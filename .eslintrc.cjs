@@ -55,10 +55,6 @@ const config = {
         strings: true,
         templates: true
       }
-    ],
-    "unicorn/prevent-abbreviations": [
-      "warn",
-      { allowList: { req: true, res: true } }
     ]
   }
 };

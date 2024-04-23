@@ -89,6 +89,7 @@ const config = {
     "sort-imports-requires/sort-requires": ["warn", { unsafeAutofix: true }],
     "sort-keys": "warn",
     "spellcheck/spell-checker": "warn",
+    "unicorn/prevent-abbreviations": "off",
     "unused-imports/no-unused-imports": "warn"
   },
   settings: { react: { version: "detect" } }
