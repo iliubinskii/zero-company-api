@@ -4,7 +4,7 @@
  * @type {import("stylelint").Config}
  */
 const config = {
-  extends: ["./.stylelintrc.base.js"],
+  extends: ["./.stylelintrc.base.mjs"],
   rules: {}
 };
 

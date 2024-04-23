@@ -71,6 +71,7 @@ const config = {
     "no-type-assertion/no-type-assertion": "warn",
     "no-undefined": "off",
     "no-use-before-define": "off",
+    "node/no-unsupported-features/es-syntax": "off",
     "prettier/prettier": [
       "warn",
       {

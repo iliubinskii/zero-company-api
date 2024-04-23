@@ -41,11 +41,13 @@
   "include": [
     ".eslintrc.base.cjs",
     ".eslintrc.cjs",
-    ".prettierrc.js",
-    ".stylelintrc.base.js",
-    ".stylelintrc.js",
+    ".prettierrc.mjs",
+    ".stylelintrc.base.mjs",
+    ".stylelintrc.mjs",
+    "**/*.cjs",
     "**/*.js",
     "**/*.jsx",
+    "**/*.mjs",
     "**/*.ts",
     "**/*.tsx"
   ]

@@ -42,6 +42,7 @@ const config = {
             "jsx",
             "lang",
             "langs",
+            "mjs",
             "parens",
             "req",
             "smacss",

@@ -62,7 +62,8 @@
     "javascript.updateImportsOnFileMove.enabled": "always",
     "search.exclude": {
       "dist": true,
-      "package-lock.json": true
+      "package-lock.json": true,
+      "tsconfig.tsbuildinfo": true
     },
     "stylelint.validate": ["css", "less", "postcss", "scss"],
     "typescript.suggestionActions.enabled": false,
