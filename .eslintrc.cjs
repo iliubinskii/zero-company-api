@@ -43,6 +43,7 @@ const config = {
             "lang",
             "langs",
             "mjs",
+            "mongodb",
             "parens",
             "req",
             "smacss",
@@ -50,7 +51,8 @@ const config = {
             "stylelint",
             "stylelintrc",
             "tsconfig",
-            "tsx"
+            "tsx",
+            "zod"
           ],
         strings: true,
         templates: true

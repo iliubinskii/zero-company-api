@@ -1,3 +1,6 @@
+// eslint-disable-next-line no-warning-comments -- Postponed
+// TODO: Typing for i18next "resources" property and "t" function
+
 import { init } from "i18next";
 
 /**
@@ -9,7 +12,10 @@ export function initLangs() {
     resources: {
       en: {
         translation: {
-          greeting: "Hello world"
+          CompanyNotFound: "Company not found",
+          HelloWorld: "Hello world",
+          InvalidCompanyData: "Invalid company data",
+          NameIsRequired: "Name is required"
         }
       }
     }

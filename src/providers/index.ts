@@ -1,0 +1,1 @@
+export { connectMongodb } from "./mongodb";

@@ -1,4 +1,6 @@
 "use strict";
+// eslint-disable-next-line no-warning-comments -- Postponed
+// TODO: Typing for i18next "resources" property and "t" function
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.initLangs = void 0;
 const i18next_1 = require("i18next");
@@ -11,7 +13,10 @@ function initLangs() {
         resources: {
             en: {
                 translation: {
-                    greeting: "Hello world"
+                    CompanyNotFound: "Company not found",
+                    HelloWorld: "Hello world",
+                    InvalidCompanyData: "Invalid company data",
+                    NameIsRequired: "Name is required"
                 }
             }
         }
