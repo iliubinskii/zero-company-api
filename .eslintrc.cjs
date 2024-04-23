@@ -10,7 +10,7 @@ const config = {
   },
   extends: ["./.eslintrc.base.cjs"],
   globals: {},
-  ignorePatterns: ["!.*", "coverage/**", "node_modules/**"],
+  ignorePatterns: ["!.*", "coverage/**", "dist/**", "node_modules/**"],
   parser: "@typescript-eslint/parser",
   parserOptions: {
     ecmaFeatures: { jsx: true },

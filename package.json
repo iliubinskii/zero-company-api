@@ -11,15 +11,16 @@
     "url": "https://github.com/iliubinskii/zero-company-api"
   },
   "author": "Ilia Liubinskii",
-  "type": "module",
+  "type": "commonjs",
   "scripts": {
+    "build": "tsc --project tsconfig-build.json",
     "dev": "nodemon",
     "format": "prettier --write \"**/*.{css,html,json,less,postcss,scss}\"",
     "install-deps": "npm install --strict-peer-deps",
     "install-dev-deps": "npm install --save-dev --strict-peer-deps",
     "lint": "eslint --fix --max-warnings=0 .",
     "lint-style": "stylelint --fix --max-warnings=0 src/**/*.{css,less,postcss,scss}",
-    "start": "tsx ./src/index.ts",
+    "start": "node dist/index.js",
     "test": "jest",
     "type-check": "tsc --noEmit"
   },

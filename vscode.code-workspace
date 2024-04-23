@@ -61,6 +61,7 @@
     "javascript.suggestionActions.enabled": false,
     "javascript.updateImportsOnFileMove.enabled": "always",
     "search.exclude": {
+      "dist": true,
       "package-lock.json": true
     },
     "stylelint.validate": ["css", "less", "postcss", "scss"],
