@@ -1,13 +1,20 @@
+import {
+  FieldType,
+  createWebAccessibleStorage
+} from "./global-middleware/web-accessible-storage";
+import {
+  createCompaniesRouter,
+  createCompaniesService,
+  createCompanyControllers
+} from "./companies";
 import { PORT } from "./config";
+import { StatusCodes } from "http-status-codes";
 import { connectMongodb } from "./providers";
-import { createCompaniesRouter } from "./companies";
-import { createCompaniesService } from "./companies/service";
-import { createCompanyControllers } from "./companies/controllers";
 import { createUploadHandler } from "./global-middleware";
-import express from "express";
+import express, { NextFunction, Request, Response } from "express";
 import { initLangs } from "./langs";
+import { logger } from "./global-services";
 import { t } from "i18next";
-import { webAccessibleStorage } from "./global-middleware/web-accessible-storage";
 
 initLangs();
 connectMongodb();
@@ -25,14 +32,33 @@ app.use(
 
 app.post(
   "/test-upload",
-  createUploadHandler([
-    { maxCount: 1, name: "header" },
-    { maxCount: 1, name: "logo" },
-    { maxCount: 10, name: "images[]" }
-  ]),
-  webAccessibleStorage,
+  createUploadHandler({
+    header: 1,
+    images: 10,
+    logo: 1
+  }),
+  createWebAccessibleStorage({
+    header: FieldType.single,
+    images: FieldType.multiple,
+    logo: FieldType.single
+  }),
   (req, res) => {
-    res.json({ uploads: req.customUploads });
+    res.json({ uploads: req.body });
+  }
+);
+
+app.use(
+  (
+    err: unknown,
+    _req: Request,
+    res: Response,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars -- Ok
+    _next: NextFunction
+  ) => {
+    logger.error(err);
+    res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ error: t("InternalServerError") });
   }
 );
 

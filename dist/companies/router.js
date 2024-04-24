@@ -13,9 +13,9 @@ function createCompaniesRouter(controllers) {
     const router = express_1.default.Router();
     router
         .get("/", controllers.getCompanies)
-        .post("/", middleware_1.requireValidCompany, controllers.addCompany)
+        .post("/", middleware_1.uploadHandler, middleware_1.webAccessibleStorage, middleware_1.requireValidCompany, controllers.addCompany)
         .get("/:id", controllers.getCompany)
-        .put("/:id", middleware_1.requireValidCompanyUpdate, controllers.updateCompany)
+        .put("/:id", middleware_1.uploadHandler, middleware_1.webAccessibleStorage, middleware_1.requireValidCompanyUpdate, controllers.updateCompany)
         .delete("/:id", controllers.deleteCompany);
     return router;
 }

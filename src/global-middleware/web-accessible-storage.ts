@@ -1,23 +1,18 @@
 import { NextFunction, Request, Response } from "express";
+import { assertDefined } from "../utils";
 import fs from "node:fs/promises";
-import { strings } from "../types";
 import { uploadImage } from "../providers";
 
 /**
- * A middleware that uploads files to a web-accessible storage.
- * @param req - The request object.
- * @param _res - The response object.
- * @param next - The next function.
+ * Creates a middleware that uploads files to a web-accessible storage.
+ * @param fields - The fields to upload.
+ * @returns The middleware.
  */
-export async function webAccessibleStorage(
-  req: Request,
-  _res: Response,
-  next: NextFunction
-): Promise<void> {
-  if (req.files && !Array.isArray(req.files)) {
-    const entries = await Promise.all(
-      Object.entries(req.files).map(
-        async ([fieldName, files]): Promise<[string, strings]> => {
+export function createWebAccessibleStorage(fields: Fields) {
+  return async (req: Request, _res: Response, next: NextFunction) => {
+    if (req.files && !Array.isArray(req.files)) {
+      const uploads = await Promise.all(
+        Object.entries(req.files).map(async ([fieldName, files]) => {
           const urls = await Promise.all(
             files.map(async file => {
               const result = await uploadImage(file.path, fieldName);
@@ -29,13 +24,40 @@ export async function webAccessibleStorage(
             })
           );
 
-          return [fieldName, urls];
+          return {
+            fieldName,
+            // eslint-disable-next-line security/detect-object-injection -- Ok
+            type: assertDefined(fields[fieldName]),
+            urls
+          };
+        })
+      );
+
+      for (const { fieldName, type, urls } of uploads)
+        switch (type) {
+          case FieldType.single: {
+            // eslint-disable-next-line security/detect-object-injection -- Ok
+            req.body[fieldName] = assertDefined(urls[0]);
+
+            break;
+          }
+
+          case FieldType.multiple: {
+            // eslint-disable-next-line security/detect-object-injection -- Ok
+            req.body[fieldName] = urls;
+          }
         }
-      )
-    );
 
-    req.customUploads = Object.fromEntries(entries);
-  }
+      next();
+    }
+  };
+}
 
-  next();
+export enum FieldType {
+  multiple = "multiple",
+  single = "single"
+}
+
+export interface Fields {
+  [fieldName: string]: FieldType;
 }

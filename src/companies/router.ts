@@ -1,4 +1,9 @@
-import { requireValidCompany, requireValidCompanyUpdate } from "./middleware";
+import {
+  requireValidCompany,
+  requireValidCompanyUpdate,
+  uploadHandler,
+  webAccessibleStorage
+} from "./middleware";
 import { CompanyControllers } from "../schema";
 import express, { Router } from "express";
 
@@ -12,9 +17,21 @@ export function createCompaniesRouter(controllers: CompanyControllers): Router {
 
   router
     .get("/", controllers.getCompanies)
-    .post("/", requireValidCompany, controllers.addCompany)
+    .post(
+      "/",
+      uploadHandler,
+      webAccessibleStorage,
+      requireValidCompany,
+      controllers.addCompany
+    )
     .get("/:id", controllers.getCompany)
-    .put("/:id", requireValidCompanyUpdate, controllers.updateCompany)
+    .put(
+      "/:id",
+      uploadHandler,
+      webAccessibleStorage,
+      requireValidCompanyUpdate,
+      controllers.updateCompany
+    )
     .delete("/:id", controllers.deleteCompany);
 
   return router;

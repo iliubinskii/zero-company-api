@@ -10,7 +10,9 @@ export function createCompaniesService(): CompaniesService {
     addCompany: async company => {
       const model = new Model(company);
 
-      await model.save();
+      const addedCompany = await model.save();
+
+      return addedCompany;
     },
     deleteCompany: async id => {
       const result = await Model.findByIdAndDelete(id);
@@ -38,6 +40,9 @@ export function createCompaniesService(): CompaniesService {
 }
 
 const Schema = new mongoose.Schema<Company>({
+  header: { required: true, type: String },
+  images: { required: true, type: [String] },
+  logo: { required: true, type: String },
   name: { required: true, type: String }
 });
 

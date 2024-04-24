@@ -5,18 +5,16 @@ import { v4 as uuidv4 } from "uuid";
 
 const storage = multer.diskStorage({
   destination(_req, _file, callback) {
-    callback(
-      // eslint-disable-next-line unicorn/no-null -- Ok
-      null,
-      MULTER_DESTINATION_PATH
-    );
+    // eslint-disable-next-line unicorn/no-null -- Ok
+    callback(null, MULTER_DESTINATION_PATH);
   },
   filename(_req, file, callback) {
-    callback(
-      // eslint-disable-next-line unicorn/no-null -- Ok
-      null,
-      uuidv4() + path.extname(file.originalname)
-    );
+    const basename = uuidv4();
+
+    const ext = path.extname(file.originalname);
+
+    // eslint-disable-next-line unicorn/no-null -- Ok
+    callback(null, `${basename}${ext}`);
   }
 });
 
@@ -27,6 +25,12 @@ const upload = multer({ storage });
  * @param fileFields - The fields to handle
  * @returns The middleware
  */
-export function createUploadHandler(fileFields: readonly multer.Field[]) {
-  return upload.fields(fileFields);
+export function createUploadHandler(fileFields: FileFields) {
+  return upload.fields(
+    Object.entries(fileFields).map(([name, maxCount]) => ({ maxCount, name }))
+  );
+}
+
+interface FileFields {
+  readonly [fieldName: string]: number;
 }

@@ -2,6 +2,11 @@ import {
   CompanyUpdateValidationSchema,
   CompanyValidationSchema
 } from "./validation-schema";
+import {
+  FieldType,
+  createUploadHandler,
+  createWebAccessibleStorage
+} from "../global-middleware";
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import { filterUndefinedProperties } from "../utils";
@@ -50,3 +55,15 @@ export function requireValidCompanyUpdate(
       .json({ error: t("InvalidCompanyData") });
   }
 }
+
+export const uploadHandler = createUploadHandler({
+  header: 1,
+  images: 10,
+  logo: 1
+});
+
+export const webAccessibleStorage = createWebAccessibleStorage({
+  header: FieldType.single,
+  images: FieldType.multiple,
+  logo: FieldType.single
+});

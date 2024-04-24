@@ -15,6 +15,7 @@ function initLangs() {
                 translation: {
                     CompanyNotFound: "Company not found",
                     HelloWorld: "Hello world",
+                    InternalServerError: "Internal server error",
                     InvalidCompanyData: "Invalid company data",
                     NameIsRequired: "Name is required"
                 }

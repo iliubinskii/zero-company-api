@@ -11,7 +11,8 @@ function createCompaniesService() {
     return {
         addCompany: async (company) => {
             const model = new Model(company);
-            await model.save();
+            const addedCompany = await model.save();
+            return addedCompany;
         },
         deleteCompany: async (id) => {
             const result = await Model.findByIdAndDelete(id);
@@ -34,6 +35,9 @@ function createCompaniesService() {
 }
 exports.createCompaniesService = createCompaniesService;
 const Schema = new mongoose_1.default.Schema({
+    header: { required: true, type: String },
+    images: { required: true, type: [String] },
+    logo: { required: true, type: String },
     name: { required: true, type: String }
 });
 const Model = mongoose_1.default.model("Company", Schema);
