@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createCategoriesService = void 0;
+exports.typeCheck = exports.createCategoriesService = void 0;
 const tslib_1 = require("tslib");
 const mongoose_1 = tslib_1.__importDefault(require("mongoose"));
 /**
@@ -40,4 +40,13 @@ const Schema = new mongoose_1.default.Schema({
     tagline: { required: true, type: String }
 });
 const Model = mongoose_1.default.model("Category", Schema);
+/**
+ * Type check
+ * @param value - Value
+ * @returns Value
+ */
+function typeCheck(value) {
+    return value;
+}
+exports.typeCheck = typeCheck;
 //# sourceMappingURL=service.js.map

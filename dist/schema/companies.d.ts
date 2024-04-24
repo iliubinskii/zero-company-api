@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { strings } from "../types";
 export interface Company {
+    readonly categories: strings;
     readonly header: string;
     readonly images: strings;
     readonly logo: string;

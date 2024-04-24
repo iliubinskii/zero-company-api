@@ -17,18 +17,22 @@ const companyIds = faker.helpers.uniqueArray(
   LIMIT.companies
 );
 
-const categories = categoryIds.map((id): ExistingCategory => {
+const categories = categoryIds.map(($oid): ExistingCategory => {
   return {
-    _id: { $oid: id },
+    _id: { $oid },
     description: faker.lorem.paragraph(),
     name: faker.commerce.department(),
     tagline: faker.company.catchPhrase()
   };
 });
 
-const companies = companyIds.map((id, index): ExistingCompany => {
+const companies = companyIds.map(($oid, index): ExistingCompany => {
   return {
-    _id: { $oid: id },
+    _id: { $oid },
+    categories: faker.helpers.uniqueArray(
+      categoryIds,
+      faker.number.int({ max: 3, min: 1 })
+    ),
     header: `https://picsum.photos/id/${index}/1600/400`,
     images: faker.helpers.uniqueArray(
       () => `https://picsum.photos/id/${index}/1600/900`,

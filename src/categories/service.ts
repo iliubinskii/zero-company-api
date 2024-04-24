@@ -1,5 +1,5 @@
 import { CategoriesService, Category } from "../schema";
-import mongoose from "mongoose";
+import mongoose, { InferSchemaType } from "mongoose";
 
 /**
  * Creates a MongoDB service for categories.
@@ -39,10 +39,19 @@ export function createCategoriesService(): CategoriesService {
   };
 }
 
-const Schema = new mongoose.Schema<Category>({
+const Schema = new mongoose.Schema({
   description: { required: true, type: String },
   name: { required: true, type: String },
   tagline: { required: true, type: String }
 });
 
 const Model = mongoose.model("Category", Schema);
+
+/**
+ * Type check
+ * @param value - Value
+ * @returns Value
+ */
+export function typeCheck(value: InferSchemaType<typeof Schema>): Category {
+  return value;
+}

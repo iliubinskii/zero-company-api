@@ -13,6 +13,7 @@ function initLangs() {
         resources: {
             en: {
                 translation: {
+                    CategoriesAreRequired: "At least one category is required",
                     CategoryNotFound: "Category not found",
                     CompanyNotFound: "Company not found",
                     DescriptionIsRequired: "Description is required",

@@ -1,5 +1,5 @@
 import { CompaniesService, Company } from "../schema";
-import mongoose from "mongoose";
+import mongoose, { InferSchemaType } from "mongoose";
 
 /**
  * Creates a MongoDB service for companies.
@@ -39,7 +39,8 @@ export function createCompaniesService(): CompaniesService {
   };
 }
 
-const Schema = new mongoose.Schema<Company>({
+const Schema = new mongoose.Schema({
+  categories: { required: true, type: [String] },
   header: { required: true, type: String },
   images: { required: true, type: [String] },
   logo: { required: true, type: String },
@@ -47,3 +48,12 @@ const Schema = new mongoose.Schema<Company>({
 });
 
 const Model = mongoose.model("Company", Schema);
+
+/**
+ * Type check
+ * @param value - Value
+ * @returns Value
+ */
+export function typeCheck(value: InferSchemaType<typeof Schema>): Company {
+  return value;
+}
