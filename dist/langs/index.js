@@ -14,9 +14,12 @@ function initLangs() {
             en: {
                 translation: {
                     CompanyNotFound: "Company not found",
+                    HeaderIsRequired: "Header is required",
                     HelloWorld: "Hello world",
+                    ImagesAreRequired: "At least one image is required",
                     InternalServerError: "Internal server error",
                     InvalidCompanyData: "Invalid company data",
+                    LogoIsRequired: "Logo is required",
                     NameIsRequired: "Name is required"
                 }
             }

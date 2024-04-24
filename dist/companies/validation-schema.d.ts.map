@@ -1,1 +1,1 @@
-{"version":3,"file":"validation-schema.d.ts","sourceRoot":"","sources":["../../src/companies/validation-schema.ts"],"names":[],"mappings":"AACA,OAAO,GAAG,MAAM,KAAK,CAAC;AAUtB,eAAO,MAAM,uBAAuB;;;;;;;;;;;;;;;EAKlC,CAAC;AAEH,eAAO,MAAM,6BAA6B;;;;;;;;;;;;;;;EAKxC,CAAC"}
+{"version":3,"file":"validation-schema.d.ts","sourceRoot":"","sources":["../../src/companies/validation-schema.ts"],"names":[],"mappings":"AACA,OAAO,GAAG,MAAM,KAAK,CAAC;AAYtB,eAAO,MAAM,uBAAuB;;;;;;;;;;;;;;;EAKlC,CAAC;AAEH,eAAO,MAAM,6BAA6B;;;;;;;;;;;;;;;EAKxC,CAAC"}

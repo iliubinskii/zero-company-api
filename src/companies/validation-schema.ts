@@ -1,11 +1,13 @@
 import { t } from "i18next";
 import zod from "zod";
 
-const header = zod.string().min(1, t("NameIsRequired"));
+const header = zod.string().min(1, t("HeaderIsRequired"));
 
-const images = zod.array(zod.string().min(1, t("NameIsRequired")));
+const images = zod
+  .array(zod.string().min(1, t("ImagesAreRequired")))
+  .min(1, t("ImagesAreRequired"));
 
-const logo = zod.string().min(1, t("NameIsRequired"));
+const logo = zod.string().min(1, t("LogoIsRequired"));
 
 const name = zod.string().min(1, t("NameIsRequired"));
 
