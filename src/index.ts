@@ -3,6 +3,11 @@ import {
   createWebAccessibleStorage
 } from "./global-middleware/web-accessible-storage";
 import {
+  createCategoriesRouter,
+  createCategoriesService,
+  createCategoryControllers
+} from "./categories";
+import {
   createCompaniesRouter,
   createCompaniesService,
   createCompanyControllers
@@ -21,9 +26,16 @@ connectMongodb();
 
 const app = express();
 
+app.use(express.json());
+
 app.get("/", (_req, res) => {
   res.json({ greeting: t("HelloWorld") });
 });
+
+app.use(
+  "/categories",
+  createCategoriesRouter(createCategoryControllers(createCategoriesService()))
+);
 
 app.use(
   "/companies",

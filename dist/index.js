@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const tslib_1 = require("tslib");
 const web_accessible_storage_1 = require("./global-middleware/web-accessible-storage");
+const categories_1 = require("./categories");
 const companies_1 = require("./companies");
 const config_1 = require("./config");
 const http_status_codes_1 = require("http-status-codes");
@@ -14,9 +15,11 @@ const i18next_1 = require("i18next");
 (0, langs_1.initLangs)();
 (0, providers_1.connectMongodb)();
 const app = (0, express_1.default)();
+app.use(express_1.default.json());
 app.get("/", (_req, res) => {
     res.json({ greeting: (0, i18next_1.t)("HelloWorld") });
 });
+app.use("/categories", (0, categories_1.createCategoriesRouter)((0, categories_1.createCategoryControllers)((0, categories_1.createCategoriesService)())));
 app.use("/companies", (0, companies_1.createCompaniesRouter)((0, companies_1.createCompanyControllers)((0, companies_1.createCompaniesService)())));
 app.post("/test-upload", (0, global_middleware_1.createUploadHandler)({
     header: 1,

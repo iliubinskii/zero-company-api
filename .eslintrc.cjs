@@ -54,6 +54,7 @@ const config = {
             "sonarjs",
             "stylelint",
             "stylelintrc",
+            "tagline",
             "tsconfig",
             "tsx",
             "unlink",

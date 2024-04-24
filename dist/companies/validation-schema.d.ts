@@ -5,15 +5,15 @@ export declare const CompanyValidationSchema: zod.ZodObject<{
     logo: zod.ZodString;
     name: zod.ZodString;
 }, "strip", zod.ZodTypeAny, {
+    name: string;
     header: string;
     images: string[];
     logo: string;
-    name: string;
 }, {
+    name: string;
     header: string;
     images: string[];
     logo: string;
-    name: string;
 }>;
 export declare const CompanyUpdateValidationSchema: zod.ZodObject<{
     header: zod.ZodOptional<zod.ZodString>;
@@ -21,14 +21,14 @@ export declare const CompanyUpdateValidationSchema: zod.ZodObject<{
     logo: zod.ZodOptional<zod.ZodString>;
     name: zod.ZodOptional<zod.ZodString>;
 }, "strip", zod.ZodTypeAny, {
+    name?: string | undefined;
     header?: string | undefined;
     images?: string[] | undefined;
     logo?: string | undefined;
-    name?: string | undefined;
 }, {
+    name?: string | undefined;
     header?: string | undefined;
     images?: string[] | undefined;
     logo?: string | undefined;
-    name?: string | undefined;
 }>;
 //# sourceMappingURL=validation-schema.d.ts.map
