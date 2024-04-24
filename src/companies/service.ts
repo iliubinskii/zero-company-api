@@ -1,4 +1,5 @@
-import { CompaniesService, Company } from "../schema";
+import { CompaniesService } from "../types";
+import { Company } from "../schema";
 import mongoose, { InferSchemaType } from "mongoose";
 
 /**

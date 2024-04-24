@@ -22,7 +22,8 @@
 /// <reference types="mongoose/types/validation" />
 /// <reference types="mongoose/types/virtuals" />
 /// <reference types="mongoose/types/inferschematype" />
-import { CompaniesService, Company } from "../schema";
+import { CompaniesService } from "../types";
+import { Company } from "../schema";
 import mongoose, { InferSchemaType } from "mongoose";
 /**
  * Creates a MongoDB service for companies.

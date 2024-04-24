@@ -22,7 +22,8 @@
 /// <reference types="mongoose/types/validation" />
 /// <reference types="mongoose/types/virtuals" />
 /// <reference types="mongoose/types/inferschematype" />
-import { CategoriesService, Category } from "../schema";
+import { CategoriesService } from "../types";
+import { Category } from "../schema";
 import mongoose, { InferSchemaType } from "mongoose";
 /**
  * Creates a MongoDB service for categories.

@@ -1,4 +1,4 @@
-import { CategoriesService, CategoryControllers } from "../schema";
+import { CategoriesService, CategoryControllers } from "../types";
 /**
  * Creates category controllers.
  * @param service - The categories service.

@@ -1,4 +1,5 @@
-import { CategoriesService, Category } from "../schema";
+import { CategoriesService } from "../types";
+import { Category } from "../schema";
 import mongoose, { InferSchemaType } from "mongoose";
 
 /**

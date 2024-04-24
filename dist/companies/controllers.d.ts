@@ -1,4 +1,4 @@
-import { CompaniesService, CompanyControllers } from "../schema";
+import { CompaniesService, CompanyControllers } from "../types";
 /**
  * Creates company controllers.
  * @param service - The companies service.

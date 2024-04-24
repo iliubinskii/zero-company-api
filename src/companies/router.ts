@@ -4,7 +4,7 @@ import {
   uploadHandler,
   webAccessibleStorage
 } from "./middleware";
-import { CompanyControllers } from "../schema";
+import { CompanyControllers } from "../types";
 import express, { Router } from "express";
 
 /**

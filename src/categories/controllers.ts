@@ -1,4 +1,4 @@
-import { CategoriesService, CategoryControllers } from "../schema";
+import { CategoriesService, CategoryControllers } from "../types";
 import { StatusCodes } from "http-status-codes";
 import { assertDefined } from "../utils";
 import { t } from "i18next";

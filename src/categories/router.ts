@@ -1,5 +1,6 @@
 import { requireValidCategory, requireValidCategoryUpdate } from "./middleware";
-import { CategoryControllers } from "../schema";
+import { CategoryControllers } from "../types";
+
 import express, { Router } from "express";
 
 /**

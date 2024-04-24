@@ -1,4 +1,4 @@
-import { CategoryControllers } from "../schema";
+import { CategoryControllers } from "../types";
 import { Router } from "express";
 /**
  * Creates a router for category routes.

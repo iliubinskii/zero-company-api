@@ -1,4 +1,4 @@
-import { CompanyControllers } from "../schema";
+import { CompanyControllers } from "../types";
 import { Router } from "express";
 /**
  * Creates a router for company routes.

@@ -1,4 +1,4 @@
-import { CompaniesService, CompanyControllers } from "../schema";
+import { CompaniesService, CompanyControllers } from "../types";
 import { StatusCodes } from "http-status-codes";
 import { assertDefined } from "../utils";
 import { t } from "i18next";
