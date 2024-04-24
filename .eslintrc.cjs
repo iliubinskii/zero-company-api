@@ -11,6 +11,14 @@ const config = {
   extends: ["./.eslintrc.base.cjs"],
   globals: {},
   ignorePatterns: ["!.*", "coverage/**", "dist/**", "node_modules/**"],
+  overrides: [
+    {
+      files: "./utils/**",
+      rules: {
+        "node/no-unpublished-import": "off"
+      }
+    }
+  ],
   parser: "@typescript-eslint/parser",
   parserOptions: {
     ecmaFeatures: { jsx: true },
@@ -47,11 +55,13 @@ const config = {
             "mjs",
             "mongodb",
             "multer",
+            "oid",
             "originalname",
             "parens",
             "req",
             "smacss",
             "sonarjs",
+            "str",
             "stylelint",
             "stylelintrc",
             "tagline",

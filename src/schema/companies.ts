@@ -10,6 +10,10 @@ export interface Company {
 
 export type Companies = readonly Company[];
 
+export interface ExistingCompany extends Company {
+  readonly _id: { readonly $oid: string };
+}
+
 export interface CompaniesService {
   /**
    * Adds a company to the database.

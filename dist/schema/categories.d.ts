@@ -5,6 +5,11 @@ export interface Category {
     readonly tagline: string;
 }
 export type Categories = readonly Category[];
+export interface ExistingCategory extends Category {
+    readonly _id: {
+        readonly $oid: string;
+    };
+}
 export interface CategoriesService {
     /**
      * Adds a category to the database.
