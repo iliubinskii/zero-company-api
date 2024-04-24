@@ -36,10 +36,8 @@ export function filterUndefinedProperties<T>(
     // eslint-disable-next-line security/detect-object-injection -- Ok
     const value = result[key];
 
-    if (value !== undefined) {
-      // eslint-disable-next-line @typescript-eslint/no-dynamic-delete,  security/detect-object-injection -- Ok
-      delete result[key];
-    }
+    // eslint-disable-next-line @typescript-eslint/no-dynamic-delete,  security/detect-object-injection -- Ok
+    if (value === undefined) delete result[key];
   }
 
   // eslint-disable-next-line no-type-assertion/no-type-assertion -- Ok

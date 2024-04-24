@@ -63,12 +63,15 @@ const config = {
   ],
   rules: {
     "callback-return": "off",
+    "camelcase": "off",
     "eslint-comments/no-use": [
       "warn",
       { allow: ["eslint", "eslint-disable", "eslint-disable-next-line"] }
     ],
     "eslint-comments/require-description": "warn",
     "id-blacklist": "off",
+    "id-length": "off",
+    "id-match": "off",
     "no-type-assertion/no-type-assertion": "warn",
     "no-undefined": "off",
     "no-unreachable": "off",

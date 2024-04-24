@@ -30,7 +30,9 @@ const config = {
           // @sort
           [
             "autofix",
+            "camelcase",
             "cjs",
+            "cloudinary",
             "commonjs",
             "destructure",
             "ecma",
@@ -44,6 +46,8 @@ const config = {
             "langs",
             "mjs",
             "mongodb",
+            "multer",
+            "originalname",
             "parens",
             "req",
             "smacss",
@@ -52,6 +56,11 @@ const config = {
             "stylelintrc",
             "tsconfig",
             "tsx",
+            "unlink",
+            "uploader",
+            "uri",
+            "urls",
+            "uuidv4",
             "zod"
           ],
         strings: true,

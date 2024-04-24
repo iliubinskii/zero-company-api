@@ -1,10 +1,12 @@
 import { NextFunction, Request, Response } from "express";
+import { strings } from "../types";
 
 declare module "express-serve-static-core" {
   // eslint-disable-next-line no-shadow -- Ok
   interface Request {
     customCompany?: Company;
     customCompanyUpdate?: Partial<Company>;
+    customUploads?: { readonly [fieldName: string]: strings };
   }
 }
 

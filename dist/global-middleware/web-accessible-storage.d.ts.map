@@ -1,0 +1,1 @@
+{"version":3,"file":"web-accessible-storage.d.ts","sourceRoot":"","sources":["../../src/global-middleware/web-accessible-storage.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,YAAY,EAAE,OAAO,EAAE,QAAQ,EAAE,MAAM,SAAS,CAAC;AAK1D;;;;;GAKG;AACH,wBAAsB,oBAAoB,CACxC,GAAG,EAAE,OAAO,EACZ,IAAI,EAAE,QAAQ,EACd,IAAI,EAAE,YAAY,GACjB,OAAO,CAAC,IAAI,CAAC,CAyBf"}

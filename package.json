@@ -27,12 +27,17 @@
   },
   "dependencies": {
     "@types/express": "^4.17.21",
+    "@types/multer": "^1.4.11",
+    "@types/uuid": "^9.0.8",
+    "cloudinary": "^2.2.0",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "http-status-codes": "^2.3.0",
     "i18next": "^23.11.2",
     "mongoose": "^8.3.2",
+    "multer": "^1.4.5-lts.1",
     "tsx": "^4.7.2",
+    "uuid": "^9.0.1",
     "zod": "^3.23.4"
   },
   "devDependencies": {

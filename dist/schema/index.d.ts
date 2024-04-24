@@ -1,8 +1,12 @@
 import { NextFunction, Request, Response } from "express";
+import { strings } from "../types";
 declare module "express-serve-static-core" {
     interface Request {
         customCompany?: Company;
         customCompanyUpdate?: Partial<Company>;
+        customUploads?: {
+            readonly [fieldName: string]: strings;
+        };
     }
 }
 export interface Company {
