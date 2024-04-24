@@ -12,34 +12,40 @@ function createCategoriesService() {
         addCategory: async (category) => {
             const model = new Model(category);
             const addedCategory = await model.save();
-            return addedCategory;
+            const { _id, ...rest } = addedCategory.toObject();
+            return { id: _id.toString(), ...rest };
         },
         deleteCategory: async (id) => {
-            const result = await Model.findByIdAndDelete(id);
-            return result ? 1 : 0;
+            const deletedCategory = await Model.findByIdAndDelete(id);
+            return deletedCategory ? 1 : 0;
         },
         getCategories: async () => {
             const categories = await Model.find({});
-            return categories;
+            return categories.map(category => {
+                const { _id, ...rest } = category.toObject();
+                return { id: _id.toString(), ...rest };
+            });
         },
         getCategory: async (id) => {
             const category = await Model.findById(id);
-            return category ?? undefined;
+            if (category) {
+                const { _id, ...rest } = category.toObject();
+                return { id: _id.toString(), ...rest };
+            }
+            return undefined;
         },
         updateCategory: async (id, category) => {
-            const mongodbCategory = new Model(category);
-            const result = await Model.findByIdAndUpdate(id, mongodbCategory);
-            return result ?? undefined;
+            const model = new Model(category);
+            const updatedCategory = await Model.findByIdAndUpdate(id, model);
+            if (updatedCategory) {
+                const { _id, ...rest } = updatedCategory.toObject();
+                return { id: _id.toString(), ...rest };
+            }
+            return undefined;
         }
     };
 }
 exports.createCategoriesService = createCategoriesService;
-const Schema = new mongoose_1.default.Schema({
-    description: { required: true, type: String },
-    name: { required: true, type: String },
-    tagline: { required: true, type: String }
-});
-const Model = mongoose_1.default.model("Category", Schema);
 /**
  * Type check
  * @param value - Value
@@ -49,4 +55,10 @@ function typeCheck(value) {
     return value;
 }
 exports.typeCheck = typeCheck;
+const Schema = new mongoose_1.default.Schema({
+    description: { required: true, type: String },
+    name: { required: true, type: String },
+    tagline: { required: true, type: String }
+});
+const Model = mongoose_1.default.model("Category", Schema);
 //# sourceMappingURL=service.js.map

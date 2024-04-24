@@ -1,4 +1,4 @@
-import { Categories, Category } from "../schema";
+import { Category, ExistingCategories, ExistingCategory } from "../schema";
 import { NextFunction, Request, Response } from "express";
 
 export interface CategoriesService {
@@ -7,7 +7,9 @@ export interface CategoriesService {
    * @param category - The category to add.
    * @returns A promise that resolves when the category has been added.
    */
-  readonly addCategory: (category: Category) => Promise<Category | undefined>;
+  readonly addCategory: (
+    category: Category
+  ) => Promise<ExistingCategory | undefined>;
   /**
    * Deletes a category from the database.
    * @param id - The ID of the category to delete.
@@ -18,13 +20,13 @@ export interface CategoriesService {
    * Gets all categories from the database.
    * @returns A promise that resolves with all categories in the database.
    */
-  readonly getCategories: () => Promise<Categories>;
+  readonly getCategories: () => Promise<ExistingCategories>;
   /**
    * Gets a category from the database.
    * @param id - The ID of the category to get.
    * @returns A promise that resolves with the category, or `undefined` if the category was not found.
    */
-  readonly getCategory: (id: string) => Promise<Category | undefined>;
+  readonly getCategory: (id: string) => Promise<ExistingCategory | undefined>;
   /**
    * Updates a category in the database.
    * @param id - The ID of the category to update.
@@ -34,7 +36,7 @@ export interface CategoriesService {
   readonly updateCategory: (
     id: string,
     category: Category
-  ) => Promise<Category | undefined>;
+  ) => Promise<ExistingCategory | undefined>;
 }
 
 export interface CategoryControllers {

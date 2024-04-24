@@ -77,6 +77,7 @@ const config = {
     "no-shadow": "off",
     "no-type-assertion/no-type-assertion": "warn",
     "no-undefined": "off",
+    "no-underscore-dangle": "off",
     "no-unreachable": "off",
     "no-unused-vars": "off",
     "no-use-before-define": "off",
@@ -100,6 +101,7 @@ const config = {
     "sort-keys": "warn",
     "spellcheck/spell-checker": "warn",
     "unicorn/catch-error-name": ["warn", { name: "err" }],
+    "unicorn/no-useless-undefined": "off",
     "unicorn/prevent-abbreviations": "off",
     "unused-imports/no-unused-imports": "warn"
   },

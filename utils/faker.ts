@@ -1,4 +1,4 @@
-import { ExistingCategory, ExistingCompany } from "../src/schema";
+import { Category, Company } from "../src/schema";
 import { faker } from "@faker-js/faker";
 import fs from "node:fs";
 
@@ -17,7 +17,7 @@ const companyIds = faker.helpers.uniqueArray(
   LIMIT.companies
 );
 
-const categories = categoryIds.map(($oid): ExistingCategory => {
+const categories = categoryIds.map(($oid): FakerCategory => {
   return {
     _id: { $oid },
     description: faker.lorem.paragraph(),
@@ -26,7 +26,7 @@ const categories = categoryIds.map(($oid): ExistingCategory => {
   };
 });
 
-const companies = companyIds.map(($oid, index): ExistingCompany => {
+const companies = companyIds.map(($oid, index): FakerCompany => {
   return {
     _id: { $oid },
     categories: faker.helpers.uniqueArray(
@@ -56,3 +56,11 @@ fs.writeFileSync(
   // eslint-disable-next-line unicorn/no-null -- Ok
   JSON.stringify(companies, null, 2)
 );
+
+interface FakerCategory extends Category {
+  readonly _id: { readonly $oid: string };
+}
+
+interface FakerCompany extends Company {
+  readonly _id: { readonly $oid: string };
+}

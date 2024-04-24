@@ -30,6 +30,12 @@ import mongoose, { InferSchemaType } from "mongoose";
  * @returns A MongoDB service for categories.
  */
 export declare function createCategoriesService(): CategoriesService;
+/**
+ * Type check
+ * @param value - Value
+ * @returns Value
+ */
+export declare function typeCheck(value: InferSchemaType<typeof Schema>): Category;
 declare const Schema: mongoose.Schema<any, mongoose.Model<any, any, any, any, any, any>, {}, {}, {}, {}, mongoose.DefaultSchemaOptions, {
     description: string;
     name: string;
@@ -45,11 +51,5 @@ declare const Schema: mongoose.Schema<any, mongoose.Model<any, any, any, any, an
 }> & {
     _id: mongoose.Types.ObjectId;
 }>;
-/**
- * Type check
- * @param value - Value
- * @returns Value
- */
-export declare function typeCheck(value: InferSchemaType<typeof Schema>): Category;
 export {};
 //# sourceMappingURL=service.d.ts.map

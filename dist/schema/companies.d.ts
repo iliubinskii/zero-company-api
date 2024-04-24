@@ -8,8 +8,7 @@ export interface Company {
 }
 export type Companies = readonly Company[];
 export interface ExistingCompany extends Company {
-    readonly _id: {
-        readonly $oid: string;
-    };
+    readonly id: string;
 }
+export type ExistingCompanies = readonly ExistingCompany[];
 //# sourceMappingURL=companies.d.ts.map

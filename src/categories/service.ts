@@ -13,40 +13,50 @@ export function createCategoriesService(): CategoriesService {
 
       const addedCategory = await model.save();
 
-      return addedCategory;
+      const { _id, ...rest } = addedCategory.toObject();
+
+      return { id: _id.toString(), ...rest };
     },
     deleteCategory: async id => {
-      const result = await Model.findByIdAndDelete(id);
+      const deletedCategory = await Model.findByIdAndDelete(id);
 
-      return result ? 1 : 0;
+      return deletedCategory ? 1 : 0;
     },
     getCategories: async () => {
       const categories = await Model.find({});
 
-      return categories;
+      return categories.map(category => {
+        const { _id, ...rest } = category.toObject();
+
+        return { id: _id.toString(), ...rest };
+      });
     },
     getCategory: async id => {
       const category = await Model.findById(id);
 
-      return category ?? undefined;
+      if (category) {
+        const { _id, ...rest } = category.toObject();
+
+        return { id: _id.toString(), ...rest };
+      }
+
+      return undefined;
     },
     updateCategory: async (id, category) => {
-      const mongodbCategory = new Model(category);
+      const model = new Model(category);
 
-      const result = await Model.findByIdAndUpdate(id, mongodbCategory);
+      const updatedCategory = await Model.findByIdAndUpdate(id, model);
 
-      return result ?? undefined;
+      if (updatedCategory) {
+        const { _id, ...rest } = updatedCategory.toObject();
+
+        return { id: _id.toString(), ...rest };
+      }
+
+      return undefined;
     }
   };
 }
-
-const Schema = new mongoose.Schema({
-  description: { required: true, type: String },
-  name: { required: true, type: String },
-  tagline: { required: true, type: String }
-});
-
-const Model = mongoose.model("Category", Schema);
 
 /**
  * Type check
@@ -56,3 +66,11 @@ const Model = mongoose.model("Category", Schema);
 export function typeCheck(value: InferSchemaType<typeof Schema>): Category {
   return value;
 }
+
+const Schema = new mongoose.Schema({
+  description: { required: true, type: String },
+  name: { required: true, type: String },
+  tagline: { required: true, type: String }
+});
+
+const Model = mongoose.model("Category", Schema);

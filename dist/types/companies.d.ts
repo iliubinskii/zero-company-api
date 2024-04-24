@@ -1,4 +1,4 @@
-import { Companies, Company } from "../schema";
+import { Company, ExistingCompanies, ExistingCompany } from "../schema";
 import { NextFunction, Request, Response } from "express";
 export interface CompaniesService {
     /**
@@ -6,7 +6,7 @@ export interface CompaniesService {
      * @param company - The company to add.
      * @returns A promise that resolves when the company has been added.
      */
-    readonly addCompany: (company: Company) => Promise<Company | undefined>;
+    readonly addCompany: (company: Company) => Promise<ExistingCompany | undefined>;
     /**
      * Deletes a company from the database.
      * @param id - The ID of the company to delete.
@@ -17,20 +17,20 @@ export interface CompaniesService {
      * Gets all companies from the database.
      * @returns A promise that resolves with all companies in the database.
      */
-    readonly getCompanies: () => Promise<Companies>;
+    readonly getCompanies: () => Promise<ExistingCompanies>;
     /**
      * Gets a company from the database.
      * @param id - The ID of the company to get.
      * @returns A promise that resolves with the company, or `undefined` if the company was not found.
      */
-    readonly getCompany: (id: string) => Promise<Company | undefined>;
+    readonly getCompany: (id: string) => Promise<ExistingCompany | undefined>;
     /**
      * Updates a company in the database.
      * @param id - The ID of the company to update.
      * @param company - The company data to update.
      * @returns A promise that resolves with the updated company, or `undefined` if the company was not found.
      */
-    readonly updateCompany: (id: string, company: Company) => Promise<Company | undefined>;
+    readonly updateCompany: (id: string, company: Company) => Promise<ExistingCompany | undefined>;
 }
 export interface CompanyControllers {
     /**
