@@ -1,5 +1,3 @@
-/* eslint-disable filenames/match-regex -- Ok */
-
 /**
  * @type {import("eslint").Linter.Config }
  */
@@ -30,19 +28,8 @@ const config = {
   ],
   overrides: [
     {
-      files: ["*.ts", "*.tsx"],
-      rules: {
-        "dot-notation": "off",
-        "jsdoc/require-param-type": "off",
-        "jsdoc/require-returns-type": "off",
-        "node/no-missing-import": "off"
-      }
-    },
-    {
       files: "*.d.ts",
-      rules: {
-        "spaced-comment": "off"
-      }
+      rules: { "spaced-comment": "off" }
     },
     {
       files: ["*.test.ts", "*.test.tsx"],
@@ -66,14 +53,19 @@ const config = {
     "camelcase": "off",
     "consistent-return": "off",
     "default-case": "off",
+    "dot-notation": "off",
     "eslint-comments/no-use": [
       "warn",
       { allow: ["eslint", "eslint-disable", "eslint-disable-next-line"] }
     ],
     "eslint-comments/require-description": "warn",
+    "filenames/match-regex": "off",
     "id-blacklist": "off",
     "id-length": "off",
     "id-match": "off",
+    "import/no-unresolved": "off",
+    "jsdoc/require-param-type": "off",
+    "jsdoc/require-returns-type": "off",
     "no-shadow": "off",
     "no-type-assertion/no-type-assertion": "warn",
     "no-undefined": "off",
@@ -81,6 +73,7 @@ const config = {
     "no-unreachable": "off",
     "no-unused-vars": "off",
     "no-use-before-define": "off",
+    "node/no-missing-import": "off",
     "node/no-unsupported-features/es-syntax": "off",
     "prettier/prettier": [
       "warn",
@@ -92,6 +85,7 @@ const config = {
       }
     ],
     "quote-props": ["warn", "consistent-as-needed"],
+    "react/jsx-sort-props": "warn",
     "sonarjs/prefer-immediate-return": "off",
     "sort-annotation/sort": "error",
     "sort-annotation/sort-keys": "error",
@@ -101,6 +95,7 @@ const config = {
     "sort-keys": "warn",
     "spellcheck/spell-checker": "warn",
     "unicorn/catch-error-name": ["warn", { name: "err" }],
+    "unicorn/filename-case": "off",
     "unicorn/no-useless-undefined": "off",
     "unicorn/prevent-abbreviations": "off",
     "unused-imports/no-unused-imports": "warn"

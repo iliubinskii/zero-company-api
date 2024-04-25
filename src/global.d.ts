@@ -1,3 +1,5 @@
+/* eslint-disable spaced-comment -- Ok */
+
 /// <reference types="jest-extended" />
 
 import { Category, Company } from "./schema";

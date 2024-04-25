@@ -1,5 +1,3 @@
-/* eslint-disable filenames/match-regex -- Ok */
-
 /**
  * @type {import("prettier").Options}
  */
