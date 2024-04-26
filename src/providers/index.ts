@@ -1,2 +1,2 @@
-export { connectMongodb } from "./mongodb";
 export { uploadImage } from "./cloudinary";
+export { connectMongodb } from "./mongodb";
