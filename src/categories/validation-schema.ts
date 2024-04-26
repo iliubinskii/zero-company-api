@@ -1,12 +1,12 @@
 import { Category } from "../schema";
-import { t } from "i18next";
+import { lang } from "../langs";
 import zod from "zod";
 
-const description = zod.string().min(1, t("DescriptionIsRequired"));
+const description = zod.string().min(1, lang.DescriptionIsRequired);
 
-const name = zod.string().min(1, t("NameIsRequired"));
+const name = zod.string().min(1, lang.NameIsRequired);
 
-const tagline = zod.string().min(1, t("TaglineIsRequired"));
+const tagline = zod.string().min(1, lang.TaglineIsRequired);
 
 export const CategoryValidationSchema = zod.strictObject({
   description,

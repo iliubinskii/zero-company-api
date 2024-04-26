@@ -17,11 +17,9 @@ import { StatusCodes } from "http-status-codes";
 import { connectMongodb } from "./providers";
 import { createUploadHandler } from "./global-middleware";
 import express, { NextFunction, Request, Response } from "express";
-import { initLangs } from "./langs";
+import { lang } from "./langs";
 import { logger } from "./global-services";
-import { t } from "i18next";
 
-initLangs();
 connectMongodb();
 
 const app = express();
@@ -29,7 +27,7 @@ const app = express();
 app.use(express.json());
 
 app.get("/", (_req, res) => {
-  res.json({ greeting: t("HelloWorld") });
+  res.json({ greeting: lang.HelloWorld });
 });
 
 app.use(
@@ -70,7 +68,7 @@ app.use(
     logger.error(err);
     res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
-      .json({ error: t("InternalServerError") });
+      .json({ error: lang.InternalServerError });
   }
 );
 

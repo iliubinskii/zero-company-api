@@ -1,7 +1,7 @@
 import { CategoriesService, CategoryControllers } from "../types";
 import { StatusCodes } from "http-status-codes";
 import { assertDefined } from "../utils";
-import { t } from "i18next";
+import { lang } from "../langs";
 
 /**
  * Creates category controllers.
@@ -53,7 +53,7 @@ export function createCategoryControllers(
         else
           res
             .status(StatusCodes.NOT_FOUND)
-            .json({ error: t("CategoryNotFound") });
+            .json({ error: lang.CategoryNotFound });
       } catch (err) {
         next(err);
       }
@@ -70,7 +70,7 @@ export function createCategoryControllers(
         else
           res
             .status(StatusCodes.NOT_FOUND)
-            .json({ error: t("CategoryNotFound") });
+            .json({ error: lang.CategoryNotFound });
       } catch (err) {
         next(err);
       }

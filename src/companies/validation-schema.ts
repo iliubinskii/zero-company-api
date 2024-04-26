@@ -1,18 +1,18 @@
 import { Company } from "../schema";
-import { t } from "i18next";
+import { lang } from "../langs";
 import zod from "zod";
 
-const categories = zod.array(zod.string()).min(1, t("CategoriesAreRequired"));
+const categories = zod.array(zod.string()).min(1, lang.CategoriesAreRequired);
 
-const header = zod.string().min(1, t("HeaderIsRequired"));
+const header = zod.string().min(1, lang.HeaderIsRequired);
 
 const images = zod
-  .array(zod.string().min(1, t("ImagesAreRequired")))
-  .min(1, t("ImagesAreRequired"));
+  .array(zod.string().min(1, lang.ImagesAreRequired))
+  .min(1, lang.ImagesAreRequired);
 
-const logo = zod.string().min(1, t("LogoIsRequired"));
+const logo = zod.string().min(1, lang.LogoIsRequired);
 
-const name = zod.string().min(1, t("NameIsRequired"));
+const name = zod.string().min(1, lang.NameIsRequired);
 
 export const CompanyValidationSchema = zod.strictObject({
   categories,

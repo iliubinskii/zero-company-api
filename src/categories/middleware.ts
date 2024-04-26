@@ -5,7 +5,7 @@ import {
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import { filterUndefinedProperties } from "../utils";
-import { t } from "i18next";
+import { lang } from "../langs";
 
 /**
  * Middleware to require a valid category object.
@@ -24,7 +24,7 @@ export function requireValidCategory(
   } catch {
     res
       .status(StatusCodes.BAD_REQUEST)
-      .json({ error: t("InvalidCategoryData") });
+      .json({ error: lang.InvalidCategoryData });
   }
 }
 
@@ -47,6 +47,6 @@ export function requireValidCategoryUpdate(
   } catch {
     res
       .status(StatusCodes.BAD_REQUEST)
-      .json({ error: t("InvalidCategoryData") });
+      .json({ error: lang.InvalidCategoryData });
   }
 }

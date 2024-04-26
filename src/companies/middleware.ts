@@ -10,7 +10,7 @@ import {
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import { filterUndefinedProperties } from "../utils";
-import { t } from "i18next";
+import { lang } from "../langs";
 
 /**
  * Middleware to require a valid company object.
@@ -29,7 +29,7 @@ export function requireValidCompany(
   } catch {
     res
       .status(StatusCodes.BAD_REQUEST)
-      .json({ error: t("InvalidCompanyData") });
+      .json({ error: lang.InvalidCompanyData });
   }
 }
 
@@ -52,7 +52,7 @@ export function requireValidCompanyUpdate(
   } catch {
     res
       .status(StatusCodes.BAD_REQUEST)
-      .json({ error: t("InvalidCompanyData") });
+      .json({ error: lang.InvalidCompanyData });
   }
 }
 
