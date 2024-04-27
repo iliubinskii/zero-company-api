@@ -17,7 +17,7 @@ import { lang } from "../langs";
 export const companiesMiddleware: CompaniesMiddleware = {
   requireValidCompany: (req, res, next) => {
     try {
-      req.customCompany = CompanyValidationSchema.parse(req.body);
+      req.company = CompanyValidationSchema.parse(req.body);
       next();
     } catch (err) {
       if (err instanceof ZodError)
@@ -29,7 +29,7 @@ export const companiesMiddleware: CompaniesMiddleware = {
   },
   requireValidCompanyUpdate: (req, res, next) => {
     try {
-      req.customCompanyUpdate = filterUndefinedProperties(
+      req.companyUpdate = filterUndefinedProperties(
         CompanyUpdateValidationSchema.parse(req.body)
       );
       next();

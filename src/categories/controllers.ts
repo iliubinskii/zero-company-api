@@ -20,7 +20,7 @@ export function createCategoryControllers(
   return {
     addCategory: async (req, res, next) => {
       try {
-        const category = assertDefined(req.customCategory);
+        const category = assertDefined(req.category);
 
         const addedCategory = await service.addCategory(category);
 
@@ -86,7 +86,7 @@ export function createCategoryControllers(
       try {
         const id = assertDefined(req.params["id"]);
 
-        const category = assertDefined(req.customCategoryUpdate);
+        const category = assertDefined(req.categoryUpdate);
 
         const updatedCategory = await service.updateCategory(id, category);
 

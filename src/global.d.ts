@@ -9,10 +9,10 @@ import {
 
 declare module "express-serve-static-core" {
   interface Request {
-    customCategory?: Category;
-    customCategoryUpdate?: Partial<Category>;
-    customCompany?: Company;
-    customCompanyUpdate?: Partial<Company>;
+    category?: Category;
+    categoryUpdate?: Partial<Category>;
+    company?: Company;
+    companyUpdate?: Partial<Company>;
     getCategoriesOptions?: GetCategoriesOptions;
     getCompaniesByCategoryOptions?: GetCompaniesByCategoryOptions;
     getCompaniesOptions?: GetCompaniesOptions;

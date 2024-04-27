@@ -13,7 +13,7 @@ import { lang } from "../langs";
 export const categoriesMiddleware: CategoriesMiddleware = {
   requireValidCategory: (req, res, next) => {
     try {
-      req.customCategory = CategoryValidationSchema.parse(req.body);
+      req.category = CategoryValidationSchema.parse(req.body);
       next();
     } catch (err) {
       if (err instanceof ZodError)
@@ -25,7 +25,7 @@ export const categoriesMiddleware: CategoriesMiddleware = {
   },
   requireValidCategoryUpdate: (req, res, next) => {
     try {
-      req.customCategoryUpdate = filterUndefinedProperties(
+      req.categoryUpdate = filterUndefinedProperties(
         CategoryUpdateValidationSchema.parse(req.body)
       );
       next();
