@@ -1,4 +1,9 @@
-import { Category, ExistingCategories, ExistingCategory } from "../schema";
+import {
+  Category,
+  ExistingCategories,
+  ExistingCategory,
+  ExistingCompanies
+} from "../schema";
 import { NextFunction, Request, Response } from "express";
 
 export interface CategoriesService {
@@ -28,6 +33,12 @@ export interface CategoriesService {
    */
   readonly getCategory: (id: string) => Promise<ExistingCategory | undefined>;
   /**
+   * Gets a category from the database.
+   * @param id - The ID of the category to get.
+   * @returns A promise that resolves with the category, or `undefined` if the category was not found.
+   */
+  readonly getCompaniesByCategory: (id: string) => Promise<ExistingCompanies>;
+  /**
    * Updates a category in the database.
    * @param id - The ID of the category to update.
    * @param category - The category data to update.
@@ -46,7 +57,7 @@ export interface CategoryControllers {
    * @param res - The response object.
    * @param next - The next function.
    */
-  addCategory: (
+  readonly addCategory: (
     req: Request,
     res: Response,
     next: NextFunction
@@ -57,7 +68,7 @@ export interface CategoryControllers {
    * @param res - The response object.
    * @param next - The next function.
    */
-  deleteCategory: (
+  readonly deleteCategory: (
     req: Request,
     res: Response,
     next: NextFunction
@@ -68,7 +79,7 @@ export interface CategoryControllers {
    * @param res - The response object.
    * @param next - The next function.
    */
-  getCategories: (
+  readonly getCategories: (
     req: Request,
     res: Response,
     next: NextFunction
@@ -79,7 +90,18 @@ export interface CategoryControllers {
    * @param res - The response object.
    * @param next - The next function.
    */
-  getCategory: (
+  readonly getCategory: (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => Promise<void>;
+  /**
+   * Returns a category from the database.
+   * @param req - The request object.
+   * @param res - The response object.
+   * @param next - The next function.
+   */
+  readonly getCompaniesByCategory: (
     req: Request,
     res: Response,
     next: NextFunction
@@ -90,7 +112,7 @@ export interface CategoryControllers {
    * @param res - The response object.
    * @param next - The next function.
    */
-  updateCategory: (
+  readonly updateCategory: (
     req: Request,
     res: Response,
     next: NextFunction

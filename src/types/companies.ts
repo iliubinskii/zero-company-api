@@ -46,7 +46,7 @@ export interface CompanyControllers {
    * @param res - The response object.
    * @param next - The next function.
    */
-  addCompany: (
+  readonly addCompany: (
     req: Request,
     res: Response,
     next: NextFunction
@@ -57,7 +57,7 @@ export interface CompanyControllers {
    * @param res - The response object.
    * @param next - The next function.
    */
-  deleteCompany: (
+  readonly deleteCompany: (
     req: Request,
     res: Response,
     next: NextFunction
@@ -68,7 +68,7 @@ export interface CompanyControllers {
    * @param res - The response object.
    * @param next - The next function.
    */
-  getCompanies: (
+  readonly getCompanies: (
     req: Request,
     res: Response,
     next: NextFunction
@@ -79,7 +79,7 @@ export interface CompanyControllers {
    * @param res - The response object.
    * @param next - The next function.
    */
-  getCompany: (
+  readonly getCompany: (
     req: Request,
     res: Response,
     next: NextFunction
@@ -90,7 +90,7 @@ export interface CompanyControllers {
    * @param res - The response object.
    * @param next - The next function.
    */
-  updateCompany: (
+  readonly updateCompany: (
     req: Request,
     res: Response,
     next: NextFunction

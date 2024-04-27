@@ -1,6 +1,5 @@
 import { CompaniesService } from "../types";
-import { Company } from "../schema";
-import mongoose, { InferSchemaType } from "mongoose";
+import { CompanyModel } from "./model";
 
 /**
  * Creates a MongoDB service for companies.
@@ -9,7 +8,7 @@ import mongoose, { InferSchemaType } from "mongoose";
 export function createCompaniesService(): CompaniesService {
   return {
     addCompany: async company => {
-      const model = new Model(company);
+      const model = new CompanyModel(company);
 
       const addedCompany = await model.save();
 
@@ -18,12 +17,12 @@ export function createCompaniesService(): CompaniesService {
       return { id: _id.toString(), ...rest };
     },
     deleteCompany: async id => {
-      const deletedCompany = await Model.findByIdAndDelete(id);
+      const deletedCompany = await CompanyModel.findByIdAndDelete(id);
 
       return deletedCompany ? 1 : 0;
     },
     getCompanies: async () => {
-      const companies = await Model.find({});
+      const companies = await CompanyModel.find({});
 
       return companies.map(company => {
         const { _id, ...rest } = company.toObject();
@@ -32,7 +31,7 @@ export function createCompaniesService(): CompaniesService {
       });
     },
     getCompany: async id => {
-      const company = await Model.findById(id);
+      const company = await CompanyModel.findById(id);
 
       if (company) {
         const { _id, ...rest } = company.toObject();
@@ -43,9 +42,9 @@ export function createCompaniesService(): CompaniesService {
       return undefined;
     },
     updateCompany: async (id, company) => {
-      const model = new Model(company);
+      const model = new CompanyModel(company);
 
-      const updatedCompany = await Model.findByIdAndUpdate(id, model);
+      const updatedCompany = await CompanyModel.findByIdAndUpdate(id, model);
 
       if (updatedCompany) {
         const { _id, ...rest } = updatedCompany.toObject();
@@ -57,22 +56,3 @@ export function createCompaniesService(): CompaniesService {
     }
   };
 }
-
-/**
- * Type check
- * @param value - Value
- * @returns Value
- */
-export function typeCheck(value: InferSchemaType<typeof Schema>): Company {
-  return value;
-}
-
-const Schema = new mongoose.Schema({
-  categories: { required: true, type: [String] },
-  header: { required: true, type: String },
-  images: { required: true, type: [String] },
-  logo: { required: true, type: String },
-  name: { required: true, type: String }
-});
-
-const Model = mongoose.model("Company", Schema);

@@ -1,15 +1,19 @@
 import { CategoriesService } from "../types";
-import { Category } from "../schema";
-import mongoose, { InferSchemaType } from "mongoose";
+import { CategoryModel } from "./model";
+import { Company } from "../schema";
+import mongoose from "mongoose";
 
 /**
  * Creates a MongoDB service for categories.
+ * @param CompanyModel - A MongoDB model for companies.
  * @returns A MongoDB service for categories.
  */
-export function createCategoriesService(): CategoriesService {
+export function createCategoriesService(
+  CompanyModel: mongoose.Model<Company>
+): CategoriesService {
   return {
     addCategory: async category => {
-      const model = new Model(category);
+      const model = new CategoryModel(category);
 
       const addedCategory = await model.save();
 
@@ -18,12 +22,12 @@ export function createCategoriesService(): CategoriesService {
       return { id: _id.toString(), ...rest };
     },
     deleteCategory: async id => {
-      const deletedCategory = await Model.findByIdAndDelete(id);
+      const deletedCategory = await CategoryModel.findByIdAndDelete(id);
 
       return deletedCategory ? 1 : 0;
     },
     getCategories: async () => {
-      const categories = await Model.find({});
+      const categories = await CategoryModel.find({});
 
       return categories.map(category => {
         const { _id, ...rest } = category.toObject();
@@ -32,7 +36,7 @@ export function createCategoriesService(): CategoriesService {
       });
     },
     getCategory: async id => {
-      const category = await Model.findById(id);
+      const category = await CategoryModel.findById(id);
 
       if (category) {
         const { _id, ...rest } = category.toObject();
@@ -42,10 +46,19 @@ export function createCategoriesService(): CategoriesService {
 
       return undefined;
     },
-    updateCategory: async (id, category) => {
-      const model = new Model(category);
+    getCompaniesByCategory: async id => {
+      const companies = await CompanyModel.find({ categories: { $in: id } });
 
-      const updatedCategory = await Model.findByIdAndUpdate(id, model);
+      return companies.map(company => {
+        const { _id, ...rest } = company.toObject();
+
+        return { id: _id.toString(), ...rest };
+      });
+    },
+    updateCategory: async (id, category) => {
+      const model = new CategoryModel(category);
+
+      const updatedCategory = await CategoryModel.findByIdAndUpdate(id, model);
 
       if (updatedCategory) {
         const { _id, ...rest } = updatedCategory.toObject();
@@ -57,20 +70,3 @@ export function createCategoriesService(): CategoriesService {
     }
   };
 }
-
-/**
- * Type check
- * @param value - Value
- * @returns Value
- */
-export function typeCheck(value: InferSchemaType<typeof Schema>): Category {
-  return value;
-}
-
-const Schema = new mongoose.Schema({
-  description: { required: true, type: String },
-  name: { required: true, type: String },
-  tagline: { required: true, type: String }
-});
-
-const Model = mongoose.model("Category", Schema);

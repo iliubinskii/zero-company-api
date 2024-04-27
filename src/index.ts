@@ -1,4 +1,10 @@
 import {
+  CompanyModel,
+  createCompaniesRouter,
+  createCompaniesService,
+  createCompanyControllers
+} from "./companies";
+import {
   FieldType,
   createWebAccessibleStorage
 } from "./global-middleware/web-accessible-storage";
@@ -7,11 +13,6 @@ import {
   createCategoriesService,
   createCategoryControllers
 } from "./categories";
-import {
-  createCompaniesRouter,
-  createCompaniesService,
-  createCompanyControllers
-} from "./companies";
 import { PORT } from "./config";
 import { StatusCodes } from "http-status-codes";
 import { connectMongodb } from "./providers";
@@ -32,7 +33,9 @@ app.get("/", (_req, res) => {
 
 app.use(
   "/categories",
-  createCategoriesRouter(createCategoryControllers(createCategoriesService()))
+  createCategoriesRouter(
+    createCategoryControllers(createCategoriesService(CompanyModel))
+  )
 );
 
 app.use(

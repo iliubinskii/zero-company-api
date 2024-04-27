@@ -58,6 +58,17 @@ export function createCategoryControllers(
         next(err);
       }
     },
+    getCompaniesByCategory: async (req, res, next) => {
+      try {
+        const id = assertDefined(req.params["id"]);
+
+        const companies = await service.getCompaniesByCategory(id);
+
+        res.json(companies);
+      } catch (err) {
+        next(err);
+      }
+    },
     updateCategory: async (req, res, next) => {
       try {
         const id = assertDefined(req.params["id"]);

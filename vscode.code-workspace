@@ -44,9 +44,11 @@
       "source.fixAll": "explicit",
       "source.sortPackageJson": "explicit"
     },
+    "editor.colorDecorators": false,
     "editor.detectIndentation": false,
     "editor.foldingStrategy": "indentation",
     "editor.formatOnSave": true,
+    "editor.lightbulb.enabled": "off",
     "editor.tabSize": 2,
     "editor.unicodeHighlight.allowedLocales": {
       "ru": true

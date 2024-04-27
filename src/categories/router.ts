@@ -18,7 +18,8 @@ export function createCategoriesRouter(
     .post("/", requireValidCategory, controllers.addCategory)
     .get("/:id", controllers.getCategory)
     .put("/:id", requireValidCategoryUpdate, controllers.updateCategory)
-    .delete("/:id", controllers.deleteCategory);
+    .delete("/:id", controllers.deleteCategory)
+    .get("/:id/companies", controllers.getCompaniesByCategory);
 
   return router;
 }

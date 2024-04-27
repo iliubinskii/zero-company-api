@@ -1,9 +1,7 @@
-import { strings } from "../types";
-
 export interface Company {
-  readonly categories: strings;
+  readonly categories: string[];
   readonly header: string;
-  readonly images: strings;
+  readonly images: string[];
   readonly logo: string;
   readonly name: string;
 }
