@@ -1,4 +1,4 @@
-import { Category, ExistingCategories, ExistingCategory } from "../schema";
+import { Category, ExistingCategory, GetCategoriesResponse } from "../schema";
 import { RequestHandler } from "express";
 
 export interface CategoriesService {
@@ -23,7 +23,7 @@ export interface CategoriesService {
    */
   readonly getCategories: (
     options?: GetCategoriesOptions
-  ) => Promise<ExistingCategories>;
+  ) => Promise<GetCategoriesResponse>;
   /**
    * Gets a category from the database.
    * @param id - The ID of the category to get.

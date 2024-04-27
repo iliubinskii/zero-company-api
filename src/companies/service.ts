@@ -34,15 +34,19 @@ export function createCompaniesService(): CompaniesService {
 
       if (typeof category === "string") filter.categories = { $in: [category] };
 
-      const companies = await CompanyModel.find(filter)
-        .skip(offset)
-        .limit(limit);
+      const [companies, total] = await Promise.all([
+        CompanyModel.find(filter).skip(offset).limit(limit),
+        CompanyModel.countDocuments(filter)
+      ]);
 
-      return companies.map(company => {
-        const { _id, ...rest } = company.toObject();
+      return {
+        docs: companies.map(company => {
+          const { _id, ...rest } = company.toObject();
 
-        return { id: _id.toString(), ...rest };
-      });
+          return { id: _id.toString(), ...rest };
+        }),
+        total
+      };
     },
     getCompany: async id => {
       const company = await CompanyModel.findById(id);

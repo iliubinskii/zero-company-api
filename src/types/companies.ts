@@ -1,4 +1,4 @@
-import { Company, ExistingCompanies, ExistingCompany } from "../schema";
+import { Company, ExistingCompany, GetCompaniesResponse } from "../schema";
 import { RequestHandler } from "express";
 
 export interface CompaniesService {
@@ -23,7 +23,7 @@ export interface CompaniesService {
    */
   readonly getCompanies: (
     options?: GetCompaniesOptions
-  ) => Promise<ExistingCompanies>;
+  ) => Promise<GetCompaniesResponse>;
   /**
    * Gets a company from the database.
    * @param id - The ID of the company to get.

@@ -26,13 +26,19 @@ export function createCategoriesService(): CategoriesService {
       limit = MONGODB_MAX_LIMIT.categories,
       offset = 0
     } = {}) => {
-      const categories = await CategoryModel.find({}).skip(offset).limit(limit);
+      const [categories, total] = await Promise.all([
+        CategoryModel.find().skip(offset).limit(limit),
+        CategoryModel.countDocuments()
+      ]);
 
-      return categories.map(category => {
-        const { _id, ...rest } = category.toObject();
+      return {
+        docs: categories.map(category => {
+          const { _id, ...rest } = category.toObject();
 
-        return { id: _id.toString(), ...rest };
-      });
+          return { id: _id.toString(), ...rest };
+        }),
+        total
+      };
     },
     getCategory: async id => {
       const category = await CategoryModel.findById(id);

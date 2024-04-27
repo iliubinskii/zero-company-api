@@ -11,3 +11,8 @@ export interface ExistingCategory extends Category {
 }
 
 export type ExistingCategories = readonly ExistingCategory[];
+
+export interface GetCategoriesResponse {
+  readonly docs: ExistingCategories;
+  readonly total: number;
+}
