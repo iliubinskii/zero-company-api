@@ -4,6 +4,7 @@ import {
 } from "./validation-schema";
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
+import { ZodError } from "zod";
 import { filterUndefinedProperties } from "../utils";
 import { lang } from "../langs";
 
@@ -21,10 +22,12 @@ export function requireValidCategory(
   try {
     req.customCategory = CategoryValidationSchema.parse(req.body);
     next();
-  } catch {
-    res
-      .status(StatusCodes.BAD_REQUEST)
-      .json({ error: lang.InvalidCategoryData });
+  } catch (err) {
+    if (err instanceof ZodError)
+      res
+        .status(StatusCodes.BAD_REQUEST)
+        .json({ error: lang.InvalidCategoryData, errorData: err.errors });
+    else throw err;
   }
 }
 
@@ -44,9 +47,11 @@ export function requireValidCategoryUpdate(
       CategoryUpdateValidationSchema.parse(req.body)
     );
     next();
-  } catch {
-    res
-      .status(StatusCodes.BAD_REQUEST)
-      .json({ error: lang.InvalidCategoryData });
+  } catch (err) {
+    if (err instanceof ZodError)
+      res
+        .status(StatusCodes.BAD_REQUEST)
+        .json({ error: lang.InvalidCategoryData, errors: err.errors });
+    else throw err;
   }
 }

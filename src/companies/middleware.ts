@@ -9,6 +9,7 @@ import {
 } from "../global-middleware";
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
+import { ZodError } from "zod";
 import { filterUndefinedProperties } from "../utils";
 import { lang } from "../langs";
 
@@ -26,10 +27,12 @@ export function requireValidCompany(
   try {
     req.customCompany = CompanyValidationSchema.parse(req.body);
     next();
-  } catch {
-    res
-      .status(StatusCodes.BAD_REQUEST)
-      .json({ error: lang.InvalidCompanyData });
+  } catch (err) {
+    if (err instanceof ZodError)
+      res
+        .status(StatusCodes.BAD_REQUEST)
+        .json({ error: lang.InvalidCompanyData, errorData: err.errors });
+    else throw err;
   }
 }
 
@@ -49,10 +52,12 @@ export function requireValidCompanyUpdate(
       CompanyUpdateValidationSchema.parse(req.body)
     );
     next();
-  } catch {
-    res
-      .status(StatusCodes.BAD_REQUEST)
-      .json({ error: lang.InvalidCompanyData });
+  } catch (err) {
+    if (err instanceof ZodError)
+      res
+        .status(StatusCodes.BAD_REQUEST)
+        .json({ error: lang.InvalidCompanyData, errors: err.errors });
+    else throw err;
   }
 }
 
