@@ -1,0 +1,344 @@
+{
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "exec": [""],
+        "packages": {},
+        "type": "text/javascript"
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "exec": [""],
+        "packages": {},
+        "type": "text/javascript"
+      }
+    }
+  ],
+  "info": {
+    "_exporter_id": "33192992",
+    "_postman_id": "6f47d89a-9e13-48c1-b58d-76b6032b6416",
+    "name": "Zero Company",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "item": [
+        {
+          "name": "Get all",
+          "request": {
+            "header": [],
+            "method": "GET",
+            "url": {
+              "host": ["{{apiUrl}}categories"],
+              "raw": "{{apiUrl}}categories"
+            }
+          },
+          "response": []
+        },
+        {
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var id = JSON.parse(responseBody).id;\r",
+                  "postman.setEnvironmentVariable(\"lastCategoryId\", id);"
+                ],
+                "packages": {},
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "name": "Add one",
+          "request": {
+            "body": {
+              "mode": "raw",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              },
+              "raw": "{\r\n    \"description\": \" Some description\",\r\n    \"name\": \"HiTech\",\r\n    \"tagline\": \"Some tagline\"\r\n}"
+            },
+            "header": [],
+            "method": "POST",
+            "url": {
+              "host": ["{{apiUrl}}categories"],
+              "raw": "{{apiUrl}}categories"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get one",
+          "request": {
+            "header": [],
+            "method": "GET",
+            "url": {
+              "host": ["{{apiUrl}}categories"],
+              "path": ["{{lastCategoryId}}"],
+              "raw": "{{apiUrl}}categories/{{lastCategoryId}}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update one",
+          "request": {
+            "body": {
+              "mode": "raw",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              },
+              "raw": "{\r\n    \"description\": \"Some description 2\",\r\n    \"tagline\": \"Some tagline 2\"\r\n}"
+            },
+            "header": [],
+            "method": "PUT",
+            "url": {
+              "host": ["{{apiUrl}}categories"],
+              "path": ["{{lastCategoryId}}"],
+              "raw": "{{apiUrl}}categories/{{lastCategoryId}}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete one",
+          "request": {
+            "header": [],
+            "method": "DELETE",
+            "url": {
+              "host": ["{{apiUrl}}categories"],
+              "path": ["{{lastCategoryId}}"],
+              "raw": "{{apiUrl}}categories/{{lastCategoryId}}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get companies",
+          "request": {
+            "header": [],
+            "method": "GET",
+            "url": {
+              "host": ["{{apiUrl}}categories"],
+              "path": ["{{lastCategoryId}}", "companies"],
+              "raw": "{{apiUrl}}categories/{{lastCategoryId}}/companies"
+            }
+          },
+          "response": []
+        }
+      ],
+      "name": "Categories"
+    },
+    {
+      "item": [
+        {
+          "name": "Get all",
+          "request": {
+            "header": [],
+            "method": "GET",
+            "url": {
+              "host": ["{{apiUrl}}companies"],
+              "raw": "{{apiUrl}}companies"
+            }
+          },
+          "response": []
+        },
+        {
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var id = JSON.parse(responseBody).id;\r",
+                  "postman.setEnvironmentVariable(\"lastCompanyId\", id);"
+                ],
+                "packages": {},
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "name": "Add one",
+          "request": {
+            "body": {
+              "formdata": [
+                {
+                  "key": "categories[]",
+                  "type": "text",
+                  "value": "{{lastCategoryId}}"
+                },
+                {
+                  "key": "header",
+                  "src": "zero-company/company/header1.jpg",
+                  "type": "file"
+                },
+                {
+                  "key": "images",
+                  "src": [
+                    "zero-company/company/images1.webp",
+                    "zero-company/company/images2.jpg"
+                  ],
+                  "type": "file"
+                },
+                {
+                  "key": "name",
+                  "type": "text",
+                  "value": "Travel aggregator"
+                },
+                {
+                  "key": "logo",
+                  "src": "zero-company/company/logo1.jpg",
+                  "type": "file"
+                }
+              ],
+              "mode": "formdata"
+            },
+            "header": [],
+            "method": "POST",
+            "url": {
+              "host": ["{{apiUrl}}companies"],
+              "raw": "{{apiUrl}}companies"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get one",
+          "request": {
+            "header": [],
+            "method": "GET",
+            "url": {
+              "host": ["{{apiUrl}}companies"],
+              "path": ["{{lastCompanyId}}"],
+              "raw": "{{apiUrl}}companies/{{lastCompanyId}}"
+            }
+          },
+          "response": []
+        },
+        {
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var id = JSON.parse(responseBody).id;\r",
+                  "postman.setEnvironmentVariable(\"lastCompanyId\", id);"
+                ],
+                "packages": {},
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "name": "Update one",
+          "request": {
+            "body": {
+              "formdata": [
+                {
+                  "key": "name",
+                  "type": "text",
+                  "value": "Travel aggregator 2"
+                },
+                {
+                  "key": "logo",
+                  "src": "zero-company/company/logo2.webp",
+                  "type": "file"
+                }
+              ],
+              "mode": "formdata"
+            },
+            "header": [],
+            "method": "PUT",
+            "url": {
+              "host": ["{{apiUrl}}companies"],
+              "path": ["{{lastCompanyId}}"],
+              "raw": "{{apiUrl}}companies/{{lastCompanyId}}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete one",
+          "request": {
+            "header": [],
+            "method": "DELETE",
+            "url": {
+              "host": ["{{apiUrl}}companies"],
+              "path": ["{{lastCompanyId}}"],
+              "raw": "{{apiUrl}}companies/{{lastCompanyId}}"
+            }
+          },
+          "response": []
+        }
+      ],
+      "name": "Companies"
+    },
+    {
+      "name": "Test upload",
+      "request": {
+        "body": {
+          "formdata": [
+            {
+              "key": "name",
+              "type": "text",
+              "value": "Travel aggregator"
+            },
+            {
+              "key": "logo",
+              "src": "zero-company/company/logo1.jpg",
+              "type": "file"
+            },
+            {
+              "key": "header",
+              "src": "zero-company/company/header1.jpg",
+              "type": "file"
+            },
+            {
+              "key": "images",
+              "src": [
+                "zero-company/company/images1.webp",
+                "zero-company/company/images2.jpg"
+              ],
+              "type": "file"
+            }
+          ],
+          "mode": "formdata"
+        },
+        "header": [],
+        "method": "POST",
+        "url": {
+          "host": ["{{apiUrl}}test-upload"],
+          "raw": "{{apiUrl}}test-upload"
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Test upload / No files",
+      "request": {
+        "body": {
+          "formdata": [
+            {
+              "key": "name",
+              "type": "text",
+              "value": "Travel aggregator"
+            }
+          ],
+          "mode": "formdata"
+        },
+        "header": [],
+        "method": "POST",
+        "url": {
+          "host": ["{{apiUrl}}test-upload"],
+          "raw": "{{apiUrl}}test-upload"
+        }
+      },
+      "response": []
+    }
+  ]
+}
