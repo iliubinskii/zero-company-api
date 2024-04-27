@@ -44,6 +44,7 @@ const config = {
             "ecma",
             "escompat",
             "eslintrc",
+            "etag",
             "filenames",
             "globals",
             "jsdoc",

@@ -33,12 +33,30 @@ const companies = companyIds.map(($oid, index): FakerCompany => {
       categoryIds,
       faker.number.int({ max: 3, min: 1 })
     ),
-    header: `https://picsum.photos/id/${index}/1600/400`,
+    header: {
+      assetId: faker.string.uuid(),
+      height: 400,
+      secureUrl: `https://picsum.photos/id/${index}/1600/400`,
+      url: `http://picsum.photos/id/${index}/1600/400`,
+      width: 1600
+    },
     images: faker.helpers.uniqueArray(
-      () => `https://picsum.photos/id/${index}/1600/900`,
+      () => ({
+        assetId: faker.string.uuid(),
+        height: 900,
+        secureUrl: `https://picsum.photos/id/${index}/1600/900`,
+        url: `http://picsum.photos/id/${index}/1600/900`,
+        width: 1600
+      }),
       faker.number.int({ max: 5, min: 1 })
     ),
-    logo: `https://picsum.photos/id/${index}/200/200`,
+    logo: {
+      assetId: faker.string.uuid(),
+      height: 512,
+      secureUrl: `https://picsum.photos/id/${index}/512/512`,
+      url: `http://picsum.photos/id/${index}/512/512`,
+      width: 512
+    },
     name: faker.commerce.productName()
   };
 });

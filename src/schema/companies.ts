@@ -1,8 +1,10 @@
+import { WebAccessibleImage } from "./common";
+
 export interface Company {
   readonly categories: string[];
-  readonly header: string;
-  readonly images: string[];
-  readonly logo: string;
+  readonly header: WebAccessibleImage;
+  readonly images: WebAccessibleImage[];
+  readonly logo: WebAccessibleImage;
   readonly name: string;
 }
 

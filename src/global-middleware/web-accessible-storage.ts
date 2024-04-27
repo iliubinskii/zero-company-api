@@ -13,38 +13,46 @@ export function createWebAccessibleStorage(fields: Fields): RequestHandler {
     if (req.files && !Array.isArray(req.files)) {
       const uploads = await Promise.all(
         Object.entries(req.files).map(async ([fieldName, files]) => {
-          const urls = await Promise.all(
+          const responses = await Promise.all(
             files.map(async file => {
-              const result = await uploadImage(file.path, fieldName);
+              const response = await uploadImage(file.path, fieldName);
 
               // eslint-disable-next-line security/detect-non-literal-fs-filename -- Ok
               await fs.unlink(file.path);
 
-              return result.secure_url;
+              return response;
             })
           );
 
           return {
             fieldName,
+            responses: responses.map(
+              ({ asset_id, height, secure_url, url, width }) => ({
+                assetId: asset_id,
+                height,
+                secureUrl: secure_url,
+                url,
+                width
+              })
+            ),
             // eslint-disable-next-line security/detect-object-injection -- Ok
-            type: assertDefined(fields[fieldName]),
-            urls
+            type: assertDefined(fields[fieldName])
           };
         })
       );
 
-      for (const { fieldName, type, urls } of uploads)
+      for (const { fieldName, responses, type } of uploads)
         switch (type) {
           case FieldType.single: {
             // eslint-disable-next-line security/detect-object-injection -- Ok
-            req.body[fieldName] = assertDefined(urls[0]);
+            req.body[fieldName] = assertDefined(responses[0]);
 
             break;
           }
 
           case FieldType.multiple: {
             // eslint-disable-next-line security/detect-object-injection -- Ok
-            req.body[fieldName] = urls;
+            req.body[fieldName] = responses;
           }
         }
 

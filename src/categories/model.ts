@@ -10,10 +10,7 @@ const Schema = new mongoose.Schema(
   { versionKey: false }
 );
 
-export const CategoryModel: mongoose.Model<Category> = mongoose.model<Category>(
-  "Category",
-  Schema
-);
+export const CategoryModel = mongoose.model<Category>("Category", Schema);
 
 typeCheck({
   description: "",
