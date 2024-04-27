@@ -1,0 +1,3 @@
+npm run type-check
+npm run lint-no-fix
+npm run lint-style-no-fix

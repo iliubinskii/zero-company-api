@@ -6,7 +6,6 @@ const config = {
     "eslint:recommended",
     "strict",
     "plugin:@typescript-eslint/strict",
-    "plugin:deprecation/recommended",
     "plugin:eslint-comments/recommended",
     "plugin:escompat/recommended",
     "plugin:etc/recommended",
@@ -60,6 +59,7 @@ const config = {
       { allow: ["eslint", "eslint-disable", "eslint-disable-next-line"] }
     ],
     "eslint-comments/require-description": "warn",
+    "etc/no-deprecated": "off",
     "filenames/match-regex": "off",
     "id-blacklist": "off",
     "id-length": "off",
@@ -100,6 +100,7 @@ const config = {
     "spellcheck/spell-checker": "warn",
     "unicorn/catch-error-name": ["warn", { name: "err" }],
     "unicorn/filename-case": "off",
+    "unicorn/no-unnecessary-polyfills": "off",
     "unicorn/no-useless-undefined": "off",
     "unicorn/prevent-abbreviations": "off",
     "unused-imports/no-unused-imports": "warn"
