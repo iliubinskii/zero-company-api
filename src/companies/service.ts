@@ -42,9 +42,11 @@ export function createCompaniesService(): CompaniesService {
       return undefined;
     },
     updateCompany: async (id, company) => {
-      const model = new CompanyModel(company);
-
-      const updatedCompany = await CompanyModel.findByIdAndUpdate(id, model);
+      const updatedCompany = await CompanyModel.findByIdAndUpdate(
+        id,
+        { $set: company },
+        { new: true }
+      );
 
       if (updatedCompany) {
         const { _id, ...rest } = updatedCompany.toObject();

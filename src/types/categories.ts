@@ -46,7 +46,7 @@ export interface CategoriesService {
    */
   readonly updateCategory: (
     id: string,
-    category: Category
+    category: Partial<Category>
   ) => Promise<ExistingCategory | undefined>;
 }
 

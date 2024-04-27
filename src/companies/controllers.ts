@@ -62,7 +62,7 @@ export function createCompanyControllers(
       try {
         const id = assertDefined(req.params["id"]);
 
-        const company = assertDefined(req.customCompany);
+        const company = assertDefined(req.customCompanyUpdate);
 
         const updatedCompany = await service.updateCompany(id, company);
 

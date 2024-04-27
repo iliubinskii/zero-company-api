@@ -56,9 +56,11 @@ export function createCategoriesService(
       });
     },
     updateCategory: async (id, category) => {
-      const model = new CategoryModel(category);
-
-      const updatedCategory = await CategoryModel.findByIdAndUpdate(id, model);
+      const updatedCategory = await CategoryModel.findByIdAndUpdate(
+        id,
+        { $set: category },
+        { new: true }
+      );
 
       if (updatedCategory) {
         const { _id, ...rest } = updatedCategory.toObject();

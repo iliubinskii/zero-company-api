@@ -35,7 +35,7 @@ export interface CompaniesService {
    */
   readonly updateCompany: (
     id: string,
-    company: Company
+    company: Partial<Company>
   ) => Promise<ExistingCompany | undefined>;
 }
 

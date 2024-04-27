@@ -73,7 +73,7 @@ export function createCategoryControllers(
       try {
         const id = assertDefined(req.params["id"]);
 
-        const category = assertDefined(req.customCategory);
+        const category = assertDefined(req.customCategoryUpdate);
 
         const updatedCategory = await service.updateCategory(id, category);
 
