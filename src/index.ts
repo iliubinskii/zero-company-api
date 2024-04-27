@@ -28,7 +28,7 @@ const app = express();
 app.use(express.json());
 
 app.get("/", (_req, res) => {
-  res.json({ greeting: lang.HelloWorld });
+  res.json({ status: lang.Ok });
 });
 
 app.use(
