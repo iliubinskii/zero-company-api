@@ -1,74 +1,68 @@
 import {
   CompanyUpdateValidationSchema,
-  CompanyValidationSchema
+  CompanyValidationSchema,
+  GetCompaniesOptionsValidationSchema
 } from "./validation-schema";
 import {
   FieldType,
   createUploadHandler,
   createWebAccessibleStorage
 } from "../global-middleware";
-import { NextFunction, Request, Response } from "express";
+import { CompaniesMiddleware } from "../types";
 import { StatusCodes } from "http-status-codes";
 import { ZodError } from "zod";
 import { filterUndefinedProperties } from "../utils";
 import { lang } from "../langs";
 
-/**
- * Middleware to require a valid company object.
- * @param req - The request object.
- * @param res - The response object.
- * @param next - The next function.
- */
-export function requireValidCompany(
-  req: Request,
-  res: Response,
-  next: NextFunction
-) {
-  try {
-    req.customCompany = CompanyValidationSchema.parse(req.body);
-    next();
-  } catch (err) {
-    if (err instanceof ZodError)
-      res
-        .status(StatusCodes.BAD_REQUEST)
-        .json({ error: lang.InvalidCompanyData, errorData: err.errors });
-    else throw err;
-  }
-}
-
-/**
- * Middleware to require a valid company update object.
- * @param req - The request object.
- * @param res - The response object.
- * @param next - The next function.
- */
-export function requireValidCompanyUpdate(
-  req: Request,
-  res: Response,
-  next: NextFunction
-) {
-  try {
-    req.customCompanyUpdate = filterUndefinedProperties(
-      CompanyUpdateValidationSchema.parse(req.body)
-    );
-    next();
-  } catch (err) {
-    if (err instanceof ZodError)
-      res
-        .status(StatusCodes.BAD_REQUEST)
-        .json({ error: lang.InvalidCompanyData, errors: err.errors });
-    else throw err;
-  }
-}
-
-export const uploadHandler = createUploadHandler({
-  header: 1,
-  images: 10,
-  logo: 1
-});
-
-export const webAccessibleStorage = createWebAccessibleStorage({
-  header: FieldType.single,
-  images: FieldType.multiple,
-  logo: FieldType.single
-});
+export const companiesMiddleware: CompaniesMiddleware = {
+  requireValidCompany: (req, res, next) => {
+    try {
+      req.customCompany = CompanyValidationSchema.parse(req.body);
+      next();
+    } catch (err) {
+      if (err instanceof ZodError)
+        res
+          .status(StatusCodes.BAD_REQUEST)
+          .json({ error: lang.InvalidCompanyData, errors: err.errors });
+      else throw err;
+    }
+  },
+  requireValidCompanyUpdate: (req, res, next) => {
+    try {
+      req.customCompanyUpdate = filterUndefinedProperties(
+        CompanyUpdateValidationSchema.parse(req.body)
+      );
+      next();
+    } catch (err) {
+      if (err instanceof ZodError)
+        res
+          .status(StatusCodes.BAD_REQUEST)
+          .json({ error: lang.InvalidCompanyData, errors: err.errors });
+      else throw err;
+    }
+  },
+  requireValidGetCompaniesOptions: (req, res, next) => {
+    try {
+      req.getCompaniesOptions = filterUndefinedProperties(
+        GetCompaniesOptionsValidationSchema.parse(req.query)
+      );
+      next();
+    } catch (err) {
+      if (err instanceof ZodError)
+        res
+          .status(StatusCodes.BAD_REQUEST)
+          .json({ error: lang.InvalidQuery, errors: err.errors });
+      else throw err;
+    }
+  },
+  uploadHandler: createUploadHandler({
+    header: 1,
+    images: 10,
+    logo: 1
+  }),
+  webAccessibleStorage: createWebAccessibleStorage({
+    header: FieldType.single,
+    images: FieldType.multiple,
+    logo: FieldType.single
+  })
+};

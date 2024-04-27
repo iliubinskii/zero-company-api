@@ -89,6 +89,15 @@ const config = {
     "react/jsx-sort-props": "warn",
     "react/prop-types": "off",
     "sonarjs/prefer-immediate-return": "off",
+    "sort/exports": [
+      "error",
+      {
+        caseSensitive: true,
+        groups: [],
+        natural: true,
+        typeOrder: "last"
+      }
+    ],
     "sort/import-members": "off",
     "sort/imports": "off",
     "sort/object-properties": ["error", { caseSensitive: true, natural: true }],
@@ -100,6 +109,7 @@ const config = {
     "spellcheck/spell-checker": "warn",
     "unicorn/catch-error-name": ["warn", { name: "err" }],
     "unicorn/filename-case": "off",
+    "unicorn/no-array-callback-reference": "off",
     "unicorn/no-unnecessary-polyfills": "off",
     "unicorn/no-useless-undefined": "off",
     "unicorn/prevent-abbreviations": "off",

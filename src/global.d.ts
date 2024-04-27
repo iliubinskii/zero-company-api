@@ -1,6 +1,11 @@
 /// <reference types="jest-extended" />
 
 import { Category, Company } from "./schema";
+import {
+  GetCategoriesOptions,
+  GetCompaniesByCategoryOptions,
+  GetCompaniesOptions
+} from "./types";
 
 declare module "express-serve-static-core" {
   interface Request {
@@ -8,5 +13,8 @@ declare module "express-serve-static-core" {
     customCategoryUpdate?: Partial<Category>;
     customCompany?: Company;
     customCompanyUpdate?: Partial<Company>;
+    getCategoriesOptions?: GetCategoriesOptions;
+    getCompaniesByCategoryOptions?: GetCompaniesByCategoryOptions;
+    getCompaniesOptions?: GetCompaniesOptions;
   }
 }

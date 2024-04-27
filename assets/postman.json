@@ -39,6 +39,28 @@
           "response": []
         },
         {
+          "name": "Get all / pagination",
+          "request": {
+            "header": [],
+            "method": "GET",
+            "url": {
+              "host": ["{{apiUrl}}categories"],
+              "query": [
+                {
+                  "key": "offset",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "2"
+                }
+              ],
+              "raw": "{{apiUrl}}categories?offset=1&limit=2"
+            }
+          },
+          "response": []
+        },
+        {
           "event": [
             {
               "listen": "test",
@@ -132,6 +154,29 @@
             }
           },
           "response": []
+        },
+        {
+          "name": "Get companies / pagination",
+          "request": {
+            "header": [],
+            "method": "GET",
+            "url": {
+              "host": ["{{apiUrl}}categories"],
+              "path": ["{{lastCategoryId}}", "companies"],
+              "query": [
+                {
+                  "key": "offset",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "2"
+                }
+              ],
+              "raw": "{{apiUrl}}categories/{{lastCategoryId}}/companies?offset=1&limit=2"
+            }
+          },
+          "response": []
         }
       ],
       "name": "Categories"
@@ -146,6 +191,28 @@
             "url": {
               "host": ["{{apiUrl}}companies"],
               "raw": "{{apiUrl}}companies"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get all / pagination",
+          "request": {
+            "header": [],
+            "method": "GET",
+            "url": {
+              "host": ["{{apiUrl}}companies"],
+              "query": [
+                {
+                  "key": "offset",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "2"
+                }
+              ],
+              "raw": "{{apiUrl}}companies?offset=1&limit=2"
             }
           },
           "response": []

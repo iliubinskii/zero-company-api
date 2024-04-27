@@ -1,5 +1,5 @@
 import { Company, ExistingCompanies, ExistingCompany } from "../schema";
-import { NextFunction, Request, Response } from "express";
+import { RequestHandler } from "express";
 
 export interface CompaniesService {
   /**
@@ -18,9 +18,12 @@ export interface CompaniesService {
   readonly deleteCompany: (id: string) => Promise<number>;
   /**
    * Gets all companies from the database.
+   * @param options - The options to use when getting companies.
    * @returns A promise that resolves with all companies in the database.
    */
-  readonly getCompanies: () => Promise<ExistingCompanies>;
+  readonly getCompanies: (
+    options?: GetCompaniesOptions
+  ) => Promise<ExistingCompanies>;
   /**
    * Gets a company from the database.
    * @param id - The ID of the company to get.
@@ -40,59 +43,23 @@ export interface CompaniesService {
 }
 
 export interface CompanyControllers {
-  /**
-   * Adds a company to the database.
-   * @param req - The request object.
-   * @param res - The response object.
-   * @param next - The next function.
-   */
-  readonly addCompany: (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) => Promise<void>;
-  /**
-   * Deletes a company from the database.
-   * @param req - The request object.
-   * @param res - The response object.
-   * @param next - The next function.
-   */
-  readonly deleteCompany: (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) => Promise<void>;
-  /**
-   * Returns all companies from the database.
-   * @param req - The request object.
-   * @param res - The response object.
-   * @param next - The next function.
-   */
-  readonly getCompanies: (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) => Promise<void>;
-  /**
-   * Returns a company from the database.
-   * @param req - The request object.
-   * @param res - The response object.
-   * @param next - The next function.
-   */
-  readonly getCompany: (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) => Promise<void>;
-  /**
-   * Updates a company in the database.
-   * @param req - The request object.
-   * @param res - The response object.
-   * @param next - The next function.
-   */
-  readonly updateCompany: (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) => Promise<void>;
+  readonly addCompany: RequestHandler;
+  readonly deleteCompany: RequestHandler;
+  readonly getCompanies: RequestHandler;
+  readonly getCompany: RequestHandler;
+  readonly updateCompany: RequestHandler;
+}
+
+export interface CompaniesMiddleware {
+  readonly requireValidCompany: RequestHandler;
+  readonly requireValidCompanyUpdate: RequestHandler;
+  readonly requireValidGetCompaniesOptions: RequestHandler;
+  readonly uploadHandler: RequestHandler;
+  readonly webAccessibleStorage: RequestHandler;
+}
+
+export interface GetCompaniesOptions {
+  readonly category?: string;
+  readonly limit?: number;
+  readonly offset?: number;
 }

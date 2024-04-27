@@ -1,10 +1,5 @@
-import {
-  requireValidCompany,
-  requireValidCompanyUpdate,
-  uploadHandler,
-  webAccessibleStorage
-} from "./middleware";
 import { CompanyControllers } from "../types";
+import { companiesMiddleware } from "./middleware";
 import express, { Router } from "express";
 
 /**
@@ -13,10 +8,18 @@ import express, { Router } from "express";
  * @returns A router for company routes.
  */
 export function createCompaniesRouter(controllers: CompanyControllers): Router {
+  const {
+    requireValidCompany,
+    requireValidCompanyUpdate,
+    requireValidGetCompaniesOptions,
+    uploadHandler,
+    webAccessibleStorage
+  } = companiesMiddleware;
+
   const router = express.Router();
 
   router
-    .get("/", controllers.getCompanies)
+    .get("/", requireValidGetCompaniesOptions, controllers.getCompanies)
     .post(
       "/",
       uploadHandler,

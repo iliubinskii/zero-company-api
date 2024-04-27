@@ -1,16 +1,12 @@
 import { CategoriesService } from "../types";
 import { CategoryModel } from "./model";
-import { Company } from "../schema";
-import mongoose from "mongoose";
+import { MONGODB_MAX_LIMIT } from "../consts";
 
 /**
  * Creates a MongoDB service for categories.
- * @param CompanyModel - A MongoDB model for companies.
  * @returns A MongoDB service for categories.
  */
-export function createCategoriesService(
-  CompanyModel: mongoose.Model<Company>
-): CategoriesService {
+export function createCategoriesService(): CategoriesService {
   return {
     addCategory: async category => {
       const model = new CategoryModel(category);
@@ -26,8 +22,11 @@ export function createCategoriesService(
 
       return deletedCategory ? 1 : 0;
     },
-    getCategories: async () => {
-      const categories = await CategoryModel.find({});
+    getCategories: async ({
+      limit = MONGODB_MAX_LIMIT.categories,
+      offset = 0
+    } = {}) => {
+      const categories = await CategoryModel.find({}).skip(offset).limit(limit);
 
       return categories.map(category => {
         const { _id, ...rest } = category.toObject();
@@ -45,15 +44,6 @@ export function createCategoriesService(
       }
 
       return undefined;
-    },
-    getCompaniesByCategory: async id => {
-      const companies = await CompanyModel.find({ categories: { $in: id } });
-
-      return companies.map(company => {
-        const { _id, ...rest } = company.toObject();
-
-        return { id: _id.toString(), ...rest };
-      });
     },
     updateCategory: async (id, category) => {
       const updatedCategory = await CategoryModel.findByIdAndUpdate(

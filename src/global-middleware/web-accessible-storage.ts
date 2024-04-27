@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from "express";
+import { RequestHandler } from "express";
 import { assertDefined } from "../utils";
 import fs from "node:fs/promises";
 import { uploadImage } from "../providers";
@@ -8,8 +8,8 @@ import { uploadImage } from "../providers";
  * @param fields - The fields to upload.
  * @returns The middleware.
  */
-export function createWebAccessibleStorage(fields: Fields) {
-  return async (req: Request, _res: Response, next: NextFunction) => {
+export function createWebAccessibleStorage(fields: Fields): RequestHandler {
+  return async (req, _res, next) => {
     if (req.files && !Array.isArray(req.files)) {
       const uploads = await Promise.all(
         Object.entries(req.files).map(async ([fieldName, files]) => {

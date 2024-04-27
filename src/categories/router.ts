@@ -1,6 +1,5 @@
-import { requireValidCategory, requireValidCategoryUpdate } from "./middleware";
 import { CategoryControllers } from "../types";
-
+import { categoriesMiddleware } from "./middleware";
 import express, { Router } from "express";
 
 /**
@@ -11,15 +10,26 @@ import express, { Router } from "express";
 export function createCategoriesRouter(
   controllers: CategoryControllers
 ): Router {
+  const {
+    requireValidCategory,
+    requireValidCategoryUpdate,
+    requireValidGetCategoriesOptions,
+    requireValidGetCompaniesByCategoryOptions
+  } = categoriesMiddleware;
+
   const router = express.Router();
 
   router
-    .get("/", controllers.getCategories)
+    .get("/", requireValidGetCategoriesOptions, controllers.getCategories)
     .post("/", requireValidCategory, controllers.addCategory)
     .get("/:id", controllers.getCategory)
     .put("/:id", requireValidCategoryUpdate, controllers.updateCategory)
     .delete("/:id", controllers.deleteCategory)
-    .get("/:id/companies", controllers.getCompaniesByCategory);
+    .get(
+      "/:id/companies",
+      requireValidGetCompaniesByCategoryOptions,
+      controllers.getCompaniesByCategory
+    );
 
   return router;
 }

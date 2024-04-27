@@ -1,5 +1,9 @@
 import { CompaniesService } from "../types";
+import { Company } from "../schema";
 import { CompanyModel } from "./model";
+import { FilterQuery } from "mongoose";
+import { MONGODB_MAX_LIMIT } from "../consts";
+import { Writable } from "ts-toolbelt/out/Object/Writable";
 
 /**
  * Creates a MongoDB service for companies.
@@ -21,8 +25,18 @@ export function createCompaniesService(): CompaniesService {
 
       return deletedCompany ? 1 : 0;
     },
-    getCompanies: async () => {
-      const companies = await CompanyModel.find({});
+    getCompanies: async ({
+      category,
+      limit = MONGODB_MAX_LIMIT.companies,
+      offset = 0
+    } = {}) => {
+      const filter: Writable<FilterQuery<Company>, "categories"> = {};
+
+      if (typeof category === "string") filter.categories = { $in: [category] };
+
+      const companies = await CompanyModel.find(filter)
+        .skip(offset)
+        .limit(limit);
 
       return companies.map(company => {
         const { _id, ...rest } = company.toObject();

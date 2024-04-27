@@ -1,4 +1,8 @@
-import { CategoriesService, CategoryControllers } from "../types";
+import {
+  CategoriesService,
+  CategoryControllers,
+  CompaniesService
+} from "../types";
 import { StatusCodes } from "http-status-codes";
 import { assertDefined } from "../utils";
 import { lang } from "../langs";
@@ -6,10 +10,12 @@ import { lang } from "../langs";
 /**
  * Creates category controllers.
  * @param service - The categories service.
+ * @param companiesService - The companies service.
  * @returns The category controllers.
  */
 export function createCategoryControllers(
-  service: CategoriesService
+  service: CategoriesService,
+  companiesService: CompaniesService
 ): CategoryControllers {
   return {
     addCategory: async (req, res, next) => {
@@ -34,9 +40,11 @@ export function createCategoryControllers(
         next(err);
       }
     },
-    getCategories: async (_req, res, next) => {
+    getCategories: async (req, res, next) => {
       try {
-        const categories = await service.getCategories();
+        const options = assertDefined(req.getCategoriesOptions);
+
+        const categories = await service.getCategories(options);
 
         res.json(categories);
       } catch (err) {
@@ -62,7 +70,12 @@ export function createCategoryControllers(
       try {
         const id = assertDefined(req.params["id"]);
 
-        const companies = await service.getCompaniesByCategory(id);
+        const options = assertDefined(req.getCompaniesByCategoryOptions);
+
+        const companies = await companiesService.getCompanies({
+          ...options,
+          category: id
+        });
 
         res.json(companies);
       } catch (err) {

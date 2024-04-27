@@ -1,10 +1,5 @@
-import {
-  Category,
-  ExistingCategories,
-  ExistingCategory,
-  ExistingCompanies
-} from "../schema";
-import { NextFunction, Request, Response } from "express";
+import { Category, ExistingCategories, ExistingCategory } from "../schema";
+import { RequestHandler } from "express";
 
 export interface CategoriesService {
   /**
@@ -23,21 +18,18 @@ export interface CategoriesService {
   readonly deleteCategory: (id: string) => Promise<number>;
   /**
    * Gets all categories from the database.
+   * @param options - The options to use when getting categories.
    * @returns A promise that resolves with all categories in the database.
    */
-  readonly getCategories: () => Promise<ExistingCategories>;
+  readonly getCategories: (
+    options?: GetCategoriesOptions
+  ) => Promise<ExistingCategories>;
   /**
    * Gets a category from the database.
    * @param id - The ID of the category to get.
    * @returns A promise that resolves with the category, or `undefined` if the category was not found.
    */
   readonly getCategory: (id: string) => Promise<ExistingCategory | undefined>;
-  /**
-   * Gets a category from the database.
-   * @param id - The ID of the category to get.
-   * @returns A promise that resolves with the category, or `undefined` if the category was not found.
-   */
-  readonly getCompaniesByCategory: (id: string) => Promise<ExistingCompanies>;
   /**
    * Updates a category in the database.
    * @param id - The ID of the category to update.
@@ -51,70 +43,27 @@ export interface CategoriesService {
 }
 
 export interface CategoryControllers {
-  /**
-   * Adds a category to the database.
-   * @param req - The request object.
-   * @param res - The response object.
-   * @param next - The next function.
-   */
-  readonly addCategory: (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) => Promise<void>;
-  /**
-   * Deletes a category from the database.
-   * @param req - The request object.
-   * @param res - The response object.
-   * @param next - The next function.
-   */
-  readonly deleteCategory: (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) => Promise<void>;
-  /**
-   * Returns all categories from the database.
-   * @param req - The request object.
-   * @param res - The response object.
-   * @param next - The next function.
-   */
-  readonly getCategories: (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) => Promise<void>;
-  /**
-   * Returns a category from the database.
-   * @param req - The request object.
-   * @param res - The response object.
-   * @param next - The next function.
-   */
-  readonly getCategory: (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) => Promise<void>;
-  /**
-   * Returns a category from the database.
-   * @param req - The request object.
-   * @param res - The response object.
-   * @param next - The next function.
-   */
-  readonly getCompaniesByCategory: (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) => Promise<void>;
-  /**
-   * Updates a category in the database.
-   * @param req - The request object.
-   * @param res - The response object.
-   * @param next - The next function.
-   */
-  readonly updateCategory: (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) => Promise<void>;
+  readonly addCategory: RequestHandler;
+  readonly deleteCategory: RequestHandler;
+  readonly getCategories: RequestHandler;
+  readonly getCategory: RequestHandler;
+  readonly getCompaniesByCategory: RequestHandler;
+  readonly updateCategory: RequestHandler;
+}
+
+export interface CategoriesMiddleware {
+  readonly requireValidCategory: RequestHandler;
+  readonly requireValidCategoryUpdate: RequestHandler;
+  readonly requireValidGetCategoriesOptions: RequestHandler;
+  readonly requireValidGetCompaniesByCategoryOptions: RequestHandler;
+}
+
+export interface GetCategoriesOptions {
+  readonly limit?: number;
+  readonly offset?: number;
+}
+
+export interface GetCompaniesByCategoryOptions {
+  readonly limit?: number;
+  readonly offset?: number;
 }

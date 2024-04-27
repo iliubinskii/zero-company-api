@@ -53,6 +53,7 @@ const config = {
             "mjs",
             "mongodb",
             "multer",
+            "nonnegative",
             "oid",
             "originalname",
             "parens",

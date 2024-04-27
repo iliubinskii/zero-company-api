@@ -34,9 +34,11 @@ export function createCompanyControllers(
         next(err);
       }
     },
-    getCompanies: async (_req, res, next) => {
+    getCompanies: async (req, res, next) => {
       try {
-        const companies = await service.getCompanies();
+        const options = assertDefined(req.getCompaniesOptions);
+
+        const companies = await service.getCompanies(options);
 
         res.json(companies);
       } catch (err) {
