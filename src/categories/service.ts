@@ -15,7 +15,7 @@ export function createCategoriesService(): CategoriesService {
 
       const { _id, ...rest } = addedCategory.toObject();
 
-      return { id: _id.toString(), ...rest };
+      return { _id: _id.toString(), ...rest };
     },
     deleteCategory: async id => {
       const deletedCategory = await CategoryModel.findByIdAndDelete(id);
@@ -35,7 +35,7 @@ export function createCategoriesService(): CategoriesService {
         docs: categories.map(category => {
           const { _id, ...rest } = category.toObject();
 
-          return { id: _id.toString(), ...rest };
+          return { _id: _id.toString(), ...rest };
         }),
         total
       };
@@ -46,7 +46,7 @@ export function createCategoriesService(): CategoriesService {
       if (category) {
         const { _id, ...rest } = category.toObject();
 
-        return { id: _id.toString(), ...rest };
+        return { _id: _id.toString(), ...rest };
       }
 
       return undefined;
@@ -61,7 +61,7 @@ export function createCategoriesService(): CategoriesService {
       if (updatedCategory) {
         const { _id, ...rest } = updatedCategory.toObject();
 
-        return { id: _id.toString(), ...rest };
+        return { _id: _id.toString(), ...rest };
       }
 
       return undefined;

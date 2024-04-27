@@ -11,7 +11,7 @@ export interface Company {
 export type Companies = readonly Company[];
 
 export interface ExistingCompany extends Company {
-  readonly id: string;
+  readonly _id: string;
 }
 
 export type ExistingCompanies = readonly ExistingCompany[];

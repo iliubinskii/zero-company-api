@@ -7,7 +7,7 @@ export interface Category {
 export type Categories = readonly Category[];
 
 export interface ExistingCategory extends Category {
-  readonly id: string;
+  readonly _id: string;
 }
 
 export type ExistingCategories = readonly ExistingCategory[];

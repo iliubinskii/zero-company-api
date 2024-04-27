@@ -18,7 +18,7 @@ export function createCompaniesService(): CompaniesService {
 
       const { _id, ...rest } = addedCompany.toObject();
 
-      return { id: _id.toString(), ...rest };
+      return { _id: _id.toString(), ...rest };
     },
     deleteCompany: async id => {
       const deletedCompany = await CompanyModel.findByIdAndDelete(id);
@@ -43,7 +43,7 @@ export function createCompaniesService(): CompaniesService {
         docs: companies.map(company => {
           const { _id, ...rest } = company.toObject();
 
-          return { id: _id.toString(), ...rest };
+          return { _id: _id.toString(), ...rest };
         }),
         total
       };
@@ -54,7 +54,7 @@ export function createCompaniesService(): CompaniesService {
       if (company) {
         const { _id, ...rest } = company.toObject();
 
-        return { id: _id.toString(), ...rest };
+        return { _id: _id.toString(), ...rest };
       }
 
       return undefined;
@@ -69,7 +69,7 @@ export function createCompaniesService(): CompaniesService {
       if (updatedCompany) {
         const { _id, ...rest } = updatedCompany.toObject();
 
-        return { id: _id.toString(), ...rest };
+        return { _id: _id.toString(), ...rest };
       }
 
       return undefined;
