@@ -1,6 +1,22 @@
 import { Company, ExistingCompany, GetCompaniesResponse } from "../schema";
 import { RequestHandler } from "express";
 
+export interface CompanyControllers {
+  readonly addCompany: RequestHandler;
+  readonly deleteCompany: RequestHandler;
+  readonly getCompanies: RequestHandler;
+  readonly getCompany: RequestHandler;
+  readonly updateCompany: RequestHandler;
+}
+
+export interface CompaniesMiddleware {
+  readonly requireValidCompany: RequestHandler;
+  readonly requireValidCompanyUpdate: RequestHandler;
+  readonly requireValidGetCompaniesOptions: RequestHandler;
+  readonly uploadHandler: RequestHandler;
+  readonly webAccessibleStorage: RequestHandler;
+}
+
 export interface CompaniesService {
   /**
    * Adds a company to the database.
@@ -40,22 +56,6 @@ export interface CompaniesService {
     id: string,
     company: Partial<Company>
   ) => Promise<ExistingCompany | undefined>;
-}
-
-export interface CompanyControllers {
-  readonly addCompany: RequestHandler;
-  readonly deleteCompany: RequestHandler;
-  readonly getCompanies: RequestHandler;
-  readonly getCompany: RequestHandler;
-  readonly updateCompany: RequestHandler;
-}
-
-export interface CompaniesMiddleware {
-  readonly requireValidCompany: RequestHandler;
-  readonly requireValidCompanyUpdate: RequestHandler;
-  readonly requireValidGetCompaniesOptions: RequestHandler;
-  readonly uploadHandler: RequestHandler;
-  readonly webAccessibleStorage: RequestHandler;
 }
 
 export interface GetCompaniesOptions {

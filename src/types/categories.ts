@@ -1,6 +1,22 @@
 import { Category, ExistingCategory, GetCategoriesResponse } from "../schema";
 import { RequestHandler } from "express";
 
+export interface CategoryControllers {
+  readonly addCategory: RequestHandler;
+  readonly deleteCategory: RequestHandler;
+  readonly getCategories: RequestHandler;
+  readonly getCategory: RequestHandler;
+  readonly getCompaniesByCategory: RequestHandler;
+  readonly updateCategory: RequestHandler;
+}
+
+export interface CategoriesMiddleware {
+  readonly requireValidCategory: RequestHandler;
+  readonly requireValidCategoryUpdate: RequestHandler;
+  readonly requireValidGetCategoriesOptions: RequestHandler;
+  readonly requireValidGetCompaniesByCategoryOptions: RequestHandler;
+}
+
 export interface CategoriesService {
   /**
    * Adds a category to the database.
@@ -40,22 +56,6 @@ export interface CategoriesService {
     id: string,
     category: Partial<Category>
   ) => Promise<ExistingCategory | undefined>;
-}
-
-export interface CategoryControllers {
-  readonly addCategory: RequestHandler;
-  readonly deleteCategory: RequestHandler;
-  readonly getCategories: RequestHandler;
-  readonly getCategory: RequestHandler;
-  readonly getCompaniesByCategory: RequestHandler;
-  readonly updateCategory: RequestHandler;
-}
-
-export interface CategoriesMiddleware {
-  readonly requireValidCategory: RequestHandler;
-  readonly requireValidCategoryUpdate: RequestHandler;
-  readonly requireValidGetCategoriesOptions: RequestHandler;
-  readonly requireValidGetCompaniesByCategoryOptions: RequestHandler;
 }
 
 export interface GetCategoriesOptions {

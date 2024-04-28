@@ -1,7 +1,3 @@
-import {
-  FieldType,
-  createWebAccessibleStorage
-} from "./global-middleware/web-accessible-storage";
 import { JWT_SECRET, PORT } from "./config";
 import { UnauthorizedError, expressjwt } from "express-jwt";
 import {
@@ -18,7 +14,6 @@ import { ErrorCode } from "./schema";
 import { StatusCodes } from "http-status-codes";
 import { buildErrorResponse } from "./utils";
 import { connectMongodb } from "./providers";
-import { createUploadHandler } from "./global-middleware";
 import express, { NextFunction, Request, Response } from "express";
 import { lang } from "./langs";
 import { logger } from "./global-services";
@@ -31,6 +26,7 @@ const companiesService = createCompaniesService();
 
 const app = express();
 
+app.use(express.json());
 app.use(
   expressjwt({
     algorithms: ["HS256"],
@@ -38,8 +34,6 @@ app.use(
     secret: JWT_SECRET
   })
 );
-
-app.use(express.json());
 
 app.get("/", (_req, res) => {
   res.json({ status: lang.Ok });
@@ -55,23 +49,6 @@ app.use(
 app.use(
   "/companies",
   createCompaniesRouter(createCompanyControllers(companiesService))
-);
-
-app.post(
-  "/test-upload",
-  createUploadHandler({
-    header: 1,
-    images: 10,
-    logo: 1
-  }),
-  createWebAccessibleStorage({
-    header: FieldType.single,
-    images: FieldType.multiple,
-    logo: FieldType.single
-  }),
-  (req, res) => {
-    res.json({ uploads: req.body });
-  }
 );
 
 app.use(
