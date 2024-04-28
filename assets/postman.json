@@ -29,6 +29,51 @@
         {
           "name": "Get all",
           "request": {
+            "auth": {
+              "jwt": [
+                {
+                  "key": "secret",
+                  "type": "string",
+                  "value": "{{jwtSecret}}"
+                },
+                {
+                  "key": "addTokenTo",
+                  "type": "string",
+                  "value": "header"
+                },
+                {
+                  "key": "algorithm",
+                  "type": "string",
+                  "value": "HS256"
+                },
+                {
+                  "key": "isSecretBase64Encoded",
+                  "type": "boolean",
+                  "value": false
+                },
+                {
+                  "key": "payload",
+                  "type": "string",
+                  "value": "{}"
+                },
+                {
+                  "key": "headerPrefix",
+                  "type": "string",
+                  "value": "Bearer"
+                },
+                {
+                  "key": "queryParamKey",
+                  "type": "string",
+                  "value": "token"
+                },
+                {
+                  "key": "header",
+                  "type": "string",
+                  "value": "{}"
+                }
+              ],
+              "type": "jwt"
+            },
             "header": [],
             "method": "GET",
             "url": {
@@ -41,6 +86,51 @@
         {
           "name": "Get all / pagination",
           "request": {
+            "auth": {
+              "jwt": [
+                {
+                  "key": "secret",
+                  "type": "string",
+                  "value": "{{jwtSecret}}"
+                },
+                {
+                  "key": "addTokenTo",
+                  "type": "string",
+                  "value": "header"
+                },
+                {
+                  "key": "algorithm",
+                  "type": "string",
+                  "value": "HS256"
+                },
+                {
+                  "key": "isSecretBase64Encoded",
+                  "type": "boolean",
+                  "value": false
+                },
+                {
+                  "key": "payload",
+                  "type": "string",
+                  "value": "{}"
+                },
+                {
+                  "key": "headerPrefix",
+                  "type": "string",
+                  "value": "Bearer"
+                },
+                {
+                  "key": "queryParamKey",
+                  "type": "string",
+                  "value": "token"
+                },
+                {
+                  "key": "header",
+                  "type": "string",
+                  "value": "{}"
+                }
+              ],
+              "type": "jwt"
+            },
             "header": [],
             "method": "GET",
             "url": {
@@ -66,8 +156,8 @@
               "listen": "test",
               "script": {
                 "exec": [
-                  "var id = JSON.parse(responseBody).id;\r",
-                  "postman.setEnvironmentVariable(\"lastCategoryId\", id);"
+                  "var { _id } = JSON.parse(responseBody);\r",
+                  "postman.setEnvironmentVariable(\"lastCategoryId\", _id);"
                 ],
                 "packages": {},
                 "type": "text/javascript"
@@ -76,6 +166,51 @@
           ],
           "name": "Add one",
           "request": {
+            "auth": {
+              "jwt": [
+                {
+                  "key": "secret",
+                  "type": "string",
+                  "value": "{{jwtSecret}}"
+                },
+                {
+                  "key": "addTokenTo",
+                  "type": "string",
+                  "value": "header"
+                },
+                {
+                  "key": "algorithm",
+                  "type": "string",
+                  "value": "HS256"
+                },
+                {
+                  "key": "isSecretBase64Encoded",
+                  "type": "boolean",
+                  "value": false
+                },
+                {
+                  "key": "payload",
+                  "type": "string",
+                  "value": "{}"
+                },
+                {
+                  "key": "headerPrefix",
+                  "type": "string",
+                  "value": "Bearer"
+                },
+                {
+                  "key": "queryParamKey",
+                  "type": "string",
+                  "value": "token"
+                },
+                {
+                  "key": "header",
+                  "type": "string",
+                  "value": "{}"
+                }
+              ],
+              "type": "jwt"
+            },
             "body": {
               "mode": "raw",
               "options": {
@@ -97,6 +232,51 @@
         {
           "name": "Get one",
           "request": {
+            "auth": {
+              "jwt": [
+                {
+                  "key": "secret",
+                  "type": "string",
+                  "value": "{{jwtSecret}}"
+                },
+                {
+                  "key": "addTokenTo",
+                  "type": "string",
+                  "value": "header"
+                },
+                {
+                  "key": "algorithm",
+                  "type": "string",
+                  "value": "HS256"
+                },
+                {
+                  "key": "isSecretBase64Encoded",
+                  "type": "boolean",
+                  "value": false
+                },
+                {
+                  "key": "payload",
+                  "type": "string",
+                  "value": "{}"
+                },
+                {
+                  "key": "headerPrefix",
+                  "type": "string",
+                  "value": "Bearer"
+                },
+                {
+                  "key": "queryParamKey",
+                  "type": "string",
+                  "value": "token"
+                },
+                {
+                  "key": "header",
+                  "type": "string",
+                  "value": "{}"
+                }
+              ],
+              "type": "jwt"
+            },
             "header": [],
             "method": "GET",
             "url": {
@@ -110,6 +290,51 @@
         {
           "name": "Update one",
           "request": {
+            "auth": {
+              "jwt": [
+                {
+                  "key": "secret",
+                  "type": "string",
+                  "value": "{{jwtSecret}}"
+                },
+                {
+                  "key": "addTokenTo",
+                  "type": "string",
+                  "value": "header"
+                },
+                {
+                  "key": "algorithm",
+                  "type": "string",
+                  "value": "HS256"
+                },
+                {
+                  "key": "isSecretBase64Encoded",
+                  "type": "boolean",
+                  "value": false
+                },
+                {
+                  "key": "payload",
+                  "type": "string",
+                  "value": "{}"
+                },
+                {
+                  "key": "headerPrefix",
+                  "type": "string",
+                  "value": "Bearer"
+                },
+                {
+                  "key": "queryParamKey",
+                  "type": "string",
+                  "value": "token"
+                },
+                {
+                  "key": "header",
+                  "type": "string",
+                  "value": "{}"
+                }
+              ],
+              "type": "jwt"
+            },
             "body": {
               "mode": "raw",
               "options": {
@@ -132,6 +357,51 @@
         {
           "name": "Delete one",
           "request": {
+            "auth": {
+              "jwt": [
+                {
+                  "key": "secret",
+                  "type": "string",
+                  "value": "{{jwtSecret}}"
+                },
+                {
+                  "key": "addTokenTo",
+                  "type": "string",
+                  "value": "header"
+                },
+                {
+                  "key": "algorithm",
+                  "type": "string",
+                  "value": "HS256"
+                },
+                {
+                  "key": "isSecretBase64Encoded",
+                  "type": "boolean",
+                  "value": false
+                },
+                {
+                  "key": "payload",
+                  "type": "string",
+                  "value": "{}"
+                },
+                {
+                  "key": "headerPrefix",
+                  "type": "string",
+                  "value": "Bearer"
+                },
+                {
+                  "key": "queryParamKey",
+                  "type": "string",
+                  "value": "token"
+                },
+                {
+                  "key": "header",
+                  "type": "string",
+                  "value": "{}"
+                }
+              ],
+              "type": "jwt"
+            },
             "header": [],
             "method": "DELETE",
             "url": {
@@ -145,6 +415,51 @@
         {
           "name": "Get companies",
           "request": {
+            "auth": {
+              "jwt": [
+                {
+                  "key": "secret",
+                  "type": "string",
+                  "value": "{{jwtSecret}}"
+                },
+                {
+                  "key": "addTokenTo",
+                  "type": "string",
+                  "value": "header"
+                },
+                {
+                  "key": "algorithm",
+                  "type": "string",
+                  "value": "HS256"
+                },
+                {
+                  "key": "isSecretBase64Encoded",
+                  "type": "boolean",
+                  "value": false
+                },
+                {
+                  "key": "payload",
+                  "type": "string",
+                  "value": "{}"
+                },
+                {
+                  "key": "headerPrefix",
+                  "type": "string",
+                  "value": "Bearer"
+                },
+                {
+                  "key": "queryParamKey",
+                  "type": "string",
+                  "value": "token"
+                },
+                {
+                  "key": "header",
+                  "type": "string",
+                  "value": "{}"
+                }
+              ],
+              "type": "jwt"
+            },
             "header": [],
             "method": "GET",
             "url": {
@@ -158,6 +473,51 @@
         {
           "name": "Get companies / pagination",
           "request": {
+            "auth": {
+              "jwt": [
+                {
+                  "key": "secret",
+                  "type": "string",
+                  "value": "{{jwtSecret}}"
+                },
+                {
+                  "key": "addTokenTo",
+                  "type": "string",
+                  "value": "header"
+                },
+                {
+                  "key": "algorithm",
+                  "type": "string",
+                  "value": "HS256"
+                },
+                {
+                  "key": "isSecretBase64Encoded",
+                  "type": "boolean",
+                  "value": false
+                },
+                {
+                  "key": "payload",
+                  "type": "string",
+                  "value": "{}"
+                },
+                {
+                  "key": "headerPrefix",
+                  "type": "string",
+                  "value": "Bearer"
+                },
+                {
+                  "key": "queryParamKey",
+                  "type": "string",
+                  "value": "token"
+                },
+                {
+                  "key": "header",
+                  "type": "string",
+                  "value": "{}"
+                }
+              ],
+              "type": "jwt"
+            },
             "header": [],
             "method": "GET",
             "url": {
@@ -186,6 +546,51 @@
         {
           "name": "Get all",
           "request": {
+            "auth": {
+              "jwt": [
+                {
+                  "key": "secret",
+                  "type": "string",
+                  "value": "{{jwtSecret}}"
+                },
+                {
+                  "key": "addTokenTo",
+                  "type": "string",
+                  "value": "header"
+                },
+                {
+                  "key": "algorithm",
+                  "type": "string",
+                  "value": "HS256"
+                },
+                {
+                  "key": "isSecretBase64Encoded",
+                  "type": "boolean",
+                  "value": false
+                },
+                {
+                  "key": "payload",
+                  "type": "string",
+                  "value": "{}"
+                },
+                {
+                  "key": "headerPrefix",
+                  "type": "string",
+                  "value": "Bearer"
+                },
+                {
+                  "key": "queryParamKey",
+                  "type": "string",
+                  "value": "token"
+                },
+                {
+                  "key": "header",
+                  "type": "string",
+                  "value": "{}"
+                }
+              ],
+              "type": "jwt"
+            },
             "header": [],
             "method": "GET",
             "url": {
@@ -198,6 +603,51 @@
         {
           "name": "Get all / pagination",
           "request": {
+            "auth": {
+              "jwt": [
+                {
+                  "key": "secret",
+                  "type": "string",
+                  "value": "{{jwtSecret}}"
+                },
+                {
+                  "key": "addTokenTo",
+                  "type": "string",
+                  "value": "header"
+                },
+                {
+                  "key": "algorithm",
+                  "type": "string",
+                  "value": "HS256"
+                },
+                {
+                  "key": "isSecretBase64Encoded",
+                  "type": "boolean",
+                  "value": false
+                },
+                {
+                  "key": "payload",
+                  "type": "string",
+                  "value": "{}"
+                },
+                {
+                  "key": "headerPrefix",
+                  "type": "string",
+                  "value": "Bearer"
+                },
+                {
+                  "key": "queryParamKey",
+                  "type": "string",
+                  "value": "token"
+                },
+                {
+                  "key": "header",
+                  "type": "string",
+                  "value": "{}"
+                }
+              ],
+              "type": "jwt"
+            },
             "header": [],
             "method": "GET",
             "url": {
@@ -223,8 +673,8 @@
               "listen": "test",
               "script": {
                 "exec": [
-                  "var id = JSON.parse(responseBody).id;\r",
-                  "postman.setEnvironmentVariable(\"lastCompanyId\", id);"
+                  "var { _id } = JSON.parse(responseBody);\r",
+                  "postman.setEnvironmentVariable(\"lastCompanyId\", _id);"
                 ],
                 "packages": {},
                 "type": "text/javascript"
@@ -233,6 +683,51 @@
           ],
           "name": "Add one",
           "request": {
+            "auth": {
+              "jwt": [
+                {
+                  "key": "secret",
+                  "type": "string",
+                  "value": "{{jwtSecret}}"
+                },
+                {
+                  "key": "addTokenTo",
+                  "type": "string",
+                  "value": "header"
+                },
+                {
+                  "key": "algorithm",
+                  "type": "string",
+                  "value": "HS256"
+                },
+                {
+                  "key": "isSecretBase64Encoded",
+                  "type": "boolean",
+                  "value": false
+                },
+                {
+                  "key": "payload",
+                  "type": "string",
+                  "value": "{}"
+                },
+                {
+                  "key": "headerPrefix",
+                  "type": "string",
+                  "value": "Bearer"
+                },
+                {
+                  "key": "queryParamKey",
+                  "type": "string",
+                  "value": "token"
+                },
+                {
+                  "key": "header",
+                  "type": "string",
+                  "value": "{}"
+                }
+              ],
+              "type": "jwt"
+            },
             "body": {
               "formdata": [
                 {
@@ -278,6 +773,51 @@
         {
           "name": "Get one",
           "request": {
+            "auth": {
+              "jwt": [
+                {
+                  "key": "secret",
+                  "type": "string",
+                  "value": "{{jwtSecret}}"
+                },
+                {
+                  "key": "addTokenTo",
+                  "type": "string",
+                  "value": "header"
+                },
+                {
+                  "key": "algorithm",
+                  "type": "string",
+                  "value": "HS256"
+                },
+                {
+                  "key": "isSecretBase64Encoded",
+                  "type": "boolean",
+                  "value": false
+                },
+                {
+                  "key": "payload",
+                  "type": "string",
+                  "value": "{}"
+                },
+                {
+                  "key": "headerPrefix",
+                  "type": "string",
+                  "value": "Bearer"
+                },
+                {
+                  "key": "queryParamKey",
+                  "type": "string",
+                  "value": "token"
+                },
+                {
+                  "key": "header",
+                  "type": "string",
+                  "value": "{}"
+                }
+              ],
+              "type": "jwt"
+            },
             "header": [],
             "method": "GET",
             "url": {
@@ -293,10 +833,7 @@
             {
               "listen": "test",
               "script": {
-                "exec": [
-                  "var id = JSON.parse(responseBody).id;\r",
-                  "postman.setEnvironmentVariable(\"lastCompanyId\", id);"
-                ],
+                "exec": [""],
                 "packages": {},
                 "type": "text/javascript"
               }
@@ -304,6 +841,51 @@
           ],
           "name": "Update one",
           "request": {
+            "auth": {
+              "jwt": [
+                {
+                  "key": "secret",
+                  "type": "string",
+                  "value": "{{jwtSecret}}"
+                },
+                {
+                  "key": "addTokenTo",
+                  "type": "string",
+                  "value": "header"
+                },
+                {
+                  "key": "algorithm",
+                  "type": "string",
+                  "value": "HS256"
+                },
+                {
+                  "key": "isSecretBase64Encoded",
+                  "type": "boolean",
+                  "value": false
+                },
+                {
+                  "key": "payload",
+                  "type": "string",
+                  "value": "{}"
+                },
+                {
+                  "key": "headerPrefix",
+                  "type": "string",
+                  "value": "Bearer"
+                },
+                {
+                  "key": "queryParamKey",
+                  "type": "string",
+                  "value": "token"
+                },
+                {
+                  "key": "header",
+                  "type": "string",
+                  "value": "{}"
+                }
+              ],
+              "type": "jwt"
+            },
             "body": {
               "formdata": [
                 {
@@ -332,6 +914,51 @@
         {
           "name": "Delete one",
           "request": {
+            "auth": {
+              "jwt": [
+                {
+                  "key": "secret",
+                  "type": "string",
+                  "value": "{{jwtSecret}}"
+                },
+                {
+                  "key": "addTokenTo",
+                  "type": "string",
+                  "value": "header"
+                },
+                {
+                  "key": "algorithm",
+                  "type": "string",
+                  "value": "HS256"
+                },
+                {
+                  "key": "isSecretBase64Encoded",
+                  "type": "boolean",
+                  "value": false
+                },
+                {
+                  "key": "payload",
+                  "type": "string",
+                  "value": "{}"
+                },
+                {
+                  "key": "headerPrefix",
+                  "type": "string",
+                  "value": "Bearer"
+                },
+                {
+                  "key": "queryParamKey",
+                  "type": "string",
+                  "value": "token"
+                },
+                {
+                  "key": "header",
+                  "type": "string",
+                  "value": "{}"
+                }
+              ],
+              "type": "jwt"
+            },
             "header": [],
             "method": "DELETE",
             "url": {
@@ -346,8 +973,110 @@
       "name": "Companies"
     },
     {
+      "name": "Index",
+      "request": {
+        "auth": {
+          "jwt": [
+            {
+              "key": "secret",
+              "type": "string",
+              "value": "{{jwtSecret}}"
+            },
+            {
+              "key": "addTokenTo",
+              "type": "string",
+              "value": "header"
+            },
+            {
+              "key": "algorithm",
+              "type": "string",
+              "value": "HS256"
+            },
+            {
+              "key": "isSecretBase64Encoded",
+              "type": "boolean",
+              "value": false
+            },
+            {
+              "key": "payload",
+              "type": "string",
+              "value": "{}"
+            },
+            {
+              "key": "headerPrefix",
+              "type": "string",
+              "value": "Bearer"
+            },
+            {
+              "key": "queryParamKey",
+              "type": "string",
+              "value": "token"
+            },
+            {
+              "key": "header",
+              "type": "string",
+              "value": "{}"
+            }
+          ],
+          "type": "jwt"
+        },
+        "header": [],
+        "method": "GET",
+        "url": {
+          "host": ["{{apiUrl}}"],
+          "raw": "{{apiUrl}}"
+        }
+      },
+      "response": []
+    },
+    {
       "name": "Test upload",
       "request": {
+        "auth": {
+          "jwt": [
+            {
+              "key": "secret",
+              "type": "string",
+              "value": "{{jwtSecret}}"
+            },
+            {
+              "key": "addTokenTo",
+              "type": "string",
+              "value": "header"
+            },
+            {
+              "key": "algorithm",
+              "type": "string",
+              "value": "HS256"
+            },
+            {
+              "key": "isSecretBase64Encoded",
+              "type": "boolean",
+              "value": false
+            },
+            {
+              "key": "payload",
+              "type": "string",
+              "value": "{}"
+            },
+            {
+              "key": "headerPrefix",
+              "type": "string",
+              "value": "Bearer"
+            },
+            {
+              "key": "queryParamKey",
+              "type": "string",
+              "value": "token"
+            },
+            {
+              "key": "header",
+              "type": "string",
+              "value": "{}"
+            }
+          ],
+          "type": "jwt"
+        },
         "body": {
           "formdata": [
             {
@@ -388,6 +1117,51 @@
     {
       "name": "Test upload / No files",
       "request": {
+        "auth": {
+          "jwt": [
+            {
+              "key": "secret",
+              "type": "string",
+              "value": "{{jwtSecret}}"
+            },
+            {
+              "key": "addTokenTo",
+              "type": "string",
+              "value": "header"
+            },
+            {
+              "key": "algorithm",
+              "type": "string",
+              "value": "HS256"
+            },
+            {
+              "key": "isSecretBase64Encoded",
+              "type": "boolean",
+              "value": false
+            },
+            {
+              "key": "payload",
+              "type": "string",
+              "value": "{}"
+            },
+            {
+              "key": "headerPrefix",
+              "type": "string",
+              "value": "Bearer"
+            },
+            {
+              "key": "queryParamKey",
+              "type": "string",
+              "value": "token"
+            },
+            {
+              "key": "header",
+              "type": "string",
+              "value": "{}"
+            }
+          ],
+          "type": "jwt"
+        },
         "body": {
           "formdata": [
             {
