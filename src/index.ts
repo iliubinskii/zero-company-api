@@ -14,7 +14,9 @@ import {
   createCompaniesService,
   createCompanyControllers
 } from "./companies";
+import { ErrorCode } from "./schema";
 import { StatusCodes } from "http-status-codes";
+import { buildErrorResponse } from "./utils";
 import { connectMongodb } from "./providers";
 import { createUploadHandler } from "./global-middleware";
 import express, { NextFunction, Request, Response } from "express";
@@ -85,11 +87,11 @@ app.use(
     if (err instanceof UnauthorizedError)
       res
         .status(StatusCodes.INTERNAL_SERVER_ERROR)
-        .json({ error: lang.Unauthorized });
+        .json(buildErrorResponse(ErrorCode.Unauthorized));
     else
       res
         .status(StatusCodes.INTERNAL_SERVER_ERROR)
-        .json({ error: lang.InternalServerError });
+        .json(buildErrorResponse(ErrorCode.InternalServerError));
   }
 );
 

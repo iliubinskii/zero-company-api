@@ -1,7 +1,7 @@
 import { CompaniesService, CompanyControllers } from "../types";
+import { assertDefined, buildErrorResponse } from "../utils";
+import { ErrorCode } from "../schema";
 import { StatusCodes } from "http-status-codes";
-import { assertDefined } from "../utils";
-import { lang } from "../langs";
 
 /**
  * Creates company controllers.
@@ -55,7 +55,7 @@ export function createCompanyControllers(
         else
           res
             .status(StatusCodes.NOT_FOUND)
-            .json({ error: lang.CompanyNotFound });
+            .json(buildErrorResponse(ErrorCode.CompanyNotFound));
       } catch (err) {
         next(err);
       }
@@ -72,7 +72,7 @@ export function createCompanyControllers(
         else
           res
             .status(StatusCodes.NOT_FOUND)
-            .json({ error: lang.CompanyNotFound });
+            .json(buildErrorResponse(ErrorCode.CompanyNotFound));
       } catch (err) {
         next(err);
       }

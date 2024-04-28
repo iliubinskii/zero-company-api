@@ -1,3 +1,6 @@
+import { ErrorCode } from "../schema";
+import { lang } from "../langs";
+
 /**
  * Asserts that a value is defined.
  * @param value - The value to check.
@@ -32,6 +35,21 @@ export function assertString(value: unknown): string {
   if (typeof value === "string") return value;
 
   throw new Error("Value is undefined");
+}
+
+/**
+ * Builds an error response object.
+ * @param error - The error code.
+ * @param data - Additional data to include in the response.
+ * @returns The error response object.
+ */
+export function buildErrorResponse(error: ErrorCode, data?: unknown): object {
+  return filterUndefinedProperties({
+    data,
+    error,
+    // eslint-disable-next-line security/detect-object-injection -- Ok
+    errorMessage: lang[error]
+  });
 }
 
 /**

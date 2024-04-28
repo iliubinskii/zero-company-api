@@ -3,9 +3,9 @@ import {
   CategoryControllers,
   CompaniesService
 } from "../types";
+import { assertDefined, buildErrorResponse } from "../utils";
+import { ErrorCode } from "../schema";
 import { StatusCodes } from "http-status-codes";
-import { assertDefined } from "../utils";
-import { lang } from "../langs";
 
 /**
  * Creates category controllers.
@@ -61,7 +61,7 @@ export function createCategoryControllers(
         else
           res
             .status(StatusCodes.NOT_FOUND)
-            .json({ error: lang.CategoryNotFound });
+            .json(buildErrorResponse(ErrorCode.CategoryNotFound));
       } catch (err) {
         next(err);
       }
@@ -94,7 +94,7 @@ export function createCategoryControllers(
         else
           res
             .status(StatusCodes.NOT_FOUND)
-            .json({ error: lang.CategoryNotFound });
+            .json(buildErrorResponse(ErrorCode.CategoryNotFound));
       } catch (err) {
         next(err);
       }

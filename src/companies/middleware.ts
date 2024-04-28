@@ -8,11 +8,11 @@ import {
   createUploadHandler,
   createWebAccessibleStorage
 } from "../global-middleware";
+import { buildErrorResponse, filterUndefinedProperties } from "../utils";
 import { CompaniesMiddleware } from "../types";
+import { ErrorCode } from "../schema";
 import { StatusCodes } from "http-status-codes";
 import { ZodError } from "zod";
-import { filterUndefinedProperties } from "../utils";
-import { lang } from "../langs";
 
 export const companiesMiddleware: CompaniesMiddleware = {
   requireValidCompany: (req, res, next) => {
@@ -23,7 +23,7 @@ export const companiesMiddleware: CompaniesMiddleware = {
       if (err instanceof ZodError)
         res
           .status(StatusCodes.BAD_REQUEST)
-          .json({ error: lang.InvalidCompanyData, errors: err.errors });
+          .json(buildErrorResponse(ErrorCode.InvalidCompanyData, err.errors));
       else throw err;
     }
   },
@@ -37,7 +37,7 @@ export const companiesMiddleware: CompaniesMiddleware = {
       if (err instanceof ZodError)
         res
           .status(StatusCodes.BAD_REQUEST)
-          .json({ error: lang.InvalidCompanyData, errors: err.errors });
+          .json(buildErrorResponse(ErrorCode.InvalidCompanyData, err.errors));
       else throw err;
     }
   },
@@ -51,7 +51,7 @@ export const companiesMiddleware: CompaniesMiddleware = {
       if (err instanceof ZodError)
         res
           .status(StatusCodes.BAD_REQUEST)
-          .json({ error: lang.InvalidQuery, errors: err.errors });
+          .json(buildErrorResponse(ErrorCode.InvalidQuery, err.errors));
       else throw err;
     }
   },

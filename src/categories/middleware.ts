@@ -4,11 +4,11 @@ import {
   GetCategoriesOptionsValidationSchema,
   GetCompaniesByCategoryOptionsValidationSchema
 } from "./validation-schema";
+import { buildErrorResponse, filterUndefinedProperties } from "../utils";
 import { CategoriesMiddleware } from "../types";
+import { ErrorCode } from "../schema";
 import { StatusCodes } from "http-status-codes";
 import { ZodError } from "zod";
-import { filterUndefinedProperties } from "../utils";
-import { lang } from "../langs";
 
 export const categoriesMiddleware: CategoriesMiddleware = {
   requireValidCategory: (req, res, next) => {
@@ -19,7 +19,7 @@ export const categoriesMiddleware: CategoriesMiddleware = {
       if (err instanceof ZodError)
         res
           .status(StatusCodes.BAD_REQUEST)
-          .json({ error: lang.InvalidCategoryData, errors: err.errors });
+          .json(buildErrorResponse(ErrorCode.InvalidCategoryData, err.errors));
       else throw err;
     }
   },
@@ -33,7 +33,7 @@ export const categoriesMiddleware: CategoriesMiddleware = {
       if (err instanceof ZodError)
         res
           .status(StatusCodes.BAD_REQUEST)
-          .json({ error: lang.InvalidCategoryData, errors: err.errors });
+          .json(buildErrorResponse(ErrorCode.InvalidCategoryData, err.errors));
       else throw err;
     }
   },
@@ -47,7 +47,7 @@ export const categoriesMiddleware: CategoriesMiddleware = {
       if (err instanceof ZodError)
         res
           .status(StatusCodes.BAD_REQUEST)
-          .json({ error: lang.InvalidQuery, errors: err.errors });
+          .json(buildErrorResponse(ErrorCode.InvalidQuery, err.errors));
       else throw err;
     }
   },
@@ -61,7 +61,7 @@ export const categoriesMiddleware: CategoriesMiddleware = {
       if (err instanceof ZodError)
         res
           .status(StatusCodes.BAD_REQUEST)
-          .json({ error: lang.InvalidQuery, errors: err.errors });
+          .json(buildErrorResponse(ErrorCode.InvalidQuery, err.errors));
       else throw err;
     }
   }
