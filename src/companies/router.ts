@@ -1,6 +1,7 @@
 import { CompanyControllers } from "../types";
 import { companiesMiddleware } from "./middleware";
 import express, { Router } from "express";
+import { requireValidMongodbId } from "../global-middleware";
 
 /**
  * Creates a router for company routes.
@@ -27,15 +28,16 @@ export function createCompaniesRouter(controllers: CompanyControllers): Router {
       requireValidCompany,
       controllers.addCompany
     )
-    .get("/:id", controllers.getCompany)
+    .get("/:id", requireValidMongodbId("id"), controllers.getCompany)
     .put(
       "/:id",
       uploadHandler,
       webAccessibleStorage,
+      requireValidMongodbId("id"),
       requireValidCompanyUpdate,
       controllers.updateCompany
     )
-    .delete("/:id", controllers.deleteCompany);
+    .delete("/:id", requireValidMongodbId("id"), controllers.deleteCompany);
 
   return router;
 }
