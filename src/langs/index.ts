@@ -5,5 +5,6 @@ export const lang = {
   InvalidCategoryData: "Invalid category data",
   InvalidCompanyData: "Invalid company data",
   InvalidQuery: "Invalid query",
-  Ok: "Ok"
+  Ok: "Ok",
+  Unauthorized: "Unauthorized"
 };

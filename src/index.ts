@@ -2,6 +2,8 @@ import {
   FieldType,
   createWebAccessibleStorage
 } from "./global-middleware/web-accessible-storage";
+import { JWT_SECRET, PORT } from "./config";
+import { UnauthorizedError, expressjwt } from "express-jwt";
 import {
   createCategoriesRouter,
   createCategoriesService,
@@ -12,7 +14,6 @@ import {
   createCompaniesService,
   createCompanyControllers
 } from "./companies";
-import { PORT } from "./config";
 import { StatusCodes } from "http-status-codes";
 import { connectMongodb } from "./providers";
 import { createUploadHandler } from "./global-middleware";
@@ -27,6 +28,14 @@ const categoriesService = createCategoriesService();
 const companiesService = createCompaniesService();
 
 const app = express();
+
+app.use(
+  expressjwt({
+    algorithms: ["HS256"],
+    requestProperty: "auth",
+    secret: JWT_SECRET
+  })
+);
 
 app.use(express.json());
 
@@ -72,9 +81,15 @@ app.use(
     _next: NextFunction
   ) => {
     logger.error(err);
-    res
-      .status(StatusCodes.INTERNAL_SERVER_ERROR)
-      .json({ error: lang.InternalServerError });
+
+    if (err instanceof UnauthorizedError)
+      res
+        .status(StatusCodes.INTERNAL_SERVER_ERROR)
+        .json({ error: lang.Unauthorized });
+    else
+      res
+        .status(StatusCodes.INTERNAL_SERVER_ERROR)
+        .json({ error: lang.InternalServerError });
   }
 );
 

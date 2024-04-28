@@ -45,6 +45,7 @@ const config = {
             "escompat",
             "eslintrc",
             "etag",
+            "expressjwt",
             "filenames",
             "globals",
             "jsdoc",

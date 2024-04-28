@@ -21,6 +21,8 @@ export const CLOUDINARY_CLOUD_NAME = assertDefined(
   process.env["CLOUDINARY_CLOUD_NAME"]
 );
 
+export const JWT_SECRET = assertDefined(process.env["JWT_SECRET"]);
+
 export const MONGODB_DATABASE_NAME = assertDefined(
   process.env["MONGODB_DATABASE_NAME"]
 );
