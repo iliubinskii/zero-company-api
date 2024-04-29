@@ -31,7 +31,7 @@ const privateCompany = zod.boolean();
 
 const targetValue = zod.number().int().positive();
 
-const website = zod.string();
+const website = zod.string().url();
 
 export const CompanyValidationSchema = zod.strictObject({
   categories,
@@ -40,9 +40,9 @@ export const CompanyValidationSchema = zod.strictObject({
   images,
   logo,
   name,
-  privateCompany,
+  privateCompany: privateCompany.default(false),
   targetValue,
-  website
+  website: website.optional()
 });
 
 export const CompanyUpdateValidationSchema = zod.strictObject({

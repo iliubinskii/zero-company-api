@@ -42,7 +42,7 @@ const Schema = new mongoose.Schema(
     privateCompany: { required: true, type: Boolean },
     recommended: { required: true, type: Boolean },
     targetValue: { required: true, type: Number },
-    website: { required: true, type: String }
+    website: String
   },
   { versionKey: false }
 );
