@@ -19,6 +19,7 @@ import { ErrorCode } from "./schema";
 import { StatusCodes } from "http-status-codes";
 import { buildErrorResponse } from "./utils";
 import { connectMongodb } from "./providers";
+import cors from "cors";
 import express, { NextFunction, Request, Response } from "express";
 import { lang } from "./langs";
 import { logger } from "./global-services";
@@ -33,6 +34,7 @@ const userService = createUsersService();
 
 const app = express();
 
+app.use(cors());
 app.use(express.json());
 app.use(
   expressjwt({

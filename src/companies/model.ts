@@ -43,7 +43,6 @@ const Schema = {
   recommended: { required: true, type: Boolean },
   targetValue: { required: true, type: Number },
   website: {
-    // eslint-disable-next-line unicorn/no-null -- Ok
     default: null,
     type: String
   }

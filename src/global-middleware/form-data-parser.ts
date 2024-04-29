@@ -5,7 +5,6 @@ import { v4 as uuidv4 } from "uuid";
 
 const storage = multer.diskStorage({
   destination(_req, _file, callback) {
-    // eslint-disable-next-line unicorn/no-null -- Ok
     callback(null, MULTER_DESTINATION_PATH);
   },
   filename(_req, file, callback) {
@@ -13,7 +12,6 @@ const storage = multer.diskStorage({
 
     const ext = path.extname(file.originalname);
 
-    // eslint-disable-next-line unicorn/no-null -- Ok
     callback(null, `${basename}${ext}`);
   }
 });

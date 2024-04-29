@@ -30,7 +30,7 @@ const logo = webAccessibleImage;
 
 const name = zod.string().min(1);
 
-const privateCompany = zod.boolean();
+const privateCompany = preprocessBoolean(zod.boolean());
 
 const targetValue = preprocessNumber(zod.number().int().positive());
 
@@ -45,7 +45,6 @@ export const CompanyCreateValidationSchema = zod.strictObject({
   name,
   privateCompany: privateCompany.default(false),
   targetValue,
-  // eslint-disable-next-line unicorn/no-null -- Ok
   website: website.default(null)
 });
 

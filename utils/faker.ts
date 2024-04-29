@@ -70,6 +70,5 @@ const companies = faker.helpers.uniqueArray((): Company => {
 // eslint-disable-next-line no-sync -- Ok
 fs.writeFileSync(
   "assets/dummy/companies.json",
-  // eslint-disable-next-line unicorn/no-null -- Ok
   JSON.stringify(companies, null, 2)
 );

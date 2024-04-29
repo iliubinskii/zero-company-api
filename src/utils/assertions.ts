@@ -11,6 +11,17 @@ export function assertDefined<T>(value: T | undefined): T {
 }
 
 /**
+ * Asserts that a value is an HTMLFormElement.
+ * @param value - The value to check.
+ * @returns The value if it is an HTMLFormElement.
+ */
+export function assertHTMLFormElement(value: EventTarget): HTMLFormElement {
+  if (value instanceof HTMLFormElement) return value;
+
+  throw new Error("Value is not an HTMLFormElement");
+}
+
+/**
  * Asserts that a value is not null.
  * @param value - The value to check.
  * @returns The value if it is not null.

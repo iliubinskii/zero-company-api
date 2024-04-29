@@ -40,6 +40,7 @@ const config = {
             "cjs",
             "cloudinary",
             "commonjs",
+            "cors",
             "destructure",
             "ecma",
             "escompat",
@@ -79,7 +80,8 @@ const config = {
         strings: true,
         templates: true
       }
-    ]
+    ],
+    "unicorn/no-null": "off"
   }
 };
 
