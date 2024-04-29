@@ -10,10 +10,10 @@ export interface CompanyControllers {
 }
 
 export interface CompaniesMiddleware {
+  readonly parseFormData: RequestHandler;
   readonly requireValidCompany: RequestHandler;
   readonly requireValidCompanyUpdate: RequestHandler;
   readonly requireValidGetCompaniesOptions: RequestHandler;
-  readonly uploadHandler: RequestHandler;
   readonly webAccessibleStorage: RequestHandler;
 }
 

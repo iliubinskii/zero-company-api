@@ -1,4 +1,5 @@
 import { MONGODB_MAX_LIMIT } from "../consts";
+import { preprocessNumber } from "../utils";
 import zod from "zod";
 
 const description = zod.string().min(1);
@@ -20,23 +21,15 @@ export const CategoryUpdateValidationSchema = zod.strictObject({
 });
 
 export const GetCategoriesOptionsValidationSchema = zod.strictObject({
-  limit: zod.preprocess(
-    value => (typeof value === "string" ? Number.parseInt(value, 10) : value),
+  limit: preprocessNumber(
     zod.number().int().positive().max(MONGODB_MAX_LIMIT.categories).optional()
   ),
-  offset: zod.preprocess(
-    value => (typeof value === "string" ? Number.parseInt(value, 10) : value),
-    zod.number().int().nonnegative().optional()
-  )
+  offset: preprocessNumber(zod.number().int().nonnegative().optional())
 });
 
 export const GetCompaniesByCategoryOptionsValidationSchema = zod.strictObject({
-  limit: zod.preprocess(
-    value => (typeof value === "string" ? Number.parseInt(value, 10) : value),
+  limit: preprocessNumber(
     zod.number().int().positive().max(MONGODB_MAX_LIMIT.companies).optional()
   ),
-  offset: zod.preprocess(
-    value => (typeof value === "string" ? Number.parseInt(value, 10) : value),
-    zod.number().int().nonnegative().optional()
-  )
+  offset: preprocessNumber(zod.number().int().nonnegative().optional())
 });

@@ -1,10 +1,11 @@
+import { preprocessBoolean, preprocessNumber } from "../utils";
 import { MONGODB_MAX_LIMIT } from "../consts";
 import zod from "zod";
 
 const founder = zod.object({
-  confirmed: zod.boolean(),
+  confirmed: preprocessBoolean(zod.boolean()),
   email: zod.string().email(),
-  share: zod.number().int().positive()
+  share: preprocessNumber(zod.number().int().positive())
 });
 
 const webAccessibleImage = zod.object({
@@ -29,10 +30,7 @@ const name = zod.string().min(1);
 
 const privateCompany = zod.boolean();
 
-const targetValue = zod.preprocess(
-  value => (typeof value === "string" ? Number.parseInt(value, 10) : value),
-  zod.number().int().positive()
-);
+const targetValue = preprocessNumber(zod.number().int().positive());
 
 const website = zod.string().url();
 
@@ -61,12 +59,8 @@ export const CompanyUpdateValidationSchema = zod.strictObject({
 export const GetCompaniesOptionsValidationSchema = zod.strictObject({
   category: zod.string().min(1).optional(),
   founder: zod.string().min(1).optional(),
-  limit: zod.preprocess(
-    value => (typeof value === "string" ? Number.parseInt(value, 10) : value),
+  limit: preprocessNumber(
     zod.number().int().positive().max(MONGODB_MAX_LIMIT.companies).optional()
   ),
-  offset: zod.preprocess(
-    value => (typeof value === "string" ? Number.parseInt(value, 10) : value),
-    zod.number().int().nonnegative().optional()
-  )
+  offset: preprocessNumber(zod.number().int().nonnegative().optional())
 });

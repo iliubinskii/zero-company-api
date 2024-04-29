@@ -5,7 +5,7 @@ import {
 } from "./validation-schema";
 import {
   FieldType,
-  createUploadHandler,
+  createFormDataParser,
   createWebAccessibleStorage
 } from "../global-middleware";
 import { buildErrorResponse, filterUndefinedProperties } from "../utils";
@@ -15,6 +15,10 @@ import { StatusCodes } from "http-status-codes";
 import { ZodError } from "zod";
 
 export const companiesMiddleware: CompaniesMiddleware = {
+  parseFormData: createFormDataParser({
+    images: 10,
+    logo: 1
+  }),
   requireValidCompany: (req, res, next) => {
     try {
       req.company = filterUndefinedProperties({
@@ -59,10 +63,6 @@ export const companiesMiddleware: CompaniesMiddleware = {
       else throw err;
     }
   },
-  uploadHandler: createUploadHandler({
-    images: 10,
-    logo: 1
-  }),
   webAccessibleStorage: createWebAccessibleStorage({
     images: FieldType.multiple,
     logo: FieldType.single

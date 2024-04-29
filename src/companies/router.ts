@@ -13,10 +13,10 @@ import express, { Router } from "express";
  */
 export function createCompaniesRouter(controllers: CompanyControllers): Router {
   const {
+    parseFormData,
     requireValidCompany,
     requireValidCompanyUpdate,
     requireValidGetCompaniesOptions,
-    uploadHandler,
     webAccessibleStorage
   } = companiesMiddleware;
 
@@ -26,8 +26,8 @@ export function createCompaniesRouter(controllers: CompanyControllers): Router {
     .get("/", requireValidGetCompaniesOptions, controllers.getCompanies)
     .post(
       "/",
+      parseFormData,
       parseNestedFormData,
-      uploadHandler,
       webAccessibleStorage,
       requireValidCompany,
       controllers.addCompany
@@ -36,8 +36,8 @@ export function createCompaniesRouter(controllers: CompanyControllers): Router {
     .put(
       "/:id",
       requireValidMongodbId("id"),
+      parseFormData,
       parseNestedFormData,
-      uploadHandler,
       webAccessibleStorage,
       requireValidCompanyUpdate,
       controllers.updateCompany
