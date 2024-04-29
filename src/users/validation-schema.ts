@@ -1,8 +1,8 @@
+import { preprocessEmail, preprocessNumber } from "../utils";
 import { MONGODB_MAX_LIMIT } from "../consts";
-import { preprocessNumber } from "../utils";
 import zod from "zod";
 
-const email = zod.string().email();
+const email = preprocessEmail(zod.string().email());
 
 const firstName = zod.string().min(1);
 

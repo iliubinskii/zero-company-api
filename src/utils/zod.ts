@@ -23,6 +23,17 @@ export function preprocessBoolean<T extends zod.ZodTypeAny>(schema: T) {
 }
 
 /**
+ * Preprocesses a schema to unify emails (lowercase).
+ * @param schema - The schema to preprocess.
+ * @returns The preprocessed schema.
+ */
+export function preprocessEmail<T extends zod.ZodTypeAny>(schema: T) {
+  return zod.preprocess(value => {
+    return typeof value === "string" ? value.toLowerCase() : value;
+  }, schema);
+}
+
+/**
  * Preprocesses a schema to convert string values to numbers.
  * @param schema - The schema to preprocess.
  * @returns The preprocessed schema.
