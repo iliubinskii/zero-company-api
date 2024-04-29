@@ -1,7 +1,10 @@
+import {
+  parseNestedFormData,
+  requireValidMongodbId
+} from "../global-middleware";
 import { CompanyControllers } from "../types";
 import { companiesMiddleware } from "./middleware";
 import express, { Router } from "express";
-import { requireValidMongodbId } from "../global-middleware";
 
 /**
  * Creates a router for company routes.
@@ -23,6 +26,7 @@ export function createCompaniesRouter(controllers: CompanyControllers): Router {
     .get("/", requireValidGetCompaniesOptions, controllers.getCompanies)
     .post(
       "/",
+      parseNestedFormData,
       uploadHandler,
       webAccessibleStorage,
       requireValidCompany,
@@ -31,9 +35,10 @@ export function createCompaniesRouter(controllers: CompanyControllers): Router {
     .get("/:id", requireValidMongodbId("id"), controllers.getCompany)
     .put(
       "/:id",
+      requireValidMongodbId("id"),
+      parseNestedFormData,
       uploadHandler,
       webAccessibleStorage,
-      requireValidMongodbId("id"),
       requireValidCompanyUpdate,
       controllers.updateCompany
     )
