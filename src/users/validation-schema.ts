@@ -15,7 +15,6 @@ export const UserValidationSchema = zod.strictObject({
 });
 
 export const UserUpdateValidationSchema = zod.strictObject({
-  email: email.optional(),
   firstName: firstName.optional(),
   lastName: lastName.optional()
 });

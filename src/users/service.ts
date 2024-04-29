@@ -1,4 +1,4 @@
-import { MONGODB_MAX_LIMIT } from "../consts";
+import { MONGODB_ERROR, MONGODB_MAX_LIMIT } from "../consts";
 import { UserModel } from "./model";
 import { UsersService } from "../types";
 
@@ -9,13 +9,25 @@ import { UsersService } from "../types";
 export function createUsersService(): UsersService {
   return {
     addUser: async user => {
-      const model = new UserModel(user);
+      try {
+        const model = new UserModel(user);
 
-      const addedUser = await model.save();
+        const addedUser = await model.save();
 
-      const { _id, ...rest } = addedUser.toObject();
+        const { _id, ...rest } = addedUser.toObject();
 
-      return { _id: _id.toString(), ...rest };
+        return { _id: _id.toString(), ...rest };
+      } catch (err) {
+        if (
+          typeof err === "object" &&
+          err !== null &&
+          "code" in err &&
+          err.code === MONGODB_ERROR.DUPLICATE_KEY
+        )
+          return undefined;
+
+        throw err;
+      }
     },
     deleteUser: async email => {
       const deletedUser = await UserModel.findOneAndDelete({ email });

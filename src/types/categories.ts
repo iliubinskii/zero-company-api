@@ -23,9 +23,7 @@ export interface CategoriesService {
    * @param category - The category to add.
    * @returns A promise that resolves when the category has been added.
    */
-  readonly addCategory: (
-    category: Category
-  ) => Promise<ExistingCategory | undefined>;
+  readonly addCategory: (category: Category) => Promise<ExistingCategory>;
   /**
    * Deletes a category from the database.
    * @param id - The ID of the category to delete.

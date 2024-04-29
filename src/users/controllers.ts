@@ -20,7 +20,11 @@ export function createUserControllers(
 
         const addedUser = await service.addUser(user);
 
-        res.status(StatusCodes.CREATED).json(addedUser);
+        if (addedUser) res.status(StatusCodes.CREATED).json(addedUser);
+        else
+          res
+            .status(StatusCodes.CONFLICT)
+            .json(buildErrorResponse(ErrorCode.UserAlreadyExists));
       } catch (err) {
         next(err);
       }

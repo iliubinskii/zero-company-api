@@ -9,5 +9,6 @@ export const lang = {
   InvalidUserData: "Invalid user data",
   Ok: "Ok",
   Unauthorized: "Unauthorized",
+  UserAlreadyExists: "User already exists",
   UserNotFound: "User not found"
 };

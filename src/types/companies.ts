@@ -23,9 +23,7 @@ export interface CompaniesService {
    * @param company - The company to add.
    * @returns A promise that resolves when the company has been added.
    */
-  readonly addCompany: (
-    company: Company
-  ) => Promise<ExistingCompany | undefined>;
+  readonly addCompany: (company: Company) => Promise<ExistingCompany>;
   /**
    * Deletes a company from the database.
    * @param id - The ID of the company to delete.
