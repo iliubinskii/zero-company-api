@@ -11,7 +11,7 @@ export interface Company {
   readonly privateCompany: boolean;
   readonly recommended: boolean;
   readonly targetValue: number;
-  readonly website?: string | null;
+  readonly website: string | null;
 }
 
 export type Companies = readonly Company[];

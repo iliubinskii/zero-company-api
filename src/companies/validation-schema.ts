@@ -32,7 +32,7 @@ const privateCompany = zod.boolean();
 
 const targetValue = preprocessNumber(zod.number().int().positive());
 
-const website = zod.string().url();
+const website = zod.union([zod.string().url(), zod.null()]);
 
 export const CompanyValidationSchema = zod.strictObject({
   categories,
@@ -43,7 +43,8 @@ export const CompanyValidationSchema = zod.strictObject({
   name,
   privateCompany: privateCompany.default(false),
   targetValue,
-  website: website.optional()
+  // eslint-disable-next-line unicorn/no-null -- Ok
+  website: website.default(null)
 });
 
 export const CompanyUpdateValidationSchema = zod.strictObject({

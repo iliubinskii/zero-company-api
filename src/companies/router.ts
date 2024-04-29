@@ -1,4 +1,5 @@
 import {
+  nullifyEmptyStrings,
   parseNestedFormData,
   requireValidMongodbId
 } from "../global-middleware";
@@ -27,8 +28,9 @@ export function createCompaniesRouter(controllers: CompanyControllers): Router {
     .post(
       "/",
       parseFormData,
-      parseNestedFormData,
+      nullifyEmptyStrings,
       webAccessibleStorage,
+      parseNestedFormData,
       requireValidCompany,
       controllers.addCompany
     )
@@ -37,8 +39,9 @@ export function createCompaniesRouter(controllers: CompanyControllers): Router {
       "/:id",
       requireValidMongodbId("id"),
       parseFormData,
-      parseNestedFormData,
+      nullifyEmptyStrings,
       webAccessibleStorage,
+      parseNestedFormData,
       requireValidCompanyUpdate,
       controllers.updateCompany
     )

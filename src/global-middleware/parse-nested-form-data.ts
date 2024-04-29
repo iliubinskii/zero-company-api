@@ -7,7 +7,9 @@ export const parseNestedFormData: RequestHandler = (req, _res, next) => {
 
   for (const [key, value] of Object.entries(req.body))
     if (/[.[\]]/u.test(key)) {
+      // Direct assignment to req.body does not work
       _.set(substitutes, key, value);
+
       // eslint-disable-next-line @typescript-eslint/no-dynamic-delete, security/detect-object-injection -- Ok
       delete req.body[key];
     }

@@ -21,11 +21,11 @@ export const companiesMiddleware: CompaniesMiddleware = {
   }),
   requireValidCompany: (req, res, next) => {
     try {
-      req.company = filterUndefinedProperties({
+      req.company = {
         foundedAt: new Date().toISOString(),
         recommended: false,
         ...CompanyValidationSchema.parse(req.body)
-      });
+      };
       next();
     } catch (err) {
       if (err instanceof ZodError)

@@ -42,7 +42,11 @@ const Schema = new mongoose.Schema(
     privateCompany: { required: true, type: Boolean },
     recommended: { required: true, type: Boolean },
     targetValue: { required: true, type: Number },
-    website: String
+    website: {
+      // eslint-disable-next-line unicorn/no-null -- Ok
+      default: null,
+      type: String
+    }
   },
   { versionKey: false }
 );
