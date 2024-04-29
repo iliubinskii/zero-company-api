@@ -29,7 +29,10 @@ const name = zod.string().min(1);
 
 const privateCompany = zod.boolean();
 
-const targetValue = zod.number().int().positive();
+const targetValue = zod.preprocess(
+  value => (typeof value === "string" ? Number.parseInt(value, 10) : value),
+  zod.number().int().positive()
+);
 
 const website = zod.string().url();
 
