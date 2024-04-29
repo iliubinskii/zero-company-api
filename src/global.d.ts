@@ -27,6 +27,7 @@ declare module "express-serve-static-core" {
     getCompaniesByUserOptions?: GetCompaniesByUserOptions;
     getCompaniesOptions?: GetCompaniesOptions;
     getUsersOptions?: GetUsersOptions;
+    readonly logout: () => void;
     userCreate?: UserCreate;
     userUpdate?: UserUpdate;
   }

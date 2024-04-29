@@ -1,3 +1,5 @@
+export const AUTH0_SCOPE = "openid email profile";
+
 export const MONGODB_ERROR = {
   DUPLICATE_KEY: 11_000
 };

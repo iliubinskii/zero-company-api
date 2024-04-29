@@ -5,6 +5,18 @@ import { config } from "dotenv";
 
 config();
 
+export const AUTH0_CALLBACK_URL = assertDefined(
+  process.env["AUTH0_CALLBACK_URL"]
+);
+
+export const AUTH0_CLIENT_ID = assertDefined(process.env["AUTH0_CLIENT_ID"]);
+
+export const AUTH0_CLIENT_SECRET = assertDefined(
+  process.env["AUTH0_CLIENT_SECRET"]
+);
+
+export const AUTH0_DOMAIN = assertDefined(process.env["AUTH0_DOMAIN"]);
+
 export const CLOUDINARY_API_KEY = assertDefined(
   process.env["CLOUDINARY_API_KEY"]
 );
@@ -34,3 +46,5 @@ export const MULTER_DESTINATION_PATH = assertDefined(
 );
 
 export const PORT = assertDefined(process.env["PORT"]);
+
+export const SESSION_SECRET = assertDefined(process.env["SESSION_SECRET"]);

@@ -7,7 +7,7 @@ const config = {
     jest: true
   },
   extends: ["./.eslintrc.base.cjs"],
-  globals: {},
+  globals: { Express: true },
   ignorePatterns: ["!.*", "coverage/**", "dist/**", "node_modules/**"],
   overrides: [
     {
@@ -58,10 +58,12 @@ const config = {
             "multer",
             "nonnegative",
             "oid",
+            "openid",
             "originalname",
             "parens",
             "picsum",
             "req",
+            "resave",
             "smacss",
             "sonarjs",
             "str",
