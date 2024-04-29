@@ -6,7 +6,6 @@ export interface Company {
   readonly discoverable: boolean;
   readonly foundedAt: string;
   readonly founders: Founder[];
-  readonly header: WebAccessibleImage;
   readonly images: WebAccessibleImage[];
   readonly logo: WebAccessibleImage;
   readonly name: string;

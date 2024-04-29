@@ -21,8 +21,6 @@ const description = zod.string().min(1);
 
 const founders = zod.array(founder).nonempty();
 
-const header = webAccessibleImage;
-
 const images = zod.array(webAccessibleImage).nonempty();
 
 const logo = webAccessibleImage;
@@ -40,7 +38,6 @@ export const CompanyValidationSchema = zod.strictObject({
   description,
   discoverable,
   founders,
-  header,
   images,
   logo,
   name,
@@ -51,7 +48,6 @@ export const CompanyValidationSchema = zod.strictObject({
 export const CompanyUpdateValidationSchema = zod.strictObject({
   description: description.optional(),
   discoverable: discoverable.optional(),
-  header: header.optional(),
   images: images.optional(),
   logo: logo.optional(),
   name: name.optional(),

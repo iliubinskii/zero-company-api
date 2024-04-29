@@ -17,16 +17,6 @@ const Schema = new mongoose.Schema(
         }
       ]
     },
-    header: {
-      required: true,
-      type: {
-        assetId: { required: true, type: String },
-        height: { required: true, type: Number },
-        secureUrl: { required: true, type: String },
-        url: { required: true, type: String },
-        width: { required: true, type: Number }
-      }
-    },
     images: {
       required: true,
       type: [

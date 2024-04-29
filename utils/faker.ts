@@ -53,13 +53,6 @@ const companies = companyIds.map(($oid, index): FakerCompany => {
           targetValue *
           PRICE_STEP
       })),
-    header: {
-      assetId: faker.string.uuid(),
-      height: 400,
-      secureUrl: `https://picsum.photos/id/${index}/1600/400`,
-      url: `http://picsum.photos/id/${index}/1600/400`,
-      width: 1600
-    },
     images: faker.helpers.uniqueArray(
       () => ({
         assetId: faker.string.uuid(),

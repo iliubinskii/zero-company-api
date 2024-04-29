@@ -60,12 +60,10 @@ export const companiesMiddleware: CompaniesMiddleware = {
     }
   },
   uploadHandler: createUploadHandler({
-    header: 1,
     images: 10,
     logo: 1
   }),
   webAccessibleStorage: createWebAccessibleStorage({
-    header: FieldType.single,
     images: FieldType.multiple,
     logo: FieldType.single
   })
