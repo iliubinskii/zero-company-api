@@ -3,12 +3,12 @@ import { WebAccessibleImage } from "./common";
 export interface Company {
   readonly categories: string[];
   readonly description: string;
-  readonly discoverable: boolean;
   readonly foundedAt: string;
   readonly founders: Founder[];
   readonly images: WebAccessibleImage[];
   readonly logo: WebAccessibleImage;
   readonly name: string;
+  readonly privateCompany: boolean;
   readonly recommended: boolean;
   readonly targetValue: number;
   readonly website: string;

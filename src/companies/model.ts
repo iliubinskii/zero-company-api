@@ -5,7 +5,6 @@ const Schema = new mongoose.Schema(
   {
     categories: { required: true, type: [String] },
     description: { required: true, type: String },
-    discoverable: { required: true, type: Boolean },
     foundedAt: { required: true, type: String },
     founders: {
       required: true,
@@ -40,6 +39,7 @@ const Schema = new mongoose.Schema(
       }
     },
     name: { required: true, type: String },
+    privateCompany: { required: true, type: Boolean },
     recommended: { required: true, type: Boolean },
     targetValue: { required: true, type: Number },
     website: { required: true, type: String }

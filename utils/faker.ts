@@ -41,7 +41,6 @@ const companies = companyIds.map(($oid, index): FakerCompany => {
       faker.number.int({ max: 2, min: 1 })
     ),
     description: faker.lorem.paragraph(),
-    discoverable: true,
     foundedAt: faker.date.past().toISOString(),
     founders: faker.helpers
       .uniqueArray(userEmails, faker.number.int({ max: 3, min: 1 }))
@@ -71,6 +70,7 @@ const companies = companyIds.map(($oid, index): FakerCompany => {
       width: 512
     },
     name: faker.commerce.productName(),
+    privateCompany: false,
     recommended: true,
     targetValue,
     website: faker.internet.url()

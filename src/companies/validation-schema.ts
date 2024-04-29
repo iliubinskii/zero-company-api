@@ -27,7 +27,7 @@ const logo = webAccessibleImage;
 
 const name = zod.string().min(1);
 
-const discoverable = zod.boolean();
+const privateCompany = zod.boolean();
 
 const targetValue = zod.number().int().positive();
 
@@ -36,21 +36,21 @@ const website = zod.string();
 export const CompanyValidationSchema = zod.strictObject({
   categories,
   description,
-  discoverable,
   founders,
   images,
   logo,
   name,
+  privateCompany,
   targetValue,
   website
 });
 
 export const CompanyUpdateValidationSchema = zod.strictObject({
   description: description.optional(),
-  discoverable: discoverable.optional(),
   images: images.optional(),
   logo: logo.optional(),
   name: name.optional(),
+  privateCompany: privateCompany.optional(),
   targetValue: targetValue.optional(),
   website: website.optional()
 });

@@ -41,7 +41,6 @@ const config = {
             "cloudinary",
             "commonjs",
             "destructure",
-            "discoverable",
             "ecma",
             "escompat",
             "eslintrc",
