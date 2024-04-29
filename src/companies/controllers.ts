@@ -14,7 +14,7 @@ export function createCompanyControllers(
   return {
     addCompany: async (req, res, next) => {
       try {
-        const company = assertDefined(req.company);
+        const company = assertDefined(req.companyCreate);
 
         const addedCompany = await service.addCompany(company);
 

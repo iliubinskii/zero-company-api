@@ -1,4 +1,9 @@
-import { Category, ExistingCategory, GetCategoriesResponse } from "../schema";
+import {
+  CategoryCreate,
+  CategoryUpdate,
+  ExistingCategory,
+  GetCategoriesResponse
+} from "../schema";
 import { RequestHandler } from "express";
 
 export interface CategoryControllers {
@@ -23,7 +28,7 @@ export interface CategoriesService {
    * @param category - The category to add.
    * @returns A promise that resolves when the category has been added.
    */
-  readonly addCategory: (category: Category) => Promise<ExistingCategory>;
+  readonly addCategory: (category: CategoryCreate) => Promise<ExistingCategory>;
   /**
    * Deletes a category from the database.
    * @param id - The ID of the category to delete.
@@ -52,7 +57,7 @@ export interface CategoriesService {
    */
   readonly updateCategory: (
     id: string,
-    category: Partial<Category>
+    category: CategoryUpdate
   ) => Promise<ExistingCategory | undefined>;
 }
 

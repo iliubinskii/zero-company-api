@@ -1,4 +1,6 @@
+import { UserCreate, UserUpdate } from "../schema";
 import { preprocessEmail, preprocessNumber } from "../utils";
+import { Equals } from "ts-toolbelt/out/Any/Equals";
 import { MONGODB_MAX_LIMIT } from "../consts";
 import zod from "zod";
 
@@ -8,7 +10,7 @@ const firstName = zod.string().min(1);
 
 const lastName = zod.string().min(1);
 
-export const UserValidationSchema = zod.strictObject({
+export const UserCreateValidationSchema = zod.strictObject({
   email,
   firstName,
   lastName
@@ -32,3 +34,19 @@ export const GetCompaniesByUserOptionsValidationSchema = zod.strictObject({
   ),
   offset: preprocessNumber(zod.number().int().nonnegative().optional())
 });
+
+// Type check the user create validation schema
+((): Equals<
+  keyof zod.infer<typeof UserCreateValidationSchema>,
+  keyof UserCreate
+> => {
+  return 1;
+})();
+
+// Type check the user update validation schema
+((): Equals<
+  keyof zod.infer<typeof UserUpdateValidationSchema>,
+  keyof UserUpdate
+> => {
+  return 1;
+})();

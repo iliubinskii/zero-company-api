@@ -1,6 +1,6 @@
 import {
+  CategoryCreateValidationSchema,
   CategoryUpdateValidationSchema,
-  CategoryValidationSchema,
   GetCategoriesOptionsValidationSchema,
   GetCompaniesByCategoryOptionsValidationSchema
 } from "./validation-schema";
@@ -13,7 +13,7 @@ import { ZodError } from "zod";
 export const categoriesMiddleware: CategoriesMiddleware = {
   requireValidCategory: (req, res, next) => {
     try {
-      req.category = CategoryValidationSchema.parse(req.body);
+      req.categoryCreate = CategoryCreateValidationSchema.parse(req.body);
       next();
     } catch (err) {
       if (err instanceof ZodError)

@@ -1,4 +1,9 @@
-import { ExistingUser, GetUsersResponse, User } from "../schema";
+import {
+  ExistingUser,
+  GetUsersResponse,
+  UserCreate,
+  UserUpdate
+} from "../schema";
 import { RequestHandler } from "express";
 
 export interface UserControllers {
@@ -23,7 +28,7 @@ export interface UsersService {
    * @param user - The user to add.
    * @returns A promise that resolves when the user has been added.
    */
-  readonly addUser: (user: User) => Promise<ExistingUser | undefined>;
+  readonly addUser: (user: UserCreate) => Promise<ExistingUser | undefined>;
   /**
    * Deletes a user from the database.
    * @param email - The e-mail of the user to delete.
@@ -50,7 +55,7 @@ export interface UsersService {
    */
   readonly updateUser: (
     email: string,
-    user: Partial<User>
+    user: UserUpdate
   ) => Promise<ExistingUser | undefined>;
 }
 

@@ -4,6 +4,10 @@ export interface Category {
   readonly tagline: string;
 }
 
+export interface CategoryCreate extends Category {}
+
+export interface CategoryUpdate extends Partial<Category> {}
+
 export type Categories = readonly Category[];
 
 export interface ExistingCategory extends Category {

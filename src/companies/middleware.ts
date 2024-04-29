@@ -1,6 +1,6 @@
 import {
+  CompanyCreateValidationSchema,
   CompanyUpdateValidationSchema,
-  CompanyValidationSchema,
   GetCompaniesOptionsValidationSchema
 } from "./validation-schema";
 import {
@@ -21,12 +21,11 @@ export const companiesMiddleware: CompaniesMiddleware = {
   }),
   requireValidCompany: (req, res, next) => {
     try {
-      req.company = {
-        foundedAt: new Date().toISOString(),
-        recommended: false,
-        ...CompanyValidationSchema.parse(req.body)
-      };
-      next();
+      req.companyCreate = CompanyCreateValidationSchema.parse(req.body);
+
+      if (req.companyCreate.founders.some(founder => founder.confirmed))
+        res.status(StatusCodes.BAD_REQUEST).json(ErrorCode.InvalidCompanyData);
+      else next();
     } catch (err) {
       if (err instanceof ZodError)
         res

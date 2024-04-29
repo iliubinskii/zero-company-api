@@ -12,7 +12,11 @@ import { Writable } from "ts-toolbelt/out/Object/Writable";
 export function createCompaniesService(): CompaniesService {
   return {
     addCompany: async company => {
-      const model = new CompanyModel(company);
+      const model = new CompanyModel<Company>({
+        ...company,
+        foundedAt: new Date().toISOString(),
+        recommended: false
+      });
 
       const addedCompany = await model.save();
 

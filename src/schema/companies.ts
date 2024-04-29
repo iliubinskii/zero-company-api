@@ -14,6 +14,17 @@ export interface Company {
   readonly website: string | null;
 }
 
+export interface CompanyCreate
+  extends Omit<Company, "foundedAt" | "recommended"> {}
+
+export interface CompanyUpdate
+  extends Partial<
+    Omit<
+      Company,
+      "categories" | "foundedAt" | "founders" | "recommended" | "targetValue"
+    >
+  > {}
+
 export type Companies = readonly Company[];
 
 export interface ExistingCompany extends Company {

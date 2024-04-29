@@ -1,4 +1,9 @@
-import { Company, ExistingCompany, GetCompaniesResponse } from "../schema";
+import {
+  CompanyCreate,
+  CompanyUpdate,
+  ExistingCompany,
+  GetCompaniesResponse
+} from "../schema";
 import { RequestHandler } from "express";
 
 export interface CompanyControllers {
@@ -23,7 +28,7 @@ export interface CompaniesService {
    * @param company - The company to add.
    * @returns A promise that resolves when the company has been added.
    */
-  readonly addCompany: (company: Company) => Promise<ExistingCompany>;
+  readonly addCompany: (company: CompanyCreate) => Promise<ExistingCompany>;
   /**
    * Deletes a company from the database.
    * @param id - The ID of the company to delete.
@@ -52,7 +57,7 @@ export interface CompaniesService {
    */
   readonly updateCompany: (
     id: string,
-    company: Partial<Company>
+    company: CompanyUpdate
   ) => Promise<ExistingCompany | undefined>;
 }
 

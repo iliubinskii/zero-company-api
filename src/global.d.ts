@@ -1,6 +1,13 @@
 /// <reference types="jest-extended" />
 
-import { Category, Company, User } from "./schema";
+import {
+  CategoryCreate,
+  CategoryUpdate,
+  CompanyCreate,
+  CompanyUpdate,
+  UserCreate,
+  UserUpdate
+} from "./schema";
 import {
   GetCategoriesOptions,
   GetCompaniesByCategoryOptions,
@@ -11,16 +18,16 @@ import {
 
 declare module "express-serve-static-core" {
   interface Request {
-    category?: Category;
-    categoryUpdate?: Partial<Category>;
-    company?: Company;
-    companyUpdate?: Partial<Company>;
+    categoryCreate?: CategoryCreate;
+    categoryUpdate?: CategoryUpdate;
+    companyCreate?: CompanyCreate;
+    companyUpdate?: CompanyUpdate;
     getCategoriesOptions?: GetCategoriesOptions;
     getCompaniesByCategoryOptions?: GetCompaniesByCategoryOptions;
     getCompaniesByUserOptions?: GetCompaniesByUserOptions;
     getCompaniesOptions?: GetCompaniesOptions;
     getUsersOptions?: GetUsersOptions;
-    user?: User;
-    userUpdate?: Partial<User>;
+    userCreate?: UserCreate;
+    userUpdate?: UserUpdate;
   }
 }

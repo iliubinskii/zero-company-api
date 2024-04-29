@@ -1,8 +1,8 @@
 import {
   GetCompaniesByUserOptionsValidationSchema,
   GetUsersOptionsValidationSchema,
-  UserUpdateValidationSchema,
-  UserValidationSchema
+  UserCreateValidationSchema,
+  UserUpdateValidationSchema
 } from "./validation-schema";
 import { buildErrorResponse, filterUndefinedProperties } from "../utils";
 import { ErrorCode } from "../schema";
@@ -41,7 +41,7 @@ export const usersMiddleware: UsersMiddleware = {
   },
   requireValidUser: (req, res, next) => {
     try {
-      req.user = UserValidationSchema.parse(req.body);
+      req.userCreate = UserCreateValidationSchema.parse(req.body);
       next();
     } catch (err) {
       if (err instanceof ZodError)

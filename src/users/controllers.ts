@@ -16,7 +16,7 @@ export function createUserControllers(
   return {
     addUser: async (req, res, next) => {
       try {
-        const user = assertDefined(req.user);
+        const user = assertDefined(req.userCreate);
 
         const addedUser = await service.addUser(user);
 

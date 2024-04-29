@@ -1,22 +1,20 @@
 import { Category } from "../schema";
-import mongoose, { InferSchemaType } from "mongoose";
+import { Equals } from "ts-toolbelt/out/Any/Equals";
+import mongoose from "mongoose";
 
-const Schema = new mongoose.Schema(
-  {
-    description: { required: true, type: String },
-    name: { required: true, type: String },
-    tagline: { required: true, type: String }
-  },
-  { versionKey: false }
+const Schema = {
+  description: { required: true, type: String },
+  name: { required: true, type: String },
+  tagline: { required: true, type: String }
+};
+
+export const CategoryModel = mongoose.model<Category>(
+  "Category",
+
+  new mongoose.Schema<Category>(Schema, { versionKey: false })
 );
 
-export const CategoryModel = mongoose.model<Category>("Category", Schema);
-
-/**
- * Type check
- * @param value - Value
- * @returns Value
- */
-export function typeCheck(value: InferSchemaType<typeof Schema>): Category {
-  return value;
-}
+// Type check the company schema
+((): Equals<keyof typeof Schema, keyof Category> => {
+  return 1;
+})();
