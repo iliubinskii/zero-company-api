@@ -1,28 +1,28 @@
 import { MONGODB_MAX_LIMIT } from "../consts";
 import zod from "zod";
 
-const description = zod.string().min(1);
+const email = zod.string().email();
 
-const name = zod.string().min(1);
+const firstName = zod.string().min(1);
 
-const tagline = zod.string().min(1);
+const lastName = zod.string().min(1);
 
-export const CategoryValidationSchema = zod.strictObject({
-  description,
-  name,
-  tagline
+export const UserValidationSchema = zod.strictObject({
+  email,
+  firstName,
+  lastName
 });
 
-export const CategoryUpdateValidationSchema = zod.strictObject({
-  description: description.optional(),
-  name: name.optional(),
-  tagline: tagline.optional()
+export const UserUpdateValidationSchema = zod.strictObject({
+  email: email.optional(),
+  firstName: firstName.optional(),
+  lastName: lastName.optional()
 });
 
-export const GetCategoriesOptionsValidationSchema = zod.strictObject({
+export const GetUsersOptionsValidationSchema = zod.strictObject({
   limit: zod.preprocess(
     value => (typeof value === "string" ? Number.parseInt(value, 10) : value),
-    zod.number().int().positive().max(MONGODB_MAX_LIMIT.categories).optional()
+    zod.number().int().positive().max(MONGODB_MAX_LIMIT.users).optional()
   ),
   offset: zod.preprocess(
     value => (typeof value === "string" ? Number.parseInt(value, 10) : value),
@@ -30,7 +30,7 @@ export const GetCategoriesOptionsValidationSchema = zod.strictObject({
   )
 });
 
-export const GetCompaniesByCategoryOptionsValidationSchema = zod.strictObject({
+export const GetCompaniesByUserOptionsValidationSchema = zod.strictObject({
   limit: zod.preprocess(
     value => (typeof value === "string" ? Number.parseInt(value, 10) : value),
     zod.number().int().positive().max(MONGODB_MAX_LIMIT.companies).optional()

@@ -27,12 +27,19 @@ export function createCompaniesService(): CompaniesService {
     },
     getCompanies: async ({
       category,
+      founderEmail,
       limit = MONGODB_MAX_LIMIT.companies,
       offset = 0
     } = {}) => {
-      const filter: Writable<FilterQuery<Company>, "categories"> = {};
+      const filter: Writable<
+        FilterQuery<Company>,
+        "categories" | "founders"
+      > = {};
 
-      if (typeof category === "string") filter.categories = { $in: [category] };
+      if (typeof category === "string") filter.categories = { $in: category };
+
+      if (typeof founderEmail === "string")
+        filter["founders.email"] = { $in: founderEmail };
 
       const [companies, total] = await Promise.all([
         CompanyModel.find(filter).skip(offset).limit(limit),

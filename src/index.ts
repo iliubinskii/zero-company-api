@@ -10,6 +10,11 @@ import {
   createCompaniesService,
   createCompanyControllers
 } from "./companies";
+import {
+  createUserControllers,
+  createUsersRouter,
+  createUsersService
+} from "./users";
 import { ErrorCode } from "./schema";
 import { StatusCodes } from "http-status-codes";
 import { buildErrorResponse } from "./utils";
@@ -23,6 +28,8 @@ connectMongodb();
 const categoriesService = createCategoriesService();
 
 const companiesService = createCompaniesService();
+
+const userService = createUsersService();
 
 const app = express();
 
@@ -49,6 +56,11 @@ app.use(
 app.use(
   "/companies",
   createCompaniesRouter(createCompanyControllers(companiesService))
+);
+
+app.use(
+  "/users",
+  createUsersRouter(createUserControllers(userService, companiesService))
 );
 
 app.use(

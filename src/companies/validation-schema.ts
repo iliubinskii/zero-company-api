@@ -1,6 +1,11 @@
-import { Company } from "../schema";
 import { MONGODB_MAX_LIMIT } from "../consts";
 import zod from "zod";
+
+const founder = zod.object({
+  confirmed: zod.boolean(),
+  email: zod.string().email(),
+  share: zod.number().int().positive()
+});
 
 const webAccessibleImage = zod.object({
   assetId: zod.string().min(1),
@@ -10,7 +15,11 @@ const webAccessibleImage = zod.object({
   width: zod.number().int().positive()
 });
 
-const categories = zod.array(zod.string().min(1)).nonempty();
+const categories = zod.array(zod.string().min(1)).nonempty().max(2);
+
+const description = zod.string().min(1);
+
+const founders = zod.array(founder).nonempty();
 
 const header = webAccessibleImage;
 
@@ -20,24 +29,39 @@ const logo = webAccessibleImage;
 
 const name = zod.string().min(1);
 
+const discoverable = zod.boolean();
+
+const targetValue = zod.number().int().positive();
+
+const website = zod.string();
+
 export const CompanyValidationSchema = zod.strictObject({
   categories,
+  description,
+  discoverable,
+  founders,
   header,
   images,
   logo,
-  name
+  name,
+  targetValue,
+  website
 });
 
 export const CompanyUpdateValidationSchema = zod.strictObject({
-  categories: categories.optional(),
+  description: description.optional(),
+  discoverable: discoverable.optional(),
   header: header.optional(),
   images: images.optional(),
   logo: logo.optional(),
-  name: name.optional()
+  name: name.optional(),
+  targetValue: targetValue.optional(),
+  website: website.optional()
 });
 
 export const GetCompaniesOptionsValidationSchema = zod.strictObject({
   category: zod.string().min(1).optional(),
+  founder: zod.string().min(1).optional(),
   limit: zod.preprocess(
     value => (typeof value === "string" ? Number.parseInt(value, 10) : value),
     zod.number().int().positive().max(MONGODB_MAX_LIMIT.companies).optional()
@@ -47,40 +71,3 @@ export const GetCompaniesOptionsValidationSchema = zod.strictObject({
     zod.number().int().nonnegative().optional()
   )
 });
-
-typeCheck({
-  categories: [""],
-  header: {
-    assetId: "",
-    height: 0,
-    secureUrl: "",
-    url: "",
-    width: 0
-  },
-  images: [
-    {
-      assetId: "",
-      height: 0,
-      secureUrl: "",
-      url: "",
-      width: 0
-    }
-  ],
-  logo: {
-    assetId: "",
-    height: 0,
-    secureUrl: "",
-    url: "",
-    width: 0
-  },
-  name: ""
-});
-
-/**
- * Type check
- * @param value - Value
- * @returns Value
- */
-function typeCheck(value: zod.infer<typeof CompanyValidationSchema>): Company {
-  return value;
-}

@@ -60,6 +60,7 @@ export interface CompaniesService {
 
 export interface GetCompaniesOptions {
   readonly category?: string;
+  readonly founderEmail?: string;
   readonly limit?: number;
   readonly offset?: number;
 }

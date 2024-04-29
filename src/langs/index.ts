@@ -6,6 +6,8 @@ export const lang = {
   InvalidCompanyData: "Invalid company data",
   InvalidParam: "Invalid parameter",
   InvalidQuery: "Invalid query",
+  InvalidUserData: "Invalid user data",
   Ok: "Ok",
-  Unauthorized: "Unauthorized"
+  Unauthorized: "Unauthorized",
+  UserNotFound: "User not found"
 };

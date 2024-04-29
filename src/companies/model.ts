@@ -4,6 +4,19 @@ import mongoose, { InferSchemaType } from "mongoose";
 const Schema = new mongoose.Schema(
   {
     categories: { required: true, type: [String] },
+    description: { required: true, type: String },
+    discoverable: { required: true, type: Boolean },
+    foundedAt: { required: true, type: String },
+    founders: {
+      required: true,
+      type: [
+        {
+          confirmed: { required: true, type: Boolean },
+          email: { required: true, type: String },
+          share: { required: true, type: Number }
+        }
+      ]
+    },
     header: {
       required: true,
       type: {
@@ -36,38 +49,21 @@ const Schema = new mongoose.Schema(
         width: { required: true, type: Number }
       }
     },
-    name: { required: true, type: String }
+    name: { required: true, type: String },
+    recommended: { required: true, type: Boolean },
+    targetValue: { required: true, type: Number },
+    website: { required: true, type: String }
   },
   { versionKey: false }
 );
 
 export const CompanyModel = mongoose.model("Company", Schema);
 
-typeCheck({
-  categories: [],
-  header: {
-    assetId: "",
-    height: 0,
-    secureUrl: "",
-    url: "",
-    width: 0
-  },
-  images: new mongoose.Types.DocumentArray([]),
-  logo: {
-    assetId: "",
-    height: 0,
-    secureUrl: "",
-    url: "",
-    width: 0
-  },
-  name: ""
-});
-
 /**
  * Type check
  * @param value - Value
  * @returns Value
  */
-function typeCheck(value: InferSchemaType<typeof Schema>): Company {
+export function typeCheck(value: InferSchemaType<typeof Schema>): Company {
   return value;
 }

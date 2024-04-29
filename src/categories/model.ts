@@ -12,17 +12,11 @@ const Schema = new mongoose.Schema(
 
 export const CategoryModel = mongoose.model<Category>("Category", Schema);
 
-typeCheck({
-  description: "",
-  name: "",
-  tagline: ""
-});
-
 /**
  * Type check
  * @param value - Value
  * @returns Value
  */
-function typeCheck(value: InferSchemaType<typeof Schema>): Category {
+export function typeCheck(value: InferSchemaType<typeof Schema>): Category {
   return value;
 }

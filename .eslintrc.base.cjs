@@ -43,7 +43,6 @@ const config = {
     "no-type-assertion",
     "only-warn",
     "sort-annotation",
-    "sort-destructure-keys",
     "sort-imports-requires",
     "spellcheck",
     "unused-imports"
@@ -89,6 +88,10 @@ const config = {
     "react/jsx-sort-props": "warn",
     "react/prop-types": "off",
     "sonarjs/prefer-immediate-return": "off",
+    "sort/destructuring-properties": [
+      "error",
+      { caseSensitive: true, natural: true }
+    ],
     "sort/exports": [
       "error",
       {
@@ -103,7 +106,6 @@ const config = {
     "sort/object-properties": ["error", { caseSensitive: true, natural: true }],
     "sort-annotation/sort": "error",
     "sort-annotation/sort-keys": "error",
-    "sort-destructure-keys/sort-destructure-keys": "warn",
     "sort-imports-requires/sort-imports": ["warn", { unsafeAutofix: true }],
     "sort-imports-requires/sort-requires": ["warn", { unsafeAutofix: true }],
     "spellcheck/spell-checker": "warn",
