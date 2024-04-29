@@ -1,82 +1,62 @@
 [
   {
-    "_id": {
-      "$oid": "dcc0beec8eccee5cf3d07fb3"
-    },
-    "description": "Cumque vito cilicium astrum candidus aeger. Coaegresco abstergo tersus civitas sodalitas temptatio spes saepe denuo. Vesper vicinus vitae vis arca somnus adfectus cupiditate.",
-    "name": "Beauty",
-    "tagline": "De-engineered 4th generation superstructure"
+    "_id": "507f1f77bcf86cd799439011",
+    "description": "Offers scalable cloud infrastructure, storage, and computing solutions that empower businesses to manage data and applications effortlessly, ensuring high availability and security.",
+    "name": "Cloud Computing",
+    "tagline": "Elevating your business operations to the cloud for unmatched efficiency and scalability."
   },
   {
-    "_id": {
-      "$oid": "7c6fcfdeaf33d08eabf1b04f"
-    },
-    "description": "Pax vetus sufficio facere. Degusto asper caste cavus animi. Abstergo pectus cibo cupio nam aspernatur.",
-    "name": "Tools",
-    "tagline": "Vision-oriented 4th generation emulation"
+    "_id": "507f1f77bcf86cd799439012",
+    "description": "Provides software applications as a service through the internet, reducing the need for extensive internal IT resources while offering flexibility and scalability across business functions.",
+    "name": "SaaS",
+    "tagline": "Delivering dynamic software solutions directly over the internet with zero hassle."
   },
   {
-    "_id": {
-      "$oid": "9c90eb854722b57ce3679761"
-    },
-    "description": "Vaco cultellus certus conturbo. Excepturi adamo asperiores territo. Incidunt expedita tendo excepturi soluta annus.",
-    "name": "Electronics",
-    "tagline": "Profit-focused value-added artificial intelligence"
+    "_id": "507f1f77bcf86cd799439013",
+    "description": "Enables customers to develop, run, and manage applications effortlessly, offering a mix of development tools, middleware, and runtime environments without the complexity of maintaining infrastructure.",
+    "name": "Web & Mobile",
+    "tagline": "Streamline your application development with our comprehensive platform solutions."
   },
   {
-    "_id": {
-      "$oid": "c7fa25c5c8cd4be55b6b6ed6"
-    },
-    "description": "Conservo testimonium decretum. Curo deludo curia correptius blandior minus patrocinor universe thermae. Assumenda at ustilo solvo celo omnis cunae accusamus aduro verus.",
-    "name": "Clothing",
-    "tagline": "Total empowering attitude"
+    "_id": "507f1f77bcf86cd799439014",
+    "description": "Provides tools and platforms that facilitate online selling, inventory management, and integration with essential services like payment processing and logistics.",
+    "name": "E-commerce",
+    "tagline": "Revolutionizing online sales with advanced, integrated e-commerce solutions."
   },
   {
-    "_id": {
-      "$oid": "7b63aeab945893e543099d1b"
-    },
-    "description": "Eius officiis degero curis vilis. Depono curso sulum terebro depromo audentia toties quia. Amitto cubitum chirographum supra error aequus.",
-    "name": "Home",
-    "tagline": "Intuitive heuristic knowledge base"
+    "_id": "507f1f77bcf86cd799439015",
+    "description": "Develops technologies for the financial sector to streamline payments, enhance security, and provide robust financial management tools to individuals and businesses.",
+    "name": "FinTech",
+    "tagline": "Transforming financial interactions with secure and innovative fintech solutions."
   },
   {
-    "_id": {
-      "$oid": "9cffe4def31b3a2a7c8ded97"
-    },
-    "description": "Maiores sto vulticulus quo reprehenderit magni decimus tunc tonsor argentum. Vel apto sponte strues basium vester. Villa depopulo succurro vicinus.",
-    "name": "Outdoors",
-    "tagline": "Mandatory uniform moratorium"
+    "_id": "507f1f77bcf86cd799439016",
+    "description": "Provides web-based solutions that improve access to care, streamline medical processes, and enhance patient interaction with health services via telemedicine and health records systems.",
+    "name": "Health",
+    "tagline": "Advancing healthcare with technology, improving patient care through innovative web services."
   },
   {
-    "_id": {
-      "$oid": "510fa7a35a6102d36a654d8a"
-    },
-    "description": "Acquiro aiunt tamisium amor. Synagoga calco sublime dolore autem comis ascisco comedo adsum. Voro velut synagoga ambitus ventito cupiditas demum.",
-    "name": "Tools",
-    "tagline": "Polarised real-time hardware"
+    "_id": "507f1f77bcf86cd799439017",
+    "description": "Offers interactive, web-based learning platforms that provide educational resources and virtual classrooms, making education accessible globally.",
+    "name": "Education",
+    "tagline": "Redefining educational experiences with technology that connects and empowers learners and educators."
   },
   {
-    "_id": {
-      "$oid": "1cdf9faf235818451bcd9a0a"
-    },
-    "description": "Aperio cunae aequitas sapiente victus vilicus cinis basium incidunt vestigium. Excepturi admoneo quas combibo non pax summisse caveo cubicularis. Aestus asporto vinco tempus vita adstringo vulticulus aperiam voluntarius.",
-    "name": "Industrial",
-    "tagline": "Configurable hybrid core"
+    "_id": "507f1f77bcf86cd799439018",
+    "description": "Focuses on protecting applications, data, and networks from cyber threats and breaches with advanced web services, ensuring digital asset security.",
+    "name": "Cyber Security",
+    "tagline": "Securing the digital world with cutting-edge cybersecurity services for relentless protection."
   },
   {
-    "_id": {
-      "$oid": "720ecdac0ce12dddb548c7fc"
-    },
-    "description": "Vestrum copiose cerno aperiam amissio denuncio spargo ciminatio cerno. Depraedor corpus tersus quis reiciendis. Textilis uredo debeo dolorem adipisci.",
-    "name": "Electronics",
-    "tagline": "Face to face foreground framework"
+    "_id": "507f1f77bcf86cd799439019",
+    "description": "Integrates artificial intelligence and machine learning into web services to provide deep insights, automate tasks, and optimize decision-making processes across industries.",
+    "name": "AI & ML",
+    "tagline": "Driving smarter decisions with AI and machine learning platforms that revolutionize business analytics."
   },
   {
-    "_id": {
-      "$oid": "e551360404e4d4f753fb3f62"
-    },
-    "description": "Hic trans debeo truculenter quidem clementia. Aureus dens super paens. Damno quia iusto tertius curriculum sopor summopere theatrum deludo deficio.",
-    "name": "Shoes",
-    "tagline": "Horizontal content-based budgetary management"
+    "_id": "507f1f77bcf86cd79943901a",
+    "description": "Develops platforms that support the integration and management of IoT devices, enabling real-time monitoring, management, and data analysis for enhanced operational efficiency.",
+    "name": "IoT",
+    "tagline": "Connecting and managing your IoT devices seamlessly through robust web platforms."
   }
 ]

@@ -24,7 +24,9 @@ export const companiesMiddleware: CompaniesMiddleware = {
       req.companyCreate = CompanyCreateValidationSchema.parse(req.body);
 
       if (req.companyCreate.founders.some(founder => founder.confirmed))
-        res.status(StatusCodes.BAD_REQUEST).json(ErrorCode.InvalidCompanyData);
+        res
+          .status(StatusCodes.BAD_REQUEST)
+          .json(buildErrorResponse(ErrorCode.InvalidCompanyData));
       else next();
     } catch (err) {
       if (err instanceof ZodError)

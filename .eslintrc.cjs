@@ -59,6 +59,7 @@ const config = {
             "oid",
             "originalname",
             "parens",
+            "picsum",
             "req",
             "smacss",
             "sonarjs",
