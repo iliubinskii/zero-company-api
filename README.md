@@ -23,4 +23,3 @@
 
 - Add authors in package.json
 - Decide whether repo is private or public
-- Select licence type in package.json
