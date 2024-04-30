@@ -1,10 +1,4 @@
-import {
-  AUTH0_LOGIN_FAILURE_URL,
-  AUTH0_LOGIN_SUCCESS_URL,
-  AUTH0_LOGOUT_URL,
-  COOKIE_DOMAIN,
-  JWT_SECRET
-} from "../config";
+import { AUTH0_RETURN_URL, COOKIE_DOMAIN, JWT_SECRET } from "../config";
 import { AUTH0_SCOPE, AUTH_TOKEN_COOKIE_NAME, JWT_EXPIRES_IN } from "../consts";
 import express from "express";
 import jwt from "jsonwebtoken";
@@ -18,7 +12,7 @@ authRouter
     "/login",
     passport.authenticate("auth0", { scope: AUTH0_SCOPE }),
     (_req, res) => {
-      res.redirect(AUTH0_LOGIN_FAILURE_URL);
+      res.redirect(AUTH0_RETURN_URL);
     }
   )
   .get(
@@ -28,7 +22,7 @@ authRouter
     // - Create a new user in MongoDB if it doesn't exist
     // - Maybe store random ID to MongoDB user and JWT and use it to verify user
     passport.authenticate("auth0", {
-      failureRedirect: AUTH0_LOGIN_FAILURE_URL
+      failureRedirect: AUTH0_RETURN_URL
     }),
     (req, res) => {
       if (req.isAuthenticated()) {
@@ -46,8 +40,8 @@ authRouter
           secure: true
         });
 
-        res.redirect(AUTH0_LOGIN_SUCCESS_URL);
-      } else res.redirect(AUTH0_LOGIN_FAILURE_URL);
+        res.redirect(AUTH0_RETURN_URL);
+      } else res.redirect(AUTH0_RETURN_URL);
     }
   )
   .get(
@@ -56,7 +50,7 @@ authRouter
     // TODO: Also remove cookie
     (req, res) => {
       req.logout();
-      res.redirect(AUTH0_LOGOUT_URL);
+      res.redirect(AUTH0_RETURN_URL);
     }
   )
   .get("/me", (req, res) => {

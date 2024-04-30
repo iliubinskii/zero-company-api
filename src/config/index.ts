@@ -21,15 +21,7 @@ export const AUTH0_CLIENT_SECRET = assertDefined(
 
 export const AUTH0_DOMAIN = assertDefined(process.env["AUTH0_DOMAIN"]);
 
-export const AUTH0_LOGIN_FAILURE_URL = assertDefined(
-  process.env["AUTH0_LOGIN_FAILURE_URL"]
-);
-
-export const AUTH0_LOGOUT_URL = assertDefined(process.env["AUTH0_LOGOUT_URL"]);
-
-export const AUTH0_LOGIN_SUCCESS_URL = assertDefined(
-  process.env["AUTH0_LOGIN_SUCCESS_URL"]
-);
+export const AUTH0_RETURN_URL = assertDefined(process.env["AUTH0_RETURN_URL"]);
 
 export const CLOUDINARY_API_KEY = assertDefined(
   process.env["CLOUDINARY_API_KEY"]
