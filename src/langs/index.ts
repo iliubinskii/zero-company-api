@@ -1,4 +1,5 @@
 export const lang = {
+  AuthenticationFailed: "Authentication failed",
   CategoryNotFound: "Category not found",
   CompanyNotFound: "Company not found",
   InternalServerError: "Internal server error",

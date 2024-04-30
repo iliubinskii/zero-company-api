@@ -110,6 +110,7 @@ const config = {
     "sort-imports-requires/sort-requires": ["warn", { unsafeAutofix: true }],
     "spellcheck/spell-checker": "warn",
     "unicorn/catch-error-name": ["warn", { name: "err" }],
+    "unicorn/consistent-function-scoping": "off",
     "unicorn/filename-case": "off",
     "unicorn/no-array-callback-reference": "off",
     "unicorn/no-unnecessary-polyfills": "off",

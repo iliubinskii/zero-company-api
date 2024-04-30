@@ -5,6 +5,10 @@ import { config } from "dotenv";
 
 config();
 
+export const ENV = assertDefined(process.env["ENV"]);
+
+export const PORT = assertDefined(process.env["PORT"]);
+
 export const AUTH0_CALLBACK_URL = assertDefined(
   process.env["AUTH0_CALLBACK_URL"]
 );
@@ -16,6 +20,16 @@ export const AUTH0_CLIENT_SECRET = assertDefined(
 );
 
 export const AUTH0_DOMAIN = assertDefined(process.env["AUTH0_DOMAIN"]);
+
+export const AUTH0_LOGIN_FAILURE_URL = assertDefined(
+  process.env["AUTH0_LOGIN_FAILURE_URL"]
+);
+
+export const AUTH0_LOGOUT_URL = assertDefined(process.env["AUTH0_LOGOUT_URL"]);
+
+export const AUTH0_LOGIN_SUCCESS_URL = assertDefined(
+  process.env["AUTH0_LOGIN_SUCCESS_URL"]
+);
 
 export const CLOUDINARY_API_KEY = assertDefined(
   process.env["CLOUDINARY_API_KEY"]
@@ -33,6 +47,10 @@ export const CLOUDINARY_CLOUD_NAME = assertDefined(
   process.env["CLOUDINARY_CLOUD_NAME"]
 );
 
+export const COOKIE_DOMAIN = assertDefined(process.env["COOKIE_DOMAIN"]);
+
+export const CORS_ORIGIN = assertDefined(process.env["CORS_ORIGIN"]);
+
 export const JWT_SECRET = assertDefined(process.env["JWT_SECRET"]);
 
 export const MONGODB_DATABASE_NAME = assertDefined(
@@ -44,7 +62,5 @@ export const MONGODB_URI = assertDefined(process.env["MONGODB_URI"]);
 export const MULTER_DESTINATION_PATH = assertDefined(
   process.env["MULTER_DESTINATION_PATH"]
 );
-
-export const PORT = assertDefined(process.env["PORT"]);
 
 export const SESSION_SECRET = assertDefined(process.env["SESSION_SECRET"]);

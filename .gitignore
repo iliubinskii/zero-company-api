@@ -1,5 +1,6 @@
 .env
 .vercel
+certificates
 coverage
 dist
 node_modules
