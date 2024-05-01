@@ -1,5 +1,5 @@
+import { Company, ExistingCompany, GetCompaniesResponse } from "../../schema";
 import { CompaniesService } from "../../types";
-import { Company } from "../../schema";
 import { CompanyModel } from "./model";
 import { FilterQuery } from "mongoose";
 import { MONGODB_MAX_LIMIT } from "../../consts";
@@ -11,7 +11,7 @@ import { Writable } from "ts-toolbelt/out/Object/Writable";
  */
 export function createCompaniesService(): CompaniesService {
   return {
-    addCompany: async company => {
+    addCompany: async (company): Promise<ExistingCompany> => {
       const model = new CompanyModel<Company>({
         ...company,
         foundedAt: new Date().toISOString(),
@@ -24,7 +24,7 @@ export function createCompaniesService(): CompaniesService {
 
       return { _id: _id.toString(), ...rest };
     },
-    deleteCompany: async id => {
+    deleteCompany: async (id): Promise<number> => {
       const deletedCompany = await CompanyModel.findByIdAndDelete(id);
 
       return deletedCompany ? 1 : 0;
@@ -34,7 +34,7 @@ export function createCompaniesService(): CompaniesService {
       founderEmail,
       limit = MONGODB_MAX_LIMIT.companies,
       offset = 0
-    } = {}) => {
+    } = {}): Promise<GetCompaniesResponse> => {
       const filter: Writable<
         FilterQuery<Company>,
         "categories" | "founders"
@@ -59,7 +59,7 @@ export function createCompaniesService(): CompaniesService {
         total
       };
     },
-    getCompany: async id => {
+    getCompany: async (id): Promise<ExistingCompany | undefined> => {
       const company = await CompanyModel.findById(id);
 
       if (company) {
@@ -70,7 +70,10 @@ export function createCompaniesService(): CompaniesService {
 
       return undefined;
     },
-    updateCompany: async (id, company) => {
+    updateCompany: async (
+      id,
+      company
+    ): Promise<ExistingCompany | undefined> => {
       const updatedCompany = await CompanyModel.findByIdAndUpdate(
         id,
         { $set: company },

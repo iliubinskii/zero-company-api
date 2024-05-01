@@ -48,6 +48,7 @@ const config = {
     "unused-imports"
   ],
   rules: {
+    "@typescript-eslint/explicit-function-return-type": "warn",
     "@typescript-eslint/restrict-template-expressions": [
       "warn",
       { allowNumber: true }

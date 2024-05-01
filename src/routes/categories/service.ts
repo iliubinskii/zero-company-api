@@ -1,3 +1,4 @@
+import { ExistingCategory, GetCategoriesResponse } from "../../schema";
 import { CategoriesService } from "../../types";
 import { CategoryModel } from "./model";
 import { MONGODB_MAX_LIMIT } from "../../consts";
@@ -8,7 +9,7 @@ import { MONGODB_MAX_LIMIT } from "../../consts";
  */
 export function createCategoriesService(): CategoriesService {
   return {
-    addCategory: async category => {
+    addCategory: async (category): Promise<ExistingCategory> => {
       const model = new CategoryModel(category);
 
       const addedCategory = await model.save();
@@ -17,7 +18,7 @@ export function createCategoriesService(): CategoriesService {
 
       return { _id: _id.toString(), ...rest };
     },
-    deleteCategory: async id => {
+    deleteCategory: async (id): Promise<number> => {
       const deletedCategory = await CategoryModel.findByIdAndDelete(id);
 
       return deletedCategory ? 1 : 0;
@@ -25,7 +26,7 @@ export function createCategoriesService(): CategoriesService {
     getCategories: async ({
       limit = MONGODB_MAX_LIMIT.categories,
       offset = 0
-    } = {}) => {
+    } = {}): Promise<GetCategoriesResponse> => {
       const [categories, total] = await Promise.all([
         CategoryModel.find().skip(offset).limit(limit),
         CategoryModel.countDocuments()
@@ -40,7 +41,7 @@ export function createCategoriesService(): CategoriesService {
         total
       };
     },
-    getCategory: async id => {
+    getCategory: async (id): Promise<ExistingCategory | undefined> => {
       const category = await CategoryModel.findById(id);
 
       if (category) {
@@ -51,7 +52,10 @@ export function createCategoriesService(): CategoriesService {
 
       return undefined;
     },
-    updateCategory: async (id, category) => {
+    updateCategory: async (
+      id,
+      category
+    ): Promise<ExistingCategory | undefined> => {
       const updatedCategory = await CategoryModel.findByIdAndUpdate(
         id,
         { $set: category },

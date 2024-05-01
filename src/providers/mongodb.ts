@@ -4,6 +4,6 @@ import mongoose from "mongoose";
 /**
  * Connects to MongoDB.
  */
-export async function connectMongodb() {
+export async function connectMongodb(): Promise<void> {
   await mongoose.connect(MONGODB_URI, { dbName: MONGODB_DATABASE_NAME });
 }

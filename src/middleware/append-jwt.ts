@@ -50,7 +50,7 @@ const JwtValidationSchema = zod
  * @param req - The request.
  * @returns The token.
  */
-function getToken(req: Parameters<RequestHandler>[0]) {
+function getToken(req: Parameters<RequestHandler>[0]): string | undefined {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, security/detect-object-injection -- Ok
   const authCookie = req.cookies[AUTH_COOKIE_NAME] as unknown;
 

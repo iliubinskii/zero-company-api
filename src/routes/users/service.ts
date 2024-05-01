@@ -1,3 +1,4 @@
+import { ExistingUser, GetUsersResponse } from "../../schema";
 import { MONGODB_ERROR, MONGODB_MAX_LIMIT } from "../../consts";
 import { UserModel } from "./model";
 import { UsersService } from "../../types";
@@ -8,7 +9,7 @@ import { UsersService } from "../../types";
  */
 export function createUsersService(): UsersService {
   return {
-    addUser: async user => {
+    addUser: async (user): Promise<ExistingUser | undefined> => {
       try {
         const model = new UserModel(user);
 
@@ -29,12 +30,12 @@ export function createUsersService(): UsersService {
         throw err;
       }
     },
-    deleteUser: async email => {
+    deleteUser: async (email): Promise<number> => {
       const deletedUser = await UserModel.findOneAndDelete({ email });
 
       return deletedUser ? 1 : 0;
     },
-    getUser: async email => {
+    getUser: async (email): Promise<ExistingUser | undefined> => {
       const user = await UserModel.findOne({ email });
 
       if (user) {
@@ -45,7 +46,10 @@ export function createUsersService(): UsersService {
 
       return undefined;
     },
-    getUsers: async ({ limit = MONGODB_MAX_LIMIT.users, offset = 0 } = {}) => {
+    getUsers: async ({
+      limit = MONGODB_MAX_LIMIT.users,
+      offset = 0
+    } = {}): Promise<GetUsersResponse> => {
       const [users, total] = await Promise.all([
         UserModel.find().skip(offset).limit(limit),
         UserModel.countDocuments()
@@ -60,7 +64,7 @@ export function createUsersService(): UsersService {
         total
       };
     },
-    updateUser: async (email, user) => {
+    updateUser: async (email, user): Promise<ExistingUser | undefined> => {
       const updatedUser = await UserModel.findOneAndUpdate(
         { email },
         { $set: user },
