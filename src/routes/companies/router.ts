@@ -4,7 +4,7 @@ import {
   requireJwtAdmin,
   requireJwtUser,
   requireValidMongodbId
-} from "../../global-middleware";
+} from "../../middleware";
 import { CompanyControllers } from "../../types";
 import { companiesMiddleware } from "./middleware";
 import express, { Router } from "express";

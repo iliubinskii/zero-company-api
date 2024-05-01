@@ -7,7 +7,7 @@ import {
   FieldType,
   parseFormData,
   webAccessibleStorage
-} from "../../global-middleware";
+} from "../../middleware";
 import { buildErrorResponse, filterUndefinedProperties } from "../../utils";
 import { CompaniesMiddleware } from "../../types";
 import { ErrorCode } from "../../schema";

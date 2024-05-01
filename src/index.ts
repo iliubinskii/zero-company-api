@@ -1,5 +1,5 @@
 import { CORS_ORIGIN, ENV, PORT, SESSION_SECRET } from "./config";
-import { appendJwt, logRequest, requestId } from "./global-middleware";
+import { appendJwt, logRequest, requestId } from "./middleware";
 import {
   authRouter,
   createCategoriesRouter,
