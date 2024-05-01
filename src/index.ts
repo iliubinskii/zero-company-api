@@ -84,6 +84,12 @@ app.use("/test", testRouter);
 
 app.use("/users", createUsersRouter(userControllers));
 
+app.all("*", (_req, res) => {
+  res
+    .status(StatusCodes.NOT_FOUND)
+    .json(buildErrorResponse(ErrorCode.NotFound));
+});
+
 app.use(
   (
     err: unknown,

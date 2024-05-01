@@ -9,6 +9,7 @@ export enum ErrorCode {
   InvalidParam = "InvalidParam",
   InvalidQuery = "InvalidQuery",
   InvalidUserData = "InvalidUserData",
+  NotFound = "NotFound",
   Unauthorized = "Unauthorized",
   UserAlreadyExists = "UserAlreadyExists",
   UserNotFound = "UserNotFound"

@@ -10,6 +10,7 @@ export const lang = {
   InvalidQuery: "Invalid query",
   InvalidUserData: "Invalid user data",
   JwtVerificationFailed: "JWT verification failed",
+  NotFound: "Not found",
   Ok: "Ok",
   ServerError: "Server error",
   ServerStarted: "Server started",
