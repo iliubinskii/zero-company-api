@@ -30,26 +30,28 @@ authRouter
     passport.authenticate("auth0", {
       failureRedirect: AUTH0_RETURN_URL
     }),
-    (req, res) => {
+    (req, res, next) => {
       if (req.isAuthenticated()) {
-        req.logout();
-
         const user = UserValidationSchema.parse(req.user);
 
         const token = jwt.sign({ email: user.emails[0].value }, JWT_SECRET, {
           expiresIn: JWT_EXPIRES_IN
         });
 
-        res
-          .cookie(AUTH_COOKIE_NAME, token, {
-            domain: COOKIE_DOMAIN,
-            expires: new Date(Date.now() + AUTH_COOKIE_LIFETIME),
-            httpOnly: true,
-            path: "/",
-            sameSite: "strict",
-            secure: true
-          })
-          .redirect(AUTH0_RETURN_URL);
+        req.logout(err => {
+          if (err) next(err);
+          else
+            res
+              .cookie(AUTH_COOKIE_NAME, token, {
+                domain: COOKIE_DOMAIN,
+                expires: new Date(Date.now() + AUTH_COOKIE_LIFETIME),
+                httpOnly: true,
+                path: "/",
+                sameSite: "strict",
+                secure: true
+              })
+              .redirect(AUTH0_RETURN_URL);
+        });
       } else res.redirect(AUTH0_RETURN_URL);
     }
   )
