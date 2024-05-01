@@ -24,7 +24,7 @@ import express, { NextFunction, Request, Response } from "express";
 import fs from "node:fs";
 import https from "node:https";
 import { lang } from "./langs";
-import { logger } from "./global-services";
+import { logger } from "./services";
 import passport from "passport";
 import path from "node:path";
 import session from "express-session";

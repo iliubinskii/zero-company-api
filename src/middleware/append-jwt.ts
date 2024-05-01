@@ -7,7 +7,7 @@ import {
 import { RequestHandler } from "express";
 import jwt from "jsonwebtoken";
 import { lang } from "../langs";
-import { logger } from "../global-services";
+import { logger } from "../services";
 import zod from "zod";
 
 export const appendJwt: RequestHandler = (req, _res, next) => {
