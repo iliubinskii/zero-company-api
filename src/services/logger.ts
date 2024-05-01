@@ -1,6 +1,7 @@
 import { LOG_LEVEL } from "../config";
 import { LOG_REQUEST_ID_LENGTH } from "../consts";
 import { format } from "date-fns";
+import { ucfirst } from "../utils";
 import winston from "winston";
 
 export const logger = winston.createLogger({
@@ -24,6 +25,8 @@ export const logger = winston.createLogger({
 function formatters(info: winston.Logform.TransformableInfo): string {
   const { level, message, requestId, stack, timestamp } = info;
 
+  const levelStr = ucfirst(level);
+
   const messageStr = stack ?? message;
 
   const timestampStr = format(timestamp, "EEE, MMM d, HH:mm:ss.SSS");
@@ -31,8 +34,8 @@ function formatters(info: winston.Logform.TransformableInfo): string {
   if (requestId) {
     const requestIdStr = requestId.slice(0, LOG_REQUEST_ID_LENGTH);
 
-    return `${level} at req '${requestIdStr}' on ${timestampStr}: ${messageStr}`;
+    return `${levelStr} at req '${requestIdStr}' on ${timestampStr}: ${messageStr}`;
   }
 
-  return `${level} on ${timestampStr}: ${messageStr}`;
+  return `${levelStr} on ${timestampStr}: ${messageStr}`;
 }
