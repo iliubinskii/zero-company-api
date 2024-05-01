@@ -16,9 +16,7 @@ export const appendJwt: RequestHandler = (req, _res, next) => {
   if (typeof token === "string")
     jwt.verify(token, JWT_SECRET, (jwtError, decoded) => {
       if (jwtError) {
-        logger.error(lang.JwtVerificationFailed, {
-          requestId: req.requestId
-        });
+        logger.warn(lang.JwtVerificationFailed, { requestId: req.requestId });
         logger.warn(jwtError);
       } else
         try {
@@ -30,7 +28,7 @@ export const appendJwt: RequestHandler = (req, _res, next) => {
           };
         } catch (err) {
           if (err instanceof zod.ZodError) {
-            logger.error(lang.JwtVerificationFailed, {
+            logger.warn(lang.JwtVerificationFailed, {
               requestId: req.requestId
             });
             logger.warn(err);
