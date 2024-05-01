@@ -132,10 +132,10 @@ async function app(): Promise<void> {
       https.createServer(httpsOptions, app).listen(PORT, () => {
         logger.info(lang.ServerStarted);
       });
-    }
-    app.listen(PORT, () => {
-      logger.info(lang.ServerStarted);
-    });
+    } else
+      app.listen(PORT, () => {
+        logger.info(lang.ServerStarted);
+      });
   } catch (err) {
     logger.error(err);
   }
