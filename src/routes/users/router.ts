@@ -14,7 +14,7 @@ export function createUsersRouter(controllers: UserControllers): Router {
     requireValidGetUsersOptions,
     requireValidUser,
     requireValidUserUpdate,
-    userEmailFromQuery
+    userEmailFromParams
   } = usersMiddleware;
 
   const router = express.Router();
@@ -22,25 +22,25 @@ export function createUsersRouter(controllers: UserControllers): Router {
   router
     .get("/", requireJwtUser, requireValidGetUsersOptions, controllers.getUsers)
     .post("/", requireJwtAdmin, requireValidUser, controllers.addUser)
-    .get("/:email", requireJwtUser, userEmailFromQuery, controllers.getUser)
+    .get("/:email", requireJwtUser, userEmailFromParams, controllers.getUser)
     .put(
       "/:email",
       requireJwtAdmin,
       requireValidUserUpdate,
-      userEmailFromQuery,
+      userEmailFromParams,
       controllers.updateUser
     )
     .delete(
       "/:email",
       requireJwtAdmin,
-      userEmailFromQuery,
+      userEmailFromParams,
       controllers.deleteUser
     )
     .get(
       "/:email/companies",
       requireJwtUser,
       requireValidGetCompaniesByUserOptions,
-      userEmailFromQuery,
+      userEmailFromParams,
       controllers.getCompaniesByUser
     );
 

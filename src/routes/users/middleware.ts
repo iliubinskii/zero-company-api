@@ -85,8 +85,8 @@ export const usersMiddleware: UsersMiddleware = {
     req.userEmail = assertDefined(req.jwtUser).email;
     next();
   },
-  userEmailFromQuery: (req, _res, next) => {
-    req.userEmail = assertString(req.query["email"]).toLowerCase();
+  userEmailFromParams: (req, _res, next) => {
+    req.userEmail = assertString(req.params["email"]).toLowerCase();
     next();
   }
 };

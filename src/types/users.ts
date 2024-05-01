@@ -22,7 +22,7 @@ export interface UsersMiddleware {
   readonly requireValidUser: RequestHandler;
   readonly requireValidUserUpdate: RequestHandler;
   readonly userEmailFromJwtUser: RequestHandler;
-  readonly userEmailFromQuery: RequestHandler;
+  readonly userEmailFromParams: RequestHandler;
 }
 
 export interface UsersService {
