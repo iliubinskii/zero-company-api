@@ -19,7 +19,7 @@ export function initPassport(): void {
       domain: AUTH0_DOMAIN
     },
     (_accessToken, _refreshToken, _extraParams, profile, done) => {
-      return done(null, profile);
+      done(null, profile);
     }
   );
 

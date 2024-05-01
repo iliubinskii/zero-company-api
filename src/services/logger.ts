@@ -23,19 +23,17 @@ export const logger = winston.createLogger({
  * @returns - Formatted log string
  */
 function formatters(info: winston.Logform.TransformableInfo): string {
-  const { level, message, requestId, stack, timestamp } = info;
+  const level = ucfirst(info.level);
 
-  const levelStr = ucfirst(level);
+  const message = String(info["stack"] ?? info.message);
 
-  const messageStr = stack ?? message;
+  const timestamp = format(info["timestamp"], "EEE, MMM d, HH:mm:ss.SSS");
 
-  const timestampStr = format(timestamp, "EEE, MMM d, HH:mm:ss.SSS");
+  if (info["requestId"]) {
+    const requestId = String(info["requestId"]).slice(0, LOG_REQUEST_ID_LENGTH);
 
-  if (requestId) {
-    const requestIdStr = requestId.slice(0, LOG_REQUEST_ID_LENGTH);
-
-    return `${levelStr} at req '${requestIdStr}' on ${timestampStr}: ${messageStr}`;
+    return `${level} at req '${requestId}' on ${timestamp}: ${message}`;
   }
 
-  return `${levelStr} on ${timestampStr}: ${messageStr}`;
+  return `${level} on ${timestamp}: ${message}`;
 }

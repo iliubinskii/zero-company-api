@@ -22,6 +22,7 @@ export const authRouter = express.Router();
 authRouter
   .get(
     "/callback",
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument -- Postponed
     passport.authenticate("auth0", {
       failureRedirect: AUTH0_RETURN_URL
     }),
@@ -52,6 +53,7 @@ authRouter
   )
   .get(
     "/login",
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument -- Postponed
     passport.authenticate("auth0", { scope: AUTH0_SCOPE }),
     (_req, res) => {
       res.redirect(AUTH0_RETURN_URL);
@@ -70,7 +72,7 @@ authRouter
       .redirect(AUTH0_RETURN_URL);
   })
   .get("/me", (req, res) => {
-    // eslint-disable-next-line security/detect-object-injection -- Ok
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, security/detect-object-injection -- Ok
     const token = req.cookies[AUTH_COOKIE_NAME] as unknown;
 
     if (typeof token === "string")

@@ -5,7 +5,7 @@ const config = {
   extends: [
     "eslint:recommended",
     "strict",
-    "plugin:@typescript-eslint/strict",
+    "plugin:@typescript-eslint/strict-type-checked",
     "plugin:eslint-comments/recommended",
     "plugin:escompat/recommended",
     "plugin:etc/recommended",
@@ -48,8 +48,10 @@ const config = {
     "unused-imports"
   ],
   rules: {
-    "@typescript-eslint/no-floating-promises": "warn",
-    "@typescript-eslint/no-misused-promises": "warn",
+    "@typescript-eslint/restrict-template-expressions": [
+      "warn",
+      { allowNumber: true }
+    ],
     "callback-return": "off",
     "camelcase": "off",
     "consistent-return": "off",

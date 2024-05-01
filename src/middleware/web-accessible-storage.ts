@@ -1,5 +1,6 @@
 import { assertDefined, wrapAsyncHandler } from "../utils";
 import { RequestHandler } from "express";
+import { WebAccessibleImage } from "../schema";
 import fs from "node:fs/promises";
 import { uploadImage } from "../providers";
 
@@ -27,8 +28,14 @@ export function webAccessibleStorage(fields: Fields): RequestHandler {
           return {
             fieldName,
             responses: responses.map(
-              ({ asset_id, height, secure_url, url, width }) => ({
-                assetId: asset_id,
+              ({
+                asset_id,
+                height,
+                secure_url,
+                url,
+                width
+              }): WebAccessibleImage => ({
+                assetId: String(asset_id),
                 height,
                 secureUrl: secure_url,
                 url,
@@ -44,14 +51,14 @@ export function webAccessibleStorage(fields: Fields): RequestHandler {
       for (const { fieldName, responses, type } of uploads)
         switch (type) {
           case FieldType.single: {
-            // eslint-disable-next-line security/detect-object-injection -- Ok
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, security/detect-object-injection -- Ok
             req.body[fieldName] = assertDefined(responses[0]);
 
             break;
           }
 
           case FieldType.multiple: {
-            // eslint-disable-next-line security/detect-object-injection -- Ok
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, security/detect-object-injection -- Ok
             req.body[fieldName] = responses;
           }
         }
