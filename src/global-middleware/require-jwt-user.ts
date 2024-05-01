@@ -4,7 +4,7 @@ import { StatusCodes } from "http-status-codes";
 import { buildErrorResponse } from "../utils";
 
 export const requireJwtUser: RequestHandler = (req, res, next) => {
-  if (req.authUser) next();
+  if (req.jwtUser) next();
   else
     res
       .status(StatusCodes.UNAUTHORIZED)

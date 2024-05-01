@@ -2,6 +2,7 @@ export const lang = {
   AuthenticationFailed: "Authentication failed",
   CategoryNotFound: "Category not found",
   CompanyNotFound: "Company not found",
+  EmailMismatch: "Email mismatch",
   InternalServerError: "Internal server error",
   InvalidCategoryData: "Invalid category data",
   InvalidCompanyData: "Invalid company data",

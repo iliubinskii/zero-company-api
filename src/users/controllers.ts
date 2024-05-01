@@ -31,7 +31,7 @@ export function createUserControllers(
     },
     deleteUser: async (req, res, next) => {
       try {
-        const email = assertDefined(req.params["email"]);
+        const email = assertDefined(req.userEmail);
 
         const affectedRows = await service.deleteUser(email);
 
@@ -42,7 +42,7 @@ export function createUserControllers(
     },
     getCompaniesByUser: async (req, res, next) => {
       try {
-        const email = assertDefined(req.params["email"]);
+        const email = assertDefined(req.userEmail);
 
         const options = assertDefined(req.getCompaniesByUserOptions);
 
@@ -58,7 +58,7 @@ export function createUserControllers(
     },
     getUser: async (req, res, next) => {
       try {
-        const email = assertDefined(req.params["email"]);
+        const email = assertDefined(req.userEmail);
 
         const user = await service.getUser(email);
 
@@ -84,7 +84,7 @@ export function createUserControllers(
     },
     updateUser: async (req, res, next) => {
       try {
-        const email = assertDefined(req.params["email"]);
+        const email = assertDefined(req.userEmail);
 
         const user = assertDefined(req.userUpdate);
 

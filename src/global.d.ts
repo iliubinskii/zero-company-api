@@ -1,11 +1,11 @@
 /// <reference types="jest-extended" />
 
 import {
-  AuthUser,
   CategoryCreate,
   CategoryUpdate,
   CompanyCreate,
   CompanyUpdate,
+  JwtUser,
   UserCreate,
   UserUpdate
 } from "./schema";
@@ -19,7 +19,6 @@ import {
 
 declare module "express-serve-static-core" {
   interface Request {
-    authUser?: AuthUser;
     categoryCreate?: CategoryCreate;
     categoryUpdate?: CategoryUpdate;
     companyCreate?: CompanyCreate;
@@ -29,8 +28,10 @@ declare module "express-serve-static-core" {
     getCompaniesByUserOptions?: GetCompaniesByUserOptions;
     getCompaniesOptions?: GetCompaniesOptions;
     getUsersOptions?: GetUsersOptions;
+    jwtUser?: JwtUser;
     readonly logout: () => void;
     userCreate?: UserCreate;
+    userEmail?: string;
     userUpdate?: UserUpdate;
   }
 }

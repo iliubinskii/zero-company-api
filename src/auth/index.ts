@@ -11,7 +11,7 @@ import {
   AUTH_COOKIE_NAME,
   JWT_EXPIRES_IN
 } from "../consts";
-import { AuthUser } from "../schema";
+import { JwtUser } from "../schema";
 import express from "express";
 import jwt from "jsonwebtoken";
 import passport from "passport";
@@ -83,12 +83,12 @@ authRouter
         else {
           const email = JwtValidationSchema.parse(decoded).email.toLowerCase();
 
-          const authUser: AuthUser = {
+          const jwtUser: JwtUser = {
             admin: ADMIN_EMAIL.includes(email),
             email
           };
 
-          res.json(authUser);
+          res.json(jwtUser);
         }
       });
     else res.json(null);

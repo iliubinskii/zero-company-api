@@ -4,7 +4,7 @@ import { StatusCodes } from "http-status-codes";
 import { buildErrorResponse } from "../utils";
 
 export const requireJwtAdmin: RequestHandler = (req, res, next) => {
-  if (req.authUser && req.authUser.admin) next();
+  if (req.jwtUser && req.jwtUser.admin) next();
   else
     res
       .status(StatusCodes.UNAUTHORIZED)

@@ -25,7 +25,7 @@ export const appendJwt: RequestHandler = (req, res, next) => {
       } else {
         const email = JwtValidationSchema.parse(decoded).email.toLowerCase();
 
-        req.authUser = {
+        req.jwtUser = {
           admin: ADMIN_EMAIL.includes(email),
           email
         };

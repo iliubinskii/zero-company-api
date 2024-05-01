@@ -11,6 +11,7 @@ import {
   createCompanyControllers
 } from "./companies";
 import {
+  createMeRouter,
   createUserControllers,
   createUsersRouter,
   createUsersService
@@ -39,6 +40,15 @@ const companiesService = createCompaniesService();
 
 const userService = createUsersService();
 
+const categoryControllers = createCategoryControllers(
+  categoriesService,
+  companiesService
+);
+
+const companyControllers = createCompanyControllers(companiesService);
+
+const userControllers = createUserControllers(userService, companiesService);
+
 const app = express();
 
 app.use(cors({ credentials: true, origin: CORS_ORIGIN }));
@@ -61,22 +71,13 @@ app.get("/", (_req, res) => {
 
 app.use("/auth", authRouter);
 
-app.use(
-  "/categories",
-  createCategoriesRouter(
-    createCategoryControllers(categoriesService, companiesService)
-  )
-);
+app.use("/categories", createCategoriesRouter(categoryControllers));
 
-app.use(
-  "/companies",
-  createCompaniesRouter(createCompanyControllers(companiesService))
-);
+app.use("/companies", createCompaniesRouter(companyControllers));
 
-app.use(
-  "/users",
-  createUsersRouter(createUserControllers(userService, companiesService))
-);
+app.use("/me", createMeRouter(userControllers));
+
+app.use("/users", createUsersRouter(userControllers));
 
 app.use(
   (

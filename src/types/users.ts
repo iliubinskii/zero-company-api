@@ -18,8 +18,11 @@ export interface UserControllers {
 export interface UsersMiddleware {
   readonly requireValidGetCompaniesByUserOptions: RequestHandler;
   readonly requireValidGetUsersOptions: RequestHandler;
+  readonly requireValidMeUser: RequestHandler;
   readonly requireValidUser: RequestHandler;
   readonly requireValidUserUpdate: RequestHandler;
+  readonly userEmailFromJwtUser: RequestHandler;
+  readonly userEmailFromQuery: RequestHandler;
 }
 
 export interface UsersService {
