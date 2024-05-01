@@ -4,37 +4,41 @@ import {
   AUTH_HEADER_NAME,
   AUTH_HEADER_PREFIX
 } from "../consts";
-import { ErrorCode } from "../schema";
 import { RequestHandler } from "express";
-import { StatusCodes } from "http-status-codes";
-import { buildErrorResponse } from "../utils";
 import jwt from "jsonwebtoken";
 import { lang } from "../langs";
 import { logger } from "../global-services";
 import zod from "zod";
 
-export const appendJwt: RequestHandler = (req, res, next) => {
+export const appendJwt: RequestHandler = (req, _res, next) => {
   const token = getToken(req);
 
   if (typeof token === "string")
-    jwt.verify(token, JWT_SECRET, (err, decoded) => {
-      if (err) {
-        logger.error(lang.JwtVerificationFailed, { requestId: req.requestId });
-        logger.error(err);
-        res
-          .status(StatusCodes.UNAUTHORIZED)
-          .json(buildErrorResponse(ErrorCode.Unauthorized));
-      } else {
-        const email = JwtValidationSchema.parse(decoded).email.toLowerCase();
+    jwt.verify(token, JWT_SECRET, (jwtError, decoded) => {
+      if (jwtError) {
+        logger.error(lang.JwtVerificationFailed, {
+          requestId: req.requestId
+        });
+        logger.warn(jwtError);
+      } else
+        try {
+          const email = JwtValidationSchema.parse(decoded).email.toLowerCase();
 
-        req.jwtUser = {
-          admin: ADMIN_EMAIL.includes(email),
-          email
-        };
-        next();
-      }
+          req.jwtUser = {
+            admin: ADMIN_EMAIL.includes(email),
+            email
+          };
+        } catch (err) {
+          if (err instanceof zod.ZodError) {
+            logger.error(lang.JwtVerificationFailed, {
+              requestId: req.requestId
+            });
+            logger.warn(err);
+          } else throw err;
+        }
     });
-  else next();
+
+  next();
 };
 
 const JwtValidationSchema = zod.strictObject({
