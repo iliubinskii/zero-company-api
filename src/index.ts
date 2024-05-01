@@ -69,6 +69,9 @@ app.use(passport.session());
 app.use(express.json());
 app.use(appendJwt);
 
+// eslint-disable-next-line unicorn/prefer-module -- Ok
+app.use(express.static(path.join(path.dirname(__dirname), "public")));
+
 app.get("/", (_req, res) => {
   res.json({ status: lang.Ok });
 });
@@ -84,9 +87,6 @@ app.use("/me", createMeRouter(userControllers));
 app.use("/test", testRouter);
 
 app.use("/users", createUsersRouter(userControllers));
-
-// eslint-disable-next-line unicorn/prefer-module -- Ok
-app.use(express.static(path.join(__dirname, "public")));
 
 app.all("*", (_req, res) => {
   res
