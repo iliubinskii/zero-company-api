@@ -4,14 +4,14 @@ import { format } from "date-fns";
 import winston from "winston";
 
 export const logger = winston.createLogger({
-  format: winston.format.combine(winston.format.timestamp()),
+  format: winston.format.combine(
+    winston.format.errors({ stack: true }),
+    winston.format.timestamp()
+  ),
   level: LOG_LEVEL,
   transports: [
     new winston.transports.Console({
-      format: winston.format.combine(
-        winston.format.colorize(),
-        winston.format.printf(formatters)
-      )
+      format: winston.format.combine(winston.format.printf(formatters))
     })
   ]
 });
