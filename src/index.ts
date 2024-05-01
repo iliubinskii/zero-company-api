@@ -29,6 +29,7 @@ import https from "node:https";
 import { lang } from "./langs";
 import { logger } from "./global-services";
 import passport from "passport";
+import path from "node:path";
 import session from "express-session";
 import { testRouter } from "./test";
 
@@ -83,6 +84,9 @@ app.use("/me", createMeRouter(userControllers));
 app.use("/test", testRouter);
 
 app.use("/users", createUsersRouter(userControllers));
+
+// eslint-disable-next-line unicorn/prefer-module -- Ok
+app.use(express.static(path.join(__dirname, "public")));
 
 app.all("*", (_req, res) => {
   res
