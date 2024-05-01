@@ -12,6 +12,7 @@ export const lang = {
   JwtVerificationFailed: "JWT verification failed",
   NotFound: "Not found",
   Ok: "Ok",
+  SecureServerStarted: "Secure server started",
   ServerError: "Server error",
   ServerStarted: "Server started",
   Unauthorized: "Unauthorized",

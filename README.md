@@ -5,8 +5,10 @@
 1. Fork repository.
 2. Clone your forked repository.
 3. Install dependencies by running `npm install`.
-4. Create .env file with the following variables:
-   - PORT
+4. Create .env file (see .env.example)
+5. Add SSL certificates
+   - certificates/localhost.pem
+   - certificates/localhost-key.pem
 
 ## Contributions
 

@@ -1,5 +1,12 @@
-import { CORS_ORIGIN, ENV, PORT, SESSION_SECRET } from "./config";
-import { appendJwt, logRequest, requestId } from "./middleware";
+/* eslint-disable no-sync -- Ok */
+
+import { CORS_ORIGIN, ENV, PORT, SECURE_PORT, SESSION_SECRET } from "./config";
+import {
+  appendJwt,
+  logRequest,
+  requestId,
+  waitForMongodbConnection
+} from "./middleware";
 import {
   authRouter,
   createCategoriesRouter,
@@ -22,13 +29,13 @@ import cors from "cors";
 import express, { NextFunction, Request, Response } from "express";
 import { favicon } from "./public";
 import fs from "node:fs";
+import http from "node:http";
 import https from "node:https";
 import { initPassport } from "./providers";
 import { lang } from "./langs";
 import { logger } from "./services";
 import passport from "passport";
 import session from "express-session";
-import { waitForMongodbConnection } from "./middleware/wait-for-mongodb-connection";
 
 initPassport();
 
@@ -112,14 +119,16 @@ app.use(
 
 if (ENV === "development") {
   const httpsOptions = {
-    // eslint-disable-next-line no-sync -- Ok
     cert: fs.readFileSync("./certificates/localhost.pem"),
-    // eslint-disable-next-line no-sync -- Ok
     key: fs.readFileSync("./certificates/localhost-key.pem")
-  };
+  } as const;
 
-  https.createServer(httpsOptions, app).listen(PORT, () => {
+  http.createServer(app).listen(PORT, () => {
     logger.info(lang.ServerStarted);
+  });
+
+  https.createServer(httpsOptions, app).listen(SECURE_PORT, () => {
+    logger.info(lang.SecureServerStarted);
   });
 }
 
