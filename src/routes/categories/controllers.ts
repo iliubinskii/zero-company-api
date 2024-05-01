@@ -3,7 +3,11 @@ import {
   CategoryControllers,
   CompaniesService
 } from "../../types";
-import { assertDefined, buildErrorResponse } from "../../utils";
+import {
+  assertDefined,
+  buildErrorResponse,
+  wrapAsyncHandler
+} from "../../utils";
 import { ErrorCode } from "../../schema";
 import { StatusCodes } from "http-status-codes";
 
@@ -18,86 +22,62 @@ export function createCategoryControllers(
   companiesService: CompaniesService
 ): CategoryControllers {
   return {
-    addCategory: async (req, res, next) => {
-      try {
-        const category = assertDefined(req.categoryCreate);
+    addCategory: wrapAsyncHandler(async (req, res) => {
+      const category = assertDefined(req.categoryCreate);
 
-        const addedCategory = await service.addCategory(category);
+      const addedCategory = await service.addCategory(category);
 
-        res.status(StatusCodes.CREATED).json(addedCategory);
-      } catch (err) {
-        next(err);
-      }
-    },
-    deleteCategory: async (req, res, next) => {
-      try {
-        const id = assertDefined(req.params["id"]);
+      res.status(StatusCodes.CREATED).json(addedCategory);
+    }),
+    deleteCategory: wrapAsyncHandler(async (req, res) => {
+      const id = assertDefined(req.params["id"]);
 
-        const affectedRows = await service.deleteCategory(id);
+      const affectedRows = await service.deleteCategory(id);
 
-        res.status(StatusCodes.OK).send({ affectedRows });
-      } catch (err) {
-        next(err);
-      }
-    },
-    getCategories: async (req, res, next) => {
-      try {
-        const options = assertDefined(req.getCategoriesOptions);
+      res.status(StatusCodes.OK).send({ affectedRows });
+    }),
+    getCategories: wrapAsyncHandler(async (req, res) => {
+      const options = assertDefined(req.getCategoriesOptions);
 
-        const categories = await service.getCategories(options);
+      const categories = await service.getCategories(options);
 
-        res.json(categories);
-      } catch (err) {
-        next(err);
-      }
-    },
-    getCategory: async (req, res, next) => {
-      try {
-        const id = assertDefined(req.params["id"]);
+      res.json(categories);
+    }),
+    getCategory: wrapAsyncHandler(async (req, res) => {
+      const id = assertDefined(req.params["id"]);
 
-        const category = await service.getCategory(id);
+      const category = await service.getCategory(id);
 
-        if (category) res.json(category);
-        else
-          res
-            .status(StatusCodes.NOT_FOUND)
-            .json(buildErrorResponse(ErrorCode.CategoryNotFound));
-      } catch (err) {
-        next(err);
-      }
-    },
-    getCompaniesByCategory: async (req, res, next) => {
-      try {
-        const id = assertDefined(req.params["id"]);
+      if (category) res.json(category);
+      else
+        res
+          .status(StatusCodes.NOT_FOUND)
+          .json(buildErrorResponse(ErrorCode.CategoryNotFound));
+    }),
+    getCompaniesByCategory: wrapAsyncHandler(async (req, res) => {
+      const id = assertDefined(req.params["id"]);
 
-        const options = assertDefined(req.getCompaniesByCategoryOptions);
+      const options = assertDefined(req.getCompaniesByCategoryOptions);
 
-        const companies = await companiesService.getCompanies({
-          ...options,
-          category: id
-        });
+      const companies = await companiesService.getCompanies({
+        ...options,
+        category: id
+      });
 
-        res.json(companies);
-      } catch (err) {
-        next(err);
-      }
-    },
-    updateCategory: async (req, res, next) => {
-      try {
-        const id = assertDefined(req.params["id"]);
+      res.json(companies);
+    }),
+    updateCategory: wrapAsyncHandler(async (req, res) => {
+      const id = assertDefined(req.params["id"]);
 
-        const category = assertDefined(req.categoryUpdate);
+      const category = assertDefined(req.categoryUpdate);
 
-        const updatedCategory = await service.updateCategory(id, category);
+      const updatedCategory = await service.updateCategory(id, category);
 
-        if (updatedCategory) res.status(StatusCodes.OK).json(updatedCategory);
-        else
-          res
-            .status(StatusCodes.NOT_FOUND)
-            .json(buildErrorResponse(ErrorCode.CategoryNotFound));
-      } catch (err) {
-        next(err);
-      }
-    }
+      if (updatedCategory) res.status(StatusCodes.OK).json(updatedCategory);
+      else
+        res
+          .status(StatusCodes.NOT_FOUND)
+          .json(buildErrorResponse(ErrorCode.CategoryNotFound));
+    })
   };
 }

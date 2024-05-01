@@ -22,10 +22,6 @@ export const authRouter = express.Router();
 authRouter
   .get(
     "/callback",
-    // eslint-disable-next-line no-warning-comments -- Postponed
-    // TODO
-    // - Create a new user in MongoDB if it doesn't exist
-    // - Maybe store random ID to MongoDB user and JWT and use it to verify user
     passport.authenticate("auth0", {
       failureRedirect: AUTH0_RETURN_URL
     }),

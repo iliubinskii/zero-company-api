@@ -29,98 +29,114 @@ import { logger } from "./services";
 import passport from "passport";
 import session from "express-session";
 
-connectMongodb();
-initPassport();
+// eslint-disable-next-line @typescript-eslint/no-floating-promises -- Ok
+app();
 
-const categoriesService = createCategoriesService();
+/**
+ * Creates an Express app or an https server
+ * @returns Express app or https server
+ */
+async function app(): Promise<void> {
+  try {
+    await connectMongodb();
+    initPassport();
 
-const companiesService = createCompaniesService();
+    const categoriesService = createCategoriesService();
 
-const userService = createUsersService();
+    const companiesService = createCompaniesService();
 
-const categoryControllers = createCategoryControllers(
-  categoriesService,
-  companiesService
-);
+    const userService = createUsersService();
 
-const companyControllers = createCompanyControllers(companiesService);
+    const categoryControllers = createCategoryControllers(
+      categoriesService,
+      companiesService
+    );
 
-const userControllers = createUserControllers(userService, companiesService);
+    const companyControllers = createCompanyControllers(companiesService);
 
-const app = express();
+    const userControllers = createUserControllers(
+      userService,
+      companiesService
+    );
 
-app.use(requestId);
-app.use(logRequest);
-app.use(cors({ credentials: true, origin: CORS_ORIGIN }));
-app.use(cookieParser());
-app.use(
-  session({
-    resave: false,
-    saveUninitialized: true,
-    secret: SESSION_SECRET
-  })
-);
-app.use(passport.initialize());
-app.use(passport.session());
-app.use(express.json());
-app.use(appendJwt);
+    const app = express();
 
-app.get("/", (_req, res) => {
-  res.json({ status: lang.Ok });
-});
+    app.use(requestId);
+    app.use(logRequest);
+    app.use(cors({ credentials: true, origin: CORS_ORIGIN }));
+    app.use(cookieParser());
+    app.use(
+      session({
+        resave: false,
+        saveUninitialized: true,
+        secret: SESSION_SECRET
+      })
+    );
+    app.use(passport.initialize());
+    app.use(passport.session());
+    app.use(express.json());
+    app.use(appendJwt);
 
-app.get("/favicon.ico", (_req, res) => {
-  const buffer = Buffer.from(favicon, "base64");
+    app.get("/", (_req, res) => {
+      res.json({ status: lang.Ok });
+    });
 
-  res.contentType("ico").send(buffer);
-});
+    app.get("/favicon.ico", (_req, res) => {
+      const buffer = Buffer.from(favicon, "base64");
 
-app.use("/auth", authRouter);
+      res.contentType("ico").send(buffer);
+    });
 
-app.use("/categories", createCategoriesRouter(categoryControllers));
+    app.use("/auth", authRouter);
 
-app.use("/companies", createCompaniesRouter(companyControllers));
+    app.use("/categories", createCategoriesRouter(categoryControllers));
 
-app.use("/me", createMeRouter(userControllers));
+    app.use("/companies", createCompaniesRouter(companyControllers));
 
-app.use("/test", testRouter);
+    app.use("/me", createMeRouter(userControllers));
 
-app.use("/users", createUsersRouter(userControllers));
+    app.use("/test", testRouter);
 
-app.all("*", (_req, res) => {
-  res
-    .status(StatusCodes.NOT_FOUND)
-    .json(buildErrorResponse(ErrorCode.NotFound));
-});
+    app.use("/users", createUsersRouter(userControllers));
 
-app.use(
-  (
-    err: unknown,
-    req: Request,
-    res: Response,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars -- Ok
-    _next: NextFunction
-  ) => {
-    logger.error(lang.ServerError, { requestId: req.requestId });
+    app.all("*", (_req, res) => {
+      res
+        .status(StatusCodes.NOT_FOUND)
+        .json(buildErrorResponse(ErrorCode.NotFound));
+    });
+
+    app.use(
+      (
+        err: unknown,
+        req: Request,
+        res: Response,
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars -- Ok
+        _next: NextFunction
+      ) => {
+        logger.error(lang.ServerError, { requestId: req.requestId });
+        logger.error(err);
+        res
+          .status(StatusCodes.INTERNAL_SERVER_ERROR)
+          .json(buildErrorResponse(ErrorCode.InternalServerError));
+      }
+    );
+
+    if (ENV === "development") {
+      const httpsOptions = {
+        // eslint-disable-next-line no-sync -- Ok
+        cert: fs.readFileSync("./certificates/localhost.pem"),
+        // eslint-disable-next-line no-sync -- Ok
+        key: fs.readFileSync("./certificates/localhost-key.pem")
+      };
+
+      https.createServer(httpsOptions, app).listen(PORT, () => {
+        logger.info(lang.ServerStarted);
+      });
+    }
+    app.listen(PORT, () => {
+      logger.info(lang.ServerStarted);
+    });
+  } catch (err) {
     logger.error(err);
-    res
-      .status(StatusCodes.INTERNAL_SERVER_ERROR)
-      .json(buildErrorResponse(ErrorCode.InternalServerError));
   }
-);
-
-if (ENV === "development") {
-  const httpsOptions = {
-    // eslint-disable-next-line no-sync -- Ok
-    cert: fs.readFileSync("./certificates/localhost.pem"),
-    // eslint-disable-next-line no-sync -- Ok
-    key: fs.readFileSync("./certificates/localhost-key.pem")
-  };
-
-  https.createServer(httpsOptions, app).listen(PORT, () => {
-    logger.info(lang.ServerStarted);
-  });
-} else
-  app.listen(PORT, () => {
-    logger.info(lang.ServerStarted);
-  });
+}

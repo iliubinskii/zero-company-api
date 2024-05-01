@@ -1,5 +1,5 @@
+import { assertDefined, wrapAsyncHandler } from "../utils";
 import { RequestHandler } from "express";
-import { assertDefined } from "../utils";
 import fs from "node:fs/promises";
 import { uploadImage } from "../providers";
 
@@ -9,7 +9,7 @@ import { uploadImage } from "../providers";
  * @returns The middleware.
  */
 export function webAccessibleStorage(fields: Fields): RequestHandler {
-  return async (req, _res, next) => {
+  return wrapAsyncHandler(async (req, _res, next) => {
     if (req.files && !Array.isArray(req.files)) {
       const uploads = await Promise.all(
         Object.entries(req.files).map(async ([fieldName, files]) => {
@@ -58,7 +58,7 @@ export function webAccessibleStorage(fields: Fields): RequestHandler {
 
       next();
     }
-  };
+  });
 }
 
 export enum FieldType {
