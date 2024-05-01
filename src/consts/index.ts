@@ -1,4 +1,8 @@
-export const AUTH_TOKEN_COOKIE_NAME = "auth_token";
+export const AUTH_COOKIE_EXPIRATION_LIFETIME = 86_400_000;
+
+export const AUTH_COOKIE_NAME = "auth_token";
+
+export const AUTH_COOKIE_LIFETIME = 86_400_000;
 
 export const AUTH0_SCOPE = "openid email profile";
 

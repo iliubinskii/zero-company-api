@@ -1,5 +1,11 @@
 import { AUTH0_RETURN_URL, COOKIE_DOMAIN, JWT_SECRET } from "../config";
-import { AUTH0_SCOPE, AUTH_TOKEN_COOKIE_NAME, JWT_EXPIRES_IN } from "../consts";
+import {
+  AUTH0_SCOPE,
+  AUTH_COOKIE_EXPIRATION_LIFETIME,
+  AUTH_COOKIE_LIFETIME,
+  AUTH_COOKIE_NAME,
+  JWT_EXPIRES_IN
+} from "../consts";
 import express from "express";
 import jwt from "jsonwebtoken";
 import passport from "passport";
@@ -26,36 +32,42 @@ authRouter
     }),
     (req, res) => {
       if (req.isAuthenticated()) {
+        req.logout();
+
         const user = UserValidationSchema.parse(req.user);
 
         const token = jwt.sign({ email: user.emails[0].value }, JWT_SECRET, {
           expiresIn: JWT_EXPIRES_IN
         });
 
-        res.cookie(AUTH_TOKEN_COOKIE_NAME, token, {
-          domain: COOKIE_DOMAIN,
-          httpOnly: true,
-          path: "/",
-          sameSite: "strict",
-          secure: true
-        });
-
-        res.redirect(AUTH0_RETURN_URL);
+        res
+          .cookie(AUTH_COOKIE_NAME, token, {
+            domain: COOKIE_DOMAIN,
+            expires: new Date(Date.now() + AUTH_COOKIE_LIFETIME),
+            httpOnly: true,
+            path: "/",
+            sameSite: "strict",
+            secure: true
+          })
+          .redirect(AUTH0_RETURN_URL);
       } else res.redirect(AUTH0_RETURN_URL);
     }
   )
-  .get(
-    "/logout",
-    // eslint-disable-next-line no-warning-comments -- Postponed
-    // TODO: Also remove cookie
-    (req, res) => {
-      req.logout();
-      res.redirect(AUTH0_RETURN_URL);
-    }
-  )
+  .get("/logout", (_req, res) => {
+    res
+      .cookie(AUTH_COOKIE_NAME, "", {
+        domain: COOKIE_DOMAIN,
+        expires: new Date(Date.now() - AUTH_COOKIE_EXPIRATION_LIFETIME),
+        httpOnly: true,
+        path: "/",
+        sameSite: "strict",
+        secure: true
+      })
+      .redirect(AUTH0_RETURN_URL);
+  })
   .get("/me", (req, res) => {
     // eslint-disable-next-line security/detect-object-injection -- Ok
-    const token = req.cookies[AUTH_TOKEN_COOKIE_NAME] as unknown;
+    const token = req.cookies[AUTH_COOKIE_NAME] as unknown;
 
     if (typeof token === "string")
       jwt.verify(token, JWT_SECRET, (err, decoded) => {
