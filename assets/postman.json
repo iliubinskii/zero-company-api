@@ -679,531 +679,11 @@
     {
       "item": [
         {
-          "name": "Get all",
-          "request": {
-            "auth": {
-              "jwt": [
-                {
-                  "key": "payload",
-                  "type": "string",
-                  "value": "{\r\n    \"email\": \"{{jwtEmail}}\"\r\n}\r\n"
-                },
-                {
-                  "key": "secret",
-                  "type": "string",
-                  "value": "{{jwtSecret}}"
-                },
-                {
-                  "key": "addTokenTo",
-                  "type": "string",
-                  "value": "header"
-                },
-                {
-                  "key": "algorithm",
-                  "type": "string",
-                  "value": "HS256"
-                },
-                {
-                  "key": "isSecretBase64Encoded",
-                  "type": "boolean",
-                  "value": false
-                },
-                {
-                  "key": "headerPrefix",
-                  "type": "string",
-                  "value": "Bearer"
-                },
-                {
-                  "key": "queryParamKey",
-                  "type": "string",
-                  "value": "token"
-                },
-                {
-                  "key": "header",
-                  "type": "string",
-                  "value": "{}"
-                }
-              ],
-              "type": "jwt"
-            },
-            "header": [],
-            "method": "GET",
-            "url": {
-              "host": ["{{apiUrl}}users"],
-              "raw": "{{apiUrl}}users"
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Get all / pagination",
-          "request": {
-            "auth": {
-              "jwt": [
-                {
-                  "key": "payload",
-                  "type": "string",
-                  "value": "{\r\n    \"email\": \"{{jwtEmail}}\"\r\n}\r\n"
-                },
-                {
-                  "key": "secret",
-                  "type": "string",
-                  "value": "{{jwtSecret}}"
-                },
-                {
-                  "key": "addTokenTo",
-                  "type": "string",
-                  "value": "header"
-                },
-                {
-                  "key": "algorithm",
-                  "type": "string",
-                  "value": "HS256"
-                },
-                {
-                  "key": "isSecretBase64Encoded",
-                  "type": "boolean",
-                  "value": false
-                },
-                {
-                  "key": "headerPrefix",
-                  "type": "string",
-                  "value": "Bearer"
-                },
-                {
-                  "key": "queryParamKey",
-                  "type": "string",
-                  "value": "token"
-                },
-                {
-                  "key": "header",
-                  "type": "string",
-                  "value": "{}"
-                }
-              ],
-              "type": "jwt"
-            },
-            "header": [],
-            "method": "GET",
-            "url": {
-              "host": ["{{apiUrl}}users"],
-              "query": [
-                {
-                  "key": "offset",
-                  "value": "1"
-                },
-                {
-                  "key": "limit",
-                  "value": "2"
-                }
-              ],
-              "raw": "{{apiUrl}}users?offset=1&limit=2"
-            }
-          },
-          "response": []
-        },
-        {
           "event": [
             {
               "listen": "test",
               "script": {
-                "exec": [
-                  "var { email } = JSON.parse(responseBody);\r",
-                  "if (email) postman.setEnvironmentVariable(\"lastUserEmail\", email);"
-                ],
-                "packages": {},
-                "type": "text/javascript"
-              }
-            }
-          ],
-          "name": "Add one",
-          "request": {
-            "auth": {
-              "jwt": [
-                {
-                  "key": "payload",
-                  "type": "string",
-                  "value": "{\r\n    \"email\": \"{{jwtAdminEmail}}\"\r\n}\r\n"
-                },
-                {
-                  "key": "secret",
-                  "type": "string",
-                  "value": "{{jwtSecret}}"
-                },
-                {
-                  "key": "addTokenTo",
-                  "type": "string",
-                  "value": "header"
-                },
-                {
-                  "key": "algorithm",
-                  "type": "string",
-                  "value": "HS256"
-                },
-                {
-                  "key": "isSecretBase64Encoded",
-                  "type": "boolean",
-                  "value": false
-                },
-                {
-                  "key": "headerPrefix",
-                  "type": "string",
-                  "value": "Bearer"
-                },
-                {
-                  "key": "queryParamKey",
-                  "type": "string",
-                  "value": "token"
-                },
-                {
-                  "key": "header",
-                  "type": "string",
-                  "value": "{}"
-                }
-              ],
-              "type": "jwt"
-            },
-            "body": {
-              "mode": "raw",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              },
-              "raw": "{\r\n    \"email\": \"john.smith@gmail.com\",\r\n    \"firstName\": \"John\",\r\n    \"lastName\": \"Smith\"\r\n}"
-            },
-            "header": [],
-            "method": "POST",
-            "url": {
-              "host": ["{{apiUrl}}users"],
-              "raw": "{{apiUrl}}users"
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Get one",
-          "request": {
-            "auth": {
-              "jwt": [
-                {
-                  "key": "payload",
-                  "type": "string",
-                  "value": "{\r\n    \"email\": \"{{jwtEmail}}\"\r\n}\r\n"
-                },
-                {
-                  "key": "secret",
-                  "type": "string",
-                  "value": "{{jwtSecret}}"
-                },
-                {
-                  "key": "addTokenTo",
-                  "type": "string",
-                  "value": "header"
-                },
-                {
-                  "key": "algorithm",
-                  "type": "string",
-                  "value": "HS256"
-                },
-                {
-                  "key": "isSecretBase64Encoded",
-                  "type": "boolean",
-                  "value": false
-                },
-                {
-                  "key": "headerPrefix",
-                  "type": "string",
-                  "value": "Bearer"
-                },
-                {
-                  "key": "queryParamKey",
-                  "type": "string",
-                  "value": "token"
-                },
-                {
-                  "key": "header",
-                  "type": "string",
-                  "value": "{}"
-                }
-              ],
-              "type": "jwt"
-            },
-            "header": [],
-            "method": "GET",
-            "url": {
-              "host": ["{{apiUrl}}users"],
-              "path": ["{{lastUserEmail}}"],
-              "raw": "{{apiUrl}}users/{{lastUserEmail}}"
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Update one",
-          "request": {
-            "auth": {
-              "jwt": [
-                {
-                  "key": "payload",
-                  "type": "string",
-                  "value": "{\r\n    \"email\": \"{{jwtAdminEmail}}\"\r\n}\r\n"
-                },
-                {
-                  "key": "secret",
-                  "type": "string",
-                  "value": "{{jwtSecret}}"
-                },
-                {
-                  "key": "addTokenTo",
-                  "type": "string",
-                  "value": "header"
-                },
-                {
-                  "key": "algorithm",
-                  "type": "string",
-                  "value": "HS256"
-                },
-                {
-                  "key": "isSecretBase64Encoded",
-                  "type": "boolean",
-                  "value": false
-                },
-                {
-                  "key": "headerPrefix",
-                  "type": "string",
-                  "value": "Bearer"
-                },
-                {
-                  "key": "queryParamKey",
-                  "type": "string",
-                  "value": "token"
-                },
-                {
-                  "key": "header",
-                  "type": "string",
-                  "value": "{}"
-                }
-              ],
-              "type": "jwt"
-            },
-            "body": {
-              "mode": "raw",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              },
-              "raw": "{\r\n    \"firstName\": \"John 2\",\r\n    \"lastName\": \"Smith 2\"\r\n}"
-            },
-            "header": [],
-            "method": "PUT",
-            "url": {
-              "host": ["{{apiUrl}}users"],
-              "path": ["{{lastUserEmail}}"],
-              "raw": "{{apiUrl}}users/{{lastUserEmail}}"
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Delete one",
-          "request": {
-            "auth": {
-              "jwt": [
-                {
-                  "key": "payload",
-                  "type": "string",
-                  "value": "{\r\n    \"email\": \"{{jwtAdminEmail}}\"\r\n}\r\n"
-                },
-                {
-                  "key": "secret",
-                  "type": "string",
-                  "value": "{{jwtSecret}}"
-                },
-                {
-                  "key": "addTokenTo",
-                  "type": "string",
-                  "value": "header"
-                },
-                {
-                  "key": "algorithm",
-                  "type": "string",
-                  "value": "HS256"
-                },
-                {
-                  "key": "isSecretBase64Encoded",
-                  "type": "boolean",
-                  "value": false
-                },
-                {
-                  "key": "headerPrefix",
-                  "type": "string",
-                  "value": "Bearer"
-                },
-                {
-                  "key": "queryParamKey",
-                  "type": "string",
-                  "value": "token"
-                },
-                {
-                  "key": "header",
-                  "type": "string",
-                  "value": "{}"
-                }
-              ],
-              "type": "jwt"
-            },
-            "header": [],
-            "method": "DELETE",
-            "url": {
-              "host": ["{{apiUrl}}users"],
-              "path": ["{{lastUserEmail}}"],
-              "raw": "{{apiUrl}}users/{{lastUserEmail}}"
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Get companies",
-          "request": {
-            "auth": {
-              "jwt": [
-                {
-                  "key": "payload",
-                  "type": "string",
-                  "value": "{\r\n    \"email\": \"{{jwtEmail}}\"\r\n}\r\n"
-                },
-                {
-                  "key": "secret",
-                  "type": "string",
-                  "value": "{{jwtSecret}}"
-                },
-                {
-                  "key": "addTokenTo",
-                  "type": "string",
-                  "value": "header"
-                },
-                {
-                  "key": "algorithm",
-                  "type": "string",
-                  "value": "HS256"
-                },
-                {
-                  "key": "isSecretBase64Encoded",
-                  "type": "boolean",
-                  "value": false
-                },
-                {
-                  "key": "headerPrefix",
-                  "type": "string",
-                  "value": "Bearer"
-                },
-                {
-                  "key": "queryParamKey",
-                  "type": "string",
-                  "value": "token"
-                },
-                {
-                  "key": "header",
-                  "type": "string",
-                  "value": "{}"
-                }
-              ],
-              "type": "jwt"
-            },
-            "header": [],
-            "method": "GET",
-            "url": {
-              "host": ["{{apiUrl}}users"],
-              "path": ["{{lastUserEmail}}", "companies"],
-              "raw": "{{apiUrl}}users/{{lastUserEmail}}/companies"
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Get companies / pagination",
-          "request": {
-            "auth": {
-              "jwt": [
-                {
-                  "key": "payload",
-                  "type": "string",
-                  "value": "{\r\n    \"email\": \"{{jwtEmail}}\"\r\n}\r\n"
-                },
-                {
-                  "key": "secret",
-                  "type": "string",
-                  "value": "{{jwtSecret}}"
-                },
-                {
-                  "key": "addTokenTo",
-                  "type": "string",
-                  "value": "header"
-                },
-                {
-                  "key": "algorithm",
-                  "type": "string",
-                  "value": "HS256"
-                },
-                {
-                  "key": "isSecretBase64Encoded",
-                  "type": "boolean",
-                  "value": false
-                },
-                {
-                  "key": "headerPrefix",
-                  "type": "string",
-                  "value": "Bearer"
-                },
-                {
-                  "key": "queryParamKey",
-                  "type": "string",
-                  "value": "token"
-                },
-                {
-                  "key": "header",
-                  "type": "string",
-                  "value": "{}"
-                }
-              ],
-              "type": "jwt"
-            },
-            "header": [],
-            "method": "GET",
-            "url": {
-              "host": ["{{apiUrl}}users"],
-              "path": ["{{lastUserEmail}}", "companies"],
-              "query": [
-                {
-                  "key": "offset",
-                  "value": "1"
-                },
-                {
-                  "key": "limit",
-                  "value": "2"
-                }
-              ],
-              "raw": "{{apiUrl}}users/{{lastUserEmail}}/companies?offset=1&limit=2"
-            }
-          },
-          "response": []
-        }
-      ],
-      "name": "Users"
-    },
-    {
-      "item": [
-        {
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "var { email } = JSON.parse(responseBody);\r",
-                  "if (email) postman.setEnvironmentVariable(\"lastUserEmail\", email);"
-                ],
+                "exec": [""],
                 "packages": {},
                 "type": "text/javascript"
               }
@@ -1584,6 +1064,557 @@
       "name": "Me"
     },
     {
+      "item": [
+        {
+          "name": "Get all",
+          "request": {
+            "auth": {
+              "jwt": [
+                {
+                  "key": "payload",
+                  "type": "string",
+                  "value": "{\r\n    \"email\": \"{{jwtEmail}}\"\r\n}\r\n"
+                },
+                {
+                  "key": "secret",
+                  "type": "string",
+                  "value": "{{jwtSecret}}"
+                },
+                {
+                  "key": "addTokenTo",
+                  "type": "string",
+                  "value": "header"
+                },
+                {
+                  "key": "algorithm",
+                  "type": "string",
+                  "value": "HS256"
+                },
+                {
+                  "key": "isSecretBase64Encoded",
+                  "type": "boolean",
+                  "value": false
+                },
+                {
+                  "key": "headerPrefix",
+                  "type": "string",
+                  "value": "Bearer"
+                },
+                {
+                  "key": "queryParamKey",
+                  "type": "string",
+                  "value": "token"
+                },
+                {
+                  "key": "header",
+                  "type": "string",
+                  "value": "{}"
+                }
+              ],
+              "type": "jwt"
+            },
+            "header": [],
+            "method": "GET",
+            "url": {
+              "host": ["{{apiUrl}}users"],
+              "raw": "{{apiUrl}}users"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get all / pagination",
+          "request": {
+            "auth": {
+              "jwt": [
+                {
+                  "key": "payload",
+                  "type": "string",
+                  "value": "{\r\n    \"email\": \"{{jwtEmail}}\"\r\n}\r\n"
+                },
+                {
+                  "key": "secret",
+                  "type": "string",
+                  "value": "{{jwtSecret}}"
+                },
+                {
+                  "key": "addTokenTo",
+                  "type": "string",
+                  "value": "header"
+                },
+                {
+                  "key": "algorithm",
+                  "type": "string",
+                  "value": "HS256"
+                },
+                {
+                  "key": "isSecretBase64Encoded",
+                  "type": "boolean",
+                  "value": false
+                },
+                {
+                  "key": "headerPrefix",
+                  "type": "string",
+                  "value": "Bearer"
+                },
+                {
+                  "key": "queryParamKey",
+                  "type": "string",
+                  "value": "token"
+                },
+                {
+                  "key": "header",
+                  "type": "string",
+                  "value": "{}"
+                }
+              ],
+              "type": "jwt"
+            },
+            "header": [],
+            "method": "GET",
+            "url": {
+              "host": ["{{apiUrl}}users"],
+              "query": [
+                {
+                  "key": "offset",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "2"
+                }
+              ],
+              "raw": "{{apiUrl}}users?offset=1&limit=2"
+            }
+          },
+          "response": []
+        },
+        {
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [""],
+                "packages": {},
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "name": "Add one",
+          "request": {
+            "auth": {
+              "jwt": [
+                {
+                  "key": "payload",
+                  "type": "string",
+                  "value": "{\r\n    \"email\": \"{{jwtAdminEmail}}\"\r\n}\r\n"
+                },
+                {
+                  "key": "secret",
+                  "type": "string",
+                  "value": "{{jwtSecret}}"
+                },
+                {
+                  "key": "addTokenTo",
+                  "type": "string",
+                  "value": "header"
+                },
+                {
+                  "key": "algorithm",
+                  "type": "string",
+                  "value": "HS256"
+                },
+                {
+                  "key": "isSecretBase64Encoded",
+                  "type": "boolean",
+                  "value": false
+                },
+                {
+                  "key": "headerPrefix",
+                  "type": "string",
+                  "value": "Bearer"
+                },
+                {
+                  "key": "queryParamKey",
+                  "type": "string",
+                  "value": "token"
+                },
+                {
+                  "key": "header",
+                  "type": "string",
+                  "value": "{}"
+                }
+              ],
+              "type": "jwt"
+            },
+            "body": {
+              "mode": "raw",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              },
+              "raw": "{\r\n    \"email\": \"{{jwtEmail}}\",\r\n    \"firstName\": \"John\",\r\n    \"lastName\": \"Smith\"\r\n}"
+            },
+            "header": [],
+            "method": "POST",
+            "url": {
+              "host": ["{{apiUrl}}users"],
+              "raw": "{{apiUrl}}users"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get one",
+          "request": {
+            "auth": {
+              "jwt": [
+                {
+                  "key": "payload",
+                  "type": "string",
+                  "value": "{\r\n    \"email\": \"{{jwtEmail}}\"\r\n}\r\n"
+                },
+                {
+                  "key": "secret",
+                  "type": "string",
+                  "value": "{{jwtSecret}}"
+                },
+                {
+                  "key": "addTokenTo",
+                  "type": "string",
+                  "value": "header"
+                },
+                {
+                  "key": "algorithm",
+                  "type": "string",
+                  "value": "HS256"
+                },
+                {
+                  "key": "isSecretBase64Encoded",
+                  "type": "boolean",
+                  "value": false
+                },
+                {
+                  "key": "headerPrefix",
+                  "type": "string",
+                  "value": "Bearer"
+                },
+                {
+                  "key": "queryParamKey",
+                  "type": "string",
+                  "value": "token"
+                },
+                {
+                  "key": "header",
+                  "type": "string",
+                  "value": "{}"
+                }
+              ],
+              "type": "jwt"
+            },
+            "header": [],
+            "method": "GET",
+            "url": {
+              "host": ["{{apiUrl}}users"],
+              "path": ["{{jwtEmail}}"],
+              "raw": "{{apiUrl}}users/{{jwtEmail}}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update one",
+          "request": {
+            "auth": {
+              "jwt": [
+                {
+                  "key": "payload",
+                  "type": "string",
+                  "value": "{\r\n    \"email\": \"{{jwtAdminEmail}}\"\r\n}\r\n"
+                },
+                {
+                  "key": "secret",
+                  "type": "string",
+                  "value": "{{jwtSecret}}"
+                },
+                {
+                  "key": "addTokenTo",
+                  "type": "string",
+                  "value": "header"
+                },
+                {
+                  "key": "algorithm",
+                  "type": "string",
+                  "value": "HS256"
+                },
+                {
+                  "key": "isSecretBase64Encoded",
+                  "type": "boolean",
+                  "value": false
+                },
+                {
+                  "key": "headerPrefix",
+                  "type": "string",
+                  "value": "Bearer"
+                },
+                {
+                  "key": "queryParamKey",
+                  "type": "string",
+                  "value": "token"
+                },
+                {
+                  "key": "header",
+                  "type": "string",
+                  "value": "{}"
+                }
+              ],
+              "type": "jwt"
+            },
+            "body": {
+              "mode": "raw",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              },
+              "raw": "{\r\n    \"firstName\": \"John 2\",\r\n    \"lastName\": \"Smith 2\"\r\n}"
+            },
+            "header": [],
+            "method": "PUT",
+            "url": {
+              "host": ["{{apiUrl}}users"],
+              "path": ["{{jwtEmail}}"],
+              "raw": "{{apiUrl}}users/{{jwtEmail}}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete one",
+          "request": {
+            "auth": {
+              "jwt": [
+                {
+                  "key": "payload",
+                  "type": "string",
+                  "value": "{\r\n    \"email\": \"{{jwtAdminEmail}}\"\r\n}\r\n"
+                },
+                {
+                  "key": "secret",
+                  "type": "string",
+                  "value": "{{jwtSecret}}"
+                },
+                {
+                  "key": "addTokenTo",
+                  "type": "string",
+                  "value": "header"
+                },
+                {
+                  "key": "algorithm",
+                  "type": "string",
+                  "value": "HS256"
+                },
+                {
+                  "key": "isSecretBase64Encoded",
+                  "type": "boolean",
+                  "value": false
+                },
+                {
+                  "key": "headerPrefix",
+                  "type": "string",
+                  "value": "Bearer"
+                },
+                {
+                  "key": "queryParamKey",
+                  "type": "string",
+                  "value": "token"
+                },
+                {
+                  "key": "header",
+                  "type": "string",
+                  "value": "{}"
+                }
+              ],
+              "type": "jwt"
+            },
+            "header": [],
+            "method": "DELETE",
+            "url": {
+              "host": ["{{apiUrl}}users"],
+              "path": ["{{jwtEmail}}"],
+              "raw": "{{apiUrl}}users/{{jwtEmail}}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get companies",
+          "request": {
+            "auth": {
+              "jwt": [
+                {
+                  "key": "payload",
+                  "type": "string",
+                  "value": "{\r\n    \"email\": \"{{jwtEmail}}\"\r\n}\r\n"
+                },
+                {
+                  "key": "secret",
+                  "type": "string",
+                  "value": "{{jwtSecret}}"
+                },
+                {
+                  "key": "addTokenTo",
+                  "type": "string",
+                  "value": "header"
+                },
+                {
+                  "key": "algorithm",
+                  "type": "string",
+                  "value": "HS256"
+                },
+                {
+                  "key": "isSecretBase64Encoded",
+                  "type": "boolean",
+                  "value": false
+                },
+                {
+                  "key": "headerPrefix",
+                  "type": "string",
+                  "value": "Bearer"
+                },
+                {
+                  "key": "queryParamKey",
+                  "type": "string",
+                  "value": "token"
+                },
+                {
+                  "key": "header",
+                  "type": "string",
+                  "value": "{}"
+                }
+              ],
+              "type": "jwt"
+            },
+            "header": [],
+            "method": "GET",
+            "url": {
+              "host": ["{{apiUrl}}users"],
+              "path": ["{{jwtEmail}}", "companies"],
+              "raw": "{{apiUrl}}users/{{jwtEmail}}/companies"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get companies / pagination",
+          "request": {
+            "auth": {
+              "jwt": [
+                {
+                  "key": "payload",
+                  "type": "string",
+                  "value": "{\r\n    \"email\": \"{{jwtEmail}}\"\r\n}\r\n"
+                },
+                {
+                  "key": "secret",
+                  "type": "string",
+                  "value": "{{jwtSecret}}"
+                },
+                {
+                  "key": "addTokenTo",
+                  "type": "string",
+                  "value": "header"
+                },
+                {
+                  "key": "algorithm",
+                  "type": "string",
+                  "value": "HS256"
+                },
+                {
+                  "key": "isSecretBase64Encoded",
+                  "type": "boolean",
+                  "value": false
+                },
+                {
+                  "key": "headerPrefix",
+                  "type": "string",
+                  "value": "Bearer"
+                },
+                {
+                  "key": "queryParamKey",
+                  "type": "string",
+                  "value": "token"
+                },
+                {
+                  "key": "header",
+                  "type": "string",
+                  "value": "{}"
+                }
+              ],
+              "type": "jwt"
+            },
+            "header": [],
+            "method": "GET",
+            "url": {
+              "host": ["{{apiUrl}}users"],
+              "path": ["{{jwtEmail}}", "companies"],
+              "query": [
+                {
+                  "key": "offset",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "2"
+                }
+              ],
+              "raw": "{{apiUrl}}users/{{jwtEmail}}/companies?offset=1&limit=2"
+            }
+          },
+          "response": []
+        }
+      ],
+      "name": "Users"
+    },
+    {
+      "item": [
+        {
+          "name": "Async reject",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "header": [],
+            "method": "GET",
+            "url": {
+              "host": ["{{apiUrl}}test"],
+              "path": ["async-reject"],
+              "raw": "{{apiUrl}}test/async-reject"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Sync reject",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "header": [],
+            "method": "GET",
+            "url": {
+              "host": ["{{apiUrl}}test"],
+              "path": ["sync-reject"],
+              "raw": "{{apiUrl}}test/sync-reject"
+            }
+          },
+          "response": []
+        }
+      ],
+      "name": "Test"
+    },
+    {
       "name": "Index",
       "request": {
         "auth": {
@@ -1594,6 +1625,21 @@
         "url": {
           "host": ["{{apiUrl}}"],
           "raw": "{{apiUrl}}"
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Not found",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "header": [],
+        "method": "GET",
+        "url": {
+          "host": ["{{apiUrl}}not-found-Xt2H"],
+          "raw": "{{apiUrl}}not-found-Xt2H"
         }
       },
       "response": []
