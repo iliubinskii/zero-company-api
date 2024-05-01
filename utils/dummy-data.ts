@@ -1,3 +1,5 @@
+/* eslint-disable no-sync -- Ok */
+
 import { Company } from "../src/schema";
 import categories from "../assets/dummy/categories.json";
 import { faker } from "@faker-js/faker";
@@ -67,8 +69,4 @@ const companies = faker.helpers.uniqueArray((): Company => {
   }
 }, LIMIT.companies);
 
-// eslint-disable-next-line no-sync -- Ok
-fs.writeFileSync(
-  "assets/dummy/companies.json",
-  JSON.stringify(companies, null, 2)
-);
+fs.writeFileSync("assets/dummy/companies.json", JSON.stringify(companies));

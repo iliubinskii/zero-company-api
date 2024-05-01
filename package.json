@@ -14,7 +14,8 @@
   "type": "commonjs",
   "scripts": {
     "build": "tsc",
-    "build-fake-data": "tsx utils/faker.ts && npm run format",
+    "build-dummy-data": "tsx utils/dummy-data.ts && npm run format",
+    "build-favicon": "tsx utils/favicon.ts && npm run format",
     "deploy-preview": "vercel",
     "deploy-prod": "vercel --prod",
     "dev": "nodemon",

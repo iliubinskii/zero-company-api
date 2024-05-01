@@ -21,12 +21,12 @@ import { buildErrorResponse } from "./utils";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import express, { NextFunction, Request, Response } from "express";
+import { favicon } from "./public";
 import fs from "node:fs";
 import https from "node:https";
 import { lang } from "./langs";
 import { logger } from "./services";
 import passport from "passport";
-import path from "node:path";
 import session from "express-session";
 
 connectMongodb();
@@ -65,11 +65,14 @@ app.use(passport.session());
 app.use(express.json());
 app.use(appendJwt);
 
-// eslint-disable-next-line unicorn/prefer-module -- Ok
-app.use(express.static(path.join(path.dirname(__dirname), "public")));
-
 app.get("/", (_req, res) => {
   res.json({ status: lang.Ok });
+});
+
+app.get("/favicon.ico", (_req, res) => {
+  const buffer = Buffer.from(favicon, "base64");
+
+  res.contentType("ico").send(buffer);
 });
 
 app.use("/auth", authRouter);
