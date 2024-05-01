@@ -1,3 +1,3 @@
 export { uploadImage } from "./cloudinary";
-export { connectMongodb } from "./mongodb";
+export { mongodbConnection } from "./mongodb";
 export { initPassport } from "./passport";
