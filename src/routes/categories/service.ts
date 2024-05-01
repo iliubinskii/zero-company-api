@@ -1,6 +1,6 @@
-import { CategoriesService } from "../types";
+import { CategoriesService } from "../../types";
 import { CategoryModel } from "./model";
-import { MONGODB_MAX_LIMIT } from "../consts";
+import { MONGODB_MAX_LIMIT } from "../../consts";
 
 /**
  * Creates a MongoDB service for categories.

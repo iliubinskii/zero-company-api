@@ -1,7 +1,7 @@
-import { UserCreate, UserUpdate } from "../schema";
-import { preprocessEmail, preprocessNumber } from "../utils";
+import { UserCreate, UserUpdate } from "../../schema";
+import { preprocessEmail, preprocessNumber } from "../../utils";
 import { Equals } from "ts-toolbelt/out/Any/Equals";
-import { MONGODB_MAX_LIMIT } from "../consts";
+import { MONGODB_MAX_LIMIT } from "../../consts";
 import zod from "zod";
 
 const email = preprocessEmail(zod.string().email());

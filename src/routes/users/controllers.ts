@@ -1,6 +1,6 @@
-import { CompaniesService, UserControllers, UsersService } from "../types";
-import { assertDefined, buildErrorResponse } from "../utils";
-import { ErrorCode } from "../schema";
+import { CompaniesService, UserControllers, UsersService } from "../../types";
+import { assertDefined, buildErrorResponse } from "../../utils";
+import { ErrorCode } from "../../schema";
 import { StatusCodes } from "http-status-codes";
 
 /**

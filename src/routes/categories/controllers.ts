@@ -2,9 +2,9 @@ import {
   CategoriesService,
   CategoryControllers,
   CompaniesService
-} from "../types";
-import { assertDefined, buildErrorResponse } from "../utils";
-import { ErrorCode } from "../schema";
+} from "../../types";
+import { assertDefined, buildErrorResponse } from "../../utils";
+import { ErrorCode } from "../../schema";
 import { StatusCodes } from "http-status-codes";
 
 /**

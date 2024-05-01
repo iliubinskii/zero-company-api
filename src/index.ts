@@ -1,25 +1,22 @@
 import { CORS_ORIGIN, ENV, PORT, SESSION_SECRET } from "./config";
 import { appendJwt, logRequest, requestId } from "./global-middleware";
-import { connectMongodb, initPassport } from "./providers";
 import {
+  authRouter,
   createCategoriesRouter,
   createCategoriesService,
-  createCategoryControllers
-} from "./categories";
-import {
+  createCategoryControllers,
   createCompaniesRouter,
   createCompaniesService,
-  createCompanyControllers
-} from "./companies";
-import {
+  createCompanyControllers,
   createMeRouter,
   createUserControllers,
   createUsersRouter,
-  createUsersService
-} from "./users";
+  createUsersService,
+  testRouter
+} from "./routes";
+import { connectMongodb, initPassport } from "./providers";
 import { ErrorCode } from "./schema";
 import { StatusCodes } from "http-status-codes";
-import { authRouter } from "./auth";
 import { buildErrorResponse } from "./utils";
 import cookieParser from "cookie-parser";
 import cors from "cors";
@@ -31,7 +28,6 @@ import { logger } from "./global-services";
 import passport from "passport";
 import path from "node:path";
 import session from "express-session";
-import { testRouter } from "./test";
 
 connectMongodb();
 initPassport();

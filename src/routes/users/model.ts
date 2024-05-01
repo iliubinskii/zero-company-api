@@ -1,5 +1,5 @@
 import { Equals } from "ts-toolbelt/out/Any/Equals";
-import { User } from "../schema";
+import { User } from "../../schema";
 import mongoose from "mongoose";
 
 const Schema = {

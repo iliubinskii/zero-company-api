@@ -1,7 +1,7 @@
-import { CategoryCreate, CategoryUpdate } from "../schema";
+import { CategoryCreate, CategoryUpdate } from "../../schema";
 import { Equals } from "ts-toolbelt/out/Any/Equals";
-import { MONGODB_MAX_LIMIT } from "../consts";
-import { preprocessNumber } from "../utils";
+import { MONGODB_MAX_LIMIT } from "../../consts";
+import { preprocessNumber } from "../../utils";
 import zod from "zod";
 
 const description = zod.string().min(1);

@@ -1,7 +1,7 @@
-import { CompanyCreate, CompanyUpdate } from "../schema";
-import { preprocessBoolean, preprocessNumber } from "../utils";
+import { CompanyCreate, CompanyUpdate } from "../../schema";
+import { preprocessBoolean, preprocessNumber } from "../../utils";
 import { Equals } from "ts-toolbelt/out/Any/Equals";
-import { MONGODB_MAX_LIMIT } from "../consts";
+import { MONGODB_MAX_LIMIT } from "../../consts";
 import zod from "zod";
 
 const founder = zod.strictObject({

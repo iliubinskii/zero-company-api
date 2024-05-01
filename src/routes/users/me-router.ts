@@ -1,6 +1,6 @@
-import { UserControllers } from "../types";
+import { UserControllers } from "../../types";
 import express, { Router } from "express";
-import { requireJwtUser } from "../global-middleware";
+import { requireJwtUser } from "../../global-middleware";
 import { usersMiddleware } from "./middleware";
 
 /**

@@ -1,5 +1,8 @@
-import { requireJwtAdmin, requireValidMongodbId } from "../global-middleware";
-import { CategoryControllers } from "../types";
+import {
+  requireJwtAdmin,
+  requireValidMongodbId
+} from "../../global-middleware";
+import { CategoryControllers } from "../../types";
 import { categoriesMiddleware } from "./middleware";
 import express, { Router } from "express";
 

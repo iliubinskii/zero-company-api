@@ -1,8 +1,8 @@
-import { CompaniesService } from "../types";
-import { Company } from "../schema";
+import { CompaniesService } from "../../types";
+import { Company } from "../../schema";
 import { CompanyModel } from "./model";
 import { FilterQuery } from "mongoose";
-import { MONGODB_MAX_LIMIT } from "../consts";
+import { MONGODB_MAX_LIMIT } from "../../consts";
 import { Writable } from "ts-toolbelt/out/Object/Writable";
 
 /**

@@ -1,4 +1,4 @@
-import { Category } from "../schema";
+import { Category } from "../../schema";
 import { Equals } from "ts-toolbelt/out/Any/Equals";
 import mongoose from "mongoose";
 

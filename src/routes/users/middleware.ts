@@ -9,10 +9,10 @@ import {
   assertString,
   buildErrorResponse,
   filterUndefinedProperties
-} from "../utils";
-import { ErrorCode } from "../schema";
+} from "../../utils";
+import { ErrorCode } from "../../schema";
 import { StatusCodes } from "http-status-codes";
-import { UsersMiddleware } from "../types";
+import { UsersMiddleware } from "../../types";
 import { ZodError } from "zod";
 
 export const usersMiddleware: UsersMiddleware = {

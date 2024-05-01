@@ -1,6 +1,6 @@
-import { MONGODB_ERROR, MONGODB_MAX_LIMIT } from "../consts";
+import { MONGODB_ERROR, MONGODB_MAX_LIMIT } from "../../consts";
 import { UserModel } from "./model";
-import { UsersService } from "../types";
+import { UsersService } from "../../types";
 
 /**
  * Creates a MongoDB service for users.

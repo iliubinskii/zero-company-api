@@ -7,10 +7,10 @@ import {
   FieldType,
   parseFormData,
   webAccessibleStorage
-} from "../global-middleware";
-import { buildErrorResponse, filterUndefinedProperties } from "../utils";
-import { CompaniesMiddleware } from "../types";
-import { ErrorCode } from "../schema";
+} from "../../global-middleware";
+import { buildErrorResponse, filterUndefinedProperties } from "../../utils";
+import { CompaniesMiddleware } from "../../types";
+import { ErrorCode } from "../../schema";
 import { StatusCodes } from "http-status-codes";
 import { ZodError } from "zod";
 

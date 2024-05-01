@@ -4,9 +4,9 @@ import {
   GetCategoriesOptionsValidationSchema,
   GetCompaniesByCategoryOptionsValidationSchema
 } from "./validation-schema";
-import { buildErrorResponse, filterUndefinedProperties } from "../utils";
-import { CategoriesMiddleware } from "../types";
-import { ErrorCode } from "../schema";
+import { buildErrorResponse, filterUndefinedProperties } from "../../utils";
+import { CategoriesMiddleware } from "../../types";
+import { ErrorCode } from "../../schema";
 import { StatusCodes } from "http-status-codes";
 import { ZodError } from "zod";
 
