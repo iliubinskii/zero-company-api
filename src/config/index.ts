@@ -49,6 +49,8 @@ export const CORS_ORIGIN = assertDefined(process.env["CORS_ORIGIN"]);
 
 export const JWT_SECRET = assertDefined(process.env["JWT_SECRET"]);
 
+export const LOG_LEVEL = assertDefined(process.env["LOG_LEVEL"]);
+
 export const MONGODB_DATABASE_NAME = assertDefined(
   process.env["MONGODB_DATABASE_NAME"]
 );

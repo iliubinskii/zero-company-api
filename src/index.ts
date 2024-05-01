@@ -1,4 +1,5 @@
 import { CORS_ORIGIN, ENV, PORT, SESSION_SECRET } from "./config";
+import { appendJwt, logRequest, requestId } from "./global-middleware";
 import { connectMongodb, initPassport } from "./providers";
 import {
   createCategoriesRouter,
@@ -18,7 +19,6 @@ import {
 } from "./users";
 import { ErrorCode } from "./schema";
 import { StatusCodes } from "http-status-codes";
-import { appendJwt } from "./global-middleware";
 import { authRouter } from "./auth";
 import { buildErrorResponse } from "./utils";
 import cookieParser from "cookie-parser";
@@ -30,6 +30,7 @@ import { lang } from "./langs";
 import { logger } from "./global-services";
 import passport from "passport";
 import session from "express-session";
+import { testRouter } from "./test";
 
 connectMongodb();
 initPassport();
@@ -51,6 +52,8 @@ const userControllers = createUserControllers(userService, companiesService);
 
 const app = express();
 
+app.use(requestId);
+app.use(logRequest);
 app.use(cors({ credentials: true, origin: CORS_ORIGIN }));
 app.use(cookieParser());
 app.use(
@@ -77,16 +80,19 @@ app.use("/companies", createCompaniesRouter(companyControllers));
 
 app.use("/me", createMeRouter(userControllers));
 
+app.use("/test", testRouter);
+
 app.use("/users", createUsersRouter(userControllers));
 
 app.use(
   (
     err: unknown,
-    _req: Request,
+    req: Request,
     res: Response,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars -- Ok
     _next: NextFunction
   ) => {
+    logger.error(lang.ServerError, { requestId: req.requestId });
     logger.error(err);
     res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
@@ -102,5 +108,10 @@ if (ENV === "development") {
     key: fs.readFileSync("./certificates/localhost-key.pem")
   };
 
-  https.createServer(httpsOptions, app).listen(PORT);
-} else app.listen(PORT);
+  https.createServer(httpsOptions, app).listen(PORT, () => {
+    logger.info(lang.ServerStarted);
+  });
+} else
+  app.listen(PORT, () => {
+    logger.info(lang.ServerStarted);
+  });

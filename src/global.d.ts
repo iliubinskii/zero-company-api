@@ -30,6 +30,7 @@ declare module "express-serve-static-core" {
     getUsersOptions?: GetUsersOptions;
     jwtUser?: JwtUser;
     readonly logout: () => void;
+    requestId: string;
     userCreate?: UserCreate;
     userEmail?: string;
     userUpdate?: UserUpdate;

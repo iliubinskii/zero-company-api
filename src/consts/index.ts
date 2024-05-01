@@ -14,6 +14,8 @@ export const AUTH0_SCOPE = "openid email profile";
 
 export const JWT_EXPIRES_IN = "24h";
 
+export const LOG_REQUEST_ID_LENGTH = 6;
+
 export const MONGODB_ERROR = {
   DUPLICATE_KEY: 11_000
 };
@@ -23,3 +25,5 @@ export const MONGODB_MAX_LIMIT = {
   companies: 100,
   users: 100
 };
+
+export const TEST_DELAY_MS = 100;

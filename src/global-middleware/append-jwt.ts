@@ -9,6 +9,7 @@ import { RequestHandler } from "express";
 import { StatusCodes } from "http-status-codes";
 import { buildErrorResponse } from "../utils";
 import jwt from "jsonwebtoken";
+import { lang } from "../langs";
 import { logger } from "../global-services";
 import zod from "zod";
 
@@ -18,6 +19,7 @@ export const appendJwt: RequestHandler = (req, res, next) => {
   if (typeof token === "string")
     jwt.verify(token, JWT_SECRET, (err, decoded) => {
       if (err) {
+        logger.error(lang.JwtVerificationFailed, { requestId: req.requestId });
         logger.error(err);
         res
           .status(StatusCodes.UNAUTHORIZED)

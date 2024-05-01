@@ -45,6 +45,7 @@
     "cloudinary": "^2.2.0",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
+    "date-fns": "^3.6.0",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "express-session": "^1.18.0",
@@ -58,6 +59,7 @@
     "passport-auth0": "^1.4.4",
     "ts-toolbelt": "^9.6.0",
     "uuid": "^9.0.1",
+    "winston": "^3.13.0",
     "zod": "^3.23.4"
   },
   "devDependencies": {
