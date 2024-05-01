@@ -4,13 +4,13 @@ import { Equals } from "ts-toolbelt/out/Any/Equals";
 import { MONGODB_MAX_LIMIT } from "../consts";
 import zod from "zod";
 
-const founder = zod.object({
+const founder = zod.strictObject({
   confirmed: preprocessBoolean(zod.boolean()),
   email: zod.string().email(),
   share: preprocessNumber(zod.number().int().positive())
 });
 
-const webAccessibleImage = zod.object({
+const webAccessibleImage = zod.strictObject({
   assetId: zod.string().min(1),
   height: zod.number().int().positive(),
   secureUrl: zod.string().min(1),

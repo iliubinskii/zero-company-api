@@ -1,3 +1,4 @@
+import { requireJwtAdmin, requireJwtUser } from "../global-middleware";
 import { UserControllers } from "../types";
 import express, { Router } from "express";
 import { usersMiddleware } from "./middleware";
@@ -18,13 +19,19 @@ export function createUsersRouter(controllers: UserControllers): Router {
   const router = express.Router();
 
   router
-    .get("/", requireValidGetUsersOptions, controllers.getUsers)
-    .post("/", requireValidUser, controllers.addUser)
-    .get("/:email", controllers.getUser)
-    .put("/:email", requireValidUserUpdate, controllers.updateUser)
-    .delete("/:email", controllers.deleteUser)
+    .get("/", requireJwtUser, requireValidGetUsersOptions, controllers.getUsers)
+    .post("/", requireJwtAdmin, requireValidUser, controllers.addUser)
+    .get("/:email", requireJwtUser, controllers.getUser)
+    .put(
+      "/:email",
+      requireJwtAdmin,
+      requireValidUserUpdate,
+      controllers.updateUser
+    )
+    .delete("/:email", requireJwtAdmin, controllers.deleteUser)
     .get(
       "/:email/companies",
+      requireJwtUser,
       requireValidGetCompaniesByUserOptions,
       controllers.getCompaniesByUser
     );

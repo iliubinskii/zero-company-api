@@ -51,6 +51,7 @@ const config = {
     "callback-return": "off",
     "camelcase": "off",
     "consistent-return": "off",
+    "curly": ["warn", "multi"],
     "default-case": "off",
     "dot-notation": "off",
     "eslint-comments/no-use": [

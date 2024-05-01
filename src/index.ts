@@ -17,7 +17,7 @@ import {
 } from "./users";
 import { ErrorCode } from "./schema";
 import { StatusCodes } from "http-status-codes";
-import { UnauthorizedError } from "express-jwt";
+import { appendJwt } from "./global-middleware";
 import { authRouter } from "./auth";
 import { buildErrorResponse } from "./utils";
 import cookieParser from "cookie-parser";
@@ -41,9 +41,8 @@ const userService = createUsersService();
 
 const app = express();
 
-app.use(cookieParser());
 app.use(cors({ credentials: true, origin: CORS_ORIGIN }));
-app.use(express.json());
+app.use(cookieParser());
 app.use(
   session({
     resave: false,
@@ -53,6 +52,8 @@ app.use(
 );
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(express.json());
+app.use(appendJwt);
 
 app.get("/", (_req, res) => {
   res.json({ status: lang.Ok });
@@ -86,15 +87,9 @@ app.use(
     _next: NextFunction
   ) => {
     logger.error(err);
-
-    if (err instanceof UnauthorizedError)
-      res
-        .status(StatusCodes.INTERNAL_SERVER_ERROR)
-        .json(buildErrorResponse(ErrorCode.Unauthorized));
-    else
-      res
-        .status(StatusCodes.INTERNAL_SERVER_ERROR)
-        .json(buildErrorResponse(ErrorCode.InternalServerError));
+    res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json(buildErrorResponse(ErrorCode.InternalServerError));
   }
 );
 

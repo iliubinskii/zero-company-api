@@ -1,4 +1,9 @@
-import { AUTH0_RETURN_URL, COOKIE_DOMAIN, JWT_SECRET } from "../config";
+import {
+  ADMIN_EMAIL,
+  AUTH0_RETURN_URL,
+  COOKIE_DOMAIN,
+  JWT_SECRET
+} from "../config";
 import {
   AUTH0_SCOPE,
   AUTH_COOKIE_EXPIRATION_LIFETIME,
@@ -6,6 +11,7 @@ import {
   AUTH_COOKIE_NAME,
   JWT_EXPIRES_IN
 } from "../consts";
+import { AuthUser } from "../schema";
 import express from "express";
 import jwt from "jsonwebtoken";
 import passport from "passport";
@@ -14,13 +20,6 @@ import zod from "zod";
 export const authRouter = express.Router();
 
 authRouter
-  .get(
-    "/login",
-    passport.authenticate("auth0", { scope: AUTH0_SCOPE }),
-    (_req, res) => {
-      res.redirect(AUTH0_RETURN_URL);
-    }
-  )
   .get(
     "/callback",
     // eslint-disable-next-line no-warning-comments -- Postponed
@@ -55,6 +54,13 @@ authRouter
       } else res.redirect(AUTH0_RETURN_URL);
     }
   )
+  .get(
+    "/login",
+    passport.authenticate("auth0", { scope: AUTH0_SCOPE }),
+    (_req, res) => {
+      res.redirect(AUTH0_RETURN_URL);
+    }
+  )
   .get("/logout", (_req, res) => {
     res
       .cookie(AUTH_COOKIE_NAME, "", {
@@ -74,19 +80,28 @@ authRouter
     if (typeof token === "string")
       jwt.verify(token, JWT_SECRET, (err, decoded) => {
         if (err) res.json(null);
-        else res.json(JwtValidationSchema.parse(decoded));
+        else {
+          const email = JwtValidationSchema.parse(decoded).email.toLowerCase();
+
+          const authUser: AuthUser = {
+            admin: ADMIN_EMAIL.includes(email),
+            email
+          };
+
+          res.json(authUser);
+        }
       });
     else res.json(null);
   });
 
-const JwtValidationSchema = zod.object({
+const JwtValidationSchema = zod.strictObject({
   email: zod.string().email()
 });
 
-const UserValidationSchema = zod.object({
+const UserValidationSchema = zod.strictObject({
   emails: zod
     .array(
-      zod.object({
+      zod.strictObject({
         value: zod.string()
       })
     )

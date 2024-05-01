@@ -23,7 +23,7 @@ const upload = multer({ storage });
  * @param fileFields - The fields to handle
  * @returns The middleware
  */
-export function createFormDataParser(fileFields: FileFields) {
+export function parseFormData(fileFields: FileFields) {
   return upload.fields(
     Object.entries(fileFields).map(([name, maxCount]) => ({ maxCount, name }))
   );

@@ -5,8 +5,8 @@ import {
 } from "./validation-schema";
 import {
   FieldType,
-  createFormDataParser,
-  createWebAccessibleStorage
+  parseFormData,
+  webAccessibleStorage
 } from "../global-middleware";
 import { buildErrorResponse, filterUndefinedProperties } from "../utils";
 import { CompaniesMiddleware } from "../types";
@@ -15,7 +15,7 @@ import { StatusCodes } from "http-status-codes";
 import { ZodError } from "zod";
 
 export const companiesMiddleware: CompaniesMiddleware = {
-  parseFormData: createFormDataParser({
+  parseFormData: parseFormData({
     images: 10,
     logo: 1
   }),
@@ -64,7 +64,7 @@ export const companiesMiddleware: CompaniesMiddleware = {
       else throw err;
     }
   },
-  webAccessibleStorage: createWebAccessibleStorage({
+  webAccessibleStorage: webAccessibleStorage({
     images: FieldType.multiple,
     logo: FieldType.single
   })

@@ -13,12 +13,10 @@ export function requireValidMongodbId(paramName: string): RequestHandler {
     // eslint-disable-next-line security/detect-object-injection -- Ok
     const id = req.params[paramName];
 
-    if (typeof id === "string" && /^[\da-f]{24}$/i.test(id)) {
-      next();
-    } else {
+    if (typeof id === "string" && /^[\da-f]{24}$/i.test(id)) next();
+    else
       res
         .status(StatusCodes.BAD_REQUEST)
         .send(buildErrorResponse(ErrorCode.InvalidParam));
-    }
   };
 }

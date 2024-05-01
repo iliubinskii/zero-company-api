@@ -1,6 +1,8 @@
 import {
   nullifyEmptyStrings,
   parseNestedFormData,
+  requireJwtAdmin,
+  requireJwtUser,
   requireValidMongodbId
 } from "../global-middleware";
 import { CompanyControllers } from "../types";
@@ -27,6 +29,7 @@ export function createCompaniesRouter(controllers: CompanyControllers): Router {
     .get("/", requireValidGetCompaniesOptions, controllers.getCompanies)
     .post(
       "/",
+      requireJwtUser,
       parseFormData,
       nullifyEmptyStrings,
       webAccessibleStorage,
@@ -37,6 +40,7 @@ export function createCompaniesRouter(controllers: CompanyControllers): Router {
     .get("/:id", requireValidMongodbId("id"), controllers.getCompany)
     .put(
       "/:id",
+      requireJwtAdmin,
       requireValidMongodbId("id"),
       parseFormData,
       nullifyEmptyStrings,
@@ -45,7 +49,12 @@ export function createCompaniesRouter(controllers: CompanyControllers): Router {
       requireValidCompanyUpdate,
       controllers.updateCompany
     )
-    .delete("/:id", requireValidMongodbId("id"), controllers.deleteCompany);
+    .delete(
+      "/:id",
+      requireJwtAdmin,
+      requireValidMongodbId("id"),
+      controllers.deleteCompany
+    );
 
   return router;
 }

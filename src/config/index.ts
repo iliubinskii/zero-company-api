@@ -9,6 +9,10 @@ export const ENV = assertDefined(process.env["ENV"]);
 
 export const PORT = assertDefined(process.env["PORT"]);
 
+export const ADMIN_EMAIL = assertDefined(process.env["ADMIN_EMAIL"])
+  .toLowerCase()
+  .split(",");
+
 export const AUTH0_CALLBACK_URL = assertDefined(
   process.env["AUTH0_CALLBACK_URL"]
 );

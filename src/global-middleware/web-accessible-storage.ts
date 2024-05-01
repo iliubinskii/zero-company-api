@@ -8,7 +8,7 @@ import { uploadImage } from "../providers";
  * @param fields - The fields to upload.
  * @returns The middleware.
  */
-export function createWebAccessibleStorage(fields: Fields): RequestHandler {
+export function webAccessibleStorage(fields: Fields): RequestHandler {
   return async (req, _res, next) => {
     if (req.files && !Array.isArray(req.files)) {
       const uploads = await Promise.all(

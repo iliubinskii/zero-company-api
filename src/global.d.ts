@@ -1,6 +1,7 @@
 /// <reference types="jest-extended" />
 
 import {
+  AuthUser,
   CategoryCreate,
   CategoryUpdate,
   CompanyCreate,
@@ -18,6 +19,7 @@ import {
 
 declare module "express-serve-static-core" {
   interface Request {
+    authUser?: AuthUser;
     categoryCreate?: CategoryCreate;
     categoryUpdate?: CategoryUpdate;
     companyCreate?: CompanyCreate;

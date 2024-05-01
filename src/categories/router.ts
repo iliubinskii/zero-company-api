@@ -1,7 +1,7 @@
+import { requireJwtAdmin, requireValidMongodbId } from "../global-middleware";
 import { CategoryControllers } from "../types";
 import { categoriesMiddleware } from "./middleware";
 import express, { Router } from "express";
-import { requireValidMongodbId } from "../global-middleware";
 
 /**
  * Creates a router for category routes.
@@ -22,15 +22,21 @@ export function createCategoriesRouter(
 
   router
     .get("/", requireValidGetCategoriesOptions, controllers.getCategories)
-    .post("/", requireValidCategory, controllers.addCategory)
+    .post("/", requireJwtAdmin, requireValidCategory, controllers.addCategory)
     .get("/:id", requireValidMongodbId("id"), controllers.getCategory)
     .put(
       "/:id",
+      requireJwtAdmin,
       requireValidMongodbId("id"),
       requireValidCategoryUpdate,
       controllers.updateCategory
     )
-    .delete("/:id", requireValidMongodbId("id"), controllers.deleteCategory)
+    .delete(
+      "/:id",
+      requireJwtAdmin,
+      requireValidMongodbId("id"),
+      controllers.deleteCategory
+    )
     .get(
       "/:id/companies",
       requireValidMongodbId("id"),
