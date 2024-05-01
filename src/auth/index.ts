@@ -94,17 +94,21 @@ authRouter
     else res.json(null);
   });
 
-const JwtValidationSchema = zod.strictObject({
-  email: zod.string().email()
-});
+const JwtValidationSchema = zod
+  // Do not use strictObject: JWT may contain additional fields
+  .object({
+    email: zod.string().email()
+  });
 
-const UserValidationSchema = zod.strictObject({
-  emails: zod
-    .array(
-      zod.strictObject({
-        value: zod.string()
-      })
-    )
-    .nonempty()
-    .max(1)
-});
+const UserValidationSchema = zod
+  // Do not use strictObject: auth0 may return additional fields
+  .object({
+    emails: zod
+      .array(
+        zod.strictObject({
+          value: zod.string()
+        })
+      )
+      .nonempty()
+      .max(1)
+  });

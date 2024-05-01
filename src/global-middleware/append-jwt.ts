@@ -41,9 +41,11 @@ export const appendJwt: RequestHandler = (req, _res, next) => {
   next();
 };
 
-const JwtValidationSchema = zod.strictObject({
-  email: zod.string().email()
-});
+const JwtValidationSchema = zod
+  // Do not use strictObject: JWT may contain additional fields
+  .object({
+    email: zod.string().email()
+  });
 
 /**
  * Get the token from the request.
