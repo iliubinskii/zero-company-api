@@ -1,12 +1,14 @@
-import { ErrorCode } from "../schema";
+import { ErrorCode, Routes } from "../schema";
+import { buildErrorResponse, sendResponse } from "../utils";
 import { RequestHandler } from "express";
 import { StatusCodes } from "http-status-codes";
-import { buildErrorResponse } from "../utils";
 
 export const requireJwtUser: RequestHandler = (req, res, next) => {
   if (req.jwtUser) next();
   else
-    res
-      .status(StatusCodes.UNAUTHORIZED)
-      .json(buildErrorResponse(ErrorCode.Unauthorized));
+    sendResponse<Routes["*"]["UNAUTHORIZED"]>(
+      res,
+      StatusCodes.UNAUTHORIZED,
+      buildErrorResponse(ErrorCode.Unauthorized)
+    );
 };

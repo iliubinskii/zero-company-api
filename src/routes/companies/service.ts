@@ -1,4 +1,4 @@
-import { Company, ExistingCompany, GetCompaniesResponse } from "../../schema";
+import { Company, ExistingCompany, MultipleDocsResponse } from "../../schema";
 import { CompaniesService } from "../../types";
 import { CompanyModel } from "./model";
 import { FilterQuery } from "mongoose";
@@ -34,7 +34,7 @@ export function createCompaniesService(): CompaniesService {
       founderEmail,
       limit = MONGODB_MAX_LIMIT.companies,
       offset = 0
-    } = {}): Promise<GetCompaniesResponse> => {
+    } = {}): Promise<MultipleDocsResponse<ExistingCompany>> => {
       const filter: Writable<
         FilterQuery<Company>,
         "categories" | "founders"

@@ -2,7 +2,7 @@ import {
   CategoryCreate,
   CategoryUpdate,
   ExistingCategory,
-  GetCategoriesResponse
+  MultipleDocsResponse
 } from "../schema";
 import { RequestHandler } from "express";
 
@@ -42,7 +42,7 @@ export interface CategoriesService {
    */
   readonly getCategories: (
     options?: GetCategoriesOptions
-  ) => Promise<GetCategoriesResponse>;
+  ) => Promise<MultipleDocsResponse<ExistingCategory>>;
   /**
    * Gets a category from the database.
    * @param id - The ID of the category to get.

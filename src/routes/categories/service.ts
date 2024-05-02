@@ -1,4 +1,4 @@
-import { ExistingCategory, GetCategoriesResponse } from "../../schema";
+import { ExistingCategory, MultipleDocsResponse } from "../../schema";
 import { CategoriesService } from "../../types";
 import { CategoryModel } from "./model";
 import { MONGODB_MAX_LIMIT } from "../../consts";
@@ -26,7 +26,7 @@ export function createCategoriesService(): CategoriesService {
     getCategories: async ({
       limit = MONGODB_MAX_LIMIT.categories,
       offset = 0
-    } = {}): Promise<GetCategoriesResponse> => {
+    } = {}): Promise<MultipleDocsResponse<ExistingCategory>> => {
       const [categories, total] = await Promise.all([
         CategoryModel.find().skip(offset).limit(limit),
         CategoryModel.countDocuments()

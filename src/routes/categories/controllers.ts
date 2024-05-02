@@ -3,12 +3,13 @@ import {
   CategoryControllers,
   CompaniesService
 } from "../../types";
+import { ErrorCode, Routes } from "../../schema";
 import {
   assertDefined,
   buildErrorResponse,
+  sendResponse,
   wrapAsyncHandler
 } from "../../utils";
-import { ErrorCode } from "../../schema";
 import { StatusCodes } from "http-status-codes";
 
 /**
@@ -27,32 +28,51 @@ export function createCategoryControllers(
 
       const addedCategory = await service.addCategory(category);
 
-      res.status(StatusCodes.CREATED).json(addedCategory);
+      sendResponse<Routes["/categories"]["/"]["POST"]>(
+        res,
+        StatusCodes.CREATED,
+        addedCategory
+      );
     }),
     deleteCategory: wrapAsyncHandler(async (req, res) => {
       const id = assertDefined(req.params["id"]);
 
       const affectedRows = await service.deleteCategory(id);
 
-      res.status(StatusCodes.OK).send({ affectedRows });
+      sendResponse<Routes["/categories"]["/:id"]["DELETE"]>(
+        res,
+        StatusCodes.OK,
+        { affectedRows }
+      );
     }),
     getCategories: wrapAsyncHandler(async (req, res) => {
       const options = assertDefined(req.getCategoriesOptions);
 
       const categories = await service.getCategories(options);
 
-      res.json(categories);
+      sendResponse<Routes["/categories"]["/"]["GET"]>(
+        res,
+        StatusCodes.OK,
+        categories
+      );
     }),
     getCategory: wrapAsyncHandler(async (req, res) => {
       const id = assertDefined(req.params["id"]);
 
       const category = await service.getCategory(id);
 
-      if (category) res.json(category);
+      if (category)
+        sendResponse<Routes["/categories"]["/:id"]["GET"]["OK"]>(
+          res,
+          StatusCodes.OK,
+          category
+        );
       else
-        res
-          .status(StatusCodes.NOT_FOUND)
-          .json(buildErrorResponse(ErrorCode.CategoryNotFound));
+        sendResponse<Routes["/categories"]["/:id"]["GET"]["NOT_FOUND"]>(
+          res,
+          StatusCodes.NOT_FOUND,
+          buildErrorResponse(ErrorCode.CategoryNotFound)
+        );
     }),
     getCompaniesByCategory: wrapAsyncHandler(async (req, res) => {
       const id = assertDefined(req.params["id"]);
@@ -64,7 +84,11 @@ export function createCategoryControllers(
         category: id
       });
 
-      res.json(companies);
+      sendResponse<Routes["/categories"]["/:id/companies"]["GET"]>(
+        res,
+        StatusCodes.OK,
+        companies
+      );
     }),
     updateCategory: wrapAsyncHandler(async (req, res) => {
       const id = assertDefined(req.params["id"]);
@@ -73,11 +97,18 @@ export function createCategoryControllers(
 
       const updatedCategory = await service.updateCategory(id, category);
 
-      if (updatedCategory) res.status(StatusCodes.OK).json(updatedCategory);
+      if (updatedCategory)
+        sendResponse<Routes["/categories"]["/:id"]["PUT"]["OK"]>(
+          res,
+          StatusCodes.OK,
+          updatedCategory
+        );
       else
-        res
-          .status(StatusCodes.NOT_FOUND)
-          .json(buildErrorResponse(ErrorCode.CategoryNotFound));
+        sendResponse<Routes["/categories"]["/:id"]["PUT"]["NOT_FOUND"]>(
+          res,
+          StatusCodes.NOT_FOUND,
+          buildErrorResponse(ErrorCode.CategoryNotFound)
+        );
     })
   };
 }

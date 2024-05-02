@@ -2,7 +2,7 @@ import {
   CompanyCreate,
   CompanyUpdate,
   ExistingCompany,
-  GetCompaniesResponse
+  MultipleDocsResponse
 } from "../schema";
 import { RequestHandler } from "express";
 
@@ -42,7 +42,7 @@ export interface CompaniesService {
    */
   readonly getCompanies: (
     options?: GetCompaniesOptions
-  ) => Promise<GetCompaniesResponse>;
+  ) => Promise<MultipleDocsResponse<ExistingCompany>>;
   /**
    * Gets a company from the database.
    * @param id - The ID of the company to get.

@@ -1,5 +1,5 @@
+import { Router } from "express";
 import { UserControllers } from "../../types";
-import express, { Router } from "express";
 import { requireJwtUser } from "../../middleware";
 import { usersMiddleware } from "./middleware";
 
@@ -17,7 +17,7 @@ export function createMeRouter(controllers: UserControllers): Router {
     userEmailFromJwtUser
   } = usersMiddleware;
 
-  const router = express.Router();
+  const router = Router();
 
   router
     .get("/", requireJwtUser, userEmailFromJwtUser, controllers.getUser)

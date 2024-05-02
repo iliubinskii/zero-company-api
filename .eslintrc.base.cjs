@@ -73,6 +73,7 @@ const config = {
     "import/no-unresolved": "off",
     "jsdoc/require-param-type": "off",
     "jsdoc/require-returns-type": "off",
+    "no-redeclare": "off",
     "no-shadow": "off",
     "no-type-assertion/no-type-assertion": "warn",
     "no-undefined": "off",

@@ -1,8 +1,8 @@
 import { delay, wrapAsyncHandler } from "../utils";
+import { Router } from "express";
 import { TEST_DELAY_MS } from "../consts";
-import express from "express";
 
-export const testRouter = express.Router();
+export const testRouter = Router();
 
 testRouter
   .get(

@@ -33,11 +33,6 @@ export interface ExistingCompany extends Company {
 
 export type ExistingCompanies = readonly ExistingCompany[];
 
-export interface GetCompaniesResponse {
-  readonly docs: ExistingCompanies;
-  readonly total: number;
-}
-
 export interface Founder {
   readonly confirmed: boolean;
   readonly email: string;

@@ -1,7 +1,7 @@
 import { requireJwtAdmin, requireValidMongodbId } from "../../middleware";
 import { CategoryControllers } from "../../types";
+import { Router } from "express";
 import { categoriesMiddleware } from "./middleware";
-import express, { Router } from "express";
 
 /**
  * Creates a router for category routes.
@@ -18,7 +18,7 @@ export function createCategoriesRouter(
     requireValidGetCompaniesByCategoryOptions
   } = categoriesMiddleware;
 
-  const router = express.Router();
+  const router = Router();
 
   router
     .get("/", requireValidGetCategoriesOptions, controllers.getCategories)

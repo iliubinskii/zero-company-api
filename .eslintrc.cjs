@@ -71,6 +71,7 @@ const config = {
             "picsum",
             "printf",
             "reconnectfailed",
+            "redeclare",
             "req",
             "resave",
             "smacss",

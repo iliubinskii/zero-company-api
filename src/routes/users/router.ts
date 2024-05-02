@@ -1,6 +1,6 @@
 import { requireJwtAdmin, requireJwtUser } from "../../middleware";
+import { Router } from "express";
 import { UserControllers } from "../../types";
-import express, { Router } from "express";
 import { usersMiddleware } from "./middleware";
 
 /**
@@ -17,7 +17,7 @@ export function createUsersRouter(controllers: UserControllers): Router {
     userEmailFromParams
   } = usersMiddleware;
 
-  const router = express.Router();
+  const router = Router();
 
   router
     .get("/", requireJwtUser, requireValidGetUsersOptions, controllers.getUsers)

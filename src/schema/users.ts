@@ -15,8 +15,3 @@ export interface ExistingUser extends User {
 }
 
 export type ExistingUsers = readonly ExistingUser[];
-
-export interface GetUsersResponse {
-  readonly docs: ExistingUsers;
-  readonly total: number;
-}

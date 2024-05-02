@@ -1,6 +1,7 @@
 /* eslint-disable no-sync -- Ok */
 
 import { CORS_ORIGIN, ENV, PORT, SECURE_PORT, SESSION_SECRET } from "./config";
+import { ErrorCode, Routes } from "./schema";
 import {
   MONGODB_SESSIONS_COLLECTION,
   MONGODB_SESSIONS_TTL_SEC
@@ -20,14 +21,13 @@ import {
   createUsersService,
   testRouter
 } from "./routes";
+import { buildErrorResponse, sendResponse } from "./utils";
 import { initMongodb, initPassport } from "./providers";
-import { ErrorCode } from "./schema";
 import MongoStore from "connect-mongo";
 import { StatusCodes } from "http-status-codes";
-import { buildErrorResponse } from "./utils";
 import cookieParser from "cookie-parser";
 import cors from "cors";
-import express, { NextFunction, Request, Response } from "express";
+import express, { NextFunction, Request, Response, json } from "express";
 import { favicon } from "./public";
 import fs from "node:fs";
 import http from "node:http";
@@ -82,11 +82,13 @@ app.use(
 );
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(express.json());
+app.use(json());
 app.use(appendJwt);
 
 app.get("/", (_req, res) => {
-  res.json({ status: lang.Ok });
+  sendResponse<Routes["/"]["GET"]>(res, StatusCodes.OK, {
+    status: ErrorCode.Ok
+  });
 });
 
 app.get("/favicon.ico", (_req, res) => {
@@ -108,9 +110,11 @@ app.use("/test", testRouter);
 app.use("/users", createUsersRouter(userControllers));
 
 app.all("*", (_req, res) => {
-  res
-    .status(StatusCodes.NOT_FOUND)
-    .json(buildErrorResponse(ErrorCode.NotFound));
+  sendResponse<Routes["*"]["NOT_FOUND"]>(
+    res,
+    StatusCodes.NOT_FOUND,
+    buildErrorResponse(ErrorCode.NotFound)
+  );
 });
 
 app.use(
@@ -122,9 +126,11 @@ app.use(
     _next: NextFunction
   ) => {
     logger.error(lang.ServerError, err, { requestId: req.requestId });
-    res
-      .status(StatusCodes.INTERNAL_SERVER_ERROR)
-      .json(buildErrorResponse(ErrorCode.InternalServerError));
+    sendResponse<Routes["*"]["INTERNAL_SERVER_ERROR"]>(
+      res,
+      StatusCodes.INTERNAL_SERVER_ERROR,
+      buildErrorResponse(ErrorCode.InternalServerError)
+    );
   }
 );
 

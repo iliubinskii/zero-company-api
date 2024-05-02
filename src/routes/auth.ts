@@ -11,13 +11,15 @@ import {
   AUTH_COOKIE_NAME,
   JWT_EXPIRES_IN
 } from "../consts";
-import { JwtUser } from "../schema";
-import express from "express";
+import { Router } from "express";
+import { Routes } from "../schema";
+import { StatusCodes } from "http-status-codes";
 import jwt from "jsonwebtoken";
 import passport from "passport";
+import { sendResponse } from "../utils";
 import zod from "zod";
 
-export const authRouter = express.Router();
+export const authRouter = Router();
 
 authRouter
   .get(
@@ -77,19 +79,22 @@ authRouter
 
     if (typeof token === "string")
       jwt.verify(token, JWT_SECRET, (err, decoded) => {
-        if (err) res.json(null);
+        if (err)
+          sendResponse<Routes["/auth"]["/me"]["GET"]>(
+            res,
+            StatusCodes.OK,
+            null
+          );
         else {
           const email = JwtValidationSchema.parse(decoded).email.toLowerCase();
 
-          const jwtUser: JwtUser = {
+          sendResponse<Routes["/auth"]["/me"]["GET"]>(res, StatusCodes.OK, {
             admin: ADMIN_EMAIL.includes(email),
             email
-          };
-
-          res.json(jwtUser);
+          });
         }
       });
-    else res.json(null);
+    else sendResponse<Routes["/auth"]["/me"]["GET"]>(res, StatusCodes.OK, null);
   });
 
 const JwtValidationSchema = zod

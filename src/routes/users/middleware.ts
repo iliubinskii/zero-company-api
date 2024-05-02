@@ -1,3 +1,4 @@
+import { ErrorCode, Routes } from "../../schema";
 import {
   GetCompaniesByUserOptionsValidationSchema,
   GetUsersOptionsValidationSchema,
@@ -8,9 +9,9 @@ import {
   assertDefined,
   assertString,
   buildErrorResponse,
-  filterUndefinedProperties
+  filterUndefinedProperties,
+  sendResponse
 } from "../../utils";
-import { ErrorCode } from "../../schema";
 import { StatusCodes } from "http-status-codes";
 import { UsersMiddleware } from "../../types";
 import { ZodError } from "zod";
@@ -24,9 +25,11 @@ export const usersMiddleware: UsersMiddleware = {
       next();
     } catch (err) {
       if (err instanceof ZodError)
-        res
-          .status(StatusCodes.BAD_REQUEST)
-          .json(buildErrorResponse(ErrorCode.InvalidQuery, err.errors));
+        sendResponse<Routes["*"]["BAD_REQUEST"]["InvalidQuery"]>(
+          res,
+          StatusCodes.BAD_REQUEST,
+          buildErrorResponse(ErrorCode.InvalidQuery, err.errors)
+        );
       else throw err;
     }
   },
@@ -38,9 +41,11 @@ export const usersMiddleware: UsersMiddleware = {
       next();
     } catch (err) {
       if (err instanceof ZodError)
-        res
-          .status(StatusCodes.BAD_REQUEST)
-          .json(buildErrorResponse(ErrorCode.InvalidQuery, err.errors));
+        sendResponse<Routes["*"]["BAD_REQUEST"]["InvalidQuery"]>(
+          res,
+          StatusCodes.BAD_REQUEST,
+          buildErrorResponse(ErrorCode.InvalidQuery, err.errors)
+        );
       else throw err;
     }
   },
@@ -51,9 +56,11 @@ export const usersMiddleware: UsersMiddleware = {
 
     if (userCreate.email === email) next();
     else
-      res
-        .status(StatusCodes.BAD_REQUEST)
-        .json(buildErrorResponse(ErrorCode.EmailMismatch));
+      sendResponse<Routes["*"]["BAD_REQUEST"]["EmailMismatch"]>(
+        res,
+        StatusCodes.BAD_REQUEST,
+        buildErrorResponse(ErrorCode.EmailMismatch)
+      );
   },
   requireValidUser: (req, res, next) => {
     try {
@@ -61,9 +68,11 @@ export const usersMiddleware: UsersMiddleware = {
       next();
     } catch (err) {
       if (err instanceof ZodError)
-        res
-          .status(StatusCodes.BAD_REQUEST)
-          .json(buildErrorResponse(ErrorCode.InvalidUserData, err.errors));
+        sendResponse<Routes["*"]["BAD_REQUEST"]["InvalidUserData"]>(
+          res,
+          StatusCodes.BAD_REQUEST,
+          buildErrorResponse(ErrorCode.InvalidUserData, err.errors)
+        );
       else throw err;
     }
   },
@@ -75,9 +84,11 @@ export const usersMiddleware: UsersMiddleware = {
       next();
     } catch (err) {
       if (err instanceof ZodError)
-        res
-          .status(StatusCodes.BAD_REQUEST)
-          .json(buildErrorResponse(ErrorCode.InvalidUserData, err.errors));
+        sendResponse<Routes["*"]["BAD_REQUEST"]["InvalidUserData"]>(
+          res,
+          StatusCodes.BAD_REQUEST,
+          buildErrorResponse(ErrorCode.InvalidUserData, err.errors)
+        );
       else throw err;
     }
   },

@@ -6,8 +6,8 @@ import {
   requireValidMongodbId
 } from "../../middleware";
 import { CompanyControllers } from "../../types";
+import { Router } from "express";
 import { companiesMiddleware } from "./middleware";
-import express, { Router } from "express";
 
 /**
  * Creates a router for company routes.
@@ -23,7 +23,7 @@ export function createCompaniesRouter(controllers: CompanyControllers): Router {
     webAccessibleStorage
   } = companiesMiddleware;
 
-  const router = express.Router();
+  const router = Router();
 
   router
     .get("/", requireValidGetCompaniesOptions, controllers.getCompanies)

@@ -1,7 +1,7 @@
-import { ErrorCode } from "../schema";
+import { ErrorCode, Routes } from "../schema";
+import { buildErrorResponse, sendResponse } from "../utils";
 import { RequestHandler } from "express";
 import { StatusCodes } from "http-status-codes";
-import { buildErrorResponse } from "../utils";
 
 /**
  * Middleware that checks if the provided field is a valid MongoDB ObjectId.
@@ -15,8 +15,10 @@ export function requireValidMongodbId(paramName: string): RequestHandler {
 
     if (typeof id === "string" && /^[\da-f]{24}$/i.test(id)) next();
     else
-      res
-        .status(StatusCodes.BAD_REQUEST)
-        .send(buildErrorResponse(ErrorCode.InvalidParam));
+      sendResponse<Routes["*"]["BAD_REQUEST"]["InvalidParam"]>(
+        res,
+        StatusCodes.BAD_REQUEST,
+        buildErrorResponse(ErrorCode.InvalidParam)
+      );
   };
 }

@@ -1,4 +1,4 @@
-import { ExistingUser, GetUsersResponse } from "../../schema";
+import { ExistingUser, MultipleDocsResponse } from "../../schema";
 import { MONGODB_ERROR, MONGODB_MAX_LIMIT } from "../../consts";
 import { UserModel } from "./model";
 import { UsersService } from "../../types";
@@ -49,7 +49,7 @@ export function createUsersService(): UsersService {
     getUsers: async ({
       limit = MONGODB_MAX_LIMIT.users,
       offset = 0
-    } = {}): Promise<GetUsersResponse> => {
+    } = {}): Promise<MultipleDocsResponse<ExistingUser>> => {
       const [users, total] = await Promise.all([
         UserModel.find().skip(offset).limit(limit),
         UserModel.countDocuments()

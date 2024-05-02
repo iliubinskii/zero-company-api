@@ -1,6 +1,6 @@
 import {
   ExistingUser,
-  GetUsersResponse,
+  MultipleDocsResponse,
   UserCreate,
   UserUpdate
 } from "../schema";
@@ -49,7 +49,9 @@ export interface UsersService {
    * @param options - The options to use when getting users.
    * @returns A promise that resolves with all users in the database.
    */
-  readonly getUsers: (options?: GetUsersOptions) => Promise<GetUsersResponse>;
+  readonly getUsers: (
+    options?: GetUsersOptions
+  ) => Promise<MultipleDocsResponse<ExistingUser>>;
   /**
    * Updates a user in the database.
    * @param email - The e-mail of the user to update.

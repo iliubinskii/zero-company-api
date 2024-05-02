@@ -3,14 +3,18 @@ import {
   CompanyUpdateValidationSchema,
   GetCompaniesOptionsValidationSchema
 } from "./validation-schema";
+import { ErrorCode, Routes } from "../../schema";
 import {
   FieldType,
   parseFormData,
   webAccessibleStorage
 } from "../../middleware";
-import { buildErrorResponse, filterUndefinedProperties } from "../../utils";
+import {
+  buildErrorResponse,
+  filterUndefinedProperties,
+  sendResponse
+} from "../../utils";
 import { CompaniesMiddleware } from "../../types";
-import { ErrorCode } from "../../schema";
 import { StatusCodes } from "http-status-codes";
 import { ZodError } from "zod";
 
@@ -24,15 +28,19 @@ export const companiesMiddleware: CompaniesMiddleware = {
       req.companyCreate = CompanyCreateValidationSchema.parse(req.body);
 
       if (req.companyCreate.founders.some(founder => founder.confirmed))
-        res
-          .status(StatusCodes.BAD_REQUEST)
-          .json(buildErrorResponse(ErrorCode.InvalidCompanyData));
+        sendResponse<Routes["*"]["CONFLICT"]["InvalidFounderConfirmedStatus"]>(
+          res,
+          StatusCodes.CONFLICT,
+          buildErrorResponse(ErrorCode.InvalidFounderConfirmedStatus)
+        );
       else next();
     } catch (err) {
       if (err instanceof ZodError)
-        res
-          .status(StatusCodes.BAD_REQUEST)
-          .json(buildErrorResponse(ErrorCode.InvalidCompanyData, err.errors));
+        sendResponse<Routes["*"]["BAD_REQUEST"]["InvalidCompanyData"]>(
+          res,
+          StatusCodes.BAD_REQUEST,
+          buildErrorResponse(ErrorCode.InvalidCompanyData, err.errors)
+        );
       else throw err;
     }
   },
@@ -44,9 +52,11 @@ export const companiesMiddleware: CompaniesMiddleware = {
       next();
     } catch (err) {
       if (err instanceof ZodError)
-        res
-          .status(StatusCodes.BAD_REQUEST)
-          .json(buildErrorResponse(ErrorCode.InvalidCompanyData, err.errors));
+        sendResponse<Routes["*"]["BAD_REQUEST"]["InvalidCompanyData"]>(
+          res,
+          StatusCodes.BAD_REQUEST,
+          buildErrorResponse(ErrorCode.InvalidCompanyData, err.errors)
+        );
       else throw err;
     }
   },
@@ -58,9 +68,11 @@ export const companiesMiddleware: CompaniesMiddleware = {
       next();
     } catch (err) {
       if (err instanceof ZodError)
-        res
-          .status(StatusCodes.BAD_REQUEST)
-          .json(buildErrorResponse(ErrorCode.InvalidQuery, err.errors));
+        sendResponse<Routes["*"]["BAD_REQUEST"]["InvalidQuery"]>(
+          res,
+          StatusCodes.BAD_REQUEST,
+          buildErrorResponse(ErrorCode.InvalidQuery, err.errors)
+        );
       else throw err;
     }
   },
