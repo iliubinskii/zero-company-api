@@ -10,12 +10,16 @@ export const lang = {
   InvalidQuery: "Invalid query",
   InvalidUserData: "Invalid user data",
   JwtVerificationFailed: "JWT verification failed",
+  MongodbAll: "MongoDB all",
   MongodbClose: "MongoDB close",
   MongodbConnected: "MongoDB connected",
+  MongodbConnecting: "MongoDB connecting",
   MongodbDisconnected: "MongoDB disconnected",
   MongodbDisconnecting: "MongoDB disconnecting",
   MongodbError: "MongoDB error",
+  MongodbFullSetup: "MongoDB full setup",
   MongodbOpen: "MongoDB open",
+  MongodbReconnectFailed: "MongoDB reconnect failed",
   MongodbReconnected: "MongoDB reconnected",
   NotFound: "Not found",
   Ok: "Ok",
@@ -25,4 +29,4 @@ export const lang = {
   Unauthorized: "Unauthorized",
   UserAlreadyExists: "User already exists",
   UserNotFound: "User not found"
-};
+} as const;

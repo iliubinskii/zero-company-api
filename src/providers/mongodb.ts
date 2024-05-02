@@ -6,41 +6,27 @@ import mongoose from "mongoose";
 /**
  * Connect to MongoDB
  */
-export function initMongodb(): void {
-  // eslint-disable-next-line @typescript-eslint/no-floating-promises -- Ok
-  initMongodbAsync();
-}
-
-/**
- * Connect to MongoDB
- */
-export async function initMongodbAsync(): Promise<void> {
-  mongoose.connection
-    .on("connected", () => {
-      logger.info(lang.MongodbConnected);
-    })
-    .on("open", () => {
-      logger.info(lang.MongodbOpen);
-    })
-    .on("disconnected", () => {
-      logger.warn(lang.MongodbDisconnected);
-    })
-    .on("reconnected", () => {
-      logger.warn(lang.MongodbReconnected);
-    })
-    .on("disconnecting", () => {
-      logger.warn(lang.MongodbDisconnecting);
-    })
-    .on("close", () => {
-      logger.warn(lang.MongodbClose);
+export async function initMongodb(): Promise<void> {
+  for (const [event, message] of Object.entries(events))
+    mongoose.connection.on(event, err => {
+      logger.info(message, err);
     });
 
-  try {
-    await mongoose.connect(MONGODB_URI, {
-      dbName: MONGODB_DATABASE_NAME
-    });
-  } catch (err) {
-    logger.error(lang.MongodbError);
-    logger.error(err);
-  }
+  await mongoose.connect(MONGODB_URI, {
+    dbName: MONGODB_DATABASE_NAME
+  });
 }
+
+const events = {
+  all: lang.MongodbAll,
+  close: lang.MongodbClose,
+  connected: lang.MongodbConnected,
+  connecting: lang.MongodbConnecting,
+  disconnected: lang.MongodbDisconnected,
+  disconnecting: lang.MongodbDisconnecting,
+  error: lang.MongodbError,
+  fullsetup: lang.MongodbFullSetup,
+  open: lang.MongodbOpen,
+  reconnected: lang.MongodbReconnected,
+  reconnectfailed: lang.MongodbReconnectFailed
+};

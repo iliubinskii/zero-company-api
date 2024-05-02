@@ -15,10 +15,11 @@ export const appendJwt: RequestHandler = (req, _res, next) => {
 
   if (typeof token === "string")
     jwt.verify(token, JWT_SECRET, (jwtError, decoded) => {
-      if (jwtError) {
-        logger.warn(lang.JwtVerificationFailed, { requestId: req.requestId });
-        logger.warn(jwtError);
-      } else
+      if (jwtError)
+        logger.warn(lang.JwtVerificationFailed, jwtError, {
+          requestId: req.requestId
+        });
+      else
         try {
           const email = JwtValidationSchema.parse(decoded).email.toLowerCase();
 
@@ -27,12 +28,11 @@ export const appendJwt: RequestHandler = (req, _res, next) => {
             email
           };
         } catch (err) {
-          if (err instanceof zod.ZodError) {
-            logger.warn(lang.JwtVerificationFailed, {
+          if (err instanceof zod.ZodError)
+            logger.warn(lang.JwtVerificationFailed, err, {
               requestId: req.requestId
             });
-            logger.warn(err);
-          } else throw err;
+          else throw err;
         }
     });
 

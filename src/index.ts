@@ -32,7 +32,13 @@ import { logger } from "./services";
 import passport from "passport";
 import session from "express-session";
 
-initMongodb();
+// eslint-disable-next-line no-warning-comments -- Postponed
+// TODO: Should server be restarted on a rejection and how?
+// eslint-disable-next-line github/no-then -- Ok
+initMongodb().catch((err: unknown) => {
+  logger.error(lang.MongodbError, err);
+});
+
 initPassport();
 
 const categoriesService = createCategoriesService();
@@ -104,8 +110,7 @@ app.use(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars -- Ok
     _next: NextFunction
   ) => {
-    logger.error(lang.ServerError, { requestId: req.requestId });
-    logger.error(err);
+    logger.error(lang.ServerError, err, { requestId: req.requestId });
     res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
       .json(buildErrorResponse(ErrorCode.InternalServerError));
