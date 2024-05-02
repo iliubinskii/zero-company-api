@@ -7,5 +7,4 @@ export { requestId } from "./request-id";
 export { requireJwtAdmin } from "./require-jwt-admin";
 export { requireJwtUser } from "./require-jwt-user";
 export { requireValidMongodbId } from "./require-valid-mongodb-id";
-export { waitForMongodbConnection } from "./wait-for-mongodb-connection";
 export { FieldType, webAccessibleStorage } from "./web-accessible-storage";

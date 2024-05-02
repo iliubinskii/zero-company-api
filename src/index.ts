@@ -1,12 +1,7 @@
 /* eslint-disable no-sync -- Ok */
 
 import { CORS_ORIGIN, ENV, PORT, SECURE_PORT, SESSION_SECRET } from "./config";
-import {
-  appendJwt,
-  logRequest,
-  requestId,
-  waitForMongodbConnection
-} from "./middleware";
+import { appendJwt, logRequest, requestId } from "./middleware";
 import {
   authRouter,
   createCategoriesRouter,
@@ -21,6 +16,7 @@ import {
   createUsersService,
   testRouter
 } from "./routes";
+import { initMongodb, initPassport } from "./providers";
 import { ErrorCode } from "./schema";
 import { StatusCodes } from "http-status-codes";
 import { buildErrorResponse } from "./utils";
@@ -31,12 +27,12 @@ import { favicon } from "./public";
 import fs from "node:fs";
 import http from "node:http";
 import https from "node:https";
-import { initPassport } from "./providers";
 import { lang } from "./langs";
 import { logger } from "./services";
 import passport from "passport";
 import session from "express-session";
 
+initMongodb();
 initPassport();
 
 const categoriesService = createCategoriesService();
@@ -71,7 +67,6 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.json());
 app.use(appendJwt);
-app.use(waitForMongodbConnection);
 
 app.get("/", (_req, res) => {
   res.json({ status: lang.Ok });
