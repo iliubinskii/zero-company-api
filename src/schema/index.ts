@@ -4,3 +4,4 @@ export * from "./common";
 export * from "./companies";
 export * from "./routes";
 export * from "./users";
+export { schemaVersion } from "./version.json";

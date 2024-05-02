@@ -1,7 +1,7 @@
 /* eslint-disable no-sync -- Ok */
 
 import { CORS_ORIGIN, ENV, PORT, SECURE_PORT, SESSION_SECRET } from "./config";
-import { ErrorCode, Routes } from "./schema";
+import { ErrorCode, Routes, schemaVersion } from "./schema";
 import {
   MONGODB_SESSIONS_COLLECTION,
   MONGODB_SESSIONS_TTL_SEC
@@ -37,6 +37,8 @@ import { logger } from "./services";
 import mongoose from "mongoose";
 import passport from "passport";
 import session from "express-session";
+
+logger.info(`${lang.ZeroApiServer} ${schemaVersion}`);
 
 // eslint-disable-next-line no-warning-comments -- Postponed
 // TODO: Should server be restarted on a rejection and how?

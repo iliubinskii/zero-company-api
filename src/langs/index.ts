@@ -29,5 +29,6 @@ export const lang = {
   ServerStarted: "Server started",
   Unauthorized: "Unauthorized",
   UserAlreadyExists: "User already exists",
-  UserNotFound: "User not found"
+  UserNotFound: "User not found",
+  ZeroApiServer: "Zero API server, schema ver"
 } as const;

@@ -89,6 +89,7 @@ const config = {
             "uri",
             "urls",
             "uuidv4",
+            "ver",
             "vercel",
             "winston",
             "zod"
