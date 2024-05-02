@@ -457,14 +457,9 @@
                   "value": "Some description"
                 },
                 {
-                  "key": "founders[0].confirmed",
-                  "type": "text",
-                  "value": "false"
-                },
-                {
                   "key": "founders[0].email",
                   "type": "text",
-                  "value": "{{lastUserEmail}}"
+                  "value": "{{jwtEmail}}"
                 },
                 {
                   "key": "founders[0].share",

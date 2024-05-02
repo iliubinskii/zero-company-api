@@ -55,15 +55,6 @@ export interface Routes {
         }
       ];
     };
-    readonly CONFLICT: {
-      "InvalidFounderConfirmedStatus": [
-        StatusCodes.CONFLICT,
-        {
-          readonly error: ErrorCode.InvalidFounderConfirmedStatus;
-          readonly errorMessage: string;
-        }
-      ];
-    };
     readonly INTERNAL_SERVER_ERROR: [
       StatusCodes.INTERNAL_SERVER_ERROR,
       {

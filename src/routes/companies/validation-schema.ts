@@ -5,7 +5,6 @@ import { MONGODB_MAX_LIMIT } from "../../consts";
 import zod from "zod";
 
 const founder = zod.strictObject({
-  confirmed: preprocessBoolean(zod.literal(true).optional()),
   email: zod.string().email(),
   share: preprocessNumber(zod.number().int().positive())
 });

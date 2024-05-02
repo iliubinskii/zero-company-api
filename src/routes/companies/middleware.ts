@@ -25,20 +25,10 @@ export const companiesMiddleware: CompaniesMiddleware = {
   }),
   requireValidCompany: (req, res, next) => {
     try {
-      const companyCreate = CompanyCreateValidationSchema.parse(req.body);
-
-      req.companyCreate = filterUndefinedProperties({
-        ...companyCreate,
-        founders: companyCreate.founders.map(filterUndefinedProperties)
-      });
-
-      if (req.companyCreate.founders.some(founder => founder.confirmed))
-        sendResponse<Routes["*"]["CONFLICT"]["InvalidFounderConfirmedStatus"]>(
-          res,
-          StatusCodes.CONFLICT,
-          buildErrorResponse(ErrorCode.InvalidFounderConfirmedStatus)
-        );
-      else next();
+      req.companyCreate = filterUndefinedProperties(
+        CompanyCreateValidationSchema.parse(req.body)
+      );
+      next();
     } catch (err) {
       if (err instanceof ZodError)
         sendResponse<Routes["*"]["BAD_REQUEST"]["InvalidCompanyData"]>(

@@ -1,11 +1,12 @@
-import { WebAccessibleImage } from "./common";
+import { WebAccessibleImage, WebAccessibleImages } from "./common";
+import { strings } from "../types";
 
 export interface Company {
-  readonly categories: string[];
+  readonly categories: strings;
   readonly description: string;
   readonly foundedAt: string;
-  readonly founders: Founder[];
-  readonly images: WebAccessibleImage[];
+  readonly founders: Founders;
+  readonly images: WebAccessibleImages;
   readonly logo: WebAccessibleImage;
   readonly name: string;
   readonly privateCompany?: true;
@@ -15,7 +16,9 @@ export interface Company {
 }
 
 export interface CompanyCreate
-  extends Omit<Company, "foundedAt" | "recommended"> {}
+  extends Omit<Company, "founders" | "foundedAt" | "recommended"> {
+  readonly founders: readonly Omit<Founder, "confirmed">[];
+}
 
 export interface CompanyUpdate
   extends Partial<
@@ -38,3 +41,5 @@ export interface Founder {
   readonly email: string;
   readonly share: number;
 }
+
+export type Founders = readonly Founder[];

@@ -6,7 +6,6 @@ export enum ErrorCode {
   InternalServerError = "InternalServerError",
   InvalidCategoryData = "InvalidCategoryData",
   InvalidCompanyData = "InvalidCompanyData",
-  InvalidFounderConfirmedStatus = "InvalidFounderConfirmedStatus",
   InvalidParam = "InvalidParam",
   InvalidQuery = "InvalidQuery",
   InvalidUserData = "InvalidUserData",
@@ -33,3 +32,5 @@ export interface WebAccessibleImage {
   readonly url: string;
   readonly width: number;
 }
+
+export type WebAccessibleImages = readonly WebAccessibleImage[];
