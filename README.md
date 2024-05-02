@@ -10,16 +10,17 @@
    - certificates/localhost.pem
    - certificates/localhost-key.pem
 
+## Development
+
+1. Start development server by running `npm run dev`
+
 ## Contributions
 
 1. Create a new feature branch `feature/<hyphened-branch-name>`.
 2. Make your changes.
 3. Format code by running `npm run format`.
-4. Check for type errors by running `npm run type-check`.
-5. Check for linting errors by running `npm run lint`.
-6. Check for style errors by running `npm run lint-style`.
-7. Commit and push your changes.
-8. Create a PR.
+4. Commit and push your changes (commit should pass validation).
+5. Create a PR.
 
 ## TODO
 
