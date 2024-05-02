@@ -1,60 +1,60 @@
 [
   {
-    "_id": "507f1f77bcf86cd799439011",
+    "_id": { "$oid": "507f1f77bcf86cd799439011" },
     "description": "Offers scalable cloud infrastructure, storage, and computing solutions that empower businesses to manage data and applications effortlessly, ensuring high availability and security.",
     "name": "Cloud Computing",
     "tagline": "Elevating your business operations to the cloud for unmatched efficiency and scalability."
   },
   {
-    "_id": "507f1f77bcf86cd799439012",
+    "_id": { "$oid": "507f1f77bcf86cd799439012" },
     "description": "Provides software applications as a service through the internet, reducing the need for extensive internal IT resources while offering flexibility and scalability across business functions.",
     "name": "SaaS",
     "tagline": "Delivering dynamic software solutions directly over the internet with zero hassle."
   },
   {
-    "_id": "507f1f77bcf86cd799439013",
+    "_id": { "$oid": "507f1f77bcf86cd799439013" },
     "description": "Enables customers to develop, run, and manage applications effortlessly, offering a mix of development tools, middleware, and runtime environments without the complexity of maintaining infrastructure.",
     "name": "Web & Mobile",
     "tagline": "Streamline your application development with our comprehensive platform solutions."
   },
   {
-    "_id": "507f1f77bcf86cd799439014",
+    "_id": { "$oid": "507f1f77bcf86cd799439014" },
     "description": "Provides tools and platforms that facilitate online selling, inventory management, and integration with essential services like payment processing and logistics.",
     "name": "E-commerce",
     "tagline": "Revolutionizing online sales with advanced, integrated e-commerce solutions."
   },
   {
-    "_id": "507f1f77bcf86cd799439015",
+    "_id": { "$oid": "507f1f77bcf86cd799439015" },
     "description": "Develops technologies for the financial sector to streamline payments, enhance security, and provide robust financial management tools to individuals and businesses.",
     "name": "FinTech",
     "tagline": "Transforming financial interactions with secure and innovative fintech solutions."
   },
   {
-    "_id": "507f1f77bcf86cd799439016",
+    "_id": { "$oid": "507f1f77bcf86cd799439016" },
     "description": "Provides web-based solutions that improve access to care, streamline medical processes, and enhance patient interaction with health services via telemedicine and health records systems.",
     "name": "Health",
     "tagline": "Advancing healthcare with technology, improving patient care through innovative web services."
   },
   {
-    "_id": "507f1f77bcf86cd799439017",
+    "_id": { "$oid": "507f1f77bcf86cd799439017" },
     "description": "Offers interactive, web-based learning platforms that provide educational resources and virtual classrooms, making education accessible globally.",
     "name": "Education",
     "tagline": "Redefining educational experiences with technology that connects and empowers learners and educators."
   },
   {
-    "_id": "507f1f77bcf86cd799439018",
+    "_id": { "$oid": "507f1f77bcf86cd799439018" },
     "description": "Focuses on protecting applications, data, and networks from cyber threats and breaches with advanced web services, ensuring digital asset security.",
     "name": "Cyber Security",
     "tagline": "Securing the digital world with cutting-edge cybersecurity services for relentless protection."
   },
   {
-    "_id": "507f1f77bcf86cd799439019",
+    "_id": { "$oid": "507f1f77bcf86cd799439019" },
     "description": "Integrates artificial intelligence and machine learning into web services to provide deep insights, automate tasks, and optimize decision-making processes across industries.",
     "name": "AI & ML",
     "tagline": "Driving smarter decisions with AI and machine learning platforms that revolutionize business analytics."
   },
   {
-    "_id": "507f1f77bcf86cd79943901a",
+    "_id": { "$oid": "507f1f77bcf86cd79943901a" },
     "description": "Develops platforms that support the integration and management of IoT devices, enabling real-time monitoring, management, and data analysis for enhanced operational efficiency.",
     "name": "IoT",
     "tagline": "Connecting and managing your IoT devices seamlessly through robust web platforms."

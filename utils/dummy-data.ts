@@ -12,7 +12,7 @@ const LIMIT = {
 
 const PRICE_STEP = 1000;
 
-const categoryIds = categories.map(category => category._id);
+const categoryIds = categories.map(category => category._id.$oid);
 
 const userEmails = users.map(user => user.email);
 
