@@ -1,10 +1,10 @@
 /* eslint-disable i18n-text/no-en -- Ok */
 
-export const AUTH_COOKIE_EXPIRATION_LIFETIME = 86_400_000;
+export const AUTH_COOKIE_EXPIRATION_LIFETIME_MS = 86_400_000;
+
+export const AUTH_COOKIE_LIFETIME_MS = 86_400_000;
 
 export const AUTH_COOKIE_NAME = "auth_token";
-
-export const AUTH_COOKIE_LIFETIME = 86_400_000;
 
 export const AUTH_HEADER_NAME = "authorization";
 
@@ -25,5 +25,11 @@ export const MONGODB_MAX_LIMIT = {
   companies: 100,
   users: 100
 };
+
+export const MONGODB_SESSIONS_COLLECTION = "sessions";
+
+export const MONGODB_SESSIONS_TTL_SEC = 3600;
+
+export const SESSION_LIFETIME_MS = 3_600_000;
 
 export const TEST_DELAY_MS = 100;

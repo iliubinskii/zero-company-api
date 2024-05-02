@@ -44,6 +44,7 @@
     "@types/passport-auth0": "^1.0.9",
     "@types/uuid": "^9.0.8",
     "cloudinary": "^2.2.0",
+    "connect-mongo": "^5.1.0",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "date-fns": "^3.6.0",

@@ -1,6 +1,11 @@
 /* eslint-disable no-sync -- Ok */
 
 import { CORS_ORIGIN, ENV, PORT, SECURE_PORT, SESSION_SECRET } from "./config";
+import {
+  MONGODB_SESSIONS_COLLECTION,
+  MONGODB_SESSIONS_TTL_SEC,
+  SESSION_LIFETIME_MS
+} from "./consts";
 import { appendJwt, logRequest, requestId } from "./middleware";
 import {
   authRouter,
@@ -18,6 +23,7 @@ import {
 } from "./routes";
 import { initMongodb, initPassport } from "./providers";
 import { ErrorCode } from "./schema";
+import MongoStore from "connect-mongo";
 import { StatusCodes } from "http-status-codes";
 import { buildErrorResponse } from "./utils";
 import cookieParser from "cookie-parser";
@@ -29,6 +35,7 @@ import http from "node:http";
 import https from "node:https";
 import { lang } from "./langs";
 import { logger } from "./services";
+import mongoose from "mongoose";
 import passport from "passport";
 import session from "express-session";
 
@@ -64,9 +71,19 @@ app.use(cors({ credentials: true, origin: CORS_ORIGIN }));
 app.use(cookieParser());
 app.use(
   session({
+    cookie: {
+      httpOnly: true,
+      maxAge: SESSION_LIFETIME_MS,
+      secure: true
+    },
     resave: false,
-    saveUninitialized: true,
-    secret: SESSION_SECRET
+    saveUninitialized: false,
+    secret: SESSION_SECRET,
+    store: MongoStore.create({
+      client: mongoose.connection.getClient(),
+      collectionName: MONGODB_SESSIONS_COLLECTION,
+      ttl: MONGODB_SESSIONS_TTL_SEC
+    })
   })
 );
 app.use(passport.initialize());

@@ -6,8 +6,8 @@ import {
 } from "../config";
 import {
   AUTH0_SCOPE,
-  AUTH_COOKIE_EXPIRATION_LIFETIME,
-  AUTH_COOKIE_LIFETIME,
+  AUTH_COOKIE_EXPIRATION_LIFETIME_MS,
+  AUTH_COOKIE_LIFETIME_MS,
   AUTH_COOKIE_NAME,
   JWT_EXPIRES_IN
 } from "../consts";
@@ -40,7 +40,7 @@ authRouter
             res
               .cookie(AUTH_COOKIE_NAME, token, {
                 domain: COOKIE_DOMAIN,
-                expires: new Date(Date.now() + AUTH_COOKIE_LIFETIME),
+                expires: new Date(Date.now() + AUTH_COOKIE_LIFETIME_MS),
                 httpOnly: true,
                 path: "/",
                 sameSite: "strict",
@@ -63,7 +63,7 @@ authRouter
     res
       .cookie(AUTH_COOKIE_NAME, "", {
         domain: COOKIE_DOMAIN,
-        expires: new Date(Date.now() - AUTH_COOKIE_EXPIRATION_LIFETIME),
+        expires: new Date(Date.now() - AUTH_COOKIE_EXPIRATION_LIFETIME_MS),
         httpOnly: true,
         path: "/",
         sameSite: "strict",

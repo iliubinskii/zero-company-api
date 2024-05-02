@@ -81,6 +81,7 @@ const config = {
             "tagline",
             "tsconfig",
             "tsx",
+            "ttl",
             "ucfirst",
             "unlink",
             "uploader",
