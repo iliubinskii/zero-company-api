@@ -3,8 +3,7 @@
 import { CORS_ORIGIN, ENV, PORT, SECURE_PORT, SESSION_SECRET } from "./config";
 import {
   MONGODB_SESSIONS_COLLECTION,
-  MONGODB_SESSIONS_TTL_SEC,
-  SESSION_LIFETIME_MS
+  MONGODB_SESSIONS_TTL_SEC
 } from "./consts";
 import { appendJwt, logRequest, requestId } from "./middleware";
 import {
@@ -71,11 +70,6 @@ app.use(cors({ credentials: true, origin: CORS_ORIGIN }));
 app.use(cookieParser());
 app.use(
   session({
-    cookie: {
-      httpOnly: true,
-      maxAge: SESSION_LIFETIME_MS,
-      secure: true
-    },
     resave: false,
     saveUninitialized: false,
     secret: SESSION_SECRET,
