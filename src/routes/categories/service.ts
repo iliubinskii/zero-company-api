@@ -2,6 +2,7 @@ import { ExistingCategory, MultipleDocsResponse } from "../../schema";
 import { CategoriesService } from "../../types";
 import { CategoryModel } from "./model";
 import { MONGODB_MAX_LIMIT } from "../../consts";
+import { buildMongodbQuery } from "../../utils";
 
 /**
  * Creates a MongoDB service for categories.
@@ -58,7 +59,7 @@ export function createCategoriesService(): CategoriesService {
     ): Promise<ExistingCategory | undefined> => {
       const updatedCategory = await CategoryModel.findByIdAndUpdate(
         id,
-        { $set: category },
+        buildMongodbQuery(category),
         { new: true }
       );
 

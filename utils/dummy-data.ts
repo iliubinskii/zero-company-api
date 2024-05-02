@@ -54,7 +54,6 @@ const companies = faker.helpers.uniqueArray((): Company => {
       width: 512
     },
     name: faker.commerce.productName(),
-    privateCompany: false,
     recommended: true,
     targetValue,
     website: faker.internet.url()

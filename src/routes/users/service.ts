@@ -2,6 +2,7 @@ import { ExistingUser, MultipleDocsResponse } from "../../schema";
 import { MONGODB_ERROR, MONGODB_MAX_LIMIT } from "../../consts";
 import { UserModel } from "./model";
 import { UsersService } from "../../types";
+import { buildMongodbQuery } from "../../utils";
 
 /**
  * Creates a MongoDB service for users.
@@ -67,7 +68,7 @@ export function createUsersService(): UsersService {
     updateUser: async (email, user): Promise<ExistingUser | undefined> => {
       const updatedUser = await UserModel.findOneAndUpdate(
         { email },
-        { $set: user },
+        buildMongodbQuery(user),
         { new: true }
       );
 

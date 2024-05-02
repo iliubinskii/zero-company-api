@@ -25,7 +25,12 @@ export const companiesMiddleware: CompaniesMiddleware = {
   }),
   requireValidCompany: (req, res, next) => {
     try {
-      req.companyCreate = CompanyCreateValidationSchema.parse(req.body);
+      const companyCreate = CompanyCreateValidationSchema.parse(req.body);
+
+      req.companyCreate = filterUndefinedProperties({
+        ...companyCreate,
+        founders: companyCreate.founders.map(filterUndefinedProperties)
+      });
 
       if (req.companyCreate.founders.some(founder => founder.confirmed))
         sendResponse<Routes["*"]["CONFLICT"]["InvalidFounderConfirmedStatus"]>(

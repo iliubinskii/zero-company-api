@@ -4,6 +4,7 @@ import { CompanyModel } from "./model";
 import { FilterQuery } from "mongoose";
 import { MONGODB_MAX_LIMIT } from "../../consts";
 import { Writable } from "ts-toolbelt/out/Object/Writable";
+import { buildMongodbQuery } from "../../utils";
 
 /**
  * Creates a MongoDB service for companies.
@@ -14,8 +15,7 @@ export function createCompaniesService(): CompaniesService {
     addCompany: async (company): Promise<ExistingCompany> => {
       const model = new CompanyModel<Company>({
         ...company,
-        foundedAt: new Date().toISOString(),
-        recommended: false
+        foundedAt: new Date().toISOString()
       });
 
       const addedCompany = await model.save();
@@ -76,7 +76,7 @@ export function createCompaniesService(): CompaniesService {
     ): Promise<ExistingCompany | undefined> => {
       const updatedCompany = await CompanyModel.findByIdAndUpdate(
         id,
-        { $set: company },
+        buildMongodbQuery(company),
         { new: true }
       );
 

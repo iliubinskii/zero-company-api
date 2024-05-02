@@ -5,7 +5,7 @@ import { MONGODB_MAX_LIMIT } from "../../consts";
 import zod from "zod";
 
 const founder = zod.strictObject({
-  confirmed: preprocessBoolean(zod.boolean()),
+  confirmed: preprocessBoolean(zod.literal(true).optional()),
   email: zod.string().email(),
   share: preprocessNumber(zod.number().int().positive())
 });
@@ -30,11 +30,11 @@ const logo = webAccessibleImage;
 
 const name = zod.string().min(1);
 
-const privateCompany = preprocessBoolean(zod.boolean());
+const privateCompany = preprocessBoolean(zod.literal(true));
 
 const targetValue = preprocessNumber(zod.number().int().positive());
 
-const website = zod.union([zod.string().url(), zod.null()]);
+const website = zod.string().url();
 
 export const CompanyCreateValidationSchema = zod.strictObject({
   categories,
@@ -43,9 +43,9 @@ export const CompanyCreateValidationSchema = zod.strictObject({
   images,
   logo,
   name,
-  privateCompany: privateCompany.default(false),
+  privateCompany: privateCompany.optional(),
   targetValue,
-  website: website.default(null)
+  website: website.optional()
 });
 
 export const CompanyUpdateValidationSchema = zod.strictObject({
@@ -53,8 +53,8 @@ export const CompanyUpdateValidationSchema = zod.strictObject({
   images: images.optional(),
   logo: logo.optional(),
   name: name.optional(),
-  privateCompany: privateCompany.optional(),
-  website: website.optional()
+  privateCompany: privateCompany.nullable().optional(),
+  website: website.nullable().optional()
 });
 
 export const GetCompaniesOptionsValidationSchema = zod.strictObject({

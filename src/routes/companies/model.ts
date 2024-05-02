@@ -10,7 +10,7 @@ const Schema = {
     required: true,
     type: [
       {
-        confirmed: { required: true, type: Boolean },
+        confirmed: { enum: [true], type: Boolean },
         email: { required: true, type: String },
         share: { required: true, type: Number }
       }
@@ -39,13 +39,10 @@ const Schema = {
     }
   },
   name: { required: true, type: String },
-  privateCompany: { required: true, type: Boolean },
-  recommended: { required: true, type: Boolean },
+  privateCompany: { enum: [true], type: Boolean },
+  recommended: { enum: [true], type: Boolean },
   targetValue: { required: true, type: Number },
-  website: {
-    default: null,
-    type: String
-  }
+  website: String
 } as const;
 
 export const CompanyModel = mongoose.model(
