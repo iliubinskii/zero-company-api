@@ -12,7 +12,7 @@ export const parseNestedFormData: RequestHandler = (req, _res, next) => {
       // Direct assignment to body does not work
       _.set(substitutes, key, value);
 
-      // eslint-disable-next-line @typescript-eslint/no-dynamic-delete, security/detect-object-injection -- Ok
+      // eslint-disable-next-line @typescript-eslint/no-dynamic-delete -- Ok
       delete body[key];
     }
 

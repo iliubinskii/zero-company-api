@@ -5,9 +5,7 @@ export const nullifyEmptyStrings: RequestHandler = (req, _res, next) => {
   const body = req.body as Record<string, unknown>;
 
   for (const [key, value] of Object.entries(body))
-    if (value === "")
-      // eslint-disable-next-line security/detect-object-injection -- Ok
-      body[key] = null;
+    if (value === "") body[key] = null;
 
   next();
 };

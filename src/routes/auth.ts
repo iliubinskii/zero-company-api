@@ -74,7 +74,7 @@ authRouter
       .redirect(AUTH0_RETURN_URL);
   })
   .get("/me", (req, res) => {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, security/detect-object-injection -- Ok
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access -- Ok
     const token = req.cookies[AUTH_COOKIE_NAME] as unknown;
 
     if (typeof token === "string")

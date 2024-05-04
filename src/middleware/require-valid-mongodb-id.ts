@@ -10,7 +10,6 @@ import { StatusCodes } from "http-status-codes";
  */
 export function requireValidMongodbId(paramName: string): RequestHandler {
   return (req, res, next) => {
-    // eslint-disable-next-line security/detect-object-injection -- Ok
     const id = req.params[paramName];
 
     if (typeof id === "string" && /^[\da-f]{24}$/i.test(id)) next();

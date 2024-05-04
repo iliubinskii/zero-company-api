@@ -11,10 +11,7 @@ export function buildMongodbQuery(
   const $unset: Record<string, unknown> = {};
 
   for (const [key, value] of Object.entries(obj))
-    if (value === null)
-      // eslint-disable-next-line security/detect-object-injection -- Ok
-      $unset[key] = value;
-    // eslint-disable-next-line security/detect-object-injection -- Ok
+    if (value === null) $unset[key] = value;
     else $set[key] = value;
 
   return { $set, $unset };

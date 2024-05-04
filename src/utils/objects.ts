@@ -9,10 +9,9 @@ export function filterUndefinedProperties<T>(
   const result = { ...obj };
 
   for (const key in result) {
-    // eslint-disable-next-line security/detect-object-injection -- Ok
     const value = result[key];
 
-    // eslint-disable-next-line @typescript-eslint/no-dynamic-delete,  security/detect-object-injection -- Ok
+    // eslint-disable-next-line @typescript-eslint/no-dynamic-delete -- Ok
     if (value === undefined) delete result[key];
   }
 

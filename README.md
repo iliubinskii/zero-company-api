@@ -6,13 +6,15 @@
 2. Clone your forked repository.
 3. Install dependencies by running `npm install`.
 4. Create .env file (see .env.example)
-5. Add SSL certificates
+5. Add SSL certificates or copy certificates generated in zero-company-app repo
    - certificates/localhost.pem
    - certificates/localhost-key.pem
 
 ## Development
 
 1. Start development server by running `npm run dev`
+2. HTTPS server runs on https://localhost:3000 (see .env.example)
+3. HTTP server runs on http://localhost:3000 (see .env.example)
 
 ## Contributions
 

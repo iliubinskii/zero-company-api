@@ -95,6 +95,7 @@ const config = {
     "quote-props": ["warn", "consistent-as-needed"],
     "react/jsx-sort-props": "warn",
     "react/prop-types": "off",
+    "security/detect-object-injection": "off",
     "sonarjs/prefer-immediate-return": "off",
     "sort/destructuring-properties": [
       "warn",

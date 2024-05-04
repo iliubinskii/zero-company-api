@@ -34,7 +34,6 @@ export function buildErrorResponse(error: ErrorCode, data?: unknown): object {
   return filterUndefinedProperties({
     data,
     error,
-    // eslint-disable-next-line security/detect-object-injection -- Ok
     errorMessage: lang[error]
   });
 }

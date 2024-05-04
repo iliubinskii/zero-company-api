@@ -42,7 +42,6 @@ export function webAccessibleStorage(fields: Fields): RequestHandler {
                 width
               })
             ),
-            // eslint-disable-next-line security/detect-object-injection -- Ok
             type: assertDefined(fields[fieldName])
           };
         })
@@ -51,14 +50,14 @@ export function webAccessibleStorage(fields: Fields): RequestHandler {
       for (const { fieldName, responses, type } of uploads)
         switch (type) {
           case FieldType.single: {
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, security/detect-object-injection -- Ok
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access -- Ok
             req.body[fieldName] = assertDefined(responses[0]);
 
             break;
           }
 
           case FieldType.multiple: {
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, security/detect-object-injection -- Ok
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access -- Ok
             req.body[fieldName] = responses;
           }
         }
