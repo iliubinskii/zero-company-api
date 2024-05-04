@@ -12,25 +12,22 @@ const LIMIT = {
 
 const PRICE_STEP = 1000;
 
-const categoryIds = categories.map(category => category._id.$oid);
-
-const userEmails = users.map(user => user.email);
-
 const companies = faker.helpers.uniqueArray((): Company => {
   const targetValue = faker.number.int({ max: 1000, min: 100 }) * PRICE_STEP;
 
   return {
-    categories: faker.helpers.uniqueArray(
-      categoryIds,
-      faker.number.int({ max: 2, min: 1 })
-    ),
+    categories: faker.helpers
+      .uniqueArray(categories, faker.number.int({ max: 2, min: 1 }))
+      .map(category => category._id.$oid),
     description: faker.lorem.paragraph(),
     foundedAt: faker.date.past().toISOString(),
     founders: faker.helpers
-      .uniqueArray(userEmails, faker.number.int({ max: 3, min: 1 }))
-      .map(email => ({
+      .uniqueArray(users, faker.number.int({ max: 3, min: 1 }))
+      .map(({ email, firstName, lastName }) => ({
         confirmed: true,
         email,
+        firstName,
+        lastName,
         share:
           faker.number.float({ fractionDigits: 2, max: 0.1, min: 0.01 }) *
           targetValue *

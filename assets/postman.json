@@ -493,6 +493,16 @@
                   "key": "website",
                   "type": "text",
                   "value": "http://cats.com/"
+                },
+                {
+                  "key": "founders[0].firstName",
+                  "type": "text",
+                  "value": "John"
+                },
+                {
+                  "key": "founders[0].lastName",
+                  "type": "text",
+                  "value": "Smith"
                 }
               ],
               "mode": "formdata"

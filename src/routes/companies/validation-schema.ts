@@ -6,6 +6,8 @@ import zod from "zod";
 
 const founder = zod.strictObject({
   email: zod.string().email(),
+  firstName: zod.string().min(1),
+  lastName: zod.string().min(1),
   share: preprocessNumber(zod.number().int().positive())
 });
 

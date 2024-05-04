@@ -12,6 +12,8 @@ const Schema = {
       {
         confirmed: { enum: [true], type: Boolean },
         email: { required: true, type: String },
+        firstName: { required: true, type: String },
+        lastName: { required: true, type: String },
         share: { required: true, type: Number }
       }
     ]

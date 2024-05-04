@@ -39,6 +39,8 @@ export type ExistingCompanies = readonly ExistingCompany[];
 export interface Founder {
   readonly confirmed?: true;
   readonly email: string;
+  readonly firstName: string;
+  readonly lastName: string;
   readonly share: number;
 }
 
