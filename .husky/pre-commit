@@ -1,2 +1,11 @@
+#!/bin/sh
+
+BRANCH_NAME=$(git symbolic-ref --short HEAD)
+
+if [ "$BRANCH_NAME" = "master" ] || [ "$BRANCH_NAME" = "develop" ]; then
+  echo "Commits to $BRANCH_NAME branch are forbidden."
+  exit 1
+fi
+
 npm run type-check
 npx lint-staged
