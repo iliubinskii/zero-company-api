@@ -1,4 +1,4 @@
-import { ErrorCode, FieldErrors } from "../schema";
+import { ErrorCode, ErrorResponse, ErrorResponseWithData } from "../schema";
 import { NextFunction, Request, RequestHandler, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import { ZodIssues } from "../types";
@@ -105,15 +105,4 @@ export function wrapAsyncHandler(handler: AsyncRequestHandler): RequestHandler {
 
 export interface AsyncRequestHandler {
   (req: Request, res: Response, next: NextFunction): Promise<void>;
-}
-
-export interface ErrorResponse<E extends ErrorCode> {
-  readonly error: E;
-  readonly errorMessage: string;
-}
-
-export interface ErrorResponseWithData<E extends ErrorCode> {
-  readonly data: FieldErrors;
-  readonly error: E;
-  readonly errorMessage: string;
 }

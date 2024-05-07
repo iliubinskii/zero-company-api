@@ -100,6 +100,7 @@ const config = {
       }
     ],
     "quote-props": ["warn", "consistent-as-needed"],
+    "quotes": ["error", "double"],
     "react/jsx-sort-props": "warn",
     "react/prop-types": "off",
     "react/self-closing-comp": "warn",

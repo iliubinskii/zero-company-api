@@ -16,6 +16,17 @@ export enum ErrorCode {
   UserNotFound = "UserNotFound"
 }
 
+export interface ErrorResponse<E extends ErrorCode> {
+  readonly error: E;
+  readonly errorMessage: string;
+}
+
+export interface ErrorResponseWithData<E extends ErrorCode> {
+  readonly data: FieldErrors;
+  readonly error: E;
+  readonly errorMessage: string;
+}
+
 export interface DeleteResponse {
   readonly affectedRows: number;
 }
