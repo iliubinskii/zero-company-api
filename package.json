@@ -23,16 +23,19 @@
     "install-deps": "npm install --strict-peer-deps",
     "install-dev-deps": "npm install --save-dev --strict-peer-deps",
     "lint": "eslint --fix --max-warnings=0 .",
-    "lint-no-fix": "eslint --max-warnings=0 .",
     "lint-profile": "set TIMING=1 && eslint --max-warnings=0 .",
     "lint-style": "stylelint --fix --max-warnings=0 src/**/*.{css,less,postcss,scss}",
-    "lint-style-no-fix": "stylelint --max-warnings=0 src/**/*.{css,less,postcss,scss}",
     "ncu-check": "ncu --dep=dev,peer,prod",
     "ncu-upgrade": "ncu --dep=dev,peer,prod --upgrade && npm run install-deps",
     "prepare": "husky",
     "start": "node dist/index.js",
     "test": "jest",
     "type-check": "tsc --incremental false --noEmit"
+  },
+  "lint-staged": {
+    "*.{css,html,json,less,postcss,scss}": "prettier --write",
+    "*.{css,less,postcss,scss}": "stylelint --max-warnings=0",
+    "*.{js,jsx,ts,tsx}": "eslint --max-warnings=0"
   },
   "dependencies": {
     "@types/cookie-parser": "^1.4.7",
@@ -106,6 +109,7 @@
     "husky": "^9.0.11",
     "jest": "^29.7.0",
     "jest-extended": "^4.0.2",
+    "lint-staged": "^15.2.2",
     "nodemon": "^3.1.0",
     "npm-check-updates": "^16.14.20",
     "prettier": "^3.2.5",

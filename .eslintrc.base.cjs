@@ -29,7 +29,9 @@ const config = {
   overrides: [
     {
       files: "*.d.ts",
-      rules: { "spaced-comment": "off" }
+      rules: {
+        "spaced-comment": "off"
+      }
     },
     {
       files: ["*.test.ts", "*.test.tsx"],
