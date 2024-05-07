@@ -1,4 +1,9 @@
-import { DeleteResponse, ErrorCode, MultipleDocsResponse } from "./common";
+import {
+  DeleteResponse,
+  ErrorCode,
+  FieldErrors,
+  MultipleDocsResponse
+} from "./common";
 import { ExistingCategory } from "./categories";
 import { ExistingCompany } from "./companies";
 import { ExistingUser } from "./users";
@@ -18,7 +23,7 @@ export interface Routes {
       readonly "InvalidCategoryData": [
         StatusCodes.BAD_REQUEST,
         {
-          readonly data: unknown;
+          readonly data: FieldErrors;
           readonly error: ErrorCode.InvalidCategoryData;
           readonly errorMessage: string;
         }
@@ -26,7 +31,7 @@ export interface Routes {
       readonly "InvalidCompanyData": [
         StatusCodes.BAD_REQUEST,
         {
-          readonly data: unknown;
+          readonly data: FieldErrors;
           readonly error: ErrorCode.InvalidCompanyData;
           readonly errorMessage: string;
         }
@@ -41,7 +46,7 @@ export interface Routes {
       readonly "InvalidQuery": [
         StatusCodes.BAD_REQUEST,
         {
-          readonly data: unknown;
+          readonly data: FieldErrors;
           readonly error: ErrorCode.InvalidQuery;
           readonly errorMessage: string;
         }
@@ -49,7 +54,7 @@ export interface Routes {
       readonly "InvalidUserData": [
         StatusCodes.BAD_REQUEST,
         {
-          readonly data: unknown;
+          readonly data: FieldErrors;
           readonly error: ErrorCode.InvalidUserData;
           readonly errorMessage: string;
         }

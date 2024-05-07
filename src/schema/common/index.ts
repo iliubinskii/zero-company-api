@@ -20,6 +20,13 @@ export interface DeleteResponse {
   readonly affectedRows: number;
 }
 
+export interface FieldError {
+  readonly message: string;
+  readonly path: string;
+}
+
+export type FieldErrors = readonly FieldError[];
+
 export interface MultipleDocsResponse<T> {
   readonly docs: readonly T[];
   readonly total: number;

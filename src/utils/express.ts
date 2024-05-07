@@ -1,7 +1,7 @@
+import { ErrorCode, FieldErrors } from "../schema";
 import { NextFunction, Request, RequestHandler, Response } from "express";
-import { ErrorCode } from "../schema";
 import { StatusCodes } from "http-status-codes";
-import { filterUndefinedProperties } from "./objects";
+import { ZodIssues } from "../types";
 import { lang } from "../langs";
 
 /**
@@ -19,10 +19,10 @@ export function buildErrorResponse<E extends ErrorCode>(
  * @param data - Additional data to include in the response.
  * @returns The error response object.
  */
-export function buildErrorResponse<E extends ErrorCode, D>(
+export function buildErrorResponse<E extends ErrorCode>(
   error: E,
-  data: D
-): ErrorResponseWithData<E, D>;
+  data: ZodIssues
+): ErrorResponseWithData<E>;
 
 /**
  * Builds an error response object.
@@ -30,12 +30,47 @@ export function buildErrorResponse<E extends ErrorCode, D>(
  * @param data - Additional data to include in the response.
  * @returns The error response object.
  */
-export function buildErrorResponse(error: ErrorCode, data?: unknown): object {
-  return filterUndefinedProperties({
-    data,
+export function buildErrorResponse<E extends ErrorCode>(
+  error: E,
+  data?: ZodIssues
+): object {
+  if (data) {
+    const result: ErrorResponseWithData<E> = {
+      data: data.map(issue => {
+        return {
+          message: issue.message,
+          path: issue.path
+            .map((item, index) => {
+              switch (typeof item) {
+                case "string": {
+                  return index ? `.${item}` : item;
+                }
+
+                case "number": {
+                  return `[${item}]`;
+                }
+
+                default: {
+                  return "";
+                }
+              }
+            })
+            .join("")
+        };
+      }),
+      error,
+      errorMessage: lang[error]
+    };
+
+    return result;
+  }
+
+  const result: ErrorResponse<E> = {
     error,
     errorMessage: lang[error]
-  });
+  };
+
+  return result;
 }
 
 /**
@@ -77,8 +112,8 @@ export interface ErrorResponse<E extends ErrorCode> {
   readonly errorMessage: string;
 }
 
-export interface ErrorResponseWithData<E extends ErrorCode, D> {
-  readonly data: D;
+export interface ErrorResponseWithData<E extends ErrorCode> {
+  readonly data: FieldErrors;
   readonly error: E;
   readonly errorMessage: string;
 }
