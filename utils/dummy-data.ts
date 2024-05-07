@@ -23,24 +23,28 @@ const companies = faker.helpers.uniqueArray((): Company => {
     foundedAt: faker.date.past().toISOString(),
     founders: faker.helpers
       .uniqueArray(users, faker.number.int({ max: 3, min: 1 }))
-      .map(({ email, firstName, lastName }) => ({
-        confirmed: true,
-        email,
-        firstName,
-        lastName,
-        share:
-          faker.number.float({ fractionDigits: 2, max: 0.1, min: 0.01 }) *
-          targetValue *
-          PRICE_STEP
-      })),
-    images: faker.helpers.uniqueArray(
-      () => ({
-        assetId: faker.string.hexadecimal({ length: 32 }),
-        height: 900,
-        secureUrl: `https://picsum.photos/id/${index()}/1600/900`,
-        url: `http://picsum.photos/id/${index()}/1600/900`,
-        width: 1600
+      .map(({ email, firstName, lastName }) => {
+        return {
+          confirmed: true,
+          email,
+          firstName,
+          lastName,
+          share:
+            faker.number.float({ fractionDigits: 2, max: 0.1, min: 0.01 }) *
+            targetValue *
+            PRICE_STEP
+        };
       }),
+    images: faker.helpers.uniqueArray(
+      () => {
+        return {
+          assetId: faker.string.hexadecimal({ length: 32 }),
+          height: 900,
+          secureUrl: `https://picsum.photos/id/${index()}/1600/900`,
+          url: `http://picsum.photos/id/${index()}/1600/900`,
+          width: 1600
+        };
+      },
       faker.number.int({ max: 5, min: 1 })
     ),
     logo: {

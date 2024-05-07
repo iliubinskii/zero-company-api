@@ -55,6 +55,11 @@ const config = {
       "warn",
       { allowNumber: true }
     ],
+    "arrow-body-style": [
+      "error",
+      "as-needed",
+      { requireReturnForObjectLiteral: true }
+    ],
     "callback-return": "off",
     "camelcase": "off",
     "consistent-return": "off",
@@ -97,6 +102,7 @@ const config = {
     "quote-props": ["warn", "consistent-as-needed"],
     "react/jsx-sort-props": "warn",
     "react/prop-types": "off",
+    "react/self-closing-comp": "warn",
     "security/detect-object-injection": "off",
     "sonarjs/prefer-immediate-return": "off",
     "sort/destructuring-properties": [

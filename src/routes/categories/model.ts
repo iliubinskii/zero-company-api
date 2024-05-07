@@ -15,6 +15,4 @@ export const CategoryModel = mongoose.model<Category>(
 );
 
 // Type check the company schema
-((): Equals<keyof typeof Schema, keyof Category> => {
-  return 1;
-})();
+((): Equals<keyof typeof Schema, keyof Category> => 1)();

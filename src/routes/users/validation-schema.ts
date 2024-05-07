@@ -39,14 +39,10 @@ export const GetCompaniesByUserOptionsValidationSchema = zod.strictObject({
 ((): Equals<
   keyof zod.infer<typeof UserCreateValidationSchema>,
   keyof UserCreate
-> => {
-  return 1;
-})();
+> => 1)();
 
 // Type check the user update validation schema
 ((): Equals<
   keyof zod.infer<typeof UserUpdateValidationSchema>,
   keyof UserUpdate
-> => {
-  return 1;
-})();
+> => 1)();

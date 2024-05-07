@@ -71,14 +71,10 @@ export const GetCompaniesOptionsValidationSchema = zod.strictObject({
 ((): Equals<
   keyof zod.infer<typeof CompanyCreateValidationSchema>,
   keyof CompanyCreate
-> => {
-  return 1;
-})();
+> => 1)();
 
 // Type check the company update validation schema
 ((): Equals<
   keyof zod.infer<typeof CompanyUpdateValidationSchema>,
   keyof CompanyUpdate
-> => {
-  return 1;
-})();
+> => 1)();
