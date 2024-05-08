@@ -2,6 +2,7 @@ import { ErrorCode, Routes } from "../schema";
 import { buildErrorResponse, sendResponse } from "../utils";
 import { RequestHandler } from "express";
 import { StatusCodes } from "http-status-codes";
+
 /**
  * Middleware to apply SSL redirection and HSTS header
  * @param req - The request object
@@ -9,14 +10,13 @@ import { StatusCodes } from "http-status-codes";
  * @param next - The next middleware
  */
 export const forceHttps: RequestHandler = (req, res, next) => {
-  // eslint-disable-next-line no-console -- Temp
-  console.log(req.secure, req.protocol, req.headers);
-
-  if (req.protocol === "http")
+  // Check x-forwarded-proto header in case the app is behind a proxy
+  if (req.protocol === "https" || req.headers["x-forwarded-proto"] === "https")
+    next();
+  else
     sendResponse<Routes["*"]["UNSECURED_URL"]>(
       res,
       StatusCodes.METHOD_NOT_ALLOWED,
       buildErrorResponse(ErrorCode.MethodNotAllowed)
     );
-  else next();
 };
