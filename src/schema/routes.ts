@@ -51,6 +51,10 @@ export interface Routes {
       StatusCodes.UNAUTHORIZED,
       ErrorResponse<ErrorCode.Unauthorized>
     ];
+    readonly UNSECURED_URL: [
+      StatusCodes.METHOD_NOT_ALLOWED,
+      ErrorResponse<ErrorCode.MethodNotAllowed>
+    ];
   };
   readonly "/": {
     readonly GET: [StatusCodes.OK, { readonly status: ErrorCode.Ok }];
