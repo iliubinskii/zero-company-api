@@ -34,13 +34,15 @@ export function webAccessibleStorage(fields: Fields): RequestHandler {
                 secure_url,
                 url,
                 width
-              }): WebAccessibleImage => ({
-                assetId: String(asset_id),
-                height,
-                secureUrl: secure_url,
-                url,
-                width
-              })
+              }): WebAccessibleImage => {
+                return {
+                  assetId: String(asset_id),
+                  height,
+                  secureUrl: secure_url,
+                  url,
+                  width
+                };
+              }
             ),
             type: assertDefined(fields[fieldName])
           };

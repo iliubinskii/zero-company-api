@@ -1,4 +1,10 @@
-import { DeleteResponse, ErrorCode, MultipleDocsResponse } from "./common";
+import {
+  DeleteResponse,
+  ErrorCode,
+  ErrorResponse,
+  ErrorResponseWithData,
+  MultipleDocsResponse
+} from "./common";
 import { ExistingCategory } from "./categories";
 import { ExistingCompany } from "./companies";
 import { ExistingUser } from "./users";
@@ -10,71 +16,40 @@ export interface Routes {
     readonly BAD_REQUEST: {
       readonly "EmailMismatch": [
         StatusCodes.BAD_REQUEST,
-        {
-          readonly error: ErrorCode.EmailMismatch;
-          readonly errorMessage: string;
-        }
+        ErrorResponse<ErrorCode.EmailMismatch>
       ];
       readonly "InvalidCategoryData": [
         StatusCodes.BAD_REQUEST,
-        {
-          readonly data: unknown;
-          readonly error: ErrorCode.InvalidCategoryData;
-          readonly errorMessage: string;
-        }
+        ErrorResponseWithData<ErrorCode.InvalidCategoryData>
       ];
       readonly "InvalidCompanyData": [
         StatusCodes.BAD_REQUEST,
-        {
-          readonly data: unknown;
-          readonly error: ErrorCode.InvalidCompanyData;
-          readonly errorMessage: string;
-        }
+        ErrorResponseWithData<ErrorCode.InvalidCompanyData>
       ];
       readonly "InvalidParam": [
         StatusCodes.BAD_REQUEST,
-        {
-          readonly error: ErrorCode.InvalidParam;
-          readonly errorMessage: string;
-        }
+        ErrorResponse<ErrorCode.InvalidParam>
       ];
       readonly "InvalidQuery": [
         StatusCodes.BAD_REQUEST,
-        {
-          readonly data: unknown;
-          readonly error: ErrorCode.InvalidQuery;
-          readonly errorMessage: string;
-        }
+        ErrorResponseWithData<ErrorCode.InvalidQuery>
       ];
       readonly "InvalidUserData": [
         StatusCodes.BAD_REQUEST,
-        {
-          readonly data: unknown;
-          readonly error: ErrorCode.InvalidUserData;
-          readonly errorMessage: string;
-        }
+        ErrorResponseWithData<ErrorCode.InvalidUserData>
       ];
     };
     readonly INTERNAL_SERVER_ERROR: [
       StatusCodes.INTERNAL_SERVER_ERROR,
-      {
-        readonly error: ErrorCode.InternalServerError;
-        readonly errorMessage: string;
-      }
+      ErrorResponse<ErrorCode.InternalServerError>
     ];
     readonly NOT_FOUND: [
       StatusCodes.NOT_FOUND,
-      {
-        readonly error: ErrorCode.NotFound;
-        readonly errorMessage: string;
-      }
+      ErrorResponse<ErrorCode.NotFound>
     ];
     readonly UNAUTHORIZED: [
       StatusCodes.UNAUTHORIZED,
-      {
-        readonly error: ErrorCode.Unauthorized;
-        readonly errorMessage: string;
-      }
+      ErrorResponse<ErrorCode.Unauthorized>
     ];
   };
   readonly "/": {
@@ -104,20 +79,14 @@ export interface Routes {
       readonly GET: {
         readonly NOT_FOUND: [
           StatusCodes.NOT_FOUND,
-          {
-            readonly error: ErrorCode.CategoryNotFound;
-            readonly errorMessage: string;
-          }
+          ErrorResponse<ErrorCode.CategoryNotFound>
         ];
         readonly OK: [StatusCodes.OK, ExistingCategory];
       };
       readonly PUT: {
         readonly NOT_FOUND: [
           StatusCodes.NOT_FOUND,
-          {
-            readonly error: ErrorCode.CategoryNotFound;
-            readonly errorMessage: string;
-          }
+          ErrorResponse<ErrorCode.CategoryNotFound>
         ];
         readonly OK: [StatusCodes.OK, ExistingCategory];
       };
@@ -136,20 +105,14 @@ export interface Routes {
       readonly GET: {
         readonly NOT_FOUND: [
           StatusCodes.NOT_FOUND,
-          {
-            readonly error: ErrorCode.CompanyNotFound;
-            readonly errorMessage: string;
-          }
+          ErrorResponse<ErrorCode.CompanyNotFound>
         ];
         readonly OK: [StatusCodes.OK, ExistingCompany];
       };
       readonly PUT: {
         readonly NOT_FOUND: [
           StatusCodes.NOT_FOUND,
-          {
-            readonly error: ErrorCode.CompanyNotFound;
-            readonly errorMessage: string;
-          }
+          ErrorResponse<ErrorCode.CompanyNotFound>
         ];
         readonly OK: [StatusCodes.OK, ExistingCompany];
       };
@@ -181,10 +144,7 @@ export interface Routes {
       readonly POST: {
         readonly CONFLICT: [
           StatusCodes.CONFLICT,
-          {
-            readonly error: ErrorCode.UserAlreadyExists;
-            readonly errorMessage: string;
-          }
+          ErrorResponse<ErrorCode.UserAlreadyExists>
         ];
         readonly CREATED: [StatusCodes.CREATED, ExistingUser];
       };
@@ -194,20 +154,14 @@ export interface Routes {
       readonly GET: {
         readonly NOT_FOUND: [
           StatusCodes.NOT_FOUND,
-          {
-            readonly error: ErrorCode.UserNotFound;
-            readonly errorMessage: string;
-          }
+          ErrorResponse<ErrorCode.UserNotFound>
         ];
         readonly OK: [StatusCodes.OK, ExistingUser];
       };
       readonly PUT: {
         readonly NOT_FOUND: [
           StatusCodes.NOT_FOUND,
-          {
-            readonly error: ErrorCode.UserNotFound;
-            readonly errorMessage: string;
-          }
+          ErrorResponse<ErrorCode.UserNotFound>
         ];
         readonly OK: [StatusCodes.OK, ExistingUser];
       };

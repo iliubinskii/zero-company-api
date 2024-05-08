@@ -14,6 +14,4 @@ export const UserModel = mongoose.model<User>(
 );
 
 // Type check the user schema
-((): Equals<keyof typeof Schema, keyof User> => {
-  return 1;
-})();
+((): Equals<keyof typeof Schema, keyof User> => 1)();

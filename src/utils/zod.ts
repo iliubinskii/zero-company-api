@@ -34,9 +34,10 @@ export function preprocessBoolean<T extends zod.ZodTypeAny>(
 export function preprocessEmail<T extends zod.ZodTypeAny>(
   schema: T
 ): zod.ZodEffects<T> {
-  return zod.preprocess(value => {
-    return typeof value === "string" ? value.toLowerCase() : value;
-  }, schema);
+  return zod.preprocess(
+    value => (typeof value === "string" ? value.toLowerCase() : value),
+    schema
+  );
 }
 
 /**
@@ -47,7 +48,8 @@ export function preprocessEmail<T extends zod.ZodTypeAny>(
 export function preprocessNumber<T extends zod.ZodTypeAny>(
   schema: T
 ): zod.ZodEffects<T> {
-  return zod.preprocess(value => {
-    return typeof value === "string" ? Number(value) : value;
-  }, schema);
+  return zod.preprocess(
+    value => (typeof value === "string" ? Number(value) : value),
+    schema
+  );
 }

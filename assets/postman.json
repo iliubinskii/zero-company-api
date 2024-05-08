@@ -146,6 +146,82 @@
           "response": []
         },
         {
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [""],
+                "packages": {},
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "name": "Add one / Missing field",
+          "request": {
+            "auth": {
+              "jwt": [
+                {
+                  "key": "payload",
+                  "type": "string",
+                  "value": "{\r\n    \"email\": \"{{jwtAdminEmail}}\"\r\n}\r\n"
+                },
+                {
+                  "key": "addTokenTo",
+                  "type": "string",
+                  "value": "header"
+                },
+                {
+                  "key": "header",
+                  "type": "string",
+                  "value": ""
+                },
+                {
+                  "key": "secret",
+                  "type": "string",
+                  "value": "{{jwtSecret}}"
+                },
+                {
+                  "key": "algorithm",
+                  "type": "string",
+                  "value": "HS256"
+                },
+                {
+                  "key": "isSecretBase64Encoded",
+                  "type": "boolean",
+                  "value": false
+                },
+                {
+                  "key": "headerPrefix",
+                  "type": "string",
+                  "value": "Bearer"
+                },
+                {
+                  "key": "queryParamKey",
+                  "type": "string",
+                  "value": "token"
+                }
+              ],
+              "type": "jwt"
+            },
+            "body": {
+              "mode": "raw",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              },
+              "raw": "{\r\n    \"description\": \"Some description\",\r\n    \"tagline\": \"Some tagline\"\r\n}"
+            },
+            "header": [],
+            "method": "POST",
+            "url": {
+              "host": ["{{apiUrl}}categories"],
+              "raw": "{{apiUrl}}categories"
+            }
+          },
+          "response": []
+        },
+        {
           "name": "Get one",
           "request": {
             "auth": {
@@ -503,6 +579,131 @@
                   "key": "founders[0].lastName",
                   "type": "text",
                   "value": "Smith"
+                }
+              ],
+              "mode": "formdata"
+            },
+            "header": [],
+            "method": "POST",
+            "url": {
+              "host": ["{{apiUrl}}companies"],
+              "raw": "{{apiUrl}}companies"
+            }
+          },
+          "response": []
+        },
+        {
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [""],
+                "packages": {},
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "name": "Add one / Missing field",
+          "request": {
+            "auth": {
+              "jwt": [
+                {
+                  "key": "payload",
+                  "type": "string",
+                  "value": "{\r\n    \"email\": \"{{jwtEmail}}\"\r\n}\r\n"
+                },
+                {
+                  "key": "secret",
+                  "type": "string",
+                  "value": "{{jwtSecret}}"
+                },
+                {
+                  "key": "addTokenTo",
+                  "type": "string",
+                  "value": "header"
+                },
+                {
+                  "key": "algorithm",
+                  "type": "string",
+                  "value": "HS256"
+                },
+                {
+                  "key": "isSecretBase64Encoded",
+                  "type": "boolean",
+                  "value": false
+                },
+                {
+                  "key": "headerPrefix",
+                  "type": "string",
+                  "value": "Bearer"
+                },
+                {
+                  "key": "queryParamKey",
+                  "type": "string",
+                  "value": "token"
+                },
+                {
+                  "key": "header",
+                  "type": "string",
+                  "value": "{}"
+                }
+              ],
+              "type": "jwt"
+            },
+            "body": {
+              "formdata": [
+                {
+                  "key": "categories[]",
+                  "type": "text",
+                  "value": "{{lastCategoryId}}"
+                },
+                {
+                  "key": "description",
+                  "type": "text",
+                  "value": "Some description"
+                },
+                {
+                  "key": "founders[0].email",
+                  "type": "text",
+                  "value": "{{jwtEmail}}"
+                },
+                {
+                  "key": "founders[0].share",
+                  "type": "text",
+                  "value": "10000"
+                },
+                {
+                  "key": "images",
+                  "src": [
+                    "zero-company/company/images1.webp",
+                    "zero-company/company/images2.jpg"
+                  ],
+                  "type": "file"
+                },
+                {
+                  "key": "name",
+                  "type": "text",
+                  "value": "Travel aggregator"
+                },
+                {
+                  "key": "logo",
+                  "src": "zero-company/company/logo1.jpg",
+                  "type": "file"
+                },
+                {
+                  "key": "targetValue",
+                  "type": "text",
+                  "value": "100000"
+                },
+                {
+                  "key": "website",
+                  "type": "text",
+                  "value": "http://cats.com/"
+                },
+                {
+                  "key": "founders[0].firstName",
+                  "type": "text",
+                  "value": "John"
                 }
               ],
               "mode": "formdata"

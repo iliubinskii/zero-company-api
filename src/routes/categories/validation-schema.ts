@@ -40,14 +40,10 @@ export const GetCompaniesByCategoryOptionsValidationSchema = zod.strictObject({
 ((): Equals<
   keyof zod.infer<typeof CategoryCreateValidationSchema>,
   keyof CategoryCreate
-> => {
-  return 1;
-})();
+> => 1)();
 
 // Type check the category update validation schema
 ((): Equals<
   keyof zod.infer<typeof CategoryUpdateValidationSchema>,
   keyof CategoryUpdate
-> => {
-  return 1;
-})();
+> => 1)();
