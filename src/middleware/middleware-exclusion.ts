@@ -13,9 +13,14 @@ export function middlewareExclusion(
 ): RequestHandler {
   return (req, res, next) => {
     // Check if the current request path is in the exclusion paths
-    const isExcluded = exclusionRoutes.some(
-      ([method, path]) => method === req.method && path === req.path
-    );
+    const isExcluded = exclusionRoutes.some(([method, path]) => {
+      const isMethodMatch = method === req.method;
+
+      const isPathMatch =
+        path instanceof RegExp ? path.test(req.path) : path === req.path;
+
+      return isMethodMatch && isPathMatch;
+    });
 
     // If the current path is excluded, pass it directly to the next handler
     // Otherwise apply the middleware
@@ -24,6 +29,6 @@ export function middlewareExclusion(
   };
 }
 
-export type ExclusionRoute = readonly [HttpMethod, string];
+export type ExclusionRoute = readonly [HttpMethod, string | RegExp];
 
 export type ExclusionRoutes = readonly ExclusionRoute[];

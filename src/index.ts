@@ -77,8 +77,9 @@ app.use(logRequest);
 app.use(cors({ credentials: true, origin: CORS_ORIGIN }));
 app.use(
   middlewareExclusion(forceHttps, [
+    ["GET", "/"],
     ["GET", "/categories"],
-    ["GET", "/category/:id/companies"],
+    ["GET", /^\/categories\/\w+\/companies$/u],
     ["GET", "/companies"]
   ])
 );
