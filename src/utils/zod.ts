@@ -12,11 +12,13 @@ export function preprocessBoolean<T extends zod.ZodTypeAny>(
     if (typeof value === "string")
       switch (value.toLowerCase()) {
         case "true":
+        case "yes":
         case "on": {
           return true;
         }
 
         case "false":
+        case "no":
         case "off": {
           return false;
         }
