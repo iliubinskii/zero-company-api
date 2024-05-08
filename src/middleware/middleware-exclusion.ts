@@ -13,7 +13,7 @@ export function middlewareExclusion(
 ): RequestHandler {
   return (req, res, next) => {
     // Check if the current request path is in the exclusion paths
-    const isExcluded = exclusionPaths.some(path => req.path.startsWith(path));
+    const isExcluded = exclusionPaths.includes(req.path);
 
     // If the current path is excluded, pass to the next middleware
     if (isExcluded) {
