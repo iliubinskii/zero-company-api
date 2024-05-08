@@ -9,6 +9,9 @@ import { StatusCodes } from "http-status-codes";
  * @param next - The next middleware
  */
 export const forceHttps: RequestHandler = (req, res, next) => {
+  // eslint-disable-next-line no-console -- Temp
+  console.log(req.secure, req.protocol, req.headers);
+
   if (req.protocol === "http")
     sendResponse<Routes["*"]["UNSECURED_URL"]>(
       res,
