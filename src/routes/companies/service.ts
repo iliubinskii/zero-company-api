@@ -33,6 +33,15 @@ export function createCompaniesService(): CompaniesService {
 
       return deletedCompany ? 1 : 0;
     },
+    // eslint-disable-next-line no-warning-comments -- Ok
+    // TODO:
+    // Use all options from GetCompaniesOptions interface
+    // Write postman tests and use them to test your solution
+    // Sample code:
+    // Model
+    //  .find({ createdAt: { $gt: lastTimestampReceived } })
+    //  .sort({ createdAt: 1 })s
+    //  .limit(numberOfDocumentsToLimit)
     getCompanies: async ({
       category,
       founderEmail,
