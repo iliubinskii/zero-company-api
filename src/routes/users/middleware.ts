@@ -4,7 +4,7 @@ import {
   GetUsersOptionsValidationSchema,
   UserCreateValidationSchema,
   UserUpdateValidationSchema
-} from "./validation-schema";
+} from "../../validation-schema";
 import {
   assertDefined,
   assertString,

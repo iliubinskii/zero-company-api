@@ -3,7 +3,7 @@ import {
   CategoryUpdateValidationSchema,
   GetCategoriesOptionsValidationSchema,
   GetCompaniesByCategoryOptionsValidationSchema
-} from "./validation-schema";
+} from "../../validation-schema";
 import { ErrorCode, Routes } from "../../schema";
 import {
   buildErrorResponse,
