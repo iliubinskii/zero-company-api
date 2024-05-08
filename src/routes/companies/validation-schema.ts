@@ -60,11 +60,16 @@ export const CompanyUpdateValidationSchema = zod.strictObject({
 
 export const GetCompaniesOptionsValidationSchema = zod.strictObject({
   category: zod.string().min(1).optional(),
-  founder: zod.string().min(1).optional(),
+  cursor: zod.string().min(1).optional(),
+  founderEmail: zod.string().min(1).optional(),
+  includePrivateCompanies: preprocessBoolean(zod.boolean().optional()),
   limit: preprocessNumber(
     zod.number().int().positive().max(MONGODB_MAX_LIMIT.companies).optional()
   ),
-  offset: preprocessNumber(zod.number().int().nonnegative().optional())
+  offset: preprocessNumber(zod.number().int().nonnegative().optional()),
+  onlyRecommended: preprocessBoolean(zod.boolean().optional()),
+  sortBy: zod.union([zod.literal("foundedAt"), zod.literal("name")]).optional(),
+  sortOrder: zod.union([zod.literal("asc"), zod.literal("desc")]).optional()
 });
 
 // Type check the company create validation schema

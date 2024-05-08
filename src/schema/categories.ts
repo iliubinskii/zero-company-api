@@ -1,3 +1,5 @@
+import { GetCompaniesOptions } from "./companies";
+
 export interface Category {
   readonly description: string;
   readonly name: string;
@@ -21,7 +23,5 @@ export interface GetCategoriesOptions {
   readonly offset?: number;
 }
 
-export interface GetCompaniesByCategoryOptions {
-  readonly limit?: number;
-  readonly offset?: number;
-}
+export interface GetCompaniesByCategoryOptions
+  extends Omit<GetCompaniesOptions, "category"> {}

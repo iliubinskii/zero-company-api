@@ -1,5 +1,9 @@
 import { UserCreate, UserUpdate } from "../../schema";
-import { preprocessEmail, preprocessNumber } from "../../utils";
+import {
+  preprocessBoolean,
+  preprocessEmail,
+  preprocessNumber
+} from "../../utils";
 import { Equals } from "ts-toolbelt/out/Any/Equals";
 import { MONGODB_MAX_LIMIT } from "../../consts";
 import zod from "zod";
@@ -29,10 +33,16 @@ export const GetUsersOptionsValidationSchema = zod.strictObject({
 });
 
 export const GetCompaniesByUserOptionsValidationSchema = zod.strictObject({
+  category: zod.string().min(1).optional(),
+  cursor: zod.string().min(1).optional(),
+  includePrivateCompanies: preprocessBoolean(zod.boolean().optional()),
   limit: preprocessNumber(
     zod.number().int().positive().max(MONGODB_MAX_LIMIT.companies).optional()
   ),
-  offset: preprocessNumber(zod.number().int().nonnegative().optional())
+  offset: preprocessNumber(zod.number().int().nonnegative().optional()),
+  onlyRecommended: preprocessBoolean(zod.boolean().optional()),
+  sortBy: zod.union([zod.literal("foundedAt"), zod.literal("name")]).optional(),
+  sortOrder: zod.union([zod.literal("asc"), zod.literal("desc")]).optional()
 });
 
 // Type check the user create validation schema

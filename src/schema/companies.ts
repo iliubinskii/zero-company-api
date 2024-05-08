@@ -48,7 +48,12 @@ export type Founders = readonly Founder[];
 
 export interface GetCompaniesOptions {
   readonly category?: string;
+  readonly cursor?: string;
   readonly founderEmail?: string;
+  readonly includePrivateCompanies?: boolean;
   readonly limit?: number;
   readonly offset?: number;
+  readonly onlyRecommended?: boolean;
+  readonly sortBy?: "foundedAt" | "name";
+  readonly sortOrder?: "asc" | "desc";
 }

@@ -1,3 +1,5 @@
+import { GetCompaniesOptions } from "./companies";
+
 export interface User {
   readonly email: string;
   readonly firstName: string;
@@ -21,7 +23,5 @@ export interface GetUsersOptions {
   readonly offset?: number;
 }
 
-export interface GetCompaniesByUserOptions {
-  readonly limit?: number;
-  readonly offset?: number;
-}
+export interface GetCompaniesByUserOptions
+  extends Omit<GetCompaniesOptions, "founderEmail"> {}

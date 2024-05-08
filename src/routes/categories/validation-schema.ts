@@ -1,7 +1,7 @@
 import { CategoryCreate, CategoryUpdate } from "../../schema";
+import { preprocessBoolean, preprocessNumber } from "../../utils";
 import { Equals } from "ts-toolbelt/out/Any/Equals";
 import { MONGODB_MAX_LIMIT } from "../../consts";
-import { preprocessNumber } from "../../utils";
 import zod from "zod";
 
 const description = zod.string().min(1);
@@ -30,10 +30,16 @@ export const GetCategoriesOptionsValidationSchema = zod.strictObject({
 });
 
 export const GetCompaniesByCategoryOptionsValidationSchema = zod.strictObject({
+  cursor: zod.string().min(1).optional(),
+  founderEmail: zod.string().min(1).optional(),
+  includePrivateCompanies: preprocessBoolean(zod.boolean().optional()),
   limit: preprocessNumber(
     zod.number().int().positive().max(MONGODB_MAX_LIMIT.companies).optional()
   ),
-  offset: preprocessNumber(zod.number().int().nonnegative().optional())
+  offset: preprocessNumber(zod.number().int().nonnegative().optional()),
+  onlyRecommended: preprocessBoolean(zod.boolean().optional()),
+  sortBy: zod.union([zod.literal("foundedAt"), zod.literal("name")]).optional(),
+  sortOrder: zod.union([zod.literal("asc"), zod.literal("desc")]).optional()
 });
 
 // Type check the category create validation schema
