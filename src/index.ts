@@ -6,7 +6,13 @@ import {
   MONGODB_SESSIONS_COLLECTION,
   MONGODB_SESSIONS_TTL_SEC
 } from "./consts";
-import { appendJwt, logRequest, requestId } from "./middleware";
+import {
+  appendJwt,
+  forceHttps,
+  logRequest,
+  middlewareExclusion,
+  requestId
+} from "./middleware";
 import {
   authRouter,
   createCategoriesRouter,
@@ -69,6 +75,13 @@ const app = express();
 app.use(requestId);
 app.use(logRequest);
 app.use(cors({ credentials: true, origin: CORS_ORIGIN }));
+app.use(
+  middlewareExclusion(forceHttps, [
+    "/category",
+    "/category/:id/companies",
+    "/companies"
+  ])
+);
 app.use(cookieParser());
 app.use(
   session({
