@@ -2,6 +2,7 @@ import {
   CategoryCreate,
   CategoryUpdate,
   ExistingCategory,
+  GetCategoriesOptions,
   MultipleDocsResponse
 } from "../schema";
 import { RequestHandler } from "express";
@@ -59,14 +60,4 @@ export interface CategoriesService {
     id: string,
     category: CategoryUpdate
   ) => Promise<ExistingCategory | undefined>;
-}
-
-export interface GetCategoriesOptions {
-  readonly limit?: number;
-  readonly offset?: number;
-}
-
-export interface GetCompaniesByCategoryOptions {
-  readonly limit?: number;
-  readonly offset?: number;
 }

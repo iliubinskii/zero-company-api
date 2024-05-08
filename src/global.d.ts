@@ -5,17 +5,15 @@ import {
   CategoryUpdate,
   CompanyCreate,
   CompanyUpdate,
-  JwtUser,
-  UserCreate,
-  UserUpdate
-} from "./schema";
-import {
   GetCategoriesOptions,
   GetCompaniesByCategoryOptions,
   GetCompaniesByUserOptions,
   GetCompaniesOptions,
-  GetUsersOptions
-} from "./types";
+  GetUsersOptions,
+  JwtUser,
+  UserCreate,
+  UserUpdate
+} from "./schema";
 
 declare module "express-serve-static-core" {
   interface Request {

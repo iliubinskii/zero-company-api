@@ -15,3 +15,13 @@ export interface ExistingCategory extends Category {
 }
 
 export type ExistingCategories = readonly ExistingCategory[];
+
+export interface GetCategoriesOptions {
+  readonly limit?: number;
+  readonly offset?: number;
+}
+
+export interface GetCompaniesByCategoryOptions {
+  readonly limit?: number;
+  readonly offset?: number;
+}
