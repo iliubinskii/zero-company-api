@@ -15,13 +15,9 @@ export function middlewareExclusion(
     // Check if the current request path is in the exclusion paths
     const isExcluded = exclusionPaths.includes(req.path);
 
-    // If the current path is excluded, pass to the next middleware
-    if (isExcluded) {
-      next();
-      return;
-    }
-
-    // Apply the given middleware
-    middleware(req, res, next);
+    // If the current path is excluded, pass it directly to the next handler
+    // Otherwise apply the middleware
+    if (isExcluded) next();
+    else middleware(req, res, next);
   };
 }
