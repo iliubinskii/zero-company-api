@@ -18,8 +18,9 @@
     }
   ],
   "info": {
+    "_collection_link": "https://zero-company.postman.co/workspace/zero-company-Workspace~867cd2aa-7237-4346-8eff-c6d498ea03ec/collection/22581092-0cae9581-7a63-447c-8326-e438e9fc77f2?action=share&source=collection_link&creator=33192992",
     "_exporter_id": "33192992",
-    "_postman_id": "6f47d89a-9e13-48c1-b58d-76b6032b6416",
+    "_postman_id": "0cae9581-7a63-447c-8326-e438e9fc77f2",
     "name": "Zero Company",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
@@ -1819,6 +1820,87 @@
         }
       ],
       "name": "Test"
+    },
+    {
+      "item": [
+        {
+          "item": [
+            {
+              "item": [
+                {
+                  "name": "Get all categories",
+                  "request": {
+                    "auth": {
+                      "type": "noauth"
+                    },
+                    "header": [],
+                    "method": "GET",
+                    "url": {
+                      "host": ["{{insecureApiUrl}}categories"],
+                      "raw": "{{insecureApiUrl}}categories"
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Get all companies",
+                  "request": {
+                    "auth": {
+                      "type": "noauth"
+                    },
+                    "header": [],
+                    "method": "GET",
+                    "url": {
+                      "host": ["{{insecureApiUrl}}companies"],
+                      "raw": "{{insecureApiUrl}}companies"
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Get companies inside a category",
+                  "request": {
+                    "auth": {
+                      "type": "noauth"
+                    },
+                    "header": [],
+                    "method": "GET",
+                    "url": {
+                      "host": ["{{insecureApiUrl}}categories"],
+                      "path": ["{{lastCategoryId}}", "companies"],
+                      "raw": "{{insecureApiUrl}}categories/{{lastCategoryId}}/companies"
+                    }
+                  },
+                  "response": []
+                }
+              ],
+              "name": "Accept (status 200)"
+            },
+            {
+              "item": [
+                {
+                  "name": "Get all users",
+                  "request": {
+                    "auth": {
+                      "type": "noauth"
+                    },
+                    "header": [],
+                    "method": "GET",
+                    "url": {
+                      "host": ["{{insecureApiUrl}}users"],
+                      "raw": "{{insecureApiUrl}}users"
+                    }
+                  },
+                  "response": []
+                }
+              ],
+              "name": "Reject (status 405)"
+            }
+          ],
+          "name": "Reject insecure requests"
+        }
+      ],
+      "name": "Test cases"
     },
     {
       "name": "Index",

@@ -52,6 +52,7 @@ const config = {
             "formatter",
             "fullsetup",
             "globals",
+            "hsts",
             "ico",
             "jsdoc",
             "jsx",

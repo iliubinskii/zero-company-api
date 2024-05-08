@@ -10,6 +10,7 @@ export const lang = {
   InvalidQuery: "Invalid query",
   InvalidUserData: "Invalid user data",
   JwtVerificationFailed: "JWT verification failed",
+  MethodNotAllowed: "Method not allowed. Https is required",
   MongodbAll: "MongoDB all",
   MongodbClose: "MongoDB close",
   MongodbConnected: "MongoDB connected",

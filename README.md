@@ -27,6 +27,16 @@
 4. Commit and push your changes (commit should pass validation).
 5. Create a PR.
 
+## How To
+
+### Disable all checks for entire file
+
+```
+/* eslint-disable eslint-comments/no-unlimited-disable -- Temp */
+/* eslint-disable -- Temp */
+// @ts-nocheck
+```
+
 ## TODO
 
 - Add authors in package.json
