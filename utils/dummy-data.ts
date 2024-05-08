@@ -1,3 +1,4 @@
+/* eslint-disable import/no-internal-modules -- Ok */
 /* eslint-disable no-sync -- Ok */
 
 import { Company } from "../src/schema";

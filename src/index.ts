@@ -79,6 +79,7 @@ app.use(
   middlewareExclusion(forceHttps, [
     ["GET", "/"],
     ["GET", "/categories"],
+    ["GET", /^\/categories\/\w+$/u],
     ["GET", /^\/categories\/\w+\/companies$/u],
     ["GET", "/companies"]
   ])
