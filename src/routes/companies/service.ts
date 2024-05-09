@@ -34,14 +34,37 @@ export function createCompaniesService(): CompaniesService {
       return deletedCompany ? 1 : 0;
     },
     // eslint-disable-next-line no-warning-comments -- Ok
-    // TODO:
-    // Use all options from GetCompaniesOptions interface
-    // Write postman tests and use them to test your solution
-    // Sample code:
-    // Model
-    //  .find({ createdAt: { $gt: lastTimestampReceived } })
-    //  .sort({ createdAt: 1 })s
-    //  .limit(numberOfDocumentsToLimit)
+    /*
+    TODO:
+    See mongoose model in ./model.ts
+    _id in MongoDB - Ask GPT
+
+    Use all options from GetCompaniesOptions interface:
+    cursor - From where to start fetching the data (foundedAt | name)
+             Consider using [foundedAt|name, _id]
+             type [string, string] - Tuple (ask GPT)
+    includePrivateCompanies
+    onlyRecommended
+    sortBy
+    sortOrder
+
+    Write postman tests and use them to test your solution
+
+    Sample code:
+    Model
+      .find({ cursor_name: { $gt: cursor } })
+      .sort({ cursor_name: 1 })
+      .limit(numberOfDocumentsToLimit)
+
+      .sort(Object.fromEntries([["foundedAt", 1], ["_id", 1]]))
+
+    Model.find({
+      $or: [
+        { name: { $gt: cursorName } },
+        { name: cursorName, _id: { $gt: cursorId } }
+      ]
+    })
+    */
     getCompanies: async ({
       category,
       founderEmail,

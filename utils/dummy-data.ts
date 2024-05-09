@@ -3,6 +3,7 @@
 import { Category, Companies, Company, Users } from "../src";
 import { dummy } from "../assets";
 import { faker } from "@faker-js/faker";
+import { filterUndefinedProperties } from "../src/utils";
 import fs from "node:fs";
 
 const LIMIT = {
@@ -14,7 +15,7 @@ const PRICE_STEP = 1000;
 const companies = faker.helpers.uniqueArray((): Company => {
   const targetValue = faker.number.int({ max: 1000, min: 100 }) * PRICE_STEP;
 
-  return {
+  return filterUndefinedProperties({
     categories: faker.helpers
       .uniqueArray(dummy.categories, faker.number.int({ max: 2, min: 1 }))
       .map(category => category._id.$oid),
@@ -54,10 +55,17 @@ const companies = faker.helpers.uniqueArray((): Company => {
       width: 512
     },
     name: faker.commerce.productName(),
+    // eslint-disable-next-line no-warning-comments -- Assigned
+    // TODO: 10% - true, 90% - undefined
+    // Use @faker-js/faker
+    privateCompany: undefined,
+    // eslint-disable-next-line no-warning-comments -- Assigned
+    // TODO: 90% - true, 10% - undefined
+    // Use @faker-js/faker
     recommended: true,
     targetValue,
     website: faker.internet.url()
-  };
+  });
 
   /**
    * Generate a random index for the picsum photos

@@ -5,6 +5,8 @@ export interface GetCategoriesOptions {
 
 export interface GetCompaniesOptions {
   readonly category?: string;
+  // eslint-disable-next-line no-warning-comments -- Assigned
+  // TODO: [string, string]
   readonly cursor?: string;
   readonly founderEmail?: string;
   readonly includePrivateCompanies?: boolean;
