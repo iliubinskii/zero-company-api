@@ -11,7 +11,7 @@ const Schema = {
     required: true,
     type: [
       {
-        confirmed: { enum: [true], type: Boolean },
+        confirmed: { type: Boolean },
         email: { required: true, type: String },
         firstName: { required: true, type: String },
         lastName: { required: true, type: String },
@@ -42,8 +42,8 @@ const Schema = {
     }
   },
   name: { required: true, type: String },
-  privateCompany: { enum: [true], type: Boolean },
-  recommended: { enum: [true], type: Boolean },
+  privateCompany: { type: Boolean },
+  recommended: { type: Boolean },
   targetValue: { required: true, type: Number },
   website: String
 } as const;

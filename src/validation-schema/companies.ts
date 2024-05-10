@@ -30,7 +30,7 @@ const logo = webAccessibleImage;
 
 const name = zod.string().min(1);
 
-const privateCompany = preprocessBoolean(zod.literal(true));
+const privateCompany = preprocessBoolean(zod.boolean());
 
 const targetValue = preprocessNumber(zod.number().int().positive());
 
