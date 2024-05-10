@@ -4,6 +4,7 @@ import {
   appendJwt,
   forceHttps,
   logRequest,
+  logResponse,
   middlewareExclusion,
   requestId
 } from "./middleware";
@@ -62,6 +63,7 @@ export function createApp(): express.Express {
 
   app.use(requestId);
   app.use(logRequest);
+  app.use(logResponse);
   app.use(cors({ credentials: true, origin: CORS_ORIGIN }));
   app.use(
     middlewareExclusion(forceHttps, [

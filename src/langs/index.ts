@@ -30,5 +30,7 @@ export const lang = {
   Unauthorized: "Unauthorized",
   UserAlreadyExists: "User already exists",
   UserNotFound: "User not found",
-  ZeroApiServer: "Zero API server, schema ver"
+  ZeroApiServer: "Zero API server, schema ver",
+  in: "in",
+  ms: "ms"
 } as const;
