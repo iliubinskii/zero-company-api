@@ -1,5 +1,3 @@
-import { GetCompaniesOptions } from "./companies";
-
 export interface User {
   readonly email: string;
   readonly firstName: string;
@@ -17,11 +15,3 @@ export interface ExistingUser extends User {
 }
 
 export type ExistingUsers = readonly ExistingUser[];
-
-export interface GetUsersOptions {
-  readonly limit?: number;
-  readonly offset?: number;
-}
-
-export interface GetCompaniesByUserOptions
-  extends Omit<GetCompaniesOptions, "founderEmail"> {}
