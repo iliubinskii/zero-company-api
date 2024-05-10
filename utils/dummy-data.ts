@@ -1,11 +1,9 @@
-/* eslint-disable import/no-internal-modules -- Ok */
 /* eslint-disable no-sync -- Ok */
 
-import { Company } from "../src/schema";
-import categories from "../assets/dummy/categories.json";
+import { Category, Companies, Company, Users } from "../src";
+import { dummy } from "../assets";
 import { faker } from "@faker-js/faker";
 import fs from "node:fs";
-import users from "../assets/dummy/users.json";
 
 const LIMIT = {
   companies: 100
@@ -18,12 +16,12 @@ const companies = faker.helpers.uniqueArray((): Company => {
 
   return {
     categories: faker.helpers
-      .uniqueArray(categories, faker.number.int({ max: 2, min: 1 }))
+      .uniqueArray(dummy.categories, faker.number.int({ max: 2, min: 1 }))
       .map(category => category._id.$oid),
     description: faker.lorem.paragraph(),
     foundedAt: faker.date.past().toISOString(),
     founders: faker.helpers
-      .uniqueArray(users, faker.number.int({ max: 3, min: 1 }))
+      .uniqueArray(dummy.users, faker.number.int({ max: 3, min: 1 }))
       .map(({ email, firstName, lastName }) => {
         return {
           confirmed: true,
@@ -71,3 +69,18 @@ const companies = faker.helpers.uniqueArray((): Company => {
 }, LIMIT.companies);
 
 fs.writeFileSync("assets/dummy/companies.json", JSON.stringify(companies));
+
+// Type check the category schema
+((): DummyCategories => dummy.categories)();
+
+// Type check the companies schema
+((): Companies => dummy.companies)();
+
+// Type check the users schema
+((): Users => dummy.users)();
+
+interface DummyCategory extends Category {
+  readonly _id: { readonly $oid: string };
+}
+
+type DummyCategories = readonly DummyCategory[];
