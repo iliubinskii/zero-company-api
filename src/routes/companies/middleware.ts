@@ -2,7 +2,7 @@ import {
   CompanyCreateValidationSchema,
   CompanyUpdateValidationSchema,
   GetCompaniesOptionsValidationSchema
-} from "./validation-schema";
+} from "../../validation-schema";
 import { ErrorCode, Routes } from "../../schema";
 import {
   FieldType,

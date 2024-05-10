@@ -2,6 +2,7 @@ import {
   CompanyCreate,
   CompanyUpdate,
   ExistingCompany,
+  GetCompaniesOptions,
   MultipleDocsResponse
 } from "../schema";
 import { RequestHandler } from "express";
@@ -59,11 +60,4 @@ export interface CompaniesService {
     id: string,
     company: CompanyUpdate
   ) => Promise<ExistingCompany | undefined>;
-}
-
-export interface GetCompaniesOptions {
-  readonly category?: string;
-  readonly founderEmail?: string;
-  readonly limit?: number;
-  readonly offset?: number;
 }

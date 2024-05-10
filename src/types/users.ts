@@ -1,5 +1,6 @@
 import {
   ExistingUser,
+  GetUsersOptions,
   MultipleDocsResponse,
   UserCreate,
   UserUpdate
@@ -62,14 +63,4 @@ export interface UsersService {
     email: string,
     user: UserUpdate
   ) => Promise<ExistingUser | undefined>;
-}
-
-export interface GetUsersOptions {
-  readonly limit?: number;
-  readonly offset?: number;
-}
-
-export interface GetCompaniesByUserOptions {
-  readonly limit?: number;
-  readonly offset?: number;
 }

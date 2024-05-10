@@ -30,7 +30,7 @@ authRouter
     }),
     (req, res, next) => {
       if (req.isAuthenticated()) {
-        const user = UserValidationSchema.parse(req.user);
+        const user = Auth0UserValidationSchema.parse(req.user);
 
         const token = jwt.sign({ email: user.emails[0].value }, JWT_SECRET, {
           expiresIn: JWT_EXPIRES_IN
@@ -103,7 +103,7 @@ const JwtValidationSchema = zod
     email: zod.string().email()
   });
 
-const UserValidationSchema = zod
+const Auth0UserValidationSchema = zod
   // Do not use strictObject: auth0 may return additional fields
   .object({
     emails: zod

@@ -1,5 +1,5 @@
 {
-  "exec": "tsx ./src/index.ts",
+  "exec": "tsx ./utils/dev-server.ts",
   "ext": "*",
-  "watch": [".env", "src"]
+  "watch": [".env", "src", "utils"]
 }

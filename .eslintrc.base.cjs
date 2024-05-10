@@ -79,6 +79,7 @@ const config = {
     "id-match": "off",
     "import/no-internal-modules": "warn",
     "import/no-unresolved": "off",
+    "init-declarations": "off",
     "jsdoc/require-param-type": "off",
     "jsdoc/require-returns-type": "off",
     "no-redeclare": "off",

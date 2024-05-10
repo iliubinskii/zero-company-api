@@ -1,5 +1,6 @@
 import { Category } from "../../schema";
 import { Equals } from "ts-toolbelt/out/Any/Equals";
+import { getMongodbConnection } from "../../providers";
 import mongoose from "mongoose";
 
 const Schema = {
@@ -8,11 +9,34 @@ const Schema = {
   tagline: { required: true, type: String }
 };
 
-export const CategoryModel = mongoose.model<Category>(
-  "Category",
+export const { getCategoryModel } = categoryModelSingleton();
 
-  new mongoose.Schema<Category>(Schema, { versionKey: false })
-);
+/**
+ * Creates a category model singleton.
+ * @returns A category model singleton.
+ */
+function categoryModelSingleton(): CategoryModelSingleton {
+  let model: mongoose.Model<Category> | undefined;
 
-// Type check the company schema
+  return {
+    getCategoryModel: async (): Promise<mongoose.Model<Category>> => {
+      const connection = await getMongodbConnection();
+
+      model =
+        model ??
+        connection.model<Category>(
+          "Category",
+          new mongoose.Schema<Category>(Schema, { versionKey: false })
+        );
+
+      return model;
+    }
+  };
+}
+
+interface CategoryModelSingleton {
+  readonly getCategoryModel: () => Promise<mongoose.Model<Category>>;
+}
+
+// Type check the category schema
 ((): Equals<keyof typeof Schema, keyof Category> => 1)();

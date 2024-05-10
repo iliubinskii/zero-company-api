@@ -1,7 +1,6 @@
-import { CompanyCreate, CompanyUpdate } from "../../schema";
-import { preprocessBoolean, preprocessNumber } from "../../utils";
+import { CompanyCreate, CompanyUpdate } from "../schema";
+import { preprocessBoolean, preprocessNumber } from "../utils";
 import { Equals } from "ts-toolbelt/out/Any/Equals";
-import { MONGODB_MAX_LIMIT } from "../../consts";
 import zod from "zod";
 
 const founder = zod.strictObject({
@@ -56,15 +55,6 @@ export const CompanyUpdateValidationSchema = zod.strictObject({
   name: name.optional(),
   privateCompany: privateCompany.nullable().optional(),
   website: website.nullable().optional()
-});
-
-export const GetCompaniesOptionsValidationSchema = zod.strictObject({
-  category: zod.string().min(1).optional(),
-  founder: zod.string().min(1).optional(),
-  limit: preprocessNumber(
-    zod.number().int().positive().max(MONGODB_MAX_LIMIT.companies).optional()
-  ),
-  offset: preprocessNumber(zod.number().int().nonnegative().optional())
 });
 
 // Type check the company create validation schema
