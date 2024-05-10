@@ -1,10 +1,10 @@
 import { Company, ExistingCompany, MultipleDocsResponse } from "../../schema";
 import { CompaniesService } from "../../types";
-import { CompanyModel } from "./model";
 import { FilterQuery } from "mongoose";
 import { MONGODB_MAX_LIMIT } from "../../consts";
 import { Writable } from "ts-toolbelt/out/Object/Writable";
 import { buildMongodbQuery } from "../../utils";
+import { getCompanyModel } from "./model";
 
 /**
  * Creates a MongoDB service for companies.
@@ -13,6 +13,8 @@ import { buildMongodbQuery } from "../../utils";
 export function createCompaniesService(): CompaniesService {
   return {
     addCompany: async (company): Promise<ExistingCompany> => {
+      const CompanyModel = await getCompanyModel();
+
       const model = new CompanyModel<Company>({
         ...company,
         foundedAt: new Date().toISOString()
@@ -25,6 +27,8 @@ export function createCompaniesService(): CompaniesService {
       return { _id: _id.toString(), ...rest };
     },
     deleteCompany: async (id): Promise<number> => {
+      const CompanyModel = await getCompanyModel();
+
       const deletedCompany = await CompanyModel.findByIdAndDelete(id);
 
       return deletedCompany ? 1 : 0;
@@ -45,6 +49,8 @@ export function createCompaniesService(): CompaniesService {
       if (typeof founderEmail === "string")
         filter["founders.email"] = { $in: founderEmail };
 
+      const CompanyModel = await getCompanyModel();
+
       const [companies, total] = await Promise.all([
         CompanyModel.find(filter).skip(offset).limit(limit),
         CompanyModel.countDocuments(filter)
@@ -60,6 +66,8 @@ export function createCompaniesService(): CompaniesService {
       };
     },
     getCompany: async (id): Promise<ExistingCompany | undefined> => {
+      const CompanyModel = await getCompanyModel();
+
       const company = await CompanyModel.findById(id);
 
       if (company) {
@@ -74,6 +82,8 @@ export function createCompaniesService(): CompaniesService {
       id,
       company
     ): Promise<ExistingCompany | undefined> => {
+      const CompanyModel = await getCompanyModel();
+
       const updatedCompany = await CompanyModel.findByIdAndUpdate(
         id,
         buildMongodbQuery(company),

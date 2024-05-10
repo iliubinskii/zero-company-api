@@ -1,5 +1,6 @@
 import { Company } from "../../schema";
 import { Equals } from "ts-toolbelt/out/Any/Equals";
+import { getMongodbConnection } from "../../providers";
 import mongoose from "mongoose";
 
 const Schema = {
@@ -47,10 +48,34 @@ const Schema = {
   website: String
 } as const;
 
-export const CompanyModel = mongoose.model(
-  "Company",
-  new mongoose.Schema<Company>(Schema, { versionKey: false })
-);
+export const { getCompanyModel } = companyModelSingleton();
+
+/**
+ * Creates a company model singleton.
+ * @returns A company model singleton.
+ */
+function companyModelSingleton(): CompanyModelSingleton {
+  let model: mongoose.Model<Company> | undefined;
+
+  return {
+    getCompanyModel: async (): Promise<mongoose.Model<Company>> => {
+      const connection = await getMongodbConnection();
+
+      model =
+        model ??
+        connection.model<Company>(
+          "Company",
+          new mongoose.Schema<Company>(Schema, { versionKey: false })
+        );
+
+      return model;
+    }
+  };
+}
+
+interface CompanyModelSingleton {
+  readonly getCompanyModel: () => Promise<mongoose.Model<Company>>;
+}
 
 // Type check the company schema
 ((): Equals<keyof typeof Schema, keyof Company> => 1)();

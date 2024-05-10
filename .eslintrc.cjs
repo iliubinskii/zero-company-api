@@ -40,6 +40,7 @@ const config = {
             "cjs",
             "cloudinary",
             "commonjs",
+            "consts",
             "cors",
             "destructure",
             "ecma",

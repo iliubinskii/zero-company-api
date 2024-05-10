@@ -1,2 +1,6 @@
-// Vercel requires serverless functions to be in a folder called "api"
-export { default } from "../src";
+import { createApp } from "../src";
+
+const app = createApp();
+
+// Export app as Vercel serverless function
+export default app;

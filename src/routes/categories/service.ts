@@ -1,8 +1,8 @@
 import { ExistingCategory, MultipleDocsResponse } from "../../schema";
 import { CategoriesService } from "../../types";
-import { CategoryModel } from "./model";
 import { MONGODB_MAX_LIMIT } from "../../consts";
 import { buildMongodbQuery } from "../../utils";
+import { getCategoryModel } from "./model";
 
 /**
  * Creates a MongoDB service for categories.
@@ -11,6 +11,8 @@ import { buildMongodbQuery } from "../../utils";
 export function createCategoriesService(): CategoriesService {
   return {
     addCategory: async (category): Promise<ExistingCategory> => {
+      const CategoryModel = await getCategoryModel();
+
       const model = new CategoryModel(category);
 
       const addedCategory = await model.save();
@@ -20,6 +22,8 @@ export function createCategoriesService(): CategoriesService {
       return { _id: _id.toString(), ...rest };
     },
     deleteCategory: async (id): Promise<number> => {
+      const CategoryModel = await getCategoryModel();
+
       const deletedCategory = await CategoryModel.findByIdAndDelete(id);
 
       return deletedCategory ? 1 : 0;
@@ -28,6 +32,8 @@ export function createCategoriesService(): CategoriesService {
       limit = MONGODB_MAX_LIMIT.categories,
       offset = 0
     } = {}): Promise<MultipleDocsResponse<ExistingCategory>> => {
+      const CategoryModel = await getCategoryModel();
+
       const [categories, total] = await Promise.all([
         CategoryModel.find().skip(offset).limit(limit),
         CategoryModel.countDocuments()
@@ -43,6 +49,8 @@ export function createCategoriesService(): CategoriesService {
       };
     },
     getCategory: async (id): Promise<ExistingCategory | undefined> => {
+      const CategoryModel = await getCategoryModel();
+
       const category = await CategoryModel.findById(id);
 
       if (category) {
@@ -57,6 +65,8 @@ export function createCategoriesService(): CategoriesService {
       id,
       category
     ): Promise<ExistingCategory | undefined> => {
+      const CategoryModel = await getCategoryModel();
+
       const updatedCategory = await CategoryModel.findByIdAndUpdate(
         id,
         buildMongodbQuery(category),
