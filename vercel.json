@@ -5,6 +5,11 @@
       "use": "@vercel/node"
     }
   ],
+  "functions": {
+    "*": {
+      "maxDuration": 30
+    }
+  },
   "routes": [
     {
       "dest": "src/index.ts",
