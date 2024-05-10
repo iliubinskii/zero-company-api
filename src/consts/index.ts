@@ -16,6 +16,8 @@ export const JWT_EXPIRES_IN = "24h";
 
 export const LOG_REQUEST_ID_LENGTH = 6;
 
+export const MONGODB_CONNECT_TIMEOUT_MS = 10_000;
+
 export const MONGODB_ERROR = {
   DUPLICATE_KEY: 11_000
 };
@@ -29,6 +31,8 @@ export const MONGODB_MAX_LIMIT = {
 export const MONGODB_SESSIONS_COLLECTION = "sessions";
 
 export const MONGODB_SESSIONS_TTL_SEC = 3600;
+
+export const MONGODB_SOCKET_TIMEOUT_MS = 10_000;
 
 export const SESSION_LIFETIME_MS = 3_600_000;
 
