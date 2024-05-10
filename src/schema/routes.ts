@@ -122,9 +122,6 @@ export interface Routes {
       };
     };
   };
-  readonly "/favicon.ico": {
-    readonly GET: null;
-  };
   readonly "/me": {
     readonly "/": {
       readonly DELETE: Routes["/users"]["/:email"]["DELETE"];

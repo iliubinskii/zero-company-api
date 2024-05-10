@@ -48,7 +48,6 @@ const config = {
             "escompat",
             "eslintrc",
             "etag",
-            "favicon",
             "filenames",
             "formatter",
             "fullsetup",

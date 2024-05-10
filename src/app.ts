@@ -28,7 +28,6 @@ import { StatusCodes } from "http-status-codes";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import express, { NextFunction, Request, Response, json } from "express";
-import { favicon } from "./public";
 import { lang } from "./langs";
 import { logger } from "./services";
 import passport from "passport";
@@ -91,12 +90,6 @@ export function createApp(): express.Express {
     sendResponse<Routes["/"]["GET"]>(res, StatusCodes.OK, {
       status: ErrorCode.Ok
     });
-  });
-
-  app.get("/favicon.ico", (_req, res) => {
-    const buffer = Buffer.from(favicon, "base64");
-
-    res.contentType("ico").send(buffer);
   });
 
   app.use("/auth", authRouter);
