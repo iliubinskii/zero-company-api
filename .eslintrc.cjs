@@ -77,6 +77,7 @@ const config = {
             "redeclare",
             "req",
             "resave",
+            "serverless",
             "smacss",
             "sonarjs",
             "str",
