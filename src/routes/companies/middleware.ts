@@ -3,7 +3,7 @@ import {
   CompanyUpdateValidationSchema,
   GetCompaniesOptionsValidationSchema
 } from "../../validation-schema";
-import { ErrorCode, Routes } from "../../schema";
+import { ErrorCode, RoutesOld } from "../../schema";
 import {
   FieldType,
   parseFormData,
@@ -12,7 +12,7 @@ import {
 import {
   buildErrorResponse,
   filterUndefinedProperties,
-  sendResponse
+  sendResponseOld
 } from "../../utils";
 import { CompaniesMiddleware } from "../../types";
 import { StatusCodes } from "http-status-codes";
@@ -31,7 +31,7 @@ export const companiesMiddleware: CompaniesMiddleware = {
       next();
     } catch (err) {
       if (err instanceof ZodError)
-        sendResponse<Routes["*"]["BAD_REQUEST"]["InvalidCompanyData"]>(
+        sendResponseOld<RoutesOld["*"]["BAD_REQUEST"]["InvalidCompanyData"]>(
           res,
           StatusCodes.BAD_REQUEST,
           buildErrorResponse(ErrorCode.InvalidCompanyData, err.errors)
@@ -47,7 +47,7 @@ export const companiesMiddleware: CompaniesMiddleware = {
       next();
     } catch (err) {
       if (err instanceof ZodError)
-        sendResponse<Routes["*"]["BAD_REQUEST"]["InvalidCompanyData"]>(
+        sendResponseOld<RoutesOld["*"]["BAD_REQUEST"]["InvalidCompanyData"]>(
           res,
           StatusCodes.BAD_REQUEST,
           buildErrorResponse(ErrorCode.InvalidCompanyData, err.errors)
@@ -63,7 +63,7 @@ export const companiesMiddleware: CompaniesMiddleware = {
       next();
     } catch (err) {
       if (err instanceof ZodError)
-        sendResponse<Routes["*"]["BAD_REQUEST"]["InvalidQuery"]>(
+        sendResponseOld<RoutesOld["*"]["BAD_REQUEST"]["InvalidQuery"]>(
           res,
           StatusCodes.BAD_REQUEST,
           buildErrorResponse(ErrorCode.InvalidQuery, err.errors)

@@ -11,7 +11,7 @@ export enum ErrorCode {
   InvalidUserData = "InvalidUserData",
   MethodNotAllowed = "MethodNotAllowed",
   NotFound = "NotFound",
-  Ok = "Ok",
+  OK = "OK",
   Unauthorized = "Unauthorized",
   UserAlreadyExists = "UserAlreadyExists",
   UserNotFound = "UserNotFound"

@@ -1,5 +1,5 @@
-import { ErrorCode, Routes } from "../schema";
-import { buildErrorResponse, sendResponse } from "../utils";
+import { ErrorCode, RoutesOld } from "../schema";
+import { buildErrorResponse, sendResponseOld } from "../utils";
 import { RequestHandler } from "express";
 import { StatusCodes } from "http-status-codes";
 
@@ -14,7 +14,7 @@ export function requireValidMongodbId(paramName: string): RequestHandler {
 
     if (typeof id === "string" && /^[\da-f]{24}$/i.test(id)) next();
     else
-      sendResponse<Routes["*"]["BAD_REQUEST"]["InvalidParam"]>(
+      sendResponseOld<RoutesOld["*"]["BAD_REQUEST"]["InvalidParam"]>(
         res,
         StatusCodes.BAD_REQUEST,
         buildErrorResponse(ErrorCode.InvalidParam)

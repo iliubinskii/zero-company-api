@@ -1,4 +1,3 @@
-import { ErrorCode, Routes } from "../../schema";
 import {
   GetCompaniesByUserOptionsValidationSchema,
   GetUsersOptionsValidationSchema,
@@ -12,6 +11,7 @@ import {
   filterUndefinedProperties,
   sendResponse
 } from "../../utils";
+import { ErrorCode } from "../../schema";
 import { StatusCodes } from "http-status-codes";
 import { UsersMiddleware } from "../../types";
 import { ZodError } from "zod";
@@ -25,7 +25,7 @@ export const usersMiddleware: UsersMiddleware = {
       next();
     } catch (err) {
       if (err instanceof ZodError)
-        sendResponse<Routes["*"]["BAD_REQUEST"]["InvalidQuery"]>(
+        sendResponse(
           res,
           StatusCodes.BAD_REQUEST,
           buildErrorResponse(ErrorCode.InvalidQuery, err.errors)
@@ -41,7 +41,7 @@ export const usersMiddleware: UsersMiddleware = {
       next();
     } catch (err) {
       if (err instanceof ZodError)
-        sendResponse<Routes["*"]["BAD_REQUEST"]["InvalidQuery"]>(
+        sendResponse(
           res,
           StatusCodes.BAD_REQUEST,
           buildErrorResponse(ErrorCode.InvalidQuery, err.errors)
@@ -56,7 +56,7 @@ export const usersMiddleware: UsersMiddleware = {
 
     if (userCreate.email === email) next();
     else
-      sendResponse<Routes["*"]["BAD_REQUEST"]["EmailMismatch"]>(
+      sendResponse(
         res,
         StatusCodes.BAD_REQUEST,
         buildErrorResponse(ErrorCode.EmailMismatch)
@@ -68,7 +68,7 @@ export const usersMiddleware: UsersMiddleware = {
       next();
     } catch (err) {
       if (err instanceof ZodError)
-        sendResponse<Routes["*"]["BAD_REQUEST"]["InvalidUserData"]>(
+        sendResponse(
           res,
           StatusCodes.BAD_REQUEST,
           buildErrorResponse(ErrorCode.InvalidUserData, err.errors)
@@ -84,7 +84,7 @@ export const usersMiddleware: UsersMiddleware = {
       next();
     } catch (err) {
       if (err instanceof ZodError)
-        sendResponse<Routes["*"]["BAD_REQUEST"]["InvalidUserData"]>(
+        sendResponse(
           res,
           StatusCodes.BAD_REQUEST,
           buildErrorResponse(ErrorCode.InvalidUserData, err.errors)

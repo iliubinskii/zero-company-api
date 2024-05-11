@@ -3,11 +3,11 @@ import {
   CategoryControllers,
   CompaniesService
 } from "../../types";
-import { ErrorCode, Routes } from "../../schema";
+import { ErrorCode, RoutesOld } from "../../schema";
 import {
   assertDefined,
   buildErrorResponse,
-  sendResponse,
+  sendResponseOld,
   wrapAsyncHandler
 } from "../../utils";
 import { StatusCodes } from "http-status-codes";
@@ -28,7 +28,7 @@ export function createCategoryControllers(
 
       const addedCategory = await service.addCategory(category);
 
-      sendResponse<Routes["/categories"]["/"]["POST"]>(
+      sendResponseOld<RoutesOld["/categories"]["/"]["POST"]>(
         res,
         StatusCodes.CREATED,
         addedCategory
@@ -39,7 +39,7 @@ export function createCategoryControllers(
 
       const affectedRows = await service.deleteCategory(id);
 
-      sendResponse<Routes["/categories"]["/:id"]["DELETE"]>(
+      sendResponseOld<RoutesOld["/categories"]["/:id"]["DELETE"]>(
         res,
         StatusCodes.OK,
         { affectedRows }
@@ -50,7 +50,7 @@ export function createCategoryControllers(
 
       const categories = await service.getCategories(options);
 
-      sendResponse<Routes["/categories"]["/"]["GET"]>(
+      sendResponseOld<RoutesOld["/categories"]["/"]["GET"]>(
         res,
         StatusCodes.OK,
         categories
@@ -62,13 +62,13 @@ export function createCategoryControllers(
       const category = await service.getCategory(id);
 
       if (category)
-        sendResponse<Routes["/categories"]["/:id"]["GET"]["OK"]>(
+        sendResponseOld<RoutesOld["/categories"]["/:id"]["GET"]["OK"]>(
           res,
           StatusCodes.OK,
           category
         );
       else
-        sendResponse<Routes["/categories"]["/:id"]["GET"]["NOT_FOUND"]>(
+        sendResponseOld<RoutesOld["/categories"]["/:id"]["GET"]["NOT_FOUND"]>(
           res,
           StatusCodes.NOT_FOUND,
           buildErrorResponse(ErrorCode.CategoryNotFound)
@@ -84,7 +84,7 @@ export function createCategoryControllers(
         category: id
       });
 
-      sendResponse<Routes["/categories"]["/:id/companies"]["GET"]>(
+      sendResponseOld<RoutesOld["/categories"]["/:id/companies"]["GET"]>(
         res,
         StatusCodes.OK,
         companies
@@ -98,13 +98,13 @@ export function createCategoryControllers(
       const updatedCategory = await service.updateCategory(id, category);
 
       if (updatedCategory)
-        sendResponse<Routes["/categories"]["/:id"]["PUT"]["OK"]>(
+        sendResponseOld<RoutesOld["/categories"]["/:id"]["PUT"]["OK"]>(
           res,
           StatusCodes.OK,
           updatedCategory
         );
       else
-        sendResponse<Routes["/categories"]["/:id"]["PUT"]["NOT_FOUND"]>(
+        sendResponseOld<RoutesOld["/categories"]["/:id"]["PUT"]["NOT_FOUND"]>(
           res,
           StatusCodes.NOT_FOUND,
           buildErrorResponse(ErrorCode.CategoryNotFound)

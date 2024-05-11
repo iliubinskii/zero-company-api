@@ -15,7 +15,6 @@
   "scripts": {
     "build": "tsc",
     "build-dummy-data": "tsx utils/dummy-data.ts && npm run format",
-    "build-favicon": "tsx utils/favicon.ts && npm run format",
     "deploy-preview": "vercel",
     "deploy-prod": "vercel --prod",
     "dev": "nodemon",
@@ -27,6 +26,7 @@
     "lint-style": "stylelint --fix --max-warnings=0 src/**/*.{css,less,postcss,scss}",
     "ncu-check": "ncu --dep=dev,peer,prod",
     "ncu-upgrade": "ncu --dep=dev,peer,prod --upgrade && npm run install-deps",
+    "parse-openapi": "openapi-typescript public/schema.yaml -o src/schema/routes.ts && eslint --fix src/schema/routes.ts",
     "prepare": "husky",
     "start": "node dist/index.js",
     "test": "jest",
@@ -113,6 +113,7 @@
     "lint-staged": "^15.2.2",
     "nodemon": "^3.1.0",
     "npm-check-updates": "^16.14.20",
+    "openapi-typescript": "^6.7.5",
     "prettier": "^3.2.5",
     "prettier-plugin-sort-json": "^4.0.0",
     "react": "^18.3.1",

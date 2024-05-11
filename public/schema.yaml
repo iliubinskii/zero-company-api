@@ -1,0 +1,412 @@
+openapi: 3.0.0
+
+# Info
+info:
+  title: Zero Company API
+  description: An API for Zero Company application
+  version: 2024.5.11-1
+
+# Servers
+servers:
+  - url: https://api.zero-company.app
+
+# Paths
+paths:
+
+  /:
+    get:
+      summary: Get API status
+      tags:
+        - root
+      responses:
+        "200":
+          $ref: "#/components/responses/Home"
+
+  # Users path
+  /users:
+    get:
+      summary: Get all users
+      tags:
+        - users
+      responses:
+        "200":
+          $ref: "#/components/responses/UserList"
+    post:
+      summary: Create a new user
+      tags:
+        - users
+      responses:
+        "201":
+          $ref: "#/components/responses/User"
+        "409":
+          $ref: "#/components/responses/UserAlreadyExists"
+
+  # User path
+  /users/{id}:
+    parameters:
+      - $ref: '#/components/parameters/Id'
+    delete:
+      summary: Delete a user by ID
+      tags:
+        - users
+      responses:
+        "200":
+          $ref: "#/components/responses/Delete"
+    get:
+      summary: Get a user by ID
+      tags:
+        - users
+      responses:
+        "200":
+          $ref: "#/components/responses/User"
+        "404":
+          $ref: "#/components/responses/UserNotFound"
+    put:
+      summary: Update a user by ID
+      tags:
+        - users
+      responses:
+        "200":
+          $ref: "#/components/responses/User"
+        "404":
+          $ref: "#/components/responses/UserNotFound"
+
+  # User companies path
+  /users/{id}/companies:
+    parameters:
+      - $ref: '#/components/parameters/Id'
+    get:
+      summary: Get all companies for a user
+      tags:
+        - users
+      responses:
+        "200":
+          $ref: "#/components/responses/CompanyList"
+
+  # Common responses
+  /*:
+    get:
+      summary: Common responses for all endpoints
+      tags:
+        - all
+      responses:
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+
+# Components
+components:
+
+  # Parameters
+  parameters:
+
+    # Id parameter
+    Id:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: string
+        pattern: '^[0-9a-fA-F]{24}$'
+
+  # Responses
+  responses:
+
+    # BadRequest response
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            oneOf:
+              - $ref: "#/components/schemas/EmailMismatch"
+              - $ref: "#/components/schemas/InvalidQuery"
+              - $ref: "#/components/schemas/InvalidUserData"
+
+    # Company response
+    Company:
+      description: Company
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Company"
+
+    # CompanyList response
+    CompanyList:
+      description: Company list
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/CompanyList"
+
+    # Delete response
+    Delete:
+      description: Delete
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Delete"
+
+    # Home response
+    Home:
+      description: Home
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Home"
+
+    # InternalServerError response
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/InternalServerError"
+
+    # NotFound response
+    NotFound:
+      description: Not found
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/NotFound"
+
+    # User response
+    User:
+      description: User
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/User"
+
+    # UserAlreadyExists response
+    UserAlreadyExists:
+      description: User already exists
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/UserAlreadyExists"
+
+    # UserList response
+    UserList:
+      description: User list
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/UserList"
+
+    # UserNotFound response
+    UserNotFound:
+      description: User not found
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/UserNotFound"
+
+  # Schemas
+  schemas:
+
+    # Company schema
+    Company:
+      type: object
+      required:
+        - _id
+      properties:
+        _id:
+          type: string
+
+    # CompanyList schema
+    CompanyList:
+      type: object
+      required:
+        - docs
+        - total
+      properties:
+        docs:
+          type: array
+          items:
+            $ref: "#/components/schemas/Company"
+        total:
+          type: integer
+
+    # Delete schema
+    Delete:
+      type: object
+      required:
+        - affectedRows
+      properties:
+        affectedRows:
+          type: integer
+
+    # EmailMismatch schema
+    EmailMismatch:
+      type: object
+      required:
+        - error
+        - errorMessage
+      properties:
+        error:
+          type: string
+          enum:
+            - EmailMismatch
+        errorMessage:
+          type: string
+
+    # Home schema
+    Home:
+      type: object
+      required:
+        - schema
+        - status
+      properties:
+        schema:
+          type: string
+        status:
+          type: string
+          enum:
+            - OK
+
+    # InternalServerError schema
+    InternalServerError:
+      type: object
+      required:
+        - error
+        - errorMessage
+      properties:
+        error:
+          type: string
+          enum:
+            - InternalServerError
+        errorMessage:
+          type: string
+
+    # InvalidQuery schema
+    InvalidQuery:
+      type: object
+      required:
+        - error
+        - errorMessage
+        - data
+      properties:
+        error:
+          type: string
+          enum:
+            - InvalidQuery
+        errorMessage:
+          type: string
+        data:
+          type: array
+          items:
+            type: object
+            required:
+              - message
+              - path
+            properties:
+              message:
+                type: string
+              path:
+                type: string
+
+    # InvalidUserData schema
+    InvalidUserData:
+      type: object
+      required:
+        - error
+        - errorMessage
+        - data
+      properties:
+        error:
+          type: string
+          enum:
+            - InvalidUserData
+        errorMessage:
+          type: string
+        data:
+          type: array
+          items:
+            type: object
+            required:
+              - message
+              - path
+            properties:
+              message:
+                type: string
+              path:
+                type: string
+
+    # NotFound schema
+    NotFound:
+      type: object
+      required:
+        - error
+        - errorMessage
+      properties:
+        error:
+          type: string
+          enum:
+            - NotFound
+        errorMessage:
+          type: string
+
+    # User schema
+    User:
+      type: object
+      required:
+        - _id
+        - email
+        - firstName
+        - lastName
+      properties:
+        _id:
+          type: string
+        email:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+
+    # UserAlreadyExists schema
+    UserAlreadyExists:
+      type: object
+      required:
+        - error
+        - errorMessage
+      properties:
+        error:
+          type: string
+          enum:
+            - UserAlreadyExists
+        errorMessage:
+          type: string
+
+    # UserList schema
+    UserList:
+      type: object
+      required:
+        - docs
+        - total
+      properties:
+        docs:
+          type: array
+          items:
+            $ref: "#/components/schemas/User"
+        total:
+          type: integer
+
+    # UserNotFound schema
+    UserNotFound:
+      type: object
+      required:
+        - error
+        - errorMessage
+      properties:
+        error:
+          type: string
+          enum:
+            - UserNotFound
+        errorMessage:
+          type: string

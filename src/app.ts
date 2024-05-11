@@ -4,6 +4,7 @@ import {
   appendJwt,
   forceHttps,
   logRequest,
+  logResponse,
   middlewareExclusion,
   requestId
 } from "./middleware";
@@ -27,7 +28,6 @@ import { StatusCodes } from "http-status-codes";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import express, { NextFunction, Request, Response, json } from "express";
-import { favicon } from "./public";
 import { lang } from "./langs";
 import { logger } from "./services";
 import passport from "passport";
@@ -62,7 +62,12 @@ export function createApp(): express.Express {
 
   app.use(requestId);
   app.use(logRequest);
+  app.use(logResponse);
+
   app.use(cors({ credentials: true, origin: CORS_ORIGIN }));
+
+  app.use(express.static("public"));
+
   app.use(
     middlewareExclusion(forceHttps, [
       ["GET", "/"],
@@ -72,6 +77,7 @@ export function createApp(): express.Express {
       ["GET", "/companies"]
     ])
   );
+
   app.use(cookieParser());
   app.use(
     session({
@@ -82,19 +88,16 @@ export function createApp(): express.Express {
   );
   app.use(passport.initialize());
   app.use(passport.session());
-  app.use(json());
+
   app.use(appendJwt);
 
+  app.use(json());
+
   app.get("/", (_req, res) => {
-    sendResponse<Routes["/"]["GET"]>(res, StatusCodes.OK, {
-      status: ErrorCode.Ok
+    sendResponse<Routes["/"]["get"]>(res, StatusCodes.OK, {
+      schema: "/schema.yaml",
+      status: ErrorCode.OK
     });
-  });
-
-  app.get("/favicon.ico", (_req, res) => {
-    const buffer = Buffer.from(favicon, "base64");
-
-    res.contentType("ico").send(buffer);
   });
 
   app.use("/auth", authRouter);
@@ -110,7 +113,7 @@ export function createApp(): express.Express {
   app.use("/users", createUsersRouter(userControllers));
 
   app.all("*", (_req, res) => {
-    sendResponse<Routes["*"]["NOT_FOUND"]>(
+    sendResponse(
       res,
       StatusCodes.NOT_FOUND,
       buildErrorResponse(ErrorCode.NotFound)
@@ -126,7 +129,7 @@ export function createApp(): express.Express {
       _next: NextFunction
     ) => {
       logger.error(lang.ServerError, err, { requestId: req.requestId });
-      sendResponse<Routes["*"]["INTERNAL_SERVER_ERROR"]>(
+      sendResponse(
         res,
         StatusCodes.INTERNAL_SERVER_ERROR,
         buildErrorResponse(ErrorCode.InternalServerError)

@@ -9,8 +9,8 @@ export interface Company {
   readonly images: WebAccessibleImages;
   readonly logo: WebAccessibleImage;
   readonly name: string;
-  readonly privateCompany?: true;
-  readonly recommended?: true;
+  readonly privateCompany?: boolean;
+  readonly recommended?: boolean;
   readonly targetValue: number;
   readonly website?: string;
 }
@@ -37,7 +37,7 @@ export interface ExistingCompany extends Company {
 export type ExistingCompanies = readonly ExistingCompany[];
 
 export interface Founder {
-  readonly confirmed?: true;
+  readonly confirmed?: boolean;
   readonly email: string;
   readonly firstName: string;
   readonly lastName: string;

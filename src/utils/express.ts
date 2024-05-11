@@ -1,7 +1,14 @@
-import { ErrorCode, ErrorResponse, ErrorResponseWithData } from "../schema";
+import {
+  ErrorCode,
+  ErrorResponse,
+  ErrorResponseWithData,
+  Routes
+} from "../schema";
 import { NextFunction, Request, RequestHandler, Response } from "express";
+import { Readonly } from "ts-toolbelt/out/Object/Readonly";
 import { StatusCodes } from "http-status-codes";
 import { ZodIssues } from "../types";
+import { assertNumber } from "./assertions";
 import { lang } from "../langs";
 
 /**
@@ -79,7 +86,55 @@ export function buildErrorResponse<E extends ErrorCode>(
  * @param status - The status code.
  * @param json - The JSON response.
  */
-export function sendResponse<T extends [StatusCodes, unknown]>(
+export function sendResponse(
+  res: Response,
+  status: SchemaStatus,
+  json: SchemaJson
+): void;
+
+/**
+ * Sends a response.
+ * @param res - The express response object.
+ * @param status - The status code.
+ * @param json - The JSON response.
+ */
+export function sendResponse<
+  R extends {
+    responses: {
+      [K: PropertyKey]: { content: { "application/json": object } };
+    };
+  } = never
+>(
+  res: Response,
+  status: keyof R["responses"],
+  json: Readonly<
+    R["responses"][keyof R["responses"]]["content"]["application/json"],
+    PropertyKey,
+    "deep"
+  >
+): void;
+
+/**
+ * Sends a response.
+ * @param res - The express response object.
+ * @param status - The status code.
+ * @param json - The JSON response.
+ */
+export function sendResponse(
+  res: Response,
+  status: PropertyKey,
+  json: object
+): void {
+  res.status(assertNumber(status)).json(json);
+}
+
+/**
+ * Sends a response.
+ * @param res - The express response object.
+ * @param status - The status code.
+ * @param json - The JSON response.
+ */
+export function sendResponseOld<T extends [StatusCodes, unknown]>(
   res: Response,
   status: T[0],
   json: T[1]
@@ -106,3 +161,13 @@ export function wrapAsyncHandler(handler: AsyncRequestHandler): RequestHandler {
 export interface AsyncRequestHandler {
   (req: Request, res: Response, next: NextFunction): Promise<void>;
 }
+
+export type SchemaResponses = Routes["/*"]["get"]["responses"];
+
+export type SchemaStatus = keyof SchemaResponses;
+
+export type SchemaJson = Readonly<
+  SchemaResponses[SchemaStatus]["content"]["application/json"],
+  PropertyKey,
+  "deep"
+>;

@@ -23,12 +23,14 @@ export const lang = {
   MongodbReconnectFailed: "MongoDB reconnect failed",
   MongodbReconnected: "MongoDB reconnected",
   NotFound: "Not found",
-  Ok: "Ok",
+  OK: "OK",
   SecureServerStarted: "Secure server started",
   ServerError: "Server error",
   ServerStarted: "Server started",
   Unauthorized: "Unauthorized",
   UserAlreadyExists: "User already exists",
   UserNotFound: "User not found",
-  ZeroApiServer: "Zero API server, schema ver"
+  ZeroApiServer: "Zero API server, schema ver",
+  in: "in",
+  ms: "ms"
 } as const;
