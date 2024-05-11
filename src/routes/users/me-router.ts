@@ -11,8 +11,7 @@ import { usersMiddleware } from "./middleware";
 export function createMeRouter(controllers: UserControllers): Router {
   const {
     requireValidGetCompaniesByUserOptions,
-    requireValidMeUser,
-    requireValidUser,
+    requireValidUserCreate,
     requireValidUserUpdate,
     userEmailFromJwtUser
   } = usersMiddleware;
@@ -24,16 +23,15 @@ export function createMeRouter(controllers: UserControllers): Router {
     .post(
       "/",
       requireJwtUser,
+      requireValidUserCreate,
       userEmailFromJwtUser,
-      requireValidUser,
-      requireValidMeUser,
       controllers.addUser
     )
     .put(
       "/",
       requireJwtUser,
-      userEmailFromJwtUser,
       requireValidUserUpdate,
+      userEmailFromJwtUser,
       controllers.updateUser
     )
     .delete("/", requireJwtUser, userEmailFromJwtUser, controllers.deleteUser)

@@ -12,7 +12,7 @@ export function createUsersRouter(controllers: UserControllers): Router {
   const {
     requireValidGetCompaniesByUserOptions,
     requireValidGetUsersOptions,
-    requireValidUser,
+    requireValidUserCreate,
     requireValidUserUpdate,
     userEmailFromParams
   } = usersMiddleware;
@@ -21,8 +21,14 @@ export function createUsersRouter(controllers: UserControllers): Router {
 
   router
     .get("/", requireJwtUser, requireValidGetUsersOptions, controllers.getUsers)
-    .post("/", requireJwtAdmin, requireValidUser, controllers.addUser)
     .get("/:email", requireJwtUser, userEmailFromParams, controllers.getUser)
+    .post(
+      "/:email",
+      requireJwtAdmin,
+      requireValidUserCreate,
+      userEmailFromParams,
+      controllers.addUser
+    )
     .put(
       "/:email",
       requireJwtAdmin,

@@ -29,20 +29,13 @@ export interface paths {
         200: components["responses"]["UserList"];
       };
     };
-    /** Create a new user */
-    post: {
-      responses: {
-        201: components["responses"]["User"];
-        409: components["responses"]["UserAlreadyExists"];
-      };
-    };
   };
-  "/users/{id}": {
+  "/users/{email}": {
     /** Delete a user by ID */
     delete: {
       parameters: {
         path: {
-          id: components["parameters"]["Id"];
+          email: components["parameters"]["Email"];
         };
       };
       responses: {
@@ -53,7 +46,7 @@ export interface paths {
     get: {
       parameters: {
         path: {
-          id: components["parameters"]["Id"];
+          email: components["parameters"]["Email"];
         };
       };
       responses: {
@@ -63,14 +56,26 @@ export interface paths {
     };
     parameters: {
       path: {
-        id: components["parameters"]["Id"];
+        email: components["parameters"]["Email"];
+      };
+    };
+    /** Create a new user */
+    post: {
+      parameters: {
+        path: {
+          email: components["parameters"]["Email"];
+        };
+      };
+      responses: {
+        201: components["responses"]["User"];
+        409: components["responses"]["UserAlreadyExists"];
       };
     };
     /** Update a user by ID */
     put: {
       parameters: {
         path: {
-          id: components["parameters"]["Id"];
+          email: components["parameters"]["Email"];
         };
       };
       responses: {
@@ -79,12 +84,12 @@ export interface paths {
       };
     };
   };
-  "/users/{id}/companies": {
+  "/users/{email}/companies": {
     /** Get all companies for a user */
     get: {
       parameters: {
         path: {
-          id: components["parameters"]["Id"];
+          email: components["parameters"]["Email"];
         };
       };
       responses: {
@@ -93,7 +98,7 @@ export interface paths {
     };
     parameters: {
       path: {
-        id: components["parameters"]["Id"];
+        email: components["parameters"]["Email"];
       };
     };
   };
@@ -104,6 +109,7 @@ export type webhooks = Record<string, never>;
 export interface components {
   headers: never;
   parameters: {
+    Email: string;
     Id: string;
   };
   pathItems: never;

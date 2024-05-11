@@ -1,16 +1,12 @@
 import { UserCreate, UserUpdate } from "../schema";
 import { Equals } from "ts-toolbelt/out/Any/Equals";
-import { preprocessEmail } from "../utils";
 import zod from "zod";
-
-const email = preprocessEmail(zod.string().email());
 
 const firstName = zod.string().min(1);
 
 const lastName = zod.string().min(1);
 
 export const UserCreateValidationSchema = zod.strictObject({
-  email,
   firstName,
   lastName
 });

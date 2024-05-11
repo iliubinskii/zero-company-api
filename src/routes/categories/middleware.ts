@@ -15,7 +15,7 @@ import { StatusCodes } from "http-status-codes";
 import { ZodError } from "zod";
 
 export const categoriesMiddleware: CategoriesMiddleware = {
-  requireValidCategory: (req, res, next) => {
+  requireValidCategoryCreate: (req, res, next) => {
     try {
       req.categoryCreate = CategoryCreateValidationSchema.parse(req.body);
       next();

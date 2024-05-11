@@ -23,7 +23,7 @@ export const companiesMiddleware: CompaniesMiddleware = {
     images: 10,
     logo: 1
   }),
-  requireValidCompany: (req, res, next) => {
+  requireValidCompanyCreate: (req, res, next) => {
     try {
       req.companyCreate = filterUndefinedProperties(
         CompanyCreateValidationSchema.parse(req.body)

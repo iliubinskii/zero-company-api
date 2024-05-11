@@ -17,7 +17,7 @@ import { companiesMiddleware } from "./middleware";
 export function createCompaniesRouter(controllers: CompanyControllers): Router {
   const {
     parseFormData,
-    requireValidCompany,
+    requireValidCompanyCreate,
     requireValidCompanyUpdate,
     requireValidGetCompaniesOptions,
     webAccessibleStorage
@@ -34,7 +34,7 @@ export function createCompaniesRouter(controllers: CompanyControllers): Router {
       nullifyEmptyStrings,
       webAccessibleStorage,
       parseNestedFormData,
-      requireValidCompany,
+      requireValidCompanyCreate,
       controllers.addCompany
     )
     .get("/:id", requireValidMongodbId("id"), controllers.getCompany)

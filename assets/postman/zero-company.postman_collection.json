@@ -912,8 +912,8 @@
               "listen": "test",
               "script": {
                 "exec": [""],
-                "packages": {},
-                "type": "text/javascript"
+                "type": "text/javascript",
+                "packages": {}
               }
             }
           ],
@@ -967,7 +967,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"email\": \"{{jwtEmail}}\",\r\n    \"firstName\": \"John\",\r\n    \"lastName\": \"Smith\"\r\n}",
+              "raw": "{\r\n    \"firstName\": \"John\",\r\n    \"lastName\": \"Smith\"\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -1423,8 +1423,8 @@
               "listen": "test",
               "script": {
                 "exec": [""],
-                "packages": {},
-                "type": "text/javascript"
+                "type": "text/javascript",
+                "packages": {}
               }
             }
           ],
@@ -1478,7 +1478,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"email\": \"{{jwtEmail}}\",\r\n    \"firstName\": \"John\",\r\n    \"lastName\": \"Smith\"\r\n}",
+              "raw": "{\r\n    \"firstName\": \"John\",\r\n    \"lastName\": \"Smith\"\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -1486,8 +1486,9 @@
               }
             },
             "url": {
-              "raw": "{{apiUrl}}users",
-              "host": ["{{apiUrl}}users"]
+              "raw": "{{apiUrl}}users/{{jwtEmail}}",
+              "host": ["{{apiUrl}}users"],
+              "path": ["{{jwtEmail}}"]
             }
           },
           "response": []

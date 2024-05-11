@@ -16,7 +16,7 @@ export interface Company {
 }
 
 export interface CompanyCreate
-  extends Omit<Company, "founders" | "foundedAt" | "recommended"> {
+  extends Omit<Company, "foundedAt" | "founders" | "recommended"> {
   readonly founders: readonly Omit<Founder, "confirmed">[];
 }
 

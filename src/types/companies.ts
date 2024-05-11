@@ -1,5 +1,5 @@
 import {
-  CompanyCreate,
+  Company,
   CompanyUpdate,
   ExistingCompany,
   GetCompaniesOptions,
@@ -17,7 +17,7 @@ export interface CompanyControllers {
 
 export interface CompaniesMiddleware {
   readonly parseFormData: RequestHandler;
-  readonly requireValidCompany: RequestHandler;
+  readonly requireValidCompanyCreate: RequestHandler;
   readonly requireValidCompanyUpdate: RequestHandler;
   readonly requireValidGetCompaniesOptions: RequestHandler;
   readonly webAccessibleStorage: RequestHandler;
@@ -29,7 +29,7 @@ export interface CompaniesService {
    * @param company - The company to add.
    * @returns A promise that resolves when the company has been added.
    */
-  readonly addCompany: (company: CompanyCreate) => Promise<ExistingCompany>;
+  readonly addCompany: (company: Company) => Promise<ExistingCompany>;
   /**
    * Deletes a company from the database.
    * @param id - The ID of the company to delete.

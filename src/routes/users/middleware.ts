@@ -49,20 +49,7 @@ export const usersMiddleware: UsersMiddleware = {
       else throw err;
     }
   },
-  requireValidMeUser: (req, res, next) => {
-    const email = assertDefined(req.userEmail);
-
-    const userCreate = assertDefined(req.userCreate);
-
-    if (userCreate.email === email) next();
-    else
-      sendResponse(
-        res,
-        StatusCodes.BAD_REQUEST,
-        buildErrorResponse(ErrorCode.EmailMismatch)
-      );
-  },
-  requireValidUser: (req, res, next) => {
+  requireValidUserCreate: (req, res, next) => {
     try {
       req.userCreate = UserCreateValidationSchema.parse(req.body);
       next();

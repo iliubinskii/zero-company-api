@@ -20,7 +20,10 @@ export function createCompanyControllers(
     addCompany: wrapAsyncHandler(async (req, res) => {
       const company = assertDefined(req.companyCreate);
 
-      const addedCompany = await service.addCompany(company);
+      const addedCompany = await service.addCompany({
+        ...company,
+        foundedAt: new Date().toISOString()
+      });
 
       sendResponseOld<RoutesOld["/companies"]["/"]["POST"]>(
         res,

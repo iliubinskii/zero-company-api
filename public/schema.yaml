@@ -31,20 +31,11 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/UserList"
-    post:
-      summary: Create a new user
-      tags:
-        - users
-      responses:
-        "201":
-          $ref: "#/components/responses/User"
-        "409":
-          $ref: "#/components/responses/UserAlreadyExists"
 
   # User path
-  /users/{id}:
+  /users/{email}:
     parameters:
-      - $ref: '#/components/parameters/Id'
+      - $ref: '#/components/parameters/Email'
     delete:
       summary: Delete a user by ID
       tags:
@@ -61,6 +52,15 @@ paths:
           $ref: "#/components/responses/User"
         "404":
           $ref: "#/components/responses/UserNotFound"
+    post:
+      summary: Create a new user
+      tags:
+        - users
+      responses:
+        "201":
+          $ref: "#/components/responses/User"
+        "409":
+          $ref: "#/components/responses/UserAlreadyExists"
     put:
       summary: Update a user by ID
       tags:
@@ -72,9 +72,9 @@ paths:
           $ref: "#/components/responses/UserNotFound"
 
   # User companies path
-  /users/{id}/companies:
+  /users/{email}/companies:
     parameters:
-      - $ref: '#/components/parameters/Id'
+      - $ref: '#/components/parameters/Email'
     get:
       summary: Get all companies for a user
       tags:
@@ -103,6 +103,14 @@ components:
   # Parameters
   parameters:
 
+    # Email parameter
+    Email:
+      name: email
+      in: path
+      required: true
+      schema:
+        type: string
+
     # Id parameter
     Id:
       name: id
@@ -110,7 +118,6 @@ components:
       required: true
       schema:
         type: string
-        pattern: '^[0-9a-fA-F]{24}$'
 
   # Responses
   responses:

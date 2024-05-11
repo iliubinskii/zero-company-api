@@ -12,7 +12,7 @@ export function createCategoriesRouter(
   controllers: CategoryControllers
 ): Router {
   const {
-    requireValidCategory,
+    requireValidCategoryCreate,
     requireValidCategoryUpdate,
     requireValidGetCategoriesOptions,
     requireValidGetCompaniesByCategoryOptions
@@ -22,7 +22,12 @@ export function createCategoriesRouter(
 
   router
     .get("/", requireValidGetCategoriesOptions, controllers.getCategories)
-    .post("/", requireJwtAdmin, requireValidCategory, controllers.addCategory)
+    .post(
+      "/",
+      requireJwtAdmin,
+      requireValidCategoryCreate,
+      controllers.addCategory
+    )
     .get("/:id", requireValidMongodbId("id"), controllers.getCategory)
     .put(
       "/:id",

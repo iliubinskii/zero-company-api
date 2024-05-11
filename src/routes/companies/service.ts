@@ -15,10 +15,7 @@ export function createCompaniesService(): CompaniesService {
     addCompany: async (company): Promise<ExistingCompany> => {
       const CompanyModel = await getCompanyModel();
 
-      const model = new CompanyModel<Company>({
-        ...company,
-        foundedAt: new Date().toISOString()
-      });
+      const model = new CompanyModel(company);
 
       const addedCompany = await model.save();
 

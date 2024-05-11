@@ -1,5 +1,5 @@
 import {
-  CategoryCreate,
+  Category,
   CategoryUpdate,
   ExistingCategory,
   GetCategoriesOptions,
@@ -17,7 +17,7 @@ export interface CategoryControllers {
 }
 
 export interface CategoriesMiddleware {
-  readonly requireValidCategory: RequestHandler;
+  readonly requireValidCategoryCreate: RequestHandler;
   readonly requireValidCategoryUpdate: RequestHandler;
   readonly requireValidGetCategoriesOptions: RequestHandler;
   readonly requireValidGetCompaniesByCategoryOptions: RequestHandler;
@@ -29,7 +29,7 @@ export interface CategoriesService {
    * @param category - The category to add.
    * @returns A promise that resolves when the category has been added.
    */
-  readonly addCategory: (category: CategoryCreate) => Promise<ExistingCategory>;
+  readonly addCategory: (category: Category) => Promise<ExistingCategory>;
   /**
    * Deletes a category from the database.
    * @param id - The ID of the category to delete.
