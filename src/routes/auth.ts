@@ -12,11 +12,11 @@ import {
   JWT_EXPIRES_IN
 } from "../consts";
 import { Router } from "express";
-import { Routes } from "../schema";
+import { RoutesOld } from "../schema";
 import { StatusCodes } from "http-status-codes";
 import jwt from "jsonwebtoken";
 import passport from "passport";
-import { sendResponse } from "../utils";
+import { sendResponseOld } from "../utils";
 import zod from "zod";
 
 export const authRouter = Router();
@@ -80,7 +80,7 @@ authRouter
     if (typeof token === "string")
       jwt.verify(token, JWT_SECRET, (err, decoded) => {
         if (err)
-          sendResponse<Routes["/auth"]["/me"]["GET"]>(
+          sendResponseOld<RoutesOld["/auth"]["/me"]["GET"]>(
             res,
             StatusCodes.OK,
             null
@@ -88,13 +88,22 @@ authRouter
         else {
           const email = JwtValidationSchema.parse(decoded).email.toLowerCase();
 
-          sendResponse<Routes["/auth"]["/me"]["GET"]>(res, StatusCodes.OK, {
-            admin: ADMIN_EMAIL.includes(email),
-            email
-          });
+          sendResponseOld<RoutesOld["/auth"]["/me"]["GET"]>(
+            res,
+            StatusCodes.OK,
+            {
+              admin: ADMIN_EMAIL.includes(email),
+              email
+            }
+          );
         }
       });
-    else sendResponse<Routes["/auth"]["/me"]["GET"]>(res, StatusCodes.OK, null);
+    else
+      sendResponseOld<RoutesOld["/auth"]["/me"]["GET"]>(
+        res,
+        StatusCodes.OK,
+        null
+      );
   });
 
 const JwtValidationSchema = zod

@@ -23,7 +23,7 @@ export const lang = {
   MongodbReconnectFailed: "MongoDB reconnect failed",
   MongodbReconnected: "MongoDB reconnected",
   NotFound: "Not found",
-  Ok: "Ok",
+  OK: "OK",
   SecureServerStarted: "Secure server started",
   ServerError: "Server error",
   ServerStarted: "Server started",

@@ -25,13 +25,13 @@ export function createUserControllers(
       const addedUser = await service.addUser(user);
 
       if (addedUser)
-        sendResponse<Routes["/users"]["/"]["POST"]["CREATED"]>(
+        sendResponse<Routes["/users"]["post"]>(
           res,
           StatusCodes.CREATED,
           addedUser
         );
       else
-        sendResponse<Routes["/users"]["/"]["POST"]["CONFLICT"]>(
+        sendResponse<Routes["/users"]["post"]>(
           res,
           StatusCodes.CONFLICT,
           buildErrorResponse(ErrorCode.UserAlreadyExists)
@@ -42,7 +42,7 @@ export function createUserControllers(
 
       const affectedRows = await service.deleteUser(email);
 
-      sendResponse<Routes["/users"]["/:email"]["DELETE"]>(res, StatusCodes.OK, {
+      sendResponse<Routes["/users/{id}"]["delete"]>(res, StatusCodes.OK, {
         affectedRows
       });
     }),
@@ -56,7 +56,7 @@ export function createUserControllers(
         founderEmail: email
       });
 
-      sendResponse<Routes["/users"]["/:email/companies"]["GET"]>(
+      sendResponse<Routes["/users/{id}/companies"]["get"]>(
         res,
         StatusCodes.OK,
         companies
@@ -68,13 +68,9 @@ export function createUserControllers(
       const user = await service.getUser(email);
 
       if (user)
-        sendResponse<Routes["/users"]["/:email"]["GET"]["OK"]>(
-          res,
-          StatusCodes.OK,
-          user
-        );
+        sendResponse<Routes["/users/{id}"]["get"]>(res, StatusCodes.OK, user);
       else
-        sendResponse<Routes["/users"]["/:email"]["GET"]["NOT_FOUND"]>(
+        sendResponse<Routes["/users/{id}"]["get"]>(
           res,
           StatusCodes.NOT_FOUND,
           buildErrorResponse(ErrorCode.UserNotFound)
@@ -85,7 +81,7 @@ export function createUserControllers(
 
       const users = await service.getUsers(options);
 
-      sendResponse<Routes["/users"]["/"]["GET"]>(res, StatusCodes.OK, users);
+      sendResponse<Routes["/users"]["get"]>(res, StatusCodes.OK, users);
     }),
     updateUser: wrapAsyncHandler(async (req, res) => {
       const email = assertDefined(req.userEmail);
@@ -95,13 +91,13 @@ export function createUserControllers(
       const updatedUser = await service.updateUser(email, user);
 
       if (updatedUser)
-        sendResponse<Routes["/users"]["/:email"]["PUT"]["OK"]>(
+        sendResponse<Routes["/users/{id}"]["put"]>(
           res,
           StatusCodes.OK,
           updatedUser
         );
       else
-        sendResponse<Routes["/users"]["/:email"]["PUT"]["NOT_FOUND"]>(
+        sendResponse<Routes["/users/{id}"]["put"]>(
           res,
           StatusCodes.NOT_FOUND,
           buildErrorResponse(ErrorCode.UserNotFound)

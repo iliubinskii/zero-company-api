@@ -38,6 +38,9 @@
     "[typescriptreact]": {
       "editor.defaultFormatter": "dbaeumer.vscode-eslint"
     },
+    "[yaml]": {
+      "editor.defaultFormatter": "vscode.json-language-features"
+    },
     "css.validate": false,
     "debug.javascript.codelens.npmScripts": "never",
     "editor.codeActionsOnSave": {

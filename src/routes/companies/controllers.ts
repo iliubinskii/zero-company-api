@@ -1,9 +1,9 @@
 import { CompaniesService, CompanyControllers } from "../../types";
-import { ErrorCode, Routes } from "../../schema";
+import { ErrorCode, RoutesOld } from "../../schema";
 import {
   assertDefined,
   buildErrorResponse,
-  sendResponse,
+  sendResponseOld,
   wrapAsyncHandler
 } from "../../utils";
 import { StatusCodes } from "http-status-codes";
@@ -22,7 +22,7 @@ export function createCompanyControllers(
 
       const addedCompany = await service.addCompany(company);
 
-      sendResponse<Routes["/companies"]["/"]["POST"]>(
+      sendResponseOld<RoutesOld["/companies"]["/"]["POST"]>(
         res,
         StatusCodes.CREATED,
         addedCompany
@@ -33,7 +33,7 @@ export function createCompanyControllers(
 
       const affectedRows = await service.deleteCompany(id);
 
-      sendResponse<Routes["/companies"]["/:id"]["DELETE"]>(
+      sendResponseOld<RoutesOld["/companies"]["/:id"]["DELETE"]>(
         res,
         StatusCodes.OK,
         { affectedRows }
@@ -44,7 +44,7 @@ export function createCompanyControllers(
 
       const companies = await service.getCompanies(options);
 
-      sendResponse<Routes["/companies"]["/"]["GET"]>(
+      sendResponseOld<RoutesOld["/companies"]["/"]["GET"]>(
         res,
         StatusCodes.OK,
         companies
@@ -56,13 +56,13 @@ export function createCompanyControllers(
       const company = await service.getCompany(id);
 
       if (company)
-        sendResponse<Routes["/companies"]["/:id"]["GET"]["OK"]>(
+        sendResponseOld<RoutesOld["/companies"]["/:id"]["GET"]["OK"]>(
           res,
           StatusCodes.OK,
           company
         );
       else
-        sendResponse<Routes["/companies"]["/:id"]["GET"]["NOT_FOUND"]>(
+        sendResponseOld<RoutesOld["/companies"]["/:id"]["GET"]["NOT_FOUND"]>(
           res,
           StatusCodes.NOT_FOUND,
           buildErrorResponse(ErrorCode.CompanyNotFound)
@@ -76,13 +76,13 @@ export function createCompanyControllers(
       const updatedCompany = await service.updateCompany(id, company);
 
       if (updatedCompany)
-        sendResponse<Routes["/companies"]["/:id"]["PUT"]["OK"]>(
+        sendResponseOld<RoutesOld["/companies"]["/:id"]["PUT"]["OK"]>(
           res,
           StatusCodes.OK,
           updatedCompany
         );
       else
-        sendResponse<Routes["/companies"]["/:id"]["PUT"]["NOT_FOUND"]>(
+        sendResponseOld<RoutesOld["/companies"]["/:id"]["PUT"]["NOT_FOUND"]>(
           res,
           StatusCodes.NOT_FOUND,
           buildErrorResponse(ErrorCode.CompanyNotFound)

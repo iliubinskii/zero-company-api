@@ -4,11 +4,11 @@ import {
   GetCategoriesOptionsValidationSchema,
   GetCompaniesByCategoryOptionsValidationSchema
 } from "../../validation-schema";
-import { ErrorCode, Routes } from "../../schema";
+import { ErrorCode, RoutesOld } from "../../schema";
 import {
   buildErrorResponse,
   filterUndefinedProperties,
-  sendResponse
+  sendResponseOld
 } from "../../utils";
 import { CategoriesMiddleware } from "../../types";
 import { StatusCodes } from "http-status-codes";
@@ -21,7 +21,7 @@ export const categoriesMiddleware: CategoriesMiddleware = {
       next();
     } catch (err) {
       if (err instanceof ZodError)
-        sendResponse<Routes["*"]["BAD_REQUEST"]["InvalidCategoryData"]>(
+        sendResponseOld<RoutesOld["*"]["BAD_REQUEST"]["InvalidCategoryData"]>(
           res,
           StatusCodes.BAD_REQUEST,
           buildErrorResponse(ErrorCode.InvalidCategoryData, err.errors)
@@ -37,7 +37,7 @@ export const categoriesMiddleware: CategoriesMiddleware = {
       next();
     } catch (err) {
       if (err instanceof ZodError)
-        sendResponse<Routes["*"]["BAD_REQUEST"]["InvalidCategoryData"]>(
+        sendResponseOld<RoutesOld["*"]["BAD_REQUEST"]["InvalidCategoryData"]>(
           res,
           StatusCodes.BAD_REQUEST,
           buildErrorResponse(ErrorCode.InvalidCategoryData, err.errors)
@@ -53,7 +53,7 @@ export const categoriesMiddleware: CategoriesMiddleware = {
       next();
     } catch (err) {
       if (err instanceof ZodError)
-        sendResponse<Routes["*"]["BAD_REQUEST"]["InvalidQuery"]>(
+        sendResponseOld<RoutesOld["*"]["BAD_REQUEST"]["InvalidQuery"]>(
           res,
           StatusCodes.BAD_REQUEST,
           buildErrorResponse(ErrorCode.InvalidQuery, err.errors)
@@ -69,7 +69,7 @@ export const categoriesMiddleware: CategoriesMiddleware = {
       next();
     } catch (err) {
       if (err instanceof ZodError)
-        sendResponse<Routes["*"]["BAD_REQUEST"]["InvalidQuery"]>(
+        sendResponseOld<RoutesOld["*"]["BAD_REQUEST"]["InvalidQuery"]>(
           res,
           StatusCodes.BAD_REQUEST,
           buildErrorResponse(ErrorCode.InvalidQuery, err.errors)

@@ -11,6 +11,12 @@ const config = {
   ignorePatterns: ["!.*", "coverage/**", "dist/**", "node_modules/**"],
   overrides: [
     {
+      files: ["./src/schema/routes.ts"],
+      rules: {
+        "no-magic-numbers": "off"
+      }
+    },
+    {
       files: "./utils/**",
       rules: {
         "node/no-unpublished-import": "off"
@@ -42,6 +48,7 @@ const config = {
             "commonjs",
             "consts",
             "cors",
+            "defs",
             "destructure",
             "ecma",
             "enum",
@@ -67,16 +74,19 @@ const config = {
             "nonnegative",
             "nullable",
             "oid",
+            "openapi",
             "openid",
             "originalname",
             "parens",
             "pem",
             "picsum",
             "printf",
+            "readonly",
             "reconnectfailed",
             "redeclare",
             "req",
             "resave",
+            "schemas",
             "serverless",
             "smacss",
             "sonarjs",
@@ -95,7 +105,9 @@ const config = {
             "uuidv4",
             "ver",
             "vercel",
+            "webhooks",
             "winston",
+            "yaml",
             "zod"
           ],
         strings: true,

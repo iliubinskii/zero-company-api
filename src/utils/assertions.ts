@@ -23,6 +23,18 @@ export function assertNotNull<T>(value: T | null): T {
 }
 
 /**
+ * Asserts that a value is a number.
+ * @param value - The value to check.
+ * @returns The value if it is a number.
+ * @throws An error if the value is not a number.
+ */
+export function assertNumber(value: unknown): number {
+  if (typeof value === "number") return value;
+
+  throw new Error("Value is not a number");
+}
+
+/**
  * Asserts that a value is a string.
  * @param value - The value to check.
  * @returns The value if it is a string.
@@ -31,5 +43,5 @@ export function assertNotNull<T>(value: T | null): T {
 export function assertString(value: unknown): string {
   if (typeof value === "string") return value;
 
-  throw new Error("Value is undefined");
+  throw new Error("Value is not a string");
 }
