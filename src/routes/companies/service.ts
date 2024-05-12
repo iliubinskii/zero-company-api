@@ -49,15 +49,6 @@ export function createCompaniesService(): CompaniesService {
       if (typeof category === "string")
         filter["categories"] = { $in: category };
 
-      if (typeof founderEmail === "string")
-        filter["founders.email"] = { $in: founderEmail };
-
-      if (onlyRecommended) filter["recommended"] = true;
-
-      if (includePrivateCompanies) {
-        // Include both public and private companies
-      } else filter["privateCompany"] = { $ne: true };
-
       if (cursor) {
         const [sortByValue, id] = cursor;
 
@@ -70,6 +61,15 @@ export function createCompaniesService(): CompaniesService {
           { _id: { [operator]: id }, [sortBy]: sortByValue }
         ];
       }
+
+      if (typeof founderEmail === "string")
+        filter["founders.email"] = { $in: founderEmail };
+
+      if (includePrivateCompanies) {
+        // Include both public and private companies
+      } else filter["privateCompany"] = { $ne: true };
+
+      if (onlyRecommended) filter["recommended"] = true;
 
       const sortOrderNumMap = { asc: 1, desc: -1 } as const;
 
