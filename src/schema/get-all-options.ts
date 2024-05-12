@@ -1,6 +1,7 @@
 export interface GetCategoriesOptions {
   readonly limit?: number;
   readonly offset?: number;
+  readonly onlyPinned?: boolean;
 }
 
 export interface GetCompaniesOptions {

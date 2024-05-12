@@ -6,6 +6,7 @@ import mongoose from "mongoose";
 const Schema = {
   description: { required: true, type: String },
   name: { required: true, type: String },
+  pinned: { type: Boolean },
   tagline: { required: true, type: String }
 };
 

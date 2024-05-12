@@ -14,7 +14,8 @@ export const GetCategoriesOptionsValidationSchema = zod.strictObject({
   limit: preprocessNumber(
     zod.number().int().positive().max(MAX_LIMIT.categories).optional()
   ),
-  offset: preprocessNumber(zod.number().int().nonnegative().optional())
+  offset: preprocessNumber(zod.number().int().nonnegative().optional()),
+  onlyPinned: preprocessBoolean(zod.boolean().optional())
 });
 
 export const GetCompaniesOptionsValidationSchema = zod.strictObject({

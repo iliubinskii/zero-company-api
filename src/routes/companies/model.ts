@@ -45,7 +45,7 @@ const Schema = {
   privateCompany: { type: Boolean },
   recommended: { type: Boolean },
   targetValue: { required: true, type: Number },
-  website: String
+  website: { type: String }
 } as const;
 
 export const getCompanyModel: GetCompanyModel = createSingleton();

@@ -1,5 +1,7 @@
+import { Category, MAX_LIMIT } from "../../schema";
 import { CategoriesService } from "../../types";
-import { MAX_LIMIT } from "../../schema";
+import { FilterQuery } from "mongoose";
+import { Writable } from "ts-toolbelt/out/Object/Writable";
 import { buildMongodbQuery } from "../../utils";
 import { getCategoryModel } from "./model";
 
@@ -29,13 +31,18 @@ export function createCategoriesService(): CategoriesService {
     },
     getCategories: async ({
       limit = MAX_LIMIT.categories,
-      offset = 0
+      offset = 0,
+      onlyPinned = false
     } = {}) => {
+      const filter: Writable<FilterQuery<Category>> = {};
+
+      if (onlyPinned) filter["pinned"] = true;
+
       const CategoryModel = await getCategoryModel();
 
       const [categories, total] = await Promise.all([
-        CategoryModel.find().skip(offset).limit(limit),
-        CategoryModel.countDocuments()
+        CategoryModel.find(filter).skip(offset).limit(limit),
+        CategoryModel.countDocuments(filter)
       ]);
 
       return {

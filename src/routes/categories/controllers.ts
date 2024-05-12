@@ -35,7 +35,9 @@ export function createCategoryControllers(
       const category = CategoryCreateValidationSchema.safeParse(req.body);
 
       if (category.success) {
-        const addedCategory = await service.addCategory(category.data);
+        const addedCategory = await service.addCategory(
+          filterUndefinedProperties(category.data)
+        );
 
         sendResponseOld<RoutesOld["/categories"]["/"]["POST"]>(
           res,
