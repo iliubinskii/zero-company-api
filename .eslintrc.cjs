@@ -11,6 +11,12 @@ const config = {
   ignorePatterns: ["!.*", "coverage/**", "dist/**", "node_modules/**"],
   overrides: [
     {
+      files: "./src/schema/**",
+      rules: {
+        "import/no-relative-parent-imports": "warn"
+      }
+    },
+    {
       files: ["./src/schema/routes.ts"],
       rules: {
         "no-magic-numbers": "off"

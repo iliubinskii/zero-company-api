@@ -32,7 +32,7 @@ export function createCompanyControllers(
       );
     }),
     deleteCompany: wrapAsyncHandler(async (req, res) => {
-      const id = assertDefined(req.params["id"]);
+      const id = assertDefined(req.idParam);
 
       const affectedRows = await service.deleteCompany(id);
 
@@ -54,7 +54,7 @@ export function createCompanyControllers(
       );
     }),
     getCompany: wrapAsyncHandler(async (req, res) => {
-      const id = assertDefined(req.params["id"]);
+      const id = assertDefined(req.idParam);
 
       const company = await service.getCompany(id);
 
@@ -72,7 +72,7 @@ export function createCompanyControllers(
         );
     }),
     updateCompany: wrapAsyncHandler(async (req, res) => {
-      const id = assertDefined(req.params["id"]);
+      const id = assertDefined(req.idParam);
 
       const company = assertDefined(req.companyUpdate);
 

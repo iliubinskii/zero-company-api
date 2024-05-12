@@ -1,10 +1,11 @@
 import {
   CategoryCreateValidationSchema,
   CategoryUpdateValidationSchema,
+  ErrorCode,
   GetCategoriesOptionsValidationSchema,
-  GetCompaniesByCategoryOptionsValidationSchema
-} from "../../validation-schema";
-import { ErrorCode, RoutesOld } from "../../schema";
+  GetCompaniesByCategoryOptionsValidationSchema,
+  RoutesOld
+} from "../../schema";
 import {
   buildErrorResponse,
   filterUndefinedProperties,
@@ -12,7 +13,7 @@ import {
 } from "../../utils";
 import { CategoriesMiddleware } from "../../types";
 import { StatusCodes } from "http-status-codes";
-import { ZodError } from "zod";
+import zod from "zod";
 
 export const categoriesMiddleware: CategoriesMiddleware = {
   requireValidCategoryCreate: (req, res, next) => {
@@ -20,7 +21,7 @@ export const categoriesMiddleware: CategoriesMiddleware = {
       req.categoryCreate = CategoryCreateValidationSchema.parse(req.body);
       next();
     } catch (err) {
-      if (err instanceof ZodError)
+      if (err instanceof zod.ZodError)
         sendResponseOld<RoutesOld["*"]["BAD_REQUEST"]["InvalidCategoryData"]>(
           res,
           StatusCodes.BAD_REQUEST,
@@ -36,7 +37,7 @@ export const categoriesMiddleware: CategoriesMiddleware = {
       );
       next();
     } catch (err) {
-      if (err instanceof ZodError)
+      if (err instanceof zod.ZodError)
         sendResponseOld<RoutesOld["*"]["BAD_REQUEST"]["InvalidCategoryData"]>(
           res,
           StatusCodes.BAD_REQUEST,
@@ -52,7 +53,7 @@ export const categoriesMiddleware: CategoriesMiddleware = {
       );
       next();
     } catch (err) {
-      if (err instanceof ZodError)
+      if (err instanceof zod.ZodError)
         sendResponseOld<RoutesOld["*"]["BAD_REQUEST"]["InvalidQuery"]>(
           res,
           StatusCodes.BAD_REQUEST,
@@ -68,7 +69,7 @@ export const categoriesMiddleware: CategoriesMiddleware = {
       );
       next();
     } catch (err) {
-      if (err instanceof ZodError)
+      if (err instanceof zod.ZodError)
         sendResponseOld<RoutesOld["*"]["BAD_REQUEST"]["InvalidQuery"]>(
           res,
           StatusCodes.BAD_REQUEST,

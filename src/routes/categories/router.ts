@@ -1,4 +1,4 @@
-import { requireJwtAdmin, requireValidMongodbId } from "../../middleware";
+import { requireIdParam, requireJwtAdmin } from "../../middleware";
 import { CategoryControllers } from "../../types";
 import { Router } from "express";
 import { categoriesMiddleware } from "./middleware";
@@ -28,23 +28,18 @@ export function createCategoriesRouter(
       requireValidCategoryCreate,
       controllers.addCategory
     )
-    .get("/:id", requireValidMongodbId("id"), controllers.getCategory)
+    .get("/:id", requireIdParam, controllers.getCategory)
     .put(
       "/:id",
       requireJwtAdmin,
-      requireValidMongodbId("id"),
+      requireIdParam,
       requireValidCategoryUpdate,
       controllers.updateCategory
     )
-    .delete(
-      "/:id",
-      requireJwtAdmin,
-      requireValidMongodbId("id"),
-      controllers.deleteCategory
-    )
+    .delete("/:id", requireJwtAdmin, requireIdParam, controllers.deleteCategory)
     .get(
       "/:id/companies",
-      requireValidMongodbId("id"),
+      requireIdParam,
       requireValidGetCompaniesByCategoryOptions,
       controllers.getCompaniesByCategory
     );

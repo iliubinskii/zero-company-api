@@ -129,7 +129,8 @@ components:
         application/json:
           schema:
             oneOf:
-              - $ref: "#/components/schemas/EmailMismatch"
+              - $ref: "#/components/schemas/InvalidEmailParam"
+              - $ref: "#/components/schemas/InvalidIdParam"
               - $ref: "#/components/schemas/InvalidQuery"
               - $ref: "#/components/schemas/InvalidUserData"
 
@@ -248,20 +249,6 @@ components:
         affectedRows:
           type: integer
 
-    # EmailMismatch schema
-    EmailMismatch:
-      type: object
-      required:
-        - error
-        - errorMessage
-      properties:
-        error:
-          type: string
-          enum:
-            - EmailMismatch
-        errorMessage:
-          type: string
-
     # Home schema
     Home:
       type: object
@@ -287,6 +274,34 @@ components:
           type: string
           enum:
             - InternalServerError
+        errorMessage:
+          type: string
+
+    # InvalidEmailParam schema
+    InvalidEmailParam:
+      type: object
+      required:
+        - error
+        - errorMessage
+      properties:
+        error:
+          type: string
+          enum:
+            - InvalidEmailParam
+        errorMessage:
+          type: string
+
+    # InvalidIdParam schema
+    InvalidIdParam:
+      type: object
+      required:
+        - error
+        - errorMessage
+      properties:
+        error:
+          type: string
+          enum:
+            - InvalidIdParam
         errorMessage:
           type: string
 

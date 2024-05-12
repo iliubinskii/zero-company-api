@@ -1,4 +1,4 @@
-import { UserCreate, UserUpdate } from "../schema";
+import { UserCreate, UserUpdate } from "./users";
 import { Equals } from "ts-toolbelt/out/Any/Equals";
 import zod from "zod";
 

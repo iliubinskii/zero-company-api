@@ -1,6 +1,9 @@
-import { ExistingCategory, MultipleDocsResponse } from "../../schema";
+import {
+  ExistingCategory,
+  MAX_LIMIT,
+  MultipleDocsResponse
+} from "../../schema";
 import { CategoriesService } from "../../types";
-import { MONGODB_MAX_LIMIT } from "../../consts";
 import { buildMongodbQuery } from "../../utils";
 import { getCategoryModel } from "./model";
 
@@ -29,7 +32,7 @@ export function createCategoriesService(): CategoriesService {
       return deletedCategory ? 1 : 0;
     },
     getCategories: async ({
-      limit = MONGODB_MAX_LIMIT.categories,
+      limit = MAX_LIMIT.categories,
       offset = 0
     } = {}): Promise<MultipleDocsResponse<ExistingCategory>> => {
       const CategoryModel = await getCategoryModel();

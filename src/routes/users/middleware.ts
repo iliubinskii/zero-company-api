@@ -1,20 +1,20 @@
 import {
+  ErrorCode,
   GetCompaniesByUserOptionsValidationSchema,
   GetUsersOptionsValidationSchema,
   UserCreateValidationSchema,
-  UserUpdateValidationSchema
-} from "../../validation-schema";
+  UserUpdateValidationSchema,
+  preprocessEmail
+} from "../../schema";
 import {
   assertDefined,
-  assertString,
   buildErrorResponse,
   filterUndefinedProperties,
   sendResponse
 } from "../../utils";
-import { ErrorCode } from "../../schema";
 import { StatusCodes } from "http-status-codes";
 import { UsersMiddleware } from "../../types";
-import { ZodError } from "zod";
+import zod from "zod";
 
 export const usersMiddleware: UsersMiddleware = {
   requireValidGetCompaniesByUserOptions: (req, res, next) => {
@@ -24,7 +24,7 @@ export const usersMiddleware: UsersMiddleware = {
       );
       next();
     } catch (err) {
-      if (err instanceof ZodError)
+      if (err instanceof zod.ZodError)
         sendResponse(
           res,
           StatusCodes.BAD_REQUEST,
@@ -40,7 +40,7 @@ export const usersMiddleware: UsersMiddleware = {
       );
       next();
     } catch (err) {
-      if (err instanceof ZodError)
+      if (err instanceof zod.ZodError)
         sendResponse(
           res,
           StatusCodes.BAD_REQUEST,
@@ -54,7 +54,7 @@ export const usersMiddleware: UsersMiddleware = {
       req.userCreate = UserCreateValidationSchema.parse(req.body);
       next();
     } catch (err) {
-      if (err instanceof ZodError)
+      if (err instanceof zod.ZodError)
         sendResponse(
           res,
           StatusCodes.BAD_REQUEST,
@@ -70,7 +70,7 @@ export const usersMiddleware: UsersMiddleware = {
       );
       next();
     } catch (err) {
-      if (err instanceof ZodError)
+      if (err instanceof zod.ZodError)
         sendResponse(
           res,
           StatusCodes.BAD_REQUEST,
@@ -83,8 +83,19 @@ export const usersMiddleware: UsersMiddleware = {
     req.userEmail = assertDefined(req.jwtUser).email;
     next();
   },
-  userEmailFromParams: (req, _res, next) => {
-    req.userEmail = assertString(req.params["email"]).toLowerCase();
-    next();
+  userEmailFromParams: (req, res, next) => {
+    const email = EmailValidationSchema.safeParse(req.params["email"]);
+
+    if (email.success) {
+      req.userEmail = email.data;
+      next();
+    } else
+      sendResponse(
+        res,
+        StatusCodes.BAD_REQUEST,
+        buildErrorResponse(ErrorCode.InvalidEmailParam)
+      );
   }
 };
+
+const EmailValidationSchema = preprocessEmail(zod.string().email());

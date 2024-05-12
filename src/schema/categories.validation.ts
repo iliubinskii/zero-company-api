@@ -1,4 +1,4 @@
-import { CategoryCreate, CategoryUpdate } from "../schema";
+import { CategoryCreate, CategoryUpdate } from "./categories";
 import { Equals } from "ts-toolbelt/out/Any/Equals";
 import zod from "zod";
 

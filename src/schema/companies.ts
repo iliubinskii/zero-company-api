@@ -1,8 +1,7 @@
 import { WebAccessibleImage, WebAccessibleImages } from "./common";
-import { strings } from "../types";
 
 export interface Company {
-  readonly categories: strings;
+  readonly categories: readonly string[];
   readonly description: string;
   readonly foundedAt: string;
   readonly founders: Founders;

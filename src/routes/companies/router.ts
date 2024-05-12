@@ -1,9 +1,9 @@
 import {
   nullifyEmptyStrings,
   parseNestedFormData,
+  requireIdParam,
   requireJwtAdmin,
-  requireJwtUser,
-  requireValidMongodbId
+  requireJwtUser
 } from "../../middleware";
 import { CompanyControllers } from "../../types";
 import { Router } from "express";
@@ -37,11 +37,11 @@ export function createCompaniesRouter(controllers: CompanyControllers): Router {
       requireValidCompanyCreate,
       controllers.addCompany
     )
-    .get("/:id", requireValidMongodbId("id"), controllers.getCompany)
+    .get("/:id", requireIdParam, controllers.getCompany)
     .put(
       "/:id",
       requireJwtAdmin,
-      requireValidMongodbId("id"),
+      requireIdParam,
       parseFormData,
       nullifyEmptyStrings,
       webAccessibleStorage,
@@ -49,12 +49,7 @@ export function createCompaniesRouter(controllers: CompanyControllers): Router {
       requireValidCompanyUpdate,
       controllers.updateCompany
     )
-    .delete(
-      "/:id",
-      requireJwtAdmin,
-      requireValidMongodbId("id"),
-      controllers.deleteCompany
-    );
+    .delete("/:id", requireJwtAdmin, requireIdParam, controllers.deleteCompany);
 
   return router;
 }

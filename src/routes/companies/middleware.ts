@@ -1,9 +1,10 @@
 import {
   CompanyCreateValidationSchema,
   CompanyUpdateValidationSchema,
-  GetCompaniesOptionsValidationSchema
-} from "../../validation-schema";
-import { ErrorCode, RoutesOld } from "../../schema";
+  ErrorCode,
+  GetCompaniesOptionsValidationSchema,
+  RoutesOld
+} from "../../schema";
 import {
   FieldType,
   parseFormData,
@@ -16,7 +17,7 @@ import {
 } from "../../utils";
 import { CompaniesMiddleware } from "../../types";
 import { StatusCodes } from "http-status-codes";
-import { ZodError } from "zod";
+import zod from "zod";
 
 export const companiesMiddleware: CompaniesMiddleware = {
   parseFormData: parseFormData({
@@ -30,7 +31,7 @@ export const companiesMiddleware: CompaniesMiddleware = {
       );
       next();
     } catch (err) {
-      if (err instanceof ZodError)
+      if (err instanceof zod.ZodError)
         sendResponseOld<RoutesOld["*"]["BAD_REQUEST"]["InvalidCompanyData"]>(
           res,
           StatusCodes.BAD_REQUEST,
@@ -46,7 +47,7 @@ export const companiesMiddleware: CompaniesMiddleware = {
       );
       next();
     } catch (err) {
-      if (err instanceof ZodError)
+      if (err instanceof zod.ZodError)
         sendResponseOld<RoutesOld["*"]["BAD_REQUEST"]["InvalidCompanyData"]>(
           res,
           StatusCodes.BAD_REQUEST,
@@ -62,7 +63,7 @@ export const companiesMiddleware: CompaniesMiddleware = {
       );
       next();
     } catch (err) {
-      if (err instanceof ZodError)
+      if (err instanceof zod.ZodError)
         sendResponseOld<RoutesOld["*"]["BAD_REQUEST"]["InvalidQuery"]>(
           res,
           StatusCodes.BAD_REQUEST,

@@ -119,7 +119,8 @@ export interface components {
     BadRequest: {
       content: {
         "application/json":
-          | components["schemas"]["EmailMismatch"]
+          | components["schemas"]["InvalidEmailParam"]
+          | components["schemas"]["InvalidIdParam"]
           | components["schemas"]["InvalidQuery"]
           | components["schemas"]["InvalidUserData"];
       };
@@ -196,11 +197,6 @@ export interface components {
     Delete: {
       affectedRows: number;
     };
-    EmailMismatch: {
-      /** @enum {string} */
-      error: "EmailMismatch";
-      errorMessage: string;
-    };
     Home: {
       schema: string;
       /** @enum {string} */
@@ -209,6 +205,16 @@ export interface components {
     InternalServerError: {
       /** @enum {string} */
       error: "InternalServerError";
+      errorMessage: string;
+    };
+    InvalidEmailParam: {
+      /** @enum {string} */
+      error: "InvalidEmailParam";
+      errorMessage: string;
+    };
+    InvalidIdParam: {
+      /** @enum {string} */
+      error: "InvalidIdParam";
       errorMessage: string;
     };
     InvalidQuery: {

@@ -4,6 +4,7 @@ import {
   AUTH_HEADER_NAME,
   AUTH_HEADER_PREFIX
 } from "../consts";
+import { JwtValidationSchema } from "../schema";
 import { RequestHandler } from "express";
 import jwt from "jsonwebtoken";
 import { lang } from "../langs";
@@ -21,7 +22,7 @@ export const appendJwt: RequestHandler = (req, _res, next) => {
         });
       else
         try {
-          const email = JwtValidationSchema.parse(decoded).email.toLowerCase();
+          const { email } = JwtValidationSchema.parse(decoded);
 
           req.jwtUser = {
             admin: ADMIN_EMAIL.includes(email),
@@ -38,12 +39,6 @@ export const appendJwt: RequestHandler = (req, _res, next) => {
 
   next();
 };
-
-const JwtValidationSchema = zod
-  // Do not use strictObject: JWT may contain additional fields
-  .object({
-    email: zod.string().email()
-  });
 
 /**
  * Get the token from the request.

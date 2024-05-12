@@ -1,5 +1,5 @@
-import { CompanyCreate, CompanyUpdate } from "../schema";
-import { preprocessBoolean, preprocessNumber } from "../utils";
+import { CompanyCreate, CompanyUpdate } from "./companies";
+import { preprocessBoolean, preprocessNumber } from "./functions";
 import { Equals } from "ts-toolbelt/out/Any/Equals";
 import zod from "zod";
 

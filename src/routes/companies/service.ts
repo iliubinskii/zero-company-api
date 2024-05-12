@@ -1,8 +1,12 @@
-import { Company, ExistingCompany, MultipleDocsResponse } from "../../schema";
+import {
+  Company,
+  ExistingCompany,
+  MAX_LIMIT,
+  MultipleDocsResponse
+} from "../../schema";
 import { buildMongodbQuery, filterUndefinedProperties } from "../../utils";
 import { CompaniesService } from "../../types";
 import { FilterQuery } from "mongoose";
-import { MONGODB_MAX_LIMIT } from "../../consts";
 import { Writable } from "ts-toolbelt/out/Object/Writable";
 import { getCompanyModel } from "./model";
 
@@ -35,7 +39,7 @@ export function createCompaniesService(): CompaniesService {
       cursor,
       founderEmail,
       includePrivateCompanies = false,
-      limit = MONGODB_MAX_LIMIT.companies,
+      limit = MAX_LIMIT.companies,
       offset = 0,
       onlyRecommended = false,
       sortBy = "name",

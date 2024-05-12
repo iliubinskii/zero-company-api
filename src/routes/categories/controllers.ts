@@ -35,7 +35,7 @@ export function createCategoryControllers(
       );
     }),
     deleteCategory: wrapAsyncHandler(async (req, res) => {
-      const id = assertDefined(req.params["id"]);
+      const id = assertDefined(req.idParam);
 
       const affectedRows = await service.deleteCategory(id);
 
@@ -57,7 +57,7 @@ export function createCategoryControllers(
       );
     }),
     getCategory: wrapAsyncHandler(async (req, res) => {
-      const id = assertDefined(req.params["id"]);
+      const id = assertDefined(req.idParam);
 
       const category = await service.getCategory(id);
 
@@ -75,7 +75,7 @@ export function createCategoryControllers(
         );
     }),
     getCompaniesByCategory: wrapAsyncHandler(async (req, res) => {
-      const id = assertDefined(req.params["id"]);
+      const id = assertDefined(req.idParam);
 
       const options = assertDefined(req.getCompaniesByCategoryOptions);
 
@@ -91,7 +91,7 @@ export function createCategoryControllers(
       );
     }),
     updateCategory: wrapAsyncHandler(async (req, res) => {
-      const id = assertDefined(req.params["id"]);
+      const id = assertDefined(req.idParam);
 
       const category = assertDefined(req.categoryUpdate);
 
