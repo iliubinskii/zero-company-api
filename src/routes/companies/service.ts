@@ -61,13 +61,19 @@ export function createCompaniesService(): CompaniesService {
       if (cursor) {
         const [sortByValue, id] = cursor;
 
+        const operatorMap = { asc: "$gt", desc: "$lt" } as const;
+
+        const operator = operatorMap[sortOrder];
+
         filter["$or"] = [
-          { [sortBy]: { $gt: sortByValue } },
-          { _id: { $gt: id }, [sortBy]: sortByValue }
+          { [sortBy]: { [operator]: sortByValue } },
+          { _id: { [operator]: id }, [sortBy]: sortByValue }
         ];
       }
 
-      const sortOrderNum = sortOrder === "asc" ? 1 : -1;
+      const sortOrderNumMap = { asc: 1, desc: -1 } as const;
+
+      const sortOrderNum = sortOrderNumMap[sortOrder];
 
       const CompanyModel = await getCompanyModel();
 
