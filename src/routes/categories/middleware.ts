@@ -13,69 +13,77 @@ import {
 } from "../../utils";
 import { CategoriesMiddleware } from "../../types";
 import { StatusCodes } from "http-status-codes";
-import zod from "zod";
 
 export const categoriesMiddleware: CategoriesMiddleware = {
   requireValidCategoryCreate: (req, res, next) => {
-    try {
-      req.categoryCreate = CategoryCreateValidationSchema.parse(req.body);
+    const categoryCreate = CategoryCreateValidationSchema.safeParse(req.body);
+
+    if (categoryCreate.success) {
+      req.categoryCreate = categoryCreate.data;
       next();
-    } catch (err) {
-      if (err instanceof zod.ZodError)
-        sendResponseOld<RoutesOld["*"]["BAD_REQUEST"]["InvalidCategoryData"]>(
-          res,
-          StatusCodes.BAD_REQUEST,
-          buildErrorResponse(ErrorCode.InvalidCategoryData, err.errors)
-        );
-      else throw err;
-    }
+    } else
+      sendResponseOld<RoutesOld["*"]["BAD_REQUEST"]["InvalidCategoryData"]>(
+        res,
+        StatusCodes.BAD_REQUEST,
+        buildErrorResponse(
+          ErrorCode.InvalidCategoryData,
+          categoryCreate.error.errors
+        )
+      );
   },
   requireValidCategoryUpdate: (req, res, next) => {
-    try {
-      req.categoryUpdate = filterUndefinedProperties(
-        CategoryUpdateValidationSchema.parse(req.body)
-      );
+    const categoryUpdate = CategoryUpdateValidationSchema.safeParse(req.body);
+
+    if (categoryUpdate.success) {
+      req.categoryUpdate = filterUndefinedProperties(categoryUpdate.data);
       next();
-    } catch (err) {
-      if (err instanceof zod.ZodError)
-        sendResponseOld<RoutesOld["*"]["BAD_REQUEST"]["InvalidCategoryData"]>(
-          res,
-          StatusCodes.BAD_REQUEST,
-          buildErrorResponse(ErrorCode.InvalidCategoryData, err.errors)
-        );
-      else throw err;
-    }
+    } else
+      sendResponseOld<RoutesOld["*"]["BAD_REQUEST"]["InvalidCategoryData"]>(
+        res,
+        StatusCodes.BAD_REQUEST,
+        buildErrorResponse(
+          ErrorCode.InvalidCategoryData,
+          categoryUpdate.error.errors
+        )
+      );
   },
   requireValidGetCategoriesOptions: (req, res, next) => {
-    try {
+    const getCategoriesOptions = GetCategoriesOptionsValidationSchema.safeParse(
+      req.query
+    );
+
+    if (getCategoriesOptions.success) {
       req.getCategoriesOptions = filterUndefinedProperties(
-        GetCategoriesOptionsValidationSchema.parse(req.query)
+        getCategoriesOptions.data
       );
       next();
-    } catch (err) {
-      if (err instanceof zod.ZodError)
-        sendResponseOld<RoutesOld["*"]["BAD_REQUEST"]["InvalidQuery"]>(
-          res,
-          StatusCodes.BAD_REQUEST,
-          buildErrorResponse(ErrorCode.InvalidQuery, err.errors)
-        );
-      else throw err;
-    }
+    } else
+      sendResponseOld<RoutesOld["*"]["BAD_REQUEST"]["InvalidQuery"]>(
+        res,
+        StatusCodes.BAD_REQUEST,
+        buildErrorResponse(
+          ErrorCode.InvalidQuery,
+          getCategoriesOptions.error.errors
+        )
+      );
   },
   requireValidGetCompaniesByCategoryOptions: (req, res, next) => {
-    try {
+    const getCompaniesByCategoryOptions =
+      GetCompaniesByCategoryOptionsValidationSchema.safeParse(req.query);
+
+    if (getCompaniesByCategoryOptions.success) {
       req.getCompaniesByCategoryOptions = filterUndefinedProperties(
-        GetCompaniesByCategoryOptionsValidationSchema.parse(req.query)
+        getCompaniesByCategoryOptions.data
       );
       next();
-    } catch (err) {
-      if (err instanceof zod.ZodError)
-        sendResponseOld<RoutesOld["*"]["BAD_REQUEST"]["InvalidQuery"]>(
-          res,
-          StatusCodes.BAD_REQUEST,
-          buildErrorResponse(ErrorCode.InvalidQuery, err.errors)
-        );
-      else throw err;
-    }
+    } else
+      sendResponseOld<RoutesOld["*"]["BAD_REQUEST"]["InvalidQuery"]>(
+        res,
+        StatusCodes.BAD_REQUEST,
+        buildErrorResponse(
+          ErrorCode.InvalidQuery,
+          getCompaniesByCategoryOptions.error.errors
+        )
+      );
   }
 };

@@ -18,66 +18,64 @@ import zod from "zod";
 
 export const usersMiddleware: UsersMiddleware = {
   requireValidGetCompaniesByUserOptions: (req, res, next) => {
-    try {
+    const getCompaniesByUserOptions =
+      GetCompaniesByUserOptionsValidationSchema.safeParse(req.query);
+
+    if (getCompaniesByUserOptions.success) {
       req.getCompaniesByUserOptions = filterUndefinedProperties(
-        GetCompaniesByUserOptionsValidationSchema.parse(req.query)
+        getCompaniesByUserOptions.data
       );
       next();
-    } catch (err) {
-      if (err instanceof zod.ZodError)
-        sendResponse(
-          res,
-          StatusCodes.BAD_REQUEST,
-          buildErrorResponse(ErrorCode.InvalidQuery, err.errors)
-        );
-      else throw err;
-    }
+    } else
+      sendResponse(
+        res,
+        StatusCodes.BAD_REQUEST,
+        buildErrorResponse(
+          ErrorCode.InvalidQuery,
+          getCompaniesByUserOptions.error.errors
+        )
+      );
   },
   requireValidGetUsersOptions: (req, res, next) => {
-    try {
-      req.getUsersOptions = filterUndefinedProperties(
-        GetUsersOptionsValidationSchema.parse(req.query)
-      );
+    const getUsersOptions = GetUsersOptionsValidationSchema.safeParse(
+      req.query
+    );
+
+    if (getUsersOptions.success) {
+      req.getUsersOptions = filterUndefinedProperties(getUsersOptions.data);
       next();
-    } catch (err) {
-      if (err instanceof zod.ZodError)
-        sendResponse(
-          res,
-          StatusCodes.BAD_REQUEST,
-          buildErrorResponse(ErrorCode.InvalidQuery, err.errors)
-        );
-      else throw err;
-    }
+    } else
+      sendResponse(
+        res,
+        StatusCodes.BAD_REQUEST,
+        buildErrorResponse(ErrorCode.InvalidQuery, getUsersOptions.error.errors)
+      );
   },
   requireValidUserCreate: (req, res, next) => {
-    try {
-      req.userCreate = UserCreateValidationSchema.parse(req.body);
+    const userCreate = UserCreateValidationSchema.safeParse(req.body);
+
+    if (userCreate.success) {
+      req.userCreate = userCreate.data;
       next();
-    } catch (err) {
-      if (err instanceof zod.ZodError)
-        sendResponse(
-          res,
-          StatusCodes.BAD_REQUEST,
-          buildErrorResponse(ErrorCode.InvalidUserData, err.errors)
-        );
-      else throw err;
-    }
+    } else
+      sendResponse(
+        res,
+        StatusCodes.BAD_REQUEST,
+        buildErrorResponse(ErrorCode.InvalidUserData, userCreate.error.errors)
+      );
   },
   requireValidUserUpdate: (req, res, next) => {
-    try {
-      req.userUpdate = filterUndefinedProperties(
-        UserUpdateValidationSchema.parse(req.body)
-      );
+    const userUpdate = UserUpdateValidationSchema.safeParse(req.body);
+
+    if (userUpdate.success) {
+      req.userUpdate = filterUndefinedProperties(userUpdate.data);
       next();
-    } catch (err) {
-      if (err instanceof zod.ZodError)
-        sendResponse(
-          res,
-          StatusCodes.BAD_REQUEST,
-          buildErrorResponse(ErrorCode.InvalidUserData, err.errors)
-        );
-      else throw err;
-    }
+    } else
+      sendResponse(
+        res,
+        StatusCodes.BAD_REQUEST,
+        buildErrorResponse(ErrorCode.InvalidUserData, userUpdate.error.errors)
+      );
   },
   userEmailFromJwtUser: (req, _res, next) => {
     req.userEmail = assertDefined(req.jwtUser).email;

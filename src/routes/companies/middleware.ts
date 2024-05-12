@@ -17,7 +17,6 @@ import {
 } from "../../utils";
 import { CompaniesMiddleware } from "../../types";
 import { StatusCodes } from "http-status-codes";
-import zod from "zod";
 
 export const companiesMiddleware: CompaniesMiddleware = {
   parseFormData: parseFormData({
@@ -25,52 +24,56 @@ export const companiesMiddleware: CompaniesMiddleware = {
     logo: 1
   }),
   requireValidCompanyCreate: (req, res, next) => {
-    try {
-      req.companyCreate = filterUndefinedProperties(
-        CompanyCreateValidationSchema.parse(req.body)
-      );
+    const companyCreate = CompanyCreateValidationSchema.safeParse(req.body);
+
+    if (companyCreate.success) {
+      req.companyCreate = filterUndefinedProperties(companyCreate.data);
       next();
-    } catch (err) {
-      if (err instanceof zod.ZodError)
-        sendResponseOld<RoutesOld["*"]["BAD_REQUEST"]["InvalidCompanyData"]>(
-          res,
-          StatusCodes.BAD_REQUEST,
-          buildErrorResponse(ErrorCode.InvalidCompanyData, err.errors)
-        );
-      else throw err;
-    }
+    } else
+      sendResponseOld<RoutesOld["*"]["BAD_REQUEST"]["InvalidCompanyData"]>(
+        res,
+        StatusCodes.BAD_REQUEST,
+        buildErrorResponse(
+          ErrorCode.InvalidCompanyData,
+          companyCreate.error.errors
+        )
+      );
   },
   requireValidCompanyUpdate: (req, res, next) => {
-    try {
-      req.companyUpdate = filterUndefinedProperties(
-        CompanyUpdateValidationSchema.parse(req.body)
-      );
+    const companyUpdate = CompanyUpdateValidationSchema.safeParse(req.body);
+
+    if (companyUpdate.success) {
+      req.companyUpdate = filterUndefinedProperties(companyUpdate.data);
       next();
-    } catch (err) {
-      if (err instanceof zod.ZodError)
-        sendResponseOld<RoutesOld["*"]["BAD_REQUEST"]["InvalidCompanyData"]>(
-          res,
-          StatusCodes.BAD_REQUEST,
-          buildErrorResponse(ErrorCode.InvalidCompanyData, err.errors)
-        );
-      else throw err;
-    }
+    } else
+      sendResponseOld<RoutesOld["*"]["BAD_REQUEST"]["InvalidCompanyData"]>(
+        res,
+        StatusCodes.BAD_REQUEST,
+        buildErrorResponse(
+          ErrorCode.InvalidCompanyData,
+          companyUpdate.error.errors
+        )
+      );
   },
   requireValidGetCompaniesOptions: (req, res, next) => {
-    try {
+    const getCompaniesOptions = GetCompaniesOptionsValidationSchema.safeParse(
+      req.query
+    );
+
+    if (getCompaniesOptions.success) {
       req.getCompaniesOptions = filterUndefinedProperties(
-        GetCompaniesOptionsValidationSchema.parse(req.query)
+        getCompaniesOptions.data
       );
       next();
-    } catch (err) {
-      if (err instanceof zod.ZodError)
-        sendResponseOld<RoutesOld["*"]["BAD_REQUEST"]["InvalidQuery"]>(
-          res,
-          StatusCodes.BAD_REQUEST,
-          buildErrorResponse(ErrorCode.InvalidQuery, err.errors)
-        );
-      else throw err;
-    }
+    } else
+      sendResponseOld<RoutesOld["*"]["BAD_REQUEST"]["InvalidQuery"]>(
+        res,
+        StatusCodes.BAD_REQUEST,
+        buildErrorResponse(
+          ErrorCode.InvalidQuery,
+          getCompaniesOptions.error.errors
+        )
+      );
   },
   webAccessibleStorage: webAccessibleStorage({
     images: FieldType.multiple,
