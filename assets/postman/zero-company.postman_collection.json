@@ -57,11 +57,11 @@
               "listen": "test",
               "script": {
                 "exec": [
-                  "var { _id } = JSON.parse(responseBody);\r",
-                  "if (_id) postman.setEnvironmentVariable(\"lastCategoryId\", _id);"
+                  "var { _id } = pm.response.json();\r",
+                  "if (_id) pm.environment.set(\"lastCategoryId\", _id);"
                 ],
-                "packages": {},
-                "type": "text/javascript"
+                "type": "text/javascript",
+                "packages": {}
               }
             }
           ],
@@ -404,6 +404,97 @@
       "name": "Companies",
       "item": [
         {
+          "name": "Cursor testing",
+          "item": [
+            {
+              "name": "Get all / cursor next",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "var { nextCursor } = pm.response.json();\r",
+                      "\r",
+                      "if (nextCursor) {\r",
+                      "  pm.environment.set(\"nextCursor[0]\", nextCursor[0]);\r",
+                      "  pm.environment.set(\"nextCursor[1]\", nextCursor[1]);\r",
+                      "}\r",
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {}
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{apiUrl}}companies?limit=3&cursor[0]={{nextCursor[0]}}&cursor[1]={{nextCursor[1]}}",
+                  "host": ["{{apiUrl}}companies"],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "3"
+                    },
+                    {
+                      "key": "cursor[0]",
+                      "value": "{{nextCursor[0]}}"
+                    },
+                    {
+                      "key": "cursor[1]",
+                      "value": "{{nextCursor[1]}}"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get all / cursor",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "var { nextCursor } = pm.response.json();\r",
+                      "\r",
+                      "if (nextCursor) {\r",
+                      "  pm.environment.set(\"nextCursor[0]\", nextCursor[0]);\r",
+                      "  pm.environment.set(\"nextCursor[1]\", nextCursor[1]);\r",
+                      "}\r",
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {}
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{apiUrl}}companies?limit=3",
+                  "host": ["{{apiUrl}}companies"],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "3"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
           "name": "Get all",
           "request": {
             "auth": {
@@ -419,6 +510,48 @@
           "response": []
         },
         {
+          "name": "Get all / includePrivateCompanies",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{apiUrl}}companies?includePrivateCompanies=true",
+              "host": ["{{apiUrl}}companies"],
+              "query": [
+                {
+                  "key": "includePrivateCompanies",
+                  "value": "true"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get all / onlyRecommended",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{apiUrl}}companies?onlyRecommended=true",
+              "host": ["{{apiUrl}}companies"],
+              "query": [
+                {
+                  "key": "onlyRecommended",
+                  "value": "true"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
           "name": "Get all / pagination",
           "request": {
             "auth": {
@@ -427,7 +560,7 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{apiUrl}}companies?offset=1&limit=4",
+              "raw": "{{apiUrl}}companies?offset=1&limit=3",
               "host": ["{{apiUrl}}companies"],
               "query": [
                 {
@@ -436,36 +569,7 @@
                 },
                 {
                   "key": "limit",
-                  "value": "4"
-                }
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Get all / pagination with cursor",
-          "request": {
-            "auth": {
-              "type": "noauth"
-            },
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{apiUrl}}companies?offset=1&limit=4&cursor=[\"Bespoke%20Cotton%20Bacon\",\"6637a383b3e893d62b885181\"]",
-              "host": ["{{apiUrl}}companies"],
-              "query": [
-                {
-                  "key": "offset",
-                  "value": "1"
-                },
-                {
-                  "key": "limit",
-                  "value": "4"
-                },
-                {
-                  "key": "cursor",
-                  "value": "[\"Bespoke%20Cotton%20Bacon\",\"6637a383b3e893d62b885181\"]"
+                  "value": "3"
                 }
               ]
             }
@@ -479,8 +583,8 @@
               "listen": "test",
               "script": {
                 "exec": [
-                  "var { _id } = JSON.parse(responseBody);\r",
-                  "if (_id) postman.setEnvironmentVariable(\"lastCompanyId\", _id);"
+                  "var { _id } = pm.response.json();\r",
+                  "if (_id) pm.environment.set(\"lastCompanyId\", _id);"
                 ],
                 "type": "text/javascript",
                 "packages": {}
@@ -554,6 +658,16 @@
                   "type": "text"
                 },
                 {
+                  "key": "founders[0].firstName",
+                  "value": "John",
+                  "type": "text"
+                },
+                {
+                  "key": "founders[0].lastName",
+                  "value": "Smith",
+                  "type": "text"
+                },
+                {
                   "key": "founders[0].share",
                   "value": "10000",
                   "type": "text"
@@ -584,16 +698,6 @@
                 {
                   "key": "website",
                   "value": "http://cats.com/",
-                  "type": "text"
-                },
-                {
-                  "key": "founders[0].firstName",
-                  "value": "John",
-                  "type": "text"
-                },
-                {
-                  "key": "founders[0].lastName",
-                  "value": "Smith",
                   "type": "text"
                 }
               ]
@@ -889,14 +993,6 @@
               "host": ["{{apiUrl}}companies"],
               "path": ["{{lastCompanyId}}"]
             }
-          },
-          "response": []
-        },
-        {
-          "name": "New Request",
-          "request": {
-            "method": "GET",
-            "header": []
           },
           "response": []
         }
@@ -1957,17 +2053,17 @@
     {
       "listen": "prerequest",
       "script": {
-        "exec": [""],
+        "type": "text/javascript",
         "packages": {},
-        "type": "text/javascript"
+        "exec": [""]
       }
     },
     {
       "listen": "test",
       "script": {
-        "exec": [""],
+        "type": "text/javascript",
         "packages": {},
-        "type": "text/javascript"
+        "exec": [""]
       }
     }
   ]
