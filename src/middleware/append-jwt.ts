@@ -9,7 +9,6 @@ import { RequestHandler } from "express";
 import jwt from "jsonwebtoken";
 import { lang } from "../langs";
 import { logger } from "../services";
-import zod from "zod";
 
 export const appendJwt: RequestHandler = (req, _res, next) => {
   const token = getToken(req);
@@ -20,21 +19,19 @@ export const appendJwt: RequestHandler = (req, _res, next) => {
         logger.warn(lang.JwtVerificationFailed, jwtError, {
           requestId: req.requestId
         });
-      else
-        try {
-          const { email } = JwtValidationSchema.parse(decoded);
+      else {
+        const jwt = JwtValidationSchema.safeParse(decoded);
 
+        if (jwt.success)
           req.jwtUser = {
-            admin: ADMIN_EMAIL.includes(email),
-            email
+            admin: ADMIN_EMAIL.includes(jwt.data.email),
+            email: jwt.data.email
           };
-        } catch (err) {
-          if (err instanceof zod.ZodError)
-            logger.warn(lang.JwtVerificationFailed, err, {
-              requestId: req.requestId
-            });
-          else throw err;
-        }
+        else
+          logger.warn(lang.JwtVerificationFailed, jwt.error, {
+            requestId: req.requestId
+          });
+      }
     });
 
   next();
