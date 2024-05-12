@@ -282,13 +282,20 @@ components:
     CompanyList:
       type: object
       required:
+        - count
         - docs
         - total
       properties:
+        count:
+          type: integer
         docs:
           type: array
           items:
             $ref: "#/components/schemas/Company"
+        nextCursor:
+          type: array
+          items:
+            type: string
         total:
           type: integer
 
@@ -447,13 +454,20 @@ components:
     UserList:
       type: object
       required:
+        - count
         - docs
         - total
       properties:
+        count:
+          type: integer
         docs:
           type: array
           items:
             $ref: "#/components/schemas/User"
+        nextCursor:
+          type: array
+          items:
+            type: string
         total:
           type: integer
 

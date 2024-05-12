@@ -222,7 +222,9 @@ export interface components {
       _id: string;
     };
     CompanyList: {
+      count: number;
       docs: components["schemas"]["Company"][];
+      nextCursor?: string[];
       total: number;
     };
     Delete: {
@@ -278,7 +280,9 @@ export interface components {
       errorMessage: string;
     };
     UserList: {
+      count: number;
       docs: components["schemas"]["User"][];
+      nextCursor?: string[];
       total: number;
     };
     UserNotFound: {
