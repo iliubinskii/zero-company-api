@@ -9,33 +9,31 @@ const Schema = {
   lastName: { required: true, type: String }
 } as const;
 
-export const { getUserModel } = userModelSingleton();
+export const getUserModel: GetUserModel = createSingleton();
+
+export interface GetUserModel {
+  (): Promise<mongoose.Model<User>>;
+}
 
 /**
  * Creates a user model singleton.
  * @returns A user model singleton.
  */
-function userModelSingleton(): UserModelSingleton {
+function createSingleton(): GetUserModel {
   let model: mongoose.Model<User> | undefined;
 
-  return {
-    getUserModel: async (): Promise<mongoose.Model<User>> => {
-      const connection = await getMongodbConnection();
+  return async () => {
+    const connection = await getMongodbConnection();
 
-      model =
-        model ??
-        connection.model<User>(
-          "User",
-          new mongoose.Schema<User>(Schema, { versionKey: false })
-        );
+    model =
+      model ??
+      connection.model<User>(
+        "User",
+        new mongoose.Schema<User>(Schema, { versionKey: false })
+      );
 
-      return model;
-    }
+    return model;
   };
-}
-
-interface UserModelSingleton {
-  readonly getUserModel: () => Promise<mongoose.Model<User>>;
 }
 
 // Type check the user schema

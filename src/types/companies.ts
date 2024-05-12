@@ -17,9 +17,6 @@ export interface CompanyControllers {
 
 export interface CompaniesMiddleware {
   readonly parseFormData: RequestHandler;
-  readonly requireValidCompanyCreate: RequestHandler;
-  readonly requireValidCompanyUpdate: RequestHandler;
-  readonly requireValidGetCompaniesOptions: RequestHandler;
   readonly webAccessibleStorage: RequestHandler;
 }
 

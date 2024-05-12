@@ -31,6 +31,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/UserList"
+        "400":
+          $ref: "#/components/responses/InvalidQuery"
 
   # User path
   /users/{email}:
@@ -59,6 +61,8 @@ paths:
       responses:
         "201":
           $ref: "#/components/responses/User"
+        "400":
+          $ref: "#/components/responses/InvalidUserData"
         "409":
           $ref: "#/components/responses/UserAlreadyExists"
     put:
@@ -68,6 +72,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/User"
+        "400":
+          $ref: "#/components/responses/InvalidUserData"
         "404":
           $ref: "#/components/responses/UserNotFound"
 
@@ -82,18 +88,36 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/CompanyList"
+        "400":
+          $ref: "#/components/responses/InvalidQuery"
 
-  # Common responses
-  /*:
+  # BadRequest response
+  /400:
     get:
-      summary: Common responses for all endpoints
+      summary: Bad request
       tags:
-        - all
+        - common
       responses:
         "400":
           $ref: "#/components/responses/BadRequest"
+
+  # NotFound response
+  /404:
+    get:
+      summary: Not found
+      tags:
+        - common
+      responses:
         "404":
           $ref: "#/components/responses/NotFound"
+
+  # InternalServerError response
+  /500:
+    get:
+      summary: Internal server error
+      tags:
+        - common
+      responses:
         "500":
           $ref: "#/components/responses/InternalServerError"
 
@@ -128,11 +152,7 @@ components:
       content:
         application/json:
           schema:
-            oneOf:
-              - $ref: "#/components/schemas/InvalidEmailParam"
-              - $ref: "#/components/schemas/InvalidIdParam"
-              - $ref: "#/components/schemas/InvalidQuery"
-              - $ref: "#/components/schemas/InvalidUserData"
+            $ref: "#/components/schemas/BadRequest"
 
     # Company response
     Company:
@@ -173,6 +193,22 @@ components:
         application/json:
           schema:
             $ref: "#/components/schemas/InternalServerError"
+
+    # InvalidQuery response
+    InvalidQuery:
+      description: Invalid query
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/InvalidQuery"
+
+    # InvalidUserData response
+    InvalidUserData:
+      description: Invalid user data
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/InvalidUserData"
 
     # NotFound response
     NotFound:
@@ -216,6 +252,22 @@ components:
 
   # Schemas
   schemas:
+
+    # BadRequest schema
+    BadRequest:
+      type: object
+      required:
+        - error
+        - errorMessage
+      properties:
+        error:
+          type: string
+          enum:
+            - BadRequest
+            - InvalidEmailParam
+            - InvalidIdParam
+        errorMessage:
+          type: string
 
     # Company schema
     Company:
@@ -274,20 +326,6 @@ components:
           type: string
           enum:
             - InternalServerError
-        errorMessage:
-          type: string
-
-    # InvalidEmailParam schema
-    InvalidEmailParam:
-      type: object
-      required:
-        - error
-        - errorMessage
-      properties:
-        error:
-          type: string
-          enum:
-            - InvalidEmailParam
         errorMessage:
           type: string
 

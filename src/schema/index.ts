@@ -6,7 +6,6 @@ export * from "./common";
 export * from "./companies";
 export * from "./companies.validation";
 export * from "./consts";
-export * from "./functions";
 export * from "./get-all-options";
 export * from "./get-all-options.validation";
 export type { paths as Routes } from "./routes";

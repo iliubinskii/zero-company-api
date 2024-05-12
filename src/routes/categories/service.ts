@@ -1,9 +1,5 @@
-import {
-  ExistingCategory,
-  MAX_LIMIT,
-  MultipleDocsResponse
-} from "../../schema";
 import { CategoriesService } from "../../types";
+import { MAX_LIMIT } from "../../schema";
 import { buildMongodbQuery } from "../../utils";
 import { getCategoryModel } from "./model";
 
@@ -13,7 +9,7 @@ import { getCategoryModel } from "./model";
  */
 export function createCategoriesService(): CategoriesService {
   return {
-    addCategory: async (category): Promise<ExistingCategory> => {
+    addCategory: async category => {
       const CategoryModel = await getCategoryModel();
 
       const model = new CategoryModel(category);
@@ -24,7 +20,7 @@ export function createCategoriesService(): CategoriesService {
 
       return { _id: _id.toString(), ...rest };
     },
-    deleteCategory: async (id): Promise<number> => {
+    deleteCategory: async id => {
       const CategoryModel = await getCategoryModel();
 
       const deletedCategory = await CategoryModel.findByIdAndDelete(id);
@@ -34,7 +30,7 @@ export function createCategoriesService(): CategoriesService {
     getCategories: async ({
       limit = MAX_LIMIT.categories,
       offset = 0
-    } = {}): Promise<MultipleDocsResponse<ExistingCategory>> => {
+    } = {}) => {
       const CategoryModel = await getCategoryModel();
 
       const [categories, total] = await Promise.all([
@@ -52,7 +48,7 @@ export function createCategoriesService(): CategoriesService {
         total
       };
     },
-    getCategory: async (id): Promise<ExistingCategory | undefined> => {
+    getCategory: async id => {
       const CategoryModel = await getCategoryModel();
 
       const category = await CategoryModel.findById(id);
@@ -65,10 +61,7 @@ export function createCategoriesService(): CategoriesService {
 
       return undefined;
     },
-    updateCategory: async (
-      id,
-      category
-    ): Promise<ExistingCategory | undefined> => {
+    updateCategory: async (id, category) => {
       const CategoryModel = await getCategoryModel();
 
       const updatedCategory = await CategoryModel.findByIdAndUpdate(

@@ -1,4 +1,4 @@
-import { preprocessEmail } from "./functions";
+import { preprocessEmail } from "./common";
 import zod from "zod";
 
 export const JwtValidationSchema = zod

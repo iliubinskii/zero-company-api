@@ -1,8 +1,16 @@
 import { CompaniesService, UserControllers, UsersService } from "../../types";
-import { ErrorCode, Routes } from "../../schema";
+import {
+  ErrorCode,
+  GetCompaniesByUserOptionsValidationSchema,
+  GetUsersOptionsValidationSchema,
+  Routes,
+  UserCreateValidationSchema,
+  UserUpdateValidationSchema
+} from "../../schema";
 import {
   assertDefined,
   buildErrorResponse,
+  filterUndefinedProperties,
   sendResponse,
   wrapAsyncHandler
 } from "../../utils";
@@ -22,21 +30,28 @@ export function createUserControllers(
     addUser: wrapAsyncHandler(async (req, res) => {
       const email = assertDefined(req.userEmail);
 
-      const user = assertDefined(req.userCreate);
+      const user = UserCreateValidationSchema.safeParse(req.body);
 
-      const addedUser = await service.addUser({ email, ...user });
+      if (user.success) {
+        const addedUser = await service.addUser({ ...user.data, email });
 
-      if (addedUser)
+        if (addedUser)
+          sendResponse<Routes["/users/{email}"]["post"]>(
+            res,
+            StatusCodes.CREATED,
+            addedUser
+          );
+        else
+          sendResponse<Routes["/users/{email}"]["post"]>(
+            res,
+            StatusCodes.CONFLICT,
+            buildErrorResponse(ErrorCode.UserAlreadyExists)
+          );
+      } else
         sendResponse<Routes["/users/{email}"]["post"]>(
           res,
-          StatusCodes.CREATED,
-          addedUser
-        );
-      else
-        sendResponse<Routes["/users/{email}"]["post"]>(
-          res,
-          StatusCodes.CONFLICT,
-          buildErrorResponse(ErrorCode.UserAlreadyExists)
+          StatusCodes.BAD_REQUEST,
+          buildErrorResponse(ErrorCode.InvalidUserData, user.error)
         );
     }),
     deleteUser: wrapAsyncHandler(async (req, res) => {
@@ -51,18 +66,27 @@ export function createUserControllers(
     getCompaniesByUser: wrapAsyncHandler(async (req, res) => {
       const email = assertDefined(req.userEmail);
 
-      const options = assertDefined(req.getCompaniesByUserOptions);
-
-      const companies = await companiesService.getCompanies({
-        ...options,
-        founderEmail: email
-      });
-
-      sendResponse<Routes["/users/{email}/companies"]["get"]>(
-        res,
-        StatusCodes.OK,
-        companies
+      const options = GetCompaniesByUserOptionsValidationSchema.safeParse(
+        req.query
       );
+
+      if (options.success) {
+        const companies = await companiesService.getCompanies({
+          ...filterUndefinedProperties(options.data),
+          founderEmail: email
+        });
+
+        sendResponse<Routes["/users/{email}/companies"]["get"]>(
+          res,
+          StatusCodes.OK,
+          companies
+        );
+      } else
+        sendResponse<Routes["/users/{email}/companies"]["get"]>(
+          res,
+          StatusCodes.BAD_REQUEST,
+          buildErrorResponse(ErrorCode.InvalidQuery, options.error)
+        );
     }),
     getUser: wrapAsyncHandler(async (req, res) => {
       const email = assertDefined(req.userEmail);
@@ -83,30 +107,49 @@ export function createUserControllers(
         );
     }),
     getUsers: wrapAsyncHandler(async (req, res) => {
-      const options = assertDefined(req.getUsersOptions);
+      const options = GetUsersOptionsValidationSchema.safeParse(req.query);
 
-      const users = await service.getUsers(options);
+      if (options.success) {
+        const users = await service.getUsers(
+          filterUndefinedProperties(options.data)
+        );
 
-      sendResponse<Routes["/users"]["get"]>(res, StatusCodes.OK, users);
+        sendResponse<Routes["/users"]["get"]>(res, StatusCodes.OK, users);
+      } else
+        sendResponse<Routes["/users"]["get"]>(
+          res,
+          StatusCodes.BAD_REQUEST,
+          buildErrorResponse(ErrorCode.InvalidQuery, options.error)
+        );
     }),
     updateUser: wrapAsyncHandler(async (req, res) => {
       const email = assertDefined(req.userEmail);
 
-      const user = assertDefined(req.userUpdate);
+      const user = UserUpdateValidationSchema.safeParse(req.body);
 
-      const updatedUser = await service.updateUser(email, user);
-
-      if (updatedUser)
-        sendResponse<Routes["/users/{email}"]["put"]>(
-          res,
-          StatusCodes.OK,
-          updatedUser
+      if (user.success) {
+        const updatedUser = await service.updateUser(
+          email,
+          filterUndefinedProperties(user.data)
         );
-      else
+
+        if (updatedUser)
+          sendResponse<Routes["/users/{email}"]["put"]>(
+            res,
+            StatusCodes.OK,
+            updatedUser
+          );
+        else
+          sendResponse<Routes["/users/{email}"]["put"]>(
+            res,
+            StatusCodes.NOT_FOUND,
+            buildErrorResponse(ErrorCode.UserNotFound)
+          );
+      } else
         sendResponse<Routes["/users/{email}"]["put"]>(
           res,
-          StatusCodes.NOT_FOUND,
-          buildErrorResponse(ErrorCode.UserNotFound)
+          StatusCodes.BAD_REQUEST,
+          buildErrorResponse(ErrorCode.InvalidUserData, user.error)
         );
     })
   };

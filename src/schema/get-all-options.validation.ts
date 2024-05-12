@@ -5,7 +5,7 @@ import {
   GetCompaniesOptions,
   GetUsersOptions
 } from "./get-all-options";
-import { preprocessBoolean, preprocessNumber } from "./functions";
+import { preprocessBoolean, preprocessNumber } from "./common";
 import { Equals } from "ts-toolbelt/out/Any/Equals";
 import { MAX_LIMIT } from "./consts";
 import zod from "zod";

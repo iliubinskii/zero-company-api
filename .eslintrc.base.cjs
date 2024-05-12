@@ -50,7 +50,19 @@ const config = {
     "unused-imports"
   ],
   rules: {
-    "@typescript-eslint/explicit-function-return-type": "warn",
+    "@typescript-eslint/explicit-function-return-type": [
+      "warn",
+      {
+        allowConciseArrowFunctionExpressionsStartingWithVoid: false,
+        allowDirectConstAssertionInArrowFunctions: true,
+        allowExpressions: true,
+        allowFunctionsWithoutTypeParameters: false,
+        allowHigherOrderFunctions: true,
+        allowIIFEs: false,
+        allowTypedFunctionExpressions: true,
+        allowedNames: []
+      }
+    ],
     "@typescript-eslint/restrict-template-expressions": [
       "warn",
       { allowNumber: true }
@@ -94,6 +106,7 @@ const config = {
     "no-use-before-define": "off",
     "node/no-missing-import": "off",
     "node/no-unsupported-features/es-syntax": "off",
+    "prefer-destructuring": "off",
     "prettier/prettier": [
       "warn",
       {

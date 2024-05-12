@@ -1,6 +1,11 @@
 import { CompanyCreate, CompanyUpdate } from "./companies";
-import { preprocessBoolean, preprocessNumber } from "./functions";
+import {
+  IdValidationSchema,
+  preprocessBoolean,
+  preprocessNumber
+} from "./common";
 import { Equals } from "ts-toolbelt/out/Any/Equals";
+import { MAX_CATEGORIES } from "./consts";
 import zod from "zod";
 
 const founder = zod.strictObject({
@@ -18,7 +23,7 @@ const webAccessibleImage = zod.strictObject({
   width: zod.number().int().positive()
 });
 
-const categories = zod.array(zod.string().min(1)).nonempty().max(2);
+const categories = zod.array(IdValidationSchema).nonempty().max(MAX_CATEGORIES);
 
 const description = zod.string().min(1);
 

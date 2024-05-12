@@ -1,7 +1,6 @@
 import { requireIdParam, requireJwtAdmin } from "../../middleware";
 import { CategoryControllers } from "../../types";
 import { Router } from "express";
-import { categoriesMiddleware } from "./middleware";
 
 /**
  * Creates a router for category routes.
@@ -11,38 +10,15 @@ import { categoriesMiddleware } from "./middleware";
 export function createCategoriesRouter(
   controllers: CategoryControllers
 ): Router {
-  const {
-    requireValidCategoryCreate,
-    requireValidCategoryUpdate,
-    requireValidGetCategoriesOptions,
-    requireValidGetCompaniesByCategoryOptions
-  } = categoriesMiddleware;
-
   const router = Router();
 
   router
-    .get("/", requireValidGetCategoriesOptions, controllers.getCategories)
-    .post(
-      "/",
-      requireJwtAdmin,
-      requireValidCategoryCreate,
-      controllers.addCategory
-    )
+    .get("/", controllers.getCategories)
+    .post("/", requireJwtAdmin, controllers.addCategory)
     .get("/:id", requireIdParam, controllers.getCategory)
-    .put(
-      "/:id",
-      requireJwtAdmin,
-      requireIdParam,
-      requireValidCategoryUpdate,
-      controllers.updateCategory
-    )
+    .put("/:id", requireJwtAdmin, requireIdParam, controllers.updateCategory)
     .delete("/:id", requireJwtAdmin, requireIdParam, controllers.deleteCategory)
-    .get(
-      "/:id/companies",
-      requireIdParam,
-      requireValidGetCompaniesByCategoryOptions,
-      controllers.getCompaniesByCategory
-    );
+    .get("/:id/companies", requireIdParam, controllers.getCompaniesByCategory);
 
   return router;
 }

@@ -16,13 +16,6 @@ export interface CategoryControllers {
   readonly updateCategory: RequestHandler;
 }
 
-export interface CategoriesMiddleware {
-  readonly requireValidCategoryCreate: RequestHandler;
-  readonly requireValidCategoryUpdate: RequestHandler;
-  readonly requireValidGetCategoriesOptions: RequestHandler;
-  readonly requireValidGetCompaniesByCategoryOptions: RequestHandler;
-}
-
 export interface CategoriesService {
   /**
    * Adds a category to the database.

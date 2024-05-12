@@ -12,12 +12,26 @@ export interface paths {
       };
     };
   };
-  "/*": {
-    /** Common responses for all endpoints */
+  "/400": {
+    /** Bad request */
     get: {
       responses: {
         400: components["responses"]["BadRequest"];
+      };
+    };
+  };
+  "/404": {
+    /** Not found */
+    get: {
+      responses: {
         404: components["responses"]["NotFound"];
+      };
+    };
+  };
+  "/500": {
+    /** Internal server error */
+    get: {
+      responses: {
         500: components["responses"]["InternalServerError"];
       };
     };
@@ -27,6 +41,7 @@ export interface paths {
     get: {
       responses: {
         200: components["responses"]["UserList"];
+        400: components["responses"]["InvalidQuery"];
       };
     };
   };
@@ -68,6 +83,7 @@ export interface paths {
       };
       responses: {
         201: components["responses"]["User"];
+        400: components["responses"]["InvalidUserData"];
         409: components["responses"]["UserAlreadyExists"];
       };
     };
@@ -80,6 +96,7 @@ export interface paths {
       };
       responses: {
         200: components["responses"]["User"];
+        400: components["responses"]["InvalidUserData"];
         404: components["responses"]["UserNotFound"];
       };
     };
@@ -94,6 +111,7 @@ export interface paths {
       };
       responses: {
         200: components["responses"]["CompanyList"];
+        400: components["responses"]["InvalidQuery"];
       };
     };
     parameters: {
@@ -118,11 +136,7 @@ export interface components {
     /** @description Bad request */
     BadRequest: {
       content: {
-        "application/json":
-          | components["schemas"]["InvalidEmailParam"]
-          | components["schemas"]["InvalidIdParam"]
-          | components["schemas"]["InvalidQuery"]
-          | components["schemas"]["InvalidUserData"];
+        "application/json": components["schemas"]["BadRequest"];
       };
     };
     /** @description Company */
@@ -153,6 +167,18 @@ export interface components {
     InternalServerError: {
       content: {
         "application/json": components["schemas"]["InternalServerError"];
+      };
+    };
+    /** @description Invalid query */
+    InvalidQuery: {
+      content: {
+        "application/json": components["schemas"]["InvalidQuery"];
+      };
+    };
+    /** @description Invalid user data */
+    InvalidUserData: {
+      content: {
+        "application/json": components["schemas"]["InvalidUserData"];
       };
     };
     /** @description Not found */
@@ -187,6 +213,11 @@ export interface components {
     };
   };
   schemas: {
+    BadRequest: {
+      /** @enum {string} */
+      error: "BadRequest" | "InvalidEmailParam" | "InvalidIdParam";
+      errorMessage: string;
+    };
     Company: {
       _id: string;
     };
@@ -205,11 +236,6 @@ export interface components {
     InternalServerError: {
       /** @enum {string} */
       error: "InternalServerError";
-      errorMessage: string;
-    };
-    InvalidEmailParam: {
-      /** @enum {string} */
-      error: "InvalidEmailParam";
       errorMessage: string;
     };
     InvalidIdParam: {

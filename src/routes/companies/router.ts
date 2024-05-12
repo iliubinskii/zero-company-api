@@ -15,18 +15,12 @@ import { companiesMiddleware } from "./middleware";
  * @returns A router for company routes.
  */
 export function createCompaniesRouter(controllers: CompanyControllers): Router {
-  const {
-    parseFormData,
-    requireValidCompanyCreate,
-    requireValidCompanyUpdate,
-    requireValidGetCompaniesOptions,
-    webAccessibleStorage
-  } = companiesMiddleware;
+  const { parseFormData, webAccessibleStorage } = companiesMiddleware;
 
   const router = Router();
 
   router
-    .get("/", requireValidGetCompaniesOptions, controllers.getCompanies)
+    .get("/", controllers.getCompanies)
     .post(
       "/",
       requireJwtUser,
@@ -34,7 +28,6 @@ export function createCompaniesRouter(controllers: CompanyControllers): Router {
       nullifyEmptyStrings,
       webAccessibleStorage,
       parseNestedFormData,
-      requireValidCompanyCreate,
       controllers.addCompany
     )
     .get("/:id", requireIdParam, controllers.getCompany)
@@ -46,7 +39,6 @@ export function createCompaniesRouter(controllers: CompanyControllers): Router {
       nullifyEmptyStrings,
       webAccessibleStorage,
       parseNestedFormData,
-      requireValidCompanyUpdate,
       controllers.updateCompany
     )
     .delete("/:id", requireJwtAdmin, requireIdParam, controllers.deleteCompany);

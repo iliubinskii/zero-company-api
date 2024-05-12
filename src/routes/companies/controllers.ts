@@ -1,8 +1,15 @@
 import { CompaniesService, CompanyControllers } from "../../types";
-import { ErrorCode, RoutesOld } from "../../schema";
+import {
+  CompanyCreateValidationSchema,
+  CompanyUpdateValidationSchema,
+  ErrorCode,
+  GetCompaniesOptionsValidationSchema,
+  RoutesOld
+} from "../../schema";
 import {
   assertDefined,
   buildErrorResponse,
+  filterUndefinedProperties,
   sendResponseOld,
   wrapAsyncHandler
 } from "../../utils";
@@ -18,18 +25,27 @@ export function createCompanyControllers(
 ): CompanyControllers {
   return {
     addCompany: wrapAsyncHandler(async (req, res) => {
-      const company = assertDefined(req.companyCreate);
+      const company = CompanyCreateValidationSchema.safeParse(req.body);
 
-      const addedCompany = await service.addCompany({
-        ...company,
-        foundedAt: new Date().toISOString()
-      });
+      if (company.success) {
+        const addedCompany = await service.addCompany(
+          filterUndefinedProperties({
+            ...company.data,
+            foundedAt: new Date().toISOString()
+          })
+        );
 
-      sendResponseOld<RoutesOld["/companies"]["/"]["POST"]>(
-        res,
-        StatusCodes.CREATED,
-        addedCompany
-      );
+        sendResponseOld<RoutesOld["/companies"]["/"]["POST"]>(
+          res,
+          StatusCodes.CREATED,
+          addedCompany
+        );
+      } else
+        sendResponseOld<RoutesOld["*"]["BAD_REQUEST"]["InvalidCompanyData"]>(
+          res,
+          StatusCodes.BAD_REQUEST,
+          buildErrorResponse(ErrorCode.InvalidCompanyData, company.error)
+        );
     }),
     deleteCompany: wrapAsyncHandler(async (req, res) => {
       const id = assertDefined(req.idParam);
@@ -43,15 +59,24 @@ export function createCompanyControllers(
       );
     }),
     getCompanies: wrapAsyncHandler(async (req, res) => {
-      const options = assertDefined(req.getCompaniesOptions);
+      const options = GetCompaniesOptionsValidationSchema.safeParse(req.query);
 
-      const companies = await service.getCompanies(options);
+      if (options.success) {
+        const companies = await service.getCompanies(
+          filterUndefinedProperties(options.data)
+        );
 
-      sendResponseOld<RoutesOld["/companies"]["/"]["GET"]>(
-        res,
-        StatusCodes.OK,
-        companies
-      );
+        sendResponseOld<RoutesOld["/companies"]["/"]["GET"]>(
+          res,
+          StatusCodes.OK,
+          companies
+        );
+      } else
+        sendResponseOld<RoutesOld["*"]["BAD_REQUEST"]["InvalidQuery"]>(
+          res,
+          StatusCodes.BAD_REQUEST,
+          buildErrorResponse(ErrorCode.InvalidQuery, options.error)
+        );
     }),
     getCompany: wrapAsyncHandler(async (req, res) => {
       const id = assertDefined(req.idParam);
@@ -74,21 +99,31 @@ export function createCompanyControllers(
     updateCompany: wrapAsyncHandler(async (req, res) => {
       const id = assertDefined(req.idParam);
 
-      const company = assertDefined(req.companyUpdate);
+      const company = CompanyUpdateValidationSchema.safeParse(req.body);
 
-      const updatedCompany = await service.updateCompany(id, company);
-
-      if (updatedCompany)
-        sendResponseOld<RoutesOld["/companies"]["/:id"]["PUT"]["OK"]>(
-          res,
-          StatusCodes.OK,
-          updatedCompany
+      if (company.success) {
+        const updatedCompany = await service.updateCompany(
+          id,
+          filterUndefinedProperties(company.data)
         );
-      else
-        sendResponseOld<RoutesOld["/companies"]["/:id"]["PUT"]["NOT_FOUND"]>(
+
+        if (updatedCompany)
+          sendResponseOld<RoutesOld["/companies"]["/:id"]["PUT"]["OK"]>(
+            res,
+            StatusCodes.OK,
+            updatedCompany
+          );
+        else
+          sendResponseOld<RoutesOld["/companies"]["/:id"]["PUT"]["NOT_FOUND"]>(
+            res,
+            StatusCodes.NOT_FOUND,
+            buildErrorResponse(ErrorCode.CompanyNotFound)
+          );
+      } else
+        sendResponseOld<RoutesOld["*"]["BAD_REQUEST"]["InvalidCompanyData"]>(
           res,
-          StatusCodes.NOT_FOUND,
-          buildErrorResponse(ErrorCode.CompanyNotFound)
+          StatusCodes.BAD_REQUEST,
+          buildErrorResponse(ErrorCode.InvalidCompanyData, company.error)
         );
     })
   };

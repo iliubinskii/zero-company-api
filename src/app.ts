@@ -47,7 +47,7 @@ export function createApp(): express.Express {
 
   const companiesService = createCompaniesService();
 
-  const userService = createUsersService();
+  const usersService = createUsersService();
 
   const categoryControllers = createCategoryControllers(
     categoriesService,
@@ -56,7 +56,7 @@ export function createApp(): express.Express {
 
   const companyControllers = createCompanyControllers(companiesService);
 
-  const userControllers = createUserControllers(userService, companiesService);
+  const userControllers = createUserControllers(usersService, companiesService);
 
   const app = express();
 
@@ -112,8 +112,32 @@ export function createApp(): express.Express {
 
   app.use("/users", createUsersRouter(userControllers));
 
+  app.use("/400", (_req, res) => {
+    sendResponse<Routes["/400"]["get"]>(
+      res,
+      StatusCodes.BAD_REQUEST,
+      buildErrorResponse(ErrorCode.BadRequest)
+    );
+  });
+
+  app.use("/404", (_req, res) => {
+    sendResponse<Routes["/404"]["get"]>(
+      res,
+      StatusCodes.NOT_FOUND,
+      buildErrorResponse(ErrorCode.NotFound)
+    );
+  });
+
+  app.use("/500", (_req, res) => {
+    sendResponse<Routes["/500"]["get"]>(
+      res,
+      StatusCodes.INTERNAL_SERVER_ERROR,
+      buildErrorResponse(ErrorCode.InternalServerError)
+    );
+  });
+
   app.all("*", (_req, res) => {
-    sendResponse(
+    sendResponse<Routes["/404"]["get"]>(
       res,
       StatusCodes.NOT_FOUND,
       buildErrorResponse(ErrorCode.NotFound)
@@ -129,7 +153,7 @@ export function createApp(): express.Express {
       _next: NextFunction
     ) => {
       logger.error(lang.ServerError, err, { requestId: req.requestId });
-      sendResponse(
+      sendResponse<Routes["/500"]["get"]>(
         res,
         StatusCodes.INTERNAL_SERVER_ERROR,
         buildErrorResponse(ErrorCode.InternalServerError)
