@@ -1,11 +1,11 @@
-import { WebAccessibleImage, WebAccessibleImages } from "./common";
+import { WebAccessibleImage } from "./common";
 
 export interface Company {
   readonly categories: readonly string[];
   readonly description: string;
   readonly foundedAt: string;
-  readonly founders: Founders;
-  readonly images: WebAccessibleImages;
+  readonly founders: readonly Founder[];
+  readonly images: readonly WebAccessibleImage[];
   readonly logo: WebAccessibleImage;
   readonly name: string;
   readonly privateCompany?: boolean;
@@ -27,13 +27,9 @@ export interface CompanyUpdate
     >
   > {}
 
-export type Companies = readonly Company[];
-
 export interface ExistingCompany extends Company {
   readonly _id: string;
 }
-
-export type ExistingCompanies = readonly ExistingCompany[];
 
 export interface Founder {
   readonly confirmed?: boolean;
@@ -42,5 +38,3 @@ export interface Founder {
   readonly lastName: string;
   readonly share: number;
 }
-
-export type Founders = readonly Founder[];

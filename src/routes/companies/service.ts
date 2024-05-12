@@ -34,7 +34,7 @@ export function createCompaniesService(): CompaniesService {
       cursor,
       founderEmail,
       includePrivateCompanies = false,
-      limit = MAX_LIMIT.companies,
+      limit = MAX_LIMIT,
       offset = 0,
       onlyRecommended = false,
       sortBy = "name",

@@ -1,4 +1,4 @@
-import { EmailValidationSchema, ErrorCode, Routes } from "../../schema";
+import { ErrorCode, Routes, UserEmailValidationSchema } from "../../schema";
 import { assertDefined, buildErrorResponse, sendResponse } from "../../utils";
 import { StatusCodes } from "http-status-codes";
 import { UsersMiddleware } from "../../types";
@@ -9,7 +9,7 @@ export const usersMiddleware: UsersMiddleware = {
     next();
   },
   userEmailFromParam: (req, res, next) => {
-    const email = EmailValidationSchema.safeParse(req.params["email"]);
+    const email = UserEmailValidationSchema.safeParse(req.params["email"]);
 
     if (email.success) {
       req.userEmail = email.data;

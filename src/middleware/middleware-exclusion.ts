@@ -9,7 +9,7 @@ import { RequestHandler } from "express";
  */
 export function middlewareExclusion(
   middleware: RequestHandler,
-  exclusionRoutes: ExclusionRoutes
+  exclusionRoutes: readonly ExclusionRoute[]
 ): RequestHandler {
   return (req, res, next) => {
     // Check if the current request path is in the exclusion paths
@@ -30,5 +30,3 @@ export function middlewareExclusion(
 }
 
 export type ExclusionRoute = readonly [HttpMethod, string | RegExp];
-
-export type ExclusionRoutes = readonly ExclusionRoute[];

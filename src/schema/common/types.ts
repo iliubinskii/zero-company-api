@@ -29,7 +29,7 @@ export interface ErrorResponse<E extends ErrorCode> {
 }
 
 export interface ErrorResponseWithData<E extends ErrorCode> {
-  readonly data: FieldErrors;
+  readonly data: readonly FieldError[];
   readonly error: E;
   readonly errorMessage: string;
 }
@@ -38,8 +38,6 @@ export interface FieldError {
   readonly message: string;
   readonly path: string;
 }
-
-export type FieldErrors = readonly FieldError[];
 
 export interface MultipleDocsResponse<T> {
   readonly count: number;
@@ -55,5 +53,3 @@ export interface WebAccessibleImage {
   readonly url: string;
   readonly width: number;
 }
-
-export type WebAccessibleImages = readonly WebAccessibleImage[];

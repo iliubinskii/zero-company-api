@@ -30,7 +30,7 @@ export function createCategoriesService(): CategoriesService {
       return deletedCategory ? 1 : 0;
     },
     getCategories: async ({
-      limit = MAX_LIMIT.categories,
+      limit = MAX_LIMIT,
       offset = 0,
       onlyPinned = false
     } = {}) => {

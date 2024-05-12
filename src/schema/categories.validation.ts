@@ -1,7 +1,10 @@
-import { CategoryCreate, CategoryUpdate } from "./categories";
+import { CategoryCreate, CategoryUpdate, ExistingCategory } from "./categories";
+import { IdValidationSchema, preprocessBoolean } from "./common";
 import { Equals } from "ts-toolbelt/out/Any/Equals";
-import { preprocessBoolean } from "./common";
+import _ from "lodash";
 import zod from "zod";
+
+const _id = IdValidationSchema;
 
 const description = zod.string().min(1);
 
@@ -11,12 +14,19 @@ const pinned = preprocessBoolean(zod.boolean());
 
 const tagline = zod.string().min(1);
 
-export const CategoryCreateValidationSchema = zod.strictObject({
+const fields = {
+  _id,
   description,
   name,
-  pinned: pinned.optional(),
+  pinned,
   tagline
-});
+};
+
+export const ExistingCategoryValidationSchema = zod.strictObject(fields);
+
+export const CategoryCreateValidationSchema = zod.strictObject(
+  _.omit(fields, "_id")
+);
 
 export const CategoryUpdateValidationSchema = zod.strictObject({
   description: description.optional(),
@@ -24,6 +34,12 @@ export const CategoryUpdateValidationSchema = zod.strictObject({
   pinned: pinned.optional(),
   tagline: tagline.optional()
 });
+
+// Type check the category create validation schema
+((): Equals<
+  keyof zod.infer<typeof ExistingCategoryValidationSchema>,
+  keyof ExistingCategory
+> => 1)();
 
 // Type check the category create validation schema
 ((): Equals<

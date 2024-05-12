@@ -1,11 +1,11 @@
 import { preprocessEmail } from "./common";
 import zod from "zod";
 
-export const JwtValidationSchema = zod
-  // Do not use strictObject: JWT may contain additional fields
-  .object({ email: preprocessEmail(zod.string().email()) });
+const admin = zod.boolean();
 
-export const JwtUserValidationSchema = zod.strictObject({
-  admin: zod.boolean(),
-  email: preprocessEmail(zod.string().email())
-});
+const email = preprocessEmail(zod.string().email());
+
+// Do not use strictObject: JWT may contain additional fields
+export const JwtValidationSchema = zod.object({ email });
+
+export const JwtUserValidationSchema = zod.strictObject({ admin, email });
