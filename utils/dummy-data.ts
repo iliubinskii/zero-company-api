@@ -12,6 +12,11 @@ const LIMIT = {
 
 const PRICE_STEP = 1000;
 
+const PROBABILITY = {
+  privateCompanyTrue: 0.1,
+  recommendedTrue: 0.9
+} as const;
+
 const companies = faker.helpers.uniqueArray((): Company => {
   const targetValue = faker.number.int({ max: 1000, min: 100 }) * PRICE_STEP;
 
@@ -55,14 +60,11 @@ const companies = faker.helpers.uniqueArray((): Company => {
       width: 512
     },
     name: faker.commerce.productName(),
-    // eslint-disable-next-line no-warning-comments -- Assigned
-    // TODO: 10% - true, 90% - undefined
-    // Use @faker-js/faker
-    privateCompany: undefined,
-    // eslint-disable-next-line no-warning-comments -- Assigned
-    // TODO: 90% - true, 10% - undefined
-    // Use @faker-js/faker
-    recommended: true,
+    // eslint-disable-next-line no-warning-comments -- Postponed
+    // TODO: faker.datatype.boolean(0,6), return true with probability 60% and false  with probability 40%
+    privateCompany:
+      Math.random() < PROBABILITY.privateCompanyTrue ? true : undefined,
+    recommended: Math.random() < PROBABILITY.recommendedTrue ? true : undefined,
     targetValue,
     website: faker.internet.url()
   });

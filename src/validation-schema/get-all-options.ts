@@ -19,10 +19,7 @@ export const GetCategoriesOptionsValidationSchema = zod.strictObject({
 
 export const GetCompaniesOptionsValidationSchema = zod.strictObject({
   category: zod.string().min(1).optional(),
-  // eslint-disable-next-line no-warning-comments -- Assigned
-  // TODO: Validate as [string, string] instead of string
-  // Validation library - "zod"
-  cursor: zod.string().min(1).optional(),
+  cursor: zod.tuple([zod.string().min(1), zod.string().min(1)]).optional(),
   founderEmail: zod.string().min(1).optional(),
   includePrivateCompanies: preprocessBoolean(zod.boolean().optional()),
   limit: preprocessNumber(

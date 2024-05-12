@@ -82,6 +82,7 @@ const config = {
     "init-declarations": "off",
     "jsdoc/require-param-type": "off",
     "jsdoc/require-returns-type": "off",
+    "no-magic-numbers": ["error", { ignore: [0, 1, -1] }],
     "no-redeclare": "off",
     "no-shadow": "off",
     "no-type-assertion/no-type-assertion": "warn",

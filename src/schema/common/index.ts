@@ -40,7 +40,9 @@ export interface FieldError {
 export type FieldErrors = readonly FieldError[];
 
 export interface MultipleDocsResponse<T> {
+  readonly count: number;
   readonly docs: readonly T[];
+  readonly nextCursor?: readonly [string, string];
   readonly total: number;
 }
 
