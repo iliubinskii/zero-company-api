@@ -1,8 +1,7 @@
-import { Company, ExistingCompany, MultipleDocsResponse } from "../../schema";
+import { Company, MAX_LIMIT } from "../../schema";
 import { buildMongodbQuery, filterUndefinedProperties } from "../../utils";
 import { CompaniesService } from "../../types";
 import { FilterQuery } from "mongoose";
-import { MONGODB_MAX_LIMIT } from "../../consts";
 import { Writable } from "ts-toolbelt/out/Object/Writable";
 import { getCompanyModel } from "./model";
 
@@ -12,13 +11,10 @@ import { getCompanyModel } from "./model";
  */
 export function createCompaniesService(): CompaniesService {
   return {
-    addCompany: async (company): Promise<ExistingCompany> => {
+    addCompany: async company => {
       const CompanyModel = await getCompanyModel();
 
-      const model = new CompanyModel<Company>({
-        ...company,
-        foundedAt: new Date().toISOString()
-      });
+      const model = new CompanyModel(company);
 
       const addedCompany = await model.save();
 
@@ -26,7 +22,7 @@ export function createCompaniesService(): CompaniesService {
 
       return { _id: _id.toString(), ...rest };
     },
-    deleteCompany: async (id): Promise<number> => {
+    deleteCompany: async id => {
       const CompanyModel = await getCompanyModel();
 
       const deletedCompany = await CompanyModel.findByIdAndDelete(id);
@@ -38,12 +34,12 @@ export function createCompaniesService(): CompaniesService {
       cursor,
       founderEmail,
       includePrivateCompanies = false,
-      limit = MONGODB_MAX_LIMIT.companies,
+      limit = MAX_LIMIT.companies,
       offset = 0,
       onlyRecommended = false,
       sortBy = "name",
       sortOrder = "asc"
-    } = {}): Promise<MultipleDocsResponse<ExistingCompany>> => {
+    } = {}) => {
       const filter: Writable<FilterQuery<Company>> = {};
 
       if (typeof category === "string")
@@ -106,7 +102,7 @@ export function createCompaniesService(): CompaniesService {
         total
       });
     },
-    getCompany: async (id): Promise<ExistingCompany | undefined> => {
+    getCompany: async id => {
       const CompanyModel = await getCompanyModel();
 
       const company = await CompanyModel.findById(id);
@@ -119,10 +115,7 @@ export function createCompaniesService(): CompaniesService {
 
       return undefined;
     },
-    updateCompany: async (
-      id,
-      company
-    ): Promise<ExistingCompany | undefined> => {
+    updateCompany: async (id, company) => {
       const CompanyModel = await getCompanyModel();
 
       const updatedCompany = await CompanyModel.findByIdAndUpdate(

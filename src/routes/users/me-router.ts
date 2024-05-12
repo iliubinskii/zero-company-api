@@ -9,39 +9,19 @@ import { usersMiddleware } from "./middleware";
  * @returns A router for me routes.
  */
 export function createMeRouter(controllers: UserControllers): Router {
-  const {
-    requireValidGetCompaniesByUserOptions,
-    requireValidMeUser,
-    requireValidUser,
-    requireValidUserUpdate,
-    userEmailFromJwtUser
-  } = usersMiddleware;
+  const { userEmailFromJwtUser } = usersMiddleware;
 
   const router = Router();
 
   router
     .get("/", requireJwtUser, userEmailFromJwtUser, controllers.getUser)
-    .post(
-      "/",
-      requireJwtUser,
-      userEmailFromJwtUser,
-      requireValidUser,
-      requireValidMeUser,
-      controllers.addUser
-    )
-    .put(
-      "/",
-      requireJwtUser,
-      userEmailFromJwtUser,
-      requireValidUserUpdate,
-      controllers.updateUser
-    )
+    .post("/", requireJwtUser, userEmailFromJwtUser, controllers.addUser)
+    .put("/", requireJwtUser, userEmailFromJwtUser, controllers.updateUser)
     .delete("/", requireJwtUser, userEmailFromJwtUser, controllers.deleteUser)
     .get(
       "/companies",
       requireJwtUser,
       userEmailFromJwtUser,
-      requireValidGetCompaniesByUserOptions,
       controllers.getCompaniesByUser
     );
 

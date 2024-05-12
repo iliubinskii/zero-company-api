@@ -45,36 +45,34 @@ const Schema = {
   privateCompany: { type: Boolean },
   recommended: { type: Boolean },
   targetValue: { required: true, type: Number },
-  website: String
+  website: { type: String }
 } as const;
 
-export const { getCompanyModel } = companyModelSingleton();
+export const getCompanyModel: GetCompanyModel = createSingleton();
+
+export interface GetCompanyModel {
+  (): Promise<mongoose.Model<Company>>;
+}
 
 /**
  * Creates a company model singleton.
  * @returns A company model singleton.
  */
-function companyModelSingleton(): CompanyModelSingleton {
+function createSingleton(): GetCompanyModel {
   let model: mongoose.Model<Company> | undefined;
 
-  return {
-    getCompanyModel: async (): Promise<mongoose.Model<Company>> => {
-      const connection = await getMongodbConnection();
+  return async () => {
+    const connection = await getMongodbConnection();
 
-      model =
-        model ??
-        connection.model<Company>(
-          "Company",
-          new mongoose.Schema<Company>(Schema, { versionKey: false })
-        );
+    model =
+      model ??
+      connection.model<Company>(
+        "Company",
+        new mongoose.Schema<Company>(Schema, { versionKey: false })
+      );
 
-      return model;
-    }
+    return model;
   };
-}
-
-interface CompanyModelSingleton {
-  readonly getCompanyModel: () => Promise<mongoose.Model<Company>>;
 }
 
 // Type check the company schema

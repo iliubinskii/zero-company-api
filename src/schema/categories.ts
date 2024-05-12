@@ -1,6 +1,7 @@
 export interface Category {
   readonly description: string;
   readonly name: string;
+  readonly pinned?: boolean;
   readonly tagline: string;
 }
 

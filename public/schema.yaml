@@ -31,20 +31,13 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/UserList"
-    post:
-      summary: Create a new user
-      tags:
-        - users
-      responses:
-        "201":
-          $ref: "#/components/responses/User"
-        "409":
-          $ref: "#/components/responses/UserAlreadyExists"
+        "400":
+          $ref: "#/components/responses/InvalidQuery"
 
   # User path
-  /users/{id}:
+  /users/{email}:
     parameters:
-      - $ref: '#/components/parameters/Id'
+      - $ref: '#/components/parameters/Email'
     delete:
       summary: Delete a user by ID
       tags:
@@ -61,6 +54,17 @@ paths:
           $ref: "#/components/responses/User"
         "404":
           $ref: "#/components/responses/UserNotFound"
+    post:
+      summary: Create a new user
+      tags:
+        - users
+      responses:
+        "201":
+          $ref: "#/components/responses/User"
+        "400":
+          $ref: "#/components/responses/InvalidUserData"
+        "409":
+          $ref: "#/components/responses/UserAlreadyExists"
     put:
       summary: Update a user by ID
       tags:
@@ -68,13 +72,15 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/User"
+        "400":
+          $ref: "#/components/responses/InvalidUserData"
         "404":
           $ref: "#/components/responses/UserNotFound"
 
   # User companies path
-  /users/{id}/companies:
+  /users/{email}/companies:
     parameters:
-      - $ref: '#/components/parameters/Id'
+      - $ref: '#/components/parameters/Email'
     get:
       summary: Get all companies for a user
       tags:
@@ -82,18 +88,36 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/CompanyList"
+        "400":
+          $ref: "#/components/responses/InvalidQuery"
 
-  # Common responses
-  /*:
+  # BadRequest response
+  /400:
     get:
-      summary: Common responses for all endpoints
+      summary: Bad request
       tags:
-        - all
+        - common
       responses:
         "400":
           $ref: "#/components/responses/BadRequest"
+
+  # NotFound response
+  /404:
+    get:
+      summary: Not found
+      tags:
+        - common
+      responses:
         "404":
           $ref: "#/components/responses/NotFound"
+
+  # InternalServerError response
+  /500:
+    get:
+      summary: Internal server error
+      tags:
+        - common
+      responses:
         "500":
           $ref: "#/components/responses/InternalServerError"
 
@@ -103,6 +127,14 @@ components:
   # Parameters
   parameters:
 
+    # Email parameter
+    Email:
+      name: email
+      in: path
+      required: true
+      schema:
+        type: string
+
     # Id parameter
     Id:
       name: id
@@ -110,7 +142,6 @@ components:
       required: true
       schema:
         type: string
-        pattern: '^[0-9a-fA-F]{24}$'
 
   # Responses
   responses:
@@ -121,10 +152,7 @@ components:
       content:
         application/json:
           schema:
-            oneOf:
-              - $ref: "#/components/schemas/EmailMismatch"
-              - $ref: "#/components/schemas/InvalidQuery"
-              - $ref: "#/components/schemas/InvalidUserData"
+            $ref: "#/components/schemas/BadRequest"
 
     # Company response
     Company:
@@ -165,6 +193,22 @@ components:
         application/json:
           schema:
             $ref: "#/components/schemas/InternalServerError"
+
+    # InvalidQuery response
+    InvalidQuery:
+      description: Invalid query
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/InvalidQuery"
+
+    # InvalidUserData response
+    InvalidUserData:
+      description: Invalid user data
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/InvalidUserData"
 
     # NotFound response
     NotFound:
@@ -209,6 +253,22 @@ components:
   # Schemas
   schemas:
 
+    # BadRequest schema
+    BadRequest:
+      type: object
+      required:
+        - error
+        - errorMessage
+      properties:
+        error:
+          type: string
+          enum:
+            - BadRequest
+            - InvalidEmailParam
+            - InvalidIdParam
+        errorMessage:
+          type: string
+
     # Company schema
     Company:
       type: object
@@ -222,13 +282,20 @@ components:
     CompanyList:
       type: object
       required:
+        - count
         - docs
         - total
       properties:
+        count:
+          type: integer
         docs:
           type: array
           items:
             $ref: "#/components/schemas/Company"
+        nextCursor:
+          type: array
+          items:
+            type: string
         total:
           type: integer
 
@@ -240,20 +307,6 @@ components:
       properties:
         affectedRows:
           type: integer
-
-    # EmailMismatch schema
-    EmailMismatch:
-      type: object
-      required:
-        - error
-        - errorMessage
-      properties:
-        error:
-          type: string
-          enum:
-            - EmailMismatch
-        errorMessage:
-          type: string
 
     # Home schema
     Home:
@@ -280,6 +333,20 @@ components:
           type: string
           enum:
             - InternalServerError
+        errorMessage:
+          type: string
+
+    # InvalidIdParam schema
+    InvalidIdParam:
+      type: object
+      required:
+        - error
+        - errorMessage
+      properties:
+        error:
+          type: string
+          enum:
+            - InvalidIdParam
         errorMessage:
           type: string
 
@@ -387,13 +454,20 @@ components:
     UserList:
       type: object
       required:
+        - count
         - docs
         - total
       properties:
+        count:
+          type: integer
         docs:
           type: array
           items:
             $ref: "#/components/schemas/User"
+        nextCursor:
+          type: array
+          items:
+            type: string
         total:
           type: integer
 

@@ -14,10 +14,6 @@ import { StatusCodes } from "http-status-codes";
 export interface RoutesOld {
   readonly "*": {
     readonly BAD_REQUEST: {
-      readonly "EmailMismatch": [
-        StatusCodes.BAD_REQUEST,
-        ErrorResponse<ErrorCode.EmailMismatch>
-      ];
       readonly "InvalidCategoryData": [
         StatusCodes.BAD_REQUEST,
         ErrorResponseWithData<ErrorCode.InvalidCategoryData>

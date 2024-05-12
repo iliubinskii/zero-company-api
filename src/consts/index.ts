@@ -22,12 +22,6 @@ export const MONGODB_ERROR = {
   DUPLICATE_KEY: 11_000
 };
 
-export const MONGODB_MAX_LIMIT = {
-  categories: 1000,
-  companies: 1000,
-  users: 1000
-};
-
 export const MONGODB_SESSIONS_COLLECTION = "sessions";
 
 export const MONGODB_SESSIONS_TTL_SEC = 3600;

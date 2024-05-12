@@ -1,15 +1,10 @@
-import {
-  ErrorCode,
-  ErrorResponse,
-  ErrorResponseWithData,
-  Routes
-} from "../schema";
+import { ErrorCode, ErrorResponse, ErrorResponseWithData } from "../schema";
 import { NextFunction, Request, RequestHandler, Response } from "express";
 import { Readonly } from "ts-toolbelt/out/Object/Readonly";
 import { StatusCodes } from "http-status-codes";
-import { ZodIssues } from "../types";
 import { assertNumber } from "./assertions";
 import { lang } from "../langs";
+import zod from "zod";
 
 /**
  * Builds an error response object.
@@ -28,7 +23,7 @@ export function buildErrorResponse<E extends ErrorCode>(
  */
 export function buildErrorResponse<E extends ErrorCode>(
   error: E,
-  data: ZodIssues
+  data: zod.ZodError
 ): ErrorResponseWithData<E>;
 
 /**
@@ -39,11 +34,11 @@ export function buildErrorResponse<E extends ErrorCode>(
  */
 export function buildErrorResponse<E extends ErrorCode>(
   error: E,
-  data?: ZodIssues
+  data?: zod.ZodError
 ): object {
   if (data) {
     const result: ErrorResponseWithData<E> = {
-      data: data.map(issue => {
+      data: data.errors.map(issue => {
         return {
           message: issue.message,
           path: issue.path
@@ -86,18 +81,6 @@ export function buildErrorResponse<E extends ErrorCode>(
  * @param status - The status code.
  * @param json - The JSON response.
  */
-export function sendResponse(
-  res: Response,
-  status: SchemaStatus,
-  json: SchemaJson
-): void;
-
-/**
- * Sends a response.
- * @param res - The express response object.
- * @param status - The status code.
- * @param json - The JSON response.
- */
 export function sendResponse<
   R extends {
     responses: {
@@ -112,18 +95,6 @@ export function sendResponse<
     PropertyKey,
     "deep"
   >
-): void;
-
-/**
- * Sends a response.
- * @param res - The express response object.
- * @param status - The status code.
- * @param json - The JSON response.
- */
-export function sendResponse(
-  res: Response,
-  status: PropertyKey,
-  json: object
 ): void {
   res.status(assertNumber(status)).json(json);
 }
@@ -161,13 +132,3 @@ export function wrapAsyncHandler(handler: AsyncRequestHandler): RequestHandler {
 export interface AsyncRequestHandler {
   (req: Request, res: Response, next: NextFunction): Promise<void>;
 }
-
-export type SchemaResponses = Routes["/*"]["get"]["responses"];
-
-export type SchemaStatus = keyof SchemaResponses;
-
-export type SchemaJson = Readonly<
-  SchemaResponses[SchemaStatus]["content"]["application/json"],
-  PropertyKey,
-  "deep"
->;

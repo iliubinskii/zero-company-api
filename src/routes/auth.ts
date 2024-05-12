@@ -11,8 +11,8 @@ import {
   AUTH_COOKIE_NAME,
   JWT_EXPIRES_IN
 } from "../consts";
+import { JwtValidationSchema, RoutesOld } from "../schema";
 import { Router } from "express";
-import { RoutesOld } from "../schema";
 import { StatusCodes } from "http-status-codes";
 import jwt from "jsonwebtoken";
 import passport from "passport";
@@ -86,7 +86,7 @@ authRouter
             null
           );
         else {
-          const email = JwtValidationSchema.parse(decoded).email.toLowerCase();
+          const { email } = JwtValidationSchema.parse(decoded);
 
           sendResponseOld<RoutesOld["/auth"]["/me"]["GET"]>(
             res,
@@ -106,21 +106,11 @@ authRouter
       );
   });
 
-const JwtValidationSchema = zod
-  // Do not use strictObject: JWT may contain additional fields
-  .object({
-    email: zod.string().email()
-  });
-
 const Auth0UserValidationSchema = zod
   // Do not use strictObject: auth0 may return additional fields
   .object({
     emails: zod
-      .array(
-        zod.strictObject({
-          value: zod.string()
-        })
-      )
+      .array(zod.strictObject({ value: zod.string() }))
       .nonempty()
       .max(1)
   });

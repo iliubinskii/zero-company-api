@@ -2,7 +2,7 @@ import {
   ExistingUser,
   GetUsersOptions,
   MultipleDocsResponse,
-  UserCreate,
+  User,
   UserUpdate
 } from "../schema";
 import { RequestHandler } from "express";
@@ -17,13 +17,8 @@ export interface UserControllers {
 }
 
 export interface UsersMiddleware {
-  readonly requireValidGetCompaniesByUserOptions: RequestHandler;
-  readonly requireValidGetUsersOptions: RequestHandler;
-  readonly requireValidMeUser: RequestHandler;
-  readonly requireValidUser: RequestHandler;
-  readonly requireValidUserUpdate: RequestHandler;
   readonly userEmailFromJwtUser: RequestHandler;
-  readonly userEmailFromParams: RequestHandler;
+  readonly userEmailFromParam: RequestHandler;
 }
 
 export interface UsersService {
@@ -32,7 +27,7 @@ export interface UsersService {
    * @param user - The user to add.
    * @returns A promise that resolves when the user has been added.
    */
-  readonly addUser: (user: UserCreate) => Promise<ExistingUser | undefined>;
+  readonly addUser: (user: User) => Promise<ExistingUser | undefined>;
   /**
    * Deletes a user from the database.
    * @param email - The e-mail of the user to delete.

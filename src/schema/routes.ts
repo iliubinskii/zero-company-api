@@ -12,12 +12,26 @@ export interface paths {
       };
     };
   };
-  "/*": {
-    /** Common responses for all endpoints */
+  "/400": {
+    /** Bad request */
     get: {
       responses: {
         400: components["responses"]["BadRequest"];
+      };
+    };
+  };
+  "/404": {
+    /** Not found */
+    get: {
+      responses: {
         404: components["responses"]["NotFound"];
+      };
+    };
+  };
+  "/500": {
+    /** Internal server error */
+    get: {
+      responses: {
         500: components["responses"]["InternalServerError"];
       };
     };
@@ -27,22 +41,16 @@ export interface paths {
     get: {
       responses: {
         200: components["responses"]["UserList"];
-      };
-    };
-    /** Create a new user */
-    post: {
-      responses: {
-        201: components["responses"]["User"];
-        409: components["responses"]["UserAlreadyExists"];
+        400: components["responses"]["InvalidQuery"];
       };
     };
   };
-  "/users/{id}": {
+  "/users/{email}": {
     /** Delete a user by ID */
     delete: {
       parameters: {
         path: {
-          id: components["parameters"]["Id"];
+          email: components["parameters"]["Email"];
         };
       };
       responses: {
@@ -53,7 +61,7 @@ export interface paths {
     get: {
       parameters: {
         path: {
-          id: components["parameters"]["Id"];
+          email: components["parameters"]["Email"];
         };
       };
       responses: {
@@ -63,37 +71,52 @@ export interface paths {
     };
     parameters: {
       path: {
-        id: components["parameters"]["Id"];
+        email: components["parameters"]["Email"];
+      };
+    };
+    /** Create a new user */
+    post: {
+      parameters: {
+        path: {
+          email: components["parameters"]["Email"];
+        };
+      };
+      responses: {
+        201: components["responses"]["User"];
+        400: components["responses"]["InvalidUserData"];
+        409: components["responses"]["UserAlreadyExists"];
       };
     };
     /** Update a user by ID */
     put: {
       parameters: {
         path: {
-          id: components["parameters"]["Id"];
+          email: components["parameters"]["Email"];
         };
       };
       responses: {
         200: components["responses"]["User"];
+        400: components["responses"]["InvalidUserData"];
         404: components["responses"]["UserNotFound"];
       };
     };
   };
-  "/users/{id}/companies": {
+  "/users/{email}/companies": {
     /** Get all companies for a user */
     get: {
       parameters: {
         path: {
-          id: components["parameters"]["Id"];
+          email: components["parameters"]["Email"];
         };
       };
       responses: {
         200: components["responses"]["CompanyList"];
+        400: components["responses"]["InvalidQuery"];
       };
     };
     parameters: {
       path: {
-        id: components["parameters"]["Id"];
+        email: components["parameters"]["Email"];
       };
     };
   };
@@ -104,6 +127,7 @@ export type webhooks = Record<string, never>;
 export interface components {
   headers: never;
   parameters: {
+    Email: string;
     Id: string;
   };
   pathItems: never;
@@ -112,10 +136,7 @@ export interface components {
     /** @description Bad request */
     BadRequest: {
       content: {
-        "application/json":
-          | components["schemas"]["EmailMismatch"]
-          | components["schemas"]["InvalidQuery"]
-          | components["schemas"]["InvalidUserData"];
+        "application/json": components["schemas"]["BadRequest"];
       };
     };
     /** @description Company */
@@ -146,6 +167,18 @@ export interface components {
     InternalServerError: {
       content: {
         "application/json": components["schemas"]["InternalServerError"];
+      };
+    };
+    /** @description Invalid query */
+    InvalidQuery: {
+      content: {
+        "application/json": components["schemas"]["InvalidQuery"];
+      };
+    };
+    /** @description Invalid user data */
+    InvalidUserData: {
+      content: {
+        "application/json": components["schemas"]["InvalidUserData"];
       };
     };
     /** @description Not found */
@@ -180,20 +213,22 @@ export interface components {
     };
   };
   schemas: {
+    BadRequest: {
+      /** @enum {string} */
+      error: "BadRequest" | "InvalidEmailParam" | "InvalidIdParam";
+      errorMessage: string;
+    };
     Company: {
       _id: string;
     };
     CompanyList: {
+      count: number;
       docs: components["schemas"]["Company"][];
+      nextCursor?: string[];
       total: number;
     };
     Delete: {
       affectedRows: number;
-    };
-    EmailMismatch: {
-      /** @enum {string} */
-      error: "EmailMismatch";
-      errorMessage: string;
     };
     Home: {
       schema: string;
@@ -203,6 +238,11 @@ export interface components {
     InternalServerError: {
       /** @enum {string} */
       error: "InternalServerError";
+      errorMessage: string;
+    };
+    InvalidIdParam: {
+      /** @enum {string} */
+      error: "InvalidIdParam";
       errorMessage: string;
     };
     InvalidQuery: {
@@ -240,7 +280,9 @@ export interface components {
       errorMessage: string;
     };
     UserList: {
+      count: number;
       docs: components["schemas"]["User"][];
+      nextCursor?: string[];
       total: number;
     };
     UserNotFound: {

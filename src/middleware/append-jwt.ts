@@ -4,11 +4,11 @@ import {
   AUTH_HEADER_NAME,
   AUTH_HEADER_PREFIX
 } from "../consts";
+import { JwtValidationSchema } from "../schema";
 import { RequestHandler } from "express";
 import jwt from "jsonwebtoken";
 import { lang } from "../langs";
 import { logger } from "../services";
-import zod from "zod";
 
 export const appendJwt: RequestHandler = (req, _res, next) => {
   const token = getToken(req);
@@ -19,31 +19,23 @@ export const appendJwt: RequestHandler = (req, _res, next) => {
         logger.warn(lang.JwtVerificationFailed, jwtError, {
           requestId: req.requestId
         });
-      else
-        try {
-          const email = JwtValidationSchema.parse(decoded).email.toLowerCase();
+      else {
+        const jwt = JwtValidationSchema.safeParse(decoded);
 
+        if (jwt.success)
           req.jwtUser = {
-            admin: ADMIN_EMAIL.includes(email),
-            email
+            admin: ADMIN_EMAIL.includes(jwt.data.email),
+            email: jwt.data.email
           };
-        } catch (err) {
-          if (err instanceof zod.ZodError)
-            logger.warn(lang.JwtVerificationFailed, err, {
-              requestId: req.requestId
-            });
-          else throw err;
-        }
+        else
+          logger.warn(lang.JwtVerificationFailed, jwt.error, {
+            requestId: req.requestId
+          });
+      }
     });
 
   next();
 };
-
-const JwtValidationSchema = zod
-  // Do not use strictObject: JWT may contain additional fields
-  .object({
-    email: zod.string().email()
-  });
 
 /**
  * Get the token from the request.

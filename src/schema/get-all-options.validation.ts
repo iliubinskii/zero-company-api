@@ -4,17 +4,18 @@ import {
   GetCompaniesByUserOptions,
   GetCompaniesOptions,
   GetUsersOptions
-} from "../schema";
-import { preprocessBoolean, preprocessNumber } from "../utils";
+} from "./get-all-options";
+import { preprocessBoolean, preprocessNumber } from "./common";
 import { Equals } from "ts-toolbelt/out/Any/Equals";
-import { MONGODB_MAX_LIMIT } from "../consts";
+import { MAX_LIMIT } from "./consts";
 import zod from "zod";
 
 export const GetCategoriesOptionsValidationSchema = zod.strictObject({
   limit: preprocessNumber(
-    zod.number().int().positive().max(MONGODB_MAX_LIMIT.categories).optional()
+    zod.number().int().positive().max(MAX_LIMIT.categories).optional()
   ),
-  offset: preprocessNumber(zod.number().int().nonnegative().optional())
+  offset: preprocessNumber(zod.number().int().nonnegative().optional()),
+  onlyPinned: preprocessBoolean(zod.boolean().optional())
 });
 
 export const GetCompaniesOptionsValidationSchema = zod.strictObject({
@@ -23,7 +24,7 @@ export const GetCompaniesOptionsValidationSchema = zod.strictObject({
   founderEmail: zod.string().min(1).optional(),
   includePrivateCompanies: preprocessBoolean(zod.boolean().optional()),
   limit: preprocessNumber(
-    zod.number().int().positive().max(MONGODB_MAX_LIMIT.companies).optional()
+    zod.number().int().positive().max(MAX_LIMIT.companies).optional()
   ),
   offset: preprocessNumber(zod.number().int().nonnegative().optional()),
   onlyRecommended: preprocessBoolean(zod.boolean().optional()),
@@ -43,7 +44,7 @@ export const GetCompaniesByUserOptionsValidationSchema =
 
 export const GetUsersOptionsValidationSchema = zod.strictObject({
   limit: preprocessNumber(
-    zod.number().int().positive().max(MONGODB_MAX_LIMIT.users).optional()
+    zod.number().int().positive().max(MAX_LIMIT.users).optional()
   ),
   offset: preprocessNumber(zod.number().int().nonnegative().optional())
 });

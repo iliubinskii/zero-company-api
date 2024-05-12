@@ -1,5 +1,11 @@
 import zod from "zod";
 
+export const EmailValidationSchema = preprocessEmail(zod.string().email());
+
+export const IdValidationSchema = zod
+  .string()
+  .refine(value => /^[\da-f]{24}$/u.test(value));
+
 /**
  * Preprocesses a schema to convert string values to booleans.
  * @param schema - The schema to preprocess.

@@ -1,9 +1,9 @@
 import {
   nullifyEmptyStrings,
   parseNestedFormData,
+  requireIdParam,
   requireJwtAdmin,
-  requireJwtUser,
-  requireValidMongodbId
+  requireJwtUser
 } from "../../middleware";
 import { CompanyControllers } from "../../types";
 import { Router } from "express";
@@ -15,18 +15,12 @@ import { companiesMiddleware } from "./middleware";
  * @returns A router for company routes.
  */
 export function createCompaniesRouter(controllers: CompanyControllers): Router {
-  const {
-    parseFormData,
-    requireValidCompany,
-    requireValidCompanyUpdate,
-    requireValidGetCompaniesOptions,
-    webAccessibleStorage
-  } = companiesMiddleware;
+  const { parseFormData, webAccessibleStorage } = companiesMiddleware;
 
   const router = Router();
 
   router
-    .get("/", requireValidGetCompaniesOptions, controllers.getCompanies)
+    .get("/", controllers.getCompanies)
     .post(
       "/",
       requireJwtUser,
@@ -34,27 +28,20 @@ export function createCompaniesRouter(controllers: CompanyControllers): Router {
       nullifyEmptyStrings,
       webAccessibleStorage,
       parseNestedFormData,
-      requireValidCompany,
       controllers.addCompany
     )
-    .get("/:id", requireValidMongodbId("id"), controllers.getCompany)
+    .get("/:id", requireIdParam, controllers.getCompany)
     .put(
       "/:id",
       requireJwtAdmin,
-      requireValidMongodbId("id"),
+      requireIdParam,
       parseFormData,
       nullifyEmptyStrings,
       webAccessibleStorage,
       parseNestedFormData,
-      requireValidCompanyUpdate,
       controllers.updateCompany
     )
-    .delete(
-      "/:id",
-      requireJwtAdmin,
-      requireValidMongodbId("id"),
-      controllers.deleteCompany
-    );
+    .delete("/:id", requireJwtAdmin, requireIdParam, controllers.deleteCompany);
 
   return router;
 }

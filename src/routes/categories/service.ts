@@ -1,6 +1,7 @@
-import { ExistingCategory, MultipleDocsResponse } from "../../schema";
+import { Category, MAX_LIMIT } from "../../schema";
 import { CategoriesService } from "../../types";
-import { MONGODB_MAX_LIMIT } from "../../consts";
+import { FilterQuery } from "mongoose";
+import { Writable } from "ts-toolbelt/out/Object/Writable";
 import { buildMongodbQuery } from "../../utils";
 import { getCategoryModel } from "./model";
 
@@ -10,7 +11,7 @@ import { getCategoryModel } from "./model";
  */
 export function createCategoriesService(): CategoriesService {
   return {
-    addCategory: async (category): Promise<ExistingCategory> => {
+    addCategory: async category => {
       const CategoryModel = await getCategoryModel();
 
       const model = new CategoryModel(category);
@@ -21,7 +22,7 @@ export function createCategoriesService(): CategoriesService {
 
       return { _id: _id.toString(), ...rest };
     },
-    deleteCategory: async (id): Promise<number> => {
+    deleteCategory: async id => {
       const CategoryModel = await getCategoryModel();
 
       const deletedCategory = await CategoryModel.findByIdAndDelete(id);
@@ -29,14 +30,19 @@ export function createCategoriesService(): CategoriesService {
       return deletedCategory ? 1 : 0;
     },
     getCategories: async ({
-      limit = MONGODB_MAX_LIMIT.categories,
-      offset = 0
-    } = {}): Promise<MultipleDocsResponse<ExistingCategory>> => {
+      limit = MAX_LIMIT.categories,
+      offset = 0,
+      onlyPinned = false
+    } = {}) => {
+      const filter: Writable<FilterQuery<Category>> = {};
+
+      if (onlyPinned) filter["pinned"] = true;
+
       const CategoryModel = await getCategoryModel();
 
       const [categories, total] = await Promise.all([
-        CategoryModel.find().skip(offset).limit(limit),
-        CategoryModel.countDocuments()
+        CategoryModel.find(filter).skip(offset).limit(limit),
+        CategoryModel.countDocuments(filter)
       ]);
 
       return {
@@ -49,7 +55,7 @@ export function createCategoriesService(): CategoriesService {
         total
       };
     },
-    getCategory: async (id): Promise<ExistingCategory | undefined> => {
+    getCategory: async id => {
       const CategoryModel = await getCategoryModel();
 
       const category = await CategoryModel.findById(id);
@@ -62,10 +68,7 @@ export function createCategoriesService(): CategoriesService {
 
       return undefined;
     },
-    updateCategory: async (
-      id,
-      category
-    ): Promise<ExistingCategory | undefined> => {
+    updateCategory: async (id, category) => {
       const CategoryModel = await getCategoryModel();
 
       const updatedCategory = await CategoryModel.findByIdAndUpdate(

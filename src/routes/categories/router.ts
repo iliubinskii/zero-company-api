@@ -1,7 +1,6 @@
-import { requireJwtAdmin, requireValidMongodbId } from "../../middleware";
+import { requireIdParam, requireJwtAdmin } from "../../middleware";
 import { CategoryControllers } from "../../types";
 import { Router } from "express";
-import { categoriesMiddleware } from "./middleware";
 
 /**
  * Creates a router for category routes.
@@ -11,38 +10,15 @@ import { categoriesMiddleware } from "./middleware";
 export function createCategoriesRouter(
   controllers: CategoryControllers
 ): Router {
-  const {
-    requireValidCategory,
-    requireValidCategoryUpdate,
-    requireValidGetCategoriesOptions,
-    requireValidGetCompaniesByCategoryOptions
-  } = categoriesMiddleware;
-
   const router = Router();
 
   router
-    .get("/", requireValidGetCategoriesOptions, controllers.getCategories)
-    .post("/", requireJwtAdmin, requireValidCategory, controllers.addCategory)
-    .get("/:id", requireValidMongodbId("id"), controllers.getCategory)
-    .put(
-      "/:id",
-      requireJwtAdmin,
-      requireValidMongodbId("id"),
-      requireValidCategoryUpdate,
-      controllers.updateCategory
-    )
-    .delete(
-      "/:id",
-      requireJwtAdmin,
-      requireValidMongodbId("id"),
-      controllers.deleteCategory
-    )
-    .get(
-      "/:id/companies",
-      requireValidMongodbId("id"),
-      requireValidGetCompaniesByCategoryOptions,
-      controllers.getCompaniesByCategory
-    );
+    .get("/", controllers.getCategories)
+    .post("/", requireJwtAdmin, controllers.addCategory)
+    .get("/:id", requireIdParam, controllers.getCategory)
+    .put("/:id", requireJwtAdmin, requireIdParam, controllers.updateCategory)
+    .delete("/:id", requireJwtAdmin, requireIdParam, controllers.deleteCategory)
+    .get("/:id/companies", requireIdParam, controllers.getCompaniesByCategory);
 
   return router;
 }

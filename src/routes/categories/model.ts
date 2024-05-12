@@ -6,36 +6,35 @@ import mongoose from "mongoose";
 const Schema = {
   description: { required: true, type: String },
   name: { required: true, type: String },
+  pinned: { type: Boolean },
   tagline: { required: true, type: String }
 };
 
-export const { getCategoryModel } = categoryModelSingleton();
+export const getCategoryModel: GetCategoryModel = createSingleton();
+
+export interface GetCategoryModel {
+  (): Promise<mongoose.Model<Category>>;
+}
 
 /**
  * Creates a category model singleton.
  * @returns A category model singleton.
  */
-function categoryModelSingleton(): CategoryModelSingleton {
+function createSingleton(): GetCategoryModel {
   let model: mongoose.Model<Category> | undefined;
 
-  return {
-    getCategoryModel: async (): Promise<mongoose.Model<Category>> => {
-      const connection = await getMongodbConnection();
+  return async () => {
+    const connection = await getMongodbConnection();
 
-      model =
-        model ??
-        connection.model<Category>(
-          "Category",
-          new mongoose.Schema<Category>(Schema, { versionKey: false })
-        );
+    model =
+      model ??
+      connection.model<Category>(
+        "Category",
+        new mongoose.Schema<Category>(Schema, { versionKey: false })
+      );
 
-      return model;
-    }
+    return model;
   };
-}
-
-interface CategoryModelSingleton {
-  readonly getCategoryModel: () => Promise<mongoose.Model<Category>>;
 }
 
 // Type check the category schema
