@@ -24,8 +24,8 @@ export const MONGODB_ERROR = {
 
 export const MONGODB_MAX_LIMIT = {
   categories: 1000,
-  companies: 100,
-  users: 100
+  companies: 1000,
+  users: 1000
 };
 
 export const MONGODB_SESSIONS_COLLECTION = "sessions";

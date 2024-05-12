@@ -40,6 +40,7 @@ export function createCategoriesService(): CategoriesService {
       ]);
 
       return {
+        count: categories.length,
         docs: categories.map(category => {
           const { _id, ...rest } = category.toObject();
 

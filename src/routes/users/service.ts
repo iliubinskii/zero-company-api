@@ -65,6 +65,7 @@ export function createUsersService(): UsersService {
       ]);
 
       return {
+        count: users.length,
         docs: users.map(user => {
           const { _id, ...rest } = user.toObject();
 

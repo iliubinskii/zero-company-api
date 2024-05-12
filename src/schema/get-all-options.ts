@@ -5,7 +5,7 @@ export interface GetCategoriesOptions {
 
 export interface GetCompaniesOptions {
   readonly category?: string;
-  readonly cursor?: string;
+  readonly cursor?: readonly [string, string];
   readonly founderEmail?: string;
   readonly includePrivateCompanies?: boolean;
   readonly limit?: number;
