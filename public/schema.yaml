@@ -22,6 +22,32 @@ paths:
         "200":
           $ref: "#/components/responses/Home"
 
+  # Companies path
+  /companies:
+    get:
+      summary: Get all companies
+      tags:
+        - companies
+      responses:
+        "200":
+          $ref: "#/components/responses/CompanyList"
+        "400":
+          $ref: "#/components/responses/InvalidQuery"
+
+  # Company path
+  /companies/{id}:
+    get:
+      summary: Get a company by ID
+      tags:
+        - companies
+      parameters:
+        - $ref: '#/components/parameters/Id'
+      responses:
+        "200":
+          $ref: "#/components/responses/Company"
+        "404":
+          $ref: "#/components/responses/CompanyNotFound"
+
   # Users path
   /users:
     get:
@@ -170,6 +196,14 @@ components:
           schema:
             $ref: "#/components/schemas/CompanyList"
 
+    # CompanyNotFound response
+    CompanyNotFound:
+      description: Company not found
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/CompanyNotFound"
+
     # Delete response
     Delete:
       description: Delete
@@ -298,6 +332,20 @@ components:
             type: string
         total:
           type: integer
+
+    # CompanyNotFound schema
+    CompanyNotFound:
+      type: object
+      required:
+        - error
+        - errorMessage
+      properties:
+        error:
+          type: string
+          enum:
+            - CompanyNotFound
+        errorMessage:
+          type: string
 
     # Delete schema
     Delete:

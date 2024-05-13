@@ -36,6 +36,29 @@ export interface paths {
       };
     };
   };
+  "/companies": {
+    /** Get all companies */
+    get: {
+      responses: {
+        200: components["responses"]["CompanyList"];
+        400: components["responses"]["InvalidQuery"];
+      };
+    };
+  };
+  "/companies/{id}": {
+    /** Get a company by ID */
+    get: {
+      parameters: {
+        path: {
+          id: components["parameters"]["Id"];
+        };
+      };
+      responses: {
+        200: components["responses"]["Company"];
+        404: components["responses"]["CompanyNotFound"];
+      };
+    };
+  };
   "/users": {
     /** Get all users */
     get: {
@@ -151,6 +174,12 @@ export interface components {
         "application/json": components["schemas"]["CompanyList"];
       };
     };
+    /** @description Company not found */
+    CompanyNotFound: {
+      content: {
+        "application/json": components["schemas"]["CompanyNotFound"];
+      };
+    };
     /** @description Delete */
     Delete: {
       content: {
@@ -226,6 +255,11 @@ export interface components {
       docs: components["schemas"]["Company"][];
       nextCursor?: string[];
       total: number;
+    };
+    CompanyNotFound: {
+      /** @enum {string} */
+      error: "CompanyNotFound";
+      errorMessage: string;
     };
     Delete: {
       affectedRows: number;

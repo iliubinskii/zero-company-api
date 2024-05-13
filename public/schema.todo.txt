@@ -1,0 +1,5 @@
+Add schema for companies to schema.yaml
+
+Add all company fields to Company schema
+
+VSCode extension: OpenAPI (Swagger) Editor

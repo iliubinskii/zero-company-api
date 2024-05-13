@@ -4,12 +4,14 @@ import {
   CompanyUpdateValidationSchema,
   ErrorCode,
   GetCompaniesOptionsValidationSchema,
+  Routes,
   RoutesOld
 } from "../../schema";
 import {
   assertDefined,
   buildErrorResponse,
   filterUndefinedProperties,
+  sendResponse,
   sendResponseOld,
   wrapAsyncHandler
 } from "../../utils";
@@ -35,6 +37,9 @@ export function createCompanyControllers(
           })
         );
 
+        // eslint-disable-next-line no-warning-comments -- Assigned to Alex
+        // TODO: Replace all sendResponseOld and RoutesOld with sendResponse and Routes
+        // Use "npm run parse-openapi" to convert the OpenAPI schema to TypeScript interfaces
         sendResponseOld<RoutesOld["/companies"]["/"]["POST"]>(
           res,
           StatusCodes.CREATED,
@@ -66,13 +71,13 @@ export function createCompanyControllers(
           filterUndefinedProperties(options.data)
         );
 
-        sendResponseOld<RoutesOld["/companies"]["/"]["GET"]>(
+        sendResponse<Routes["/companies"]["get"]>(
           res,
           StatusCodes.OK,
           companies
         );
       } else
-        sendResponseOld<RoutesOld["*"]["BAD_REQUEST"]["InvalidQuery"]>(
+        sendResponse<Routes["/companies"]["get"]>(
           res,
           StatusCodes.BAD_REQUEST,
           buildErrorResponse(ErrorCode.InvalidQuery, options.error)
@@ -84,13 +89,15 @@ export function createCompanyControllers(
       const company = await service.getCompany(id);
 
       if (company)
-        sendResponseOld<RoutesOld["/companies"]["/:id"]["GET"]["OK"]>(
+        // eslint-disable-next-line no-warning-comments -- Assigned to Alex
+        // TODO: Use this as a sample
+        sendResponse<Routes["/companies/{id}"]["get"]>(
           res,
           StatusCodes.OK,
           company
         );
       else
-        sendResponseOld<RoutesOld["/companies"]["/:id"]["GET"]["NOT_FOUND"]>(
+        sendResponse<Routes["/companies/{id}"]["get"]>(
           res,
           StatusCodes.NOT_FOUND,
           buildErrorResponse(ErrorCode.CompanyNotFound)
