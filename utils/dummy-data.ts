@@ -1,6 +1,6 @@
 /* eslint-disable no-sync -- Ok */
 
-import { Category, Companies, Company, Users } from "../src";
+import { Category, Company, User } from "../src";
 import { dummy } from "../assets";
 import { faker } from "@faker-js/faker";
 import fs from "node:fs";
@@ -81,16 +81,14 @@ const companies = faker.helpers.uniqueArray((): Company => {
 fs.writeFileSync("assets/dummy/companies.json", JSON.stringify(companies));
 
 // Type check the category schema
-((): DummyCategories => dummy.categories)();
+((): DummyCategory[] => dummy.categories)();
 
 // Type check the companies schema
-((): Companies => dummy.companies)();
+((): Company[] => dummy.companies)();
 
 // Type check the users schema
-((): Users => dummy.users)();
+((): User[] => dummy.users)();
 
 interface DummyCategory extends Category {
   readonly _id: { readonly $oid: string };
 }
-
-type DummyCategories = readonly DummyCategory[];

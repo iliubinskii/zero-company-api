@@ -1,10 +1,18 @@
 import zod from "zod";
 
-export const EmailValidationSchema = preprocessEmail(zod.string().email());
-
 export const IdValidationSchema = zod
   .string()
   .refine(value => /^[\da-f]{24}$/u.test(value));
+
+export const ImageValidationSchema = zod.strictObject({
+  assetId: zod.string().min(1),
+  height: preprocessNumber(zod.number().int().positive()),
+  secureUrl: zod.string().min(1),
+  url: zod.string().min(1),
+  width: preprocessNumber(zod.number().int().positive())
+});
+
+export const UserEmailValidationSchema = preprocessEmail(zod.string().email());
 
 /**
  * Preprocesses a schema to convert string values to booleans.

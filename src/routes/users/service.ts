@@ -53,7 +53,7 @@ export function createUsersService(): UsersService {
 
       return undefined;
     },
-    getUsers: async ({ limit = MAX_LIMIT.users, offset = 0 } = {}) => {
+    getUsers: async ({ limit = MAX_LIMIT, offset = 0 } = {}) => {
       const UserModel = await getUserModel();
 
       const [users, total] = await Promise.all([

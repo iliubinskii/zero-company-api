@@ -5,51 +5,79 @@ import {
   GetCompaniesOptions,
   GetUsersOptions
 } from "./get-all-options";
-import { preprocessBoolean, preprocessNumber } from "./common";
+import {
+  IdValidationSchema,
+  preprocessBoolean,
+  preprocessNumber
+} from "./common";
 import { Equals } from "ts-toolbelt/out/Any/Equals";
 import { MAX_LIMIT } from "./consts";
+import _ from "lodash";
 import zod from "zod";
 
-export const GetCategoriesOptionsValidationSchema = zod.strictObject({
-  limit: preprocessNumber(
-    zod.number().int().positive().max(MAX_LIMIT.categories).optional()
-  ),
-  offset: preprocessNumber(zod.number().int().nonnegative().optional()),
-  onlyPinned: preprocessBoolean(zod.boolean().optional())
-});
+const category = IdValidationSchema.optional();
 
-export const GetCompaniesOptionsValidationSchema = zod.strictObject({
-  category: zod.string().min(1).optional(),
-  cursor: zod.tuple([zod.string().min(1), zod.string().min(1)]).optional(),
-  founderEmail: zod.string().min(1).optional(),
-  includePrivateCompanies: preprocessBoolean(zod.boolean().optional()),
-  limit: preprocessNumber(
-    zod.number().int().positive().max(MAX_LIMIT.companies).optional()
-  ),
-  offset: preprocessNumber(zod.number().int().nonnegative().optional()),
-  onlyRecommended: preprocessBoolean(zod.boolean().optional()),
-  sortBy: zod.union([zod.literal("foundedAt"), zod.literal("name")]).optional(),
-  sortOrder: zod.union([zod.literal("asc"), zod.literal("desc")]).optional()
-});
+const cursor = zod.tuple([zod.string().min(1), IdValidationSchema]).optional();
 
-export const GetCompaniesByCategoryOptionsValidationSchema =
-  GetCompaniesOptionsValidationSchema.omit({
-    category: true
-  });
+const founderEmail = zod.string().min(1).optional();
 
-export const GetCompaniesByUserOptionsValidationSchema =
-  GetCompaniesOptionsValidationSchema.omit({
-    founderEmail: true
-  });
+const includePrivateCompanies = preprocessBoolean(zod.boolean()).optional();
 
-export const GetUsersOptionsValidationSchema = zod.strictObject({
-  limit: preprocessNumber(
-    zod.number().int().positive().max(MAX_LIMIT.users).optional()
-  ),
-  offset: preprocessNumber(zod.number().int().nonnegative().optional())
-});
+const limit = preprocessNumber(
+  zod.number().int().positive().max(MAX_LIMIT)
+).optional();
 
-// Type check the get companies options validation schema
+const offset = preprocessNumber(zod.number().int().nonnegative()).optional();
+
+const onlyPinned = preprocessBoolean(zod.boolean()).optional();
+
+const onlyRecommended = preprocessBoolean(zod.boolean()).optional();
+
+const sortBy = {
+  companies: zod
+    .union([zod.literal("foundedAt"), zod.literal("name")])
+    .optional()
+} as const;
+
+const sortOrder = {
+  companies: zod.union([zod.literal("asc"), zod.literal("desc")]).optional()
+} as const;
+
+const fields = {
+  categories: { limit, offset, onlyPinned },
+  companies: {
+    category,
+    cursor,
+    founderEmail,
+    includePrivateCompanies,
+    limit,
+    offset,
+    onlyRecommended,
+    sortBy: sortBy.companies,
+    sortOrder: sortOrder.companies
+  },
+  users: { limit, offset }
+} as const;
+
+export const GetCategoriesOptionsValidationSchema = zod.strictObject(
+  fields.categories
+);
+
+export const GetCompaniesOptionsValidationSchema = zod.strictObject(
+  fields.companies
+);
+
+export const GetCompaniesByCategoryOptionsValidationSchema = zod.strictObject(
+  _.omit(fields.companies, ["category"])
+);
+
+export const GetCompaniesByUserOptionsValidationSchema = zod.strictObject(
+  _.omit(fields.companies, ["founderEmail"])
+);
+
+export const GetUsersOptionsValidationSchema = zod.strictObject(fields.users);
+
+// Type check the get categories options validation schema
 ((): Equals<
   keyof zod.infer<typeof GetCategoriesOptionsValidationSchema>,
   keyof GetCategoriesOptions
