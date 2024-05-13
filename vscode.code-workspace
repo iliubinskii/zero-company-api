@@ -44,7 +44,7 @@
     "css.validate": false,
     "debug.javascript.codelens.npmScripts": "never",
     "editor.codeActionsOnSave": {
-      "source.fixAll": "never",
+      "source.fixAll": "explicit",
       "source.sortPackageJson": "explicit"
     },
     "editor.colorDecorators": false,
