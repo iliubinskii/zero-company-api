@@ -36,7 +36,9 @@ const config = {
     {
       files: ["*.test.ts", "*.test.tsx"],
       rules: {
-        "i18n-text/no-en": "off"
+        "i18n-text/no-en": "off",
+        "no-magic-numbers": "off",
+        "node/no-unpublished-import": "off"
       }
     }
   ],
