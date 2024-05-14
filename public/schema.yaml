@@ -45,6 +45,8 @@ paths:
 
   # Company path
   /companies/{id}:
+    parameters:
+      - $ref: '#/components/parameters/Id'
     delete:
       summary: Delete a company by ID
       tags:
@@ -56,8 +58,6 @@ paths:
       summary: Get a company by ID
       tags:
         - companies
-      parameters:
-        - $ref: '#/components/parameters/Id'
       responses:
         "200":
           $ref: "#/components/responses/Company"
