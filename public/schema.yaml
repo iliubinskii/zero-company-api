@@ -45,6 +45,13 @@ paths:
 
   # Company path
   /companies/{id}:
+    delete:
+      summary: Delete a company by ID
+      tags:
+        - companies
+      responses:
+        "200":
+          $ref: "#/components/responses/Delete"
     get:
       summary: Get a company by ID
       tags:
@@ -56,13 +63,6 @@ paths:
           $ref: "#/components/responses/Company"
         "404":
           $ref: "#/components/responses/CompanyNotFound"
-    delete:
-      summary: Delete a company by ID
-      tags:
-        - companies
-      responses:
-        "200":
-          $ref: "#/components/responses/Delete"
     put:
       summary: Update a company by ID
       tags:
@@ -349,8 +349,8 @@ components:
         - founders
         - images
         - logo
-        - targetValue
         - name
+        - targetValue
       properties:
         _id:
           type: string
@@ -431,14 +431,13 @@ components:
     Founder:
       type: object
       required:
-        # - _id
         - email
         - firstName
         - lastName
         - share
       properties:
-        # _id:
-        #   type: string
+        confirmed:
+          type: boolean
         email:
           type: string
         firstName:
@@ -447,9 +446,6 @@ components:
           type: string
         share:
           type: number
-        confirmed:
-          type: boolean
-
 
     # Home schema
     Home:
@@ -661,17 +657,17 @@ components:
       required:
         - assetId
         - height
-        - width
         - secureUrl
         - url
+        - width
       properties:
         assetId:
           type: string
         height:
           type: number
-        width:
-          type: number
-        url:
-          type: string
         secureUrl:
           type: string
+        url:
+          type: string
+        width:
+          type: number
