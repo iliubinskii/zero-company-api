@@ -1,5 +1,8 @@
-export * from "./auth";
-export * from "./auth.validation";
+import version from "./version.json";
+
+// Should not re-export the named export 'schemaVersion' directly from default-exporting module
+export const schemaVersion = version.schemaVersion;
+
 export * from "./categories";
 export * from "./categories.validation";
 export * from "./common";
@@ -12,4 +15,3 @@ export type { paths as Routes } from "./routes";
 export * from "./routes-old";
 export * from "./users";
 export * from "./users.validation";
-export { schemaVersion } from "./version.json";

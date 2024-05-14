@@ -2,14 +2,14 @@
 
 ## Initial setup
 
-1. Global git configuration:
-   - git config --global core.autocrlf true
-   - git config --global core.eol lf
-2. Fork repository.
-3. Clone your forked repository.
-4. Install dependencies by running `npm install`.
-5. Create .env file (see .env.example)
-6. Add SSL certificates or copy certificates generated in zero-company-app repo
+1. Clone repository.
+2. Git configuration for line breaks:
+   - git config core.autocrlf true
+   - git config core.eol lf
+   - git add --renormalize .
+3. Install dependencies by running `npm install`.
+4. Create .env file (see .env.example)
+5. Add SSL certificates or copy certificates generated in zero-company-app repo
    - certificates/localhost.pem
    - certificates/localhost-key.pem
 

@@ -2,11 +2,11 @@ import { CompanyCreate, CompanyUpdate, ExistingCompany } from "./companies";
 import {
   IdValidationSchema,
   ImageValidationSchema,
+  ValidationResult,
   preprocessBoolean,
   preprocessEmail,
   preprocessNumber
 } from "./common";
-import { Equals } from "ts-toolbelt/out/Any/Equals";
 import { MAX_CATEGORIES } from "./consts";
 import _ from "lodash";
 import zod from "zod";
@@ -62,7 +62,7 @@ const fields = {
   website
 };
 
-export const CompanyValidationSchema = zod.strictObject(fields);
+export const ExistingCompanyValidationSchema = zod.strictObject(fields);
 
 export const CompanyCreateValidationSchema = zod.strictObject({
   ..._.omit(fields, "_id", "foundedAt", "founders", "recommended"),
@@ -78,20 +78,23 @@ export const CompanyUpdateValidationSchema = zod.strictObject({
   website: website.nullable().optional()
 });
 
-// Type check the company create validation schema
-((): Equals<
-  keyof zod.infer<typeof CompanyValidationSchema>,
-  keyof ExistingCompany
-> => 1)();
+// Type check the existing company validation schema
+((): ValidationResult<ExistingCompany> | undefined => {
+  const result = ExistingCompanyValidationSchema.safeParse(undefined);
+
+  return result.success ? result.data : undefined;
+})();
 
 // Type check the company create validation schema
-((): Equals<
-  keyof zod.infer<typeof CompanyCreateValidationSchema>,
-  keyof CompanyCreate
-> => 1)();
+((): ValidationResult<CompanyCreate> | undefined => {
+  const result = CompanyCreateValidationSchema.safeParse(undefined);
+
+  return result.success ? result.data : undefined;
+})();
 
 // Type check the company update validation schema
-((): Equals<
-  keyof zod.infer<typeof CompanyUpdateValidationSchema>,
-  keyof CompanyUpdate
-> => 1)();
+((): ValidationResult<CompanyUpdate> | undefined => {
+  const result = CompanyUpdateValidationSchema.safeParse(undefined);
+
+  return result.success ? result.data : undefined;
+})();

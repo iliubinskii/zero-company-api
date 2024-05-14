@@ -5,10 +5,9 @@ import {
   ErrorResponseWithData,
   MultipleDocsResponse
 } from "./common";
+import { ExistingUser, JwtUser } from "./users";
 import { ExistingCategory } from "./categories";
 import { ExistingCompany } from "./companies";
-import { ExistingUser } from "./users";
-import { JwtUser } from "./auth";
 import { StatusCodes } from "http-status-codes";
 
 export interface RoutesOld {

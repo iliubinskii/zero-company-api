@@ -1,4 +1,4 @@
-import { WebAccessibleImage } from "./common";
+import { Update, WebAccessibleImage } from "./common";
 
 export interface Company {
   readonly categories: readonly string[];
@@ -20,7 +20,7 @@ export interface CompanyCreate
 }
 
 export interface CompanyUpdate
-  extends Partial<
+  extends Update<
     Omit<
       Company,
       "categories" | "foundedAt" | "founders" | "recommended" | "targetValue"

@@ -1,3 +1,5 @@
+import { Update } from "./common";
+
 export interface Category {
   readonly description: string;
   readonly name: string;
@@ -7,7 +9,7 @@ export interface Category {
 
 export interface CategoryCreate extends Category {}
 
-export interface CategoryUpdate extends Partial<Category> {}
+export interface CategoryUpdate extends Update<Category> {}
 
 export interface ExistingCategory extends Category {
   readonly _id: string;

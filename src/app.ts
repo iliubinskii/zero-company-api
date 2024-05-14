@@ -8,8 +8,9 @@ import {
   middlewareExclusion,
   requestId
 } from "./middleware";
+import { buildErrorResponse, sendResponse } from "./utils";
 import {
-  authRouter,
+  createAuthRouter,
   createCategoriesRouter,
   createCategoriesService,
   createCategoryControllers,
@@ -22,7 +23,6 @@ import {
   createUsersService,
   testRouter
 } from "./routes";
-import { buildErrorResponse, sendResponse } from "./utils";
 import { initMongodb, initPassport } from "./providers";
 import { StatusCodes } from "http-status-codes";
 import cookieParser from "cookie-parser";
@@ -100,7 +100,7 @@ export function createApp(): express.Express {
     });
   });
 
-  app.use("/auth", authRouter);
+  app.use("/auth", createAuthRouter(usersService));
 
   app.use("/categories", createCategoriesRouter(categoryControllers));
 

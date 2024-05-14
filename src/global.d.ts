@@ -1,11 +1,11 @@
 /// <reference types="jest-extended" />
 
-import { JwtUser } from "./schema";
+import { Jwt } from "./schema";
 
 declare module "express-serve-static-core" {
   interface Request {
     idParam?: string;
-    jwtUser?: JwtUser;
+    jwt?: Jwt;
     readonly logout: () => void;
     requestId: string;
     userEmail?: string;

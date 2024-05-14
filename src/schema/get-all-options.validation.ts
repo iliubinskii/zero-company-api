@@ -7,10 +7,10 @@ import {
 } from "./get-all-options";
 import {
   IdValidationSchema,
+  ValidationResult,
   preprocessBoolean,
   preprocessNumber
 } from "./common";
-import { Equals } from "ts-toolbelt/out/Any/Equals";
 import { MAX_LIMIT } from "./consts";
 import _ from "lodash";
 import zod from "zod";
@@ -78,31 +78,37 @@ export const GetCompaniesByUserOptionsValidationSchema = zod.strictObject(
 export const GetUsersOptionsValidationSchema = zod.strictObject(fields.users);
 
 // Type check the get categories options validation schema
-((): Equals<
-  keyof zod.infer<typeof GetCategoriesOptionsValidationSchema>,
-  keyof GetCategoriesOptions
-> => 1)();
+((): ValidationResult<GetCategoriesOptions> | undefined => {
+  const result = GetCategoriesOptionsValidationSchema.safeParse(undefined);
+
+  return result.success ? result.data : undefined;
+})();
 
 // Type check the get companies options validation schema
-((): Equals<
-  keyof zod.infer<typeof GetCompaniesOptionsValidationSchema>,
-  keyof GetCompaniesOptions
-> => 1)();
+((): ValidationResult<GetCompaniesOptions> | undefined => {
+  const result = GetCompaniesOptionsValidationSchema.safeParse(undefined);
+
+  return result.success ? result.data : undefined;
+})();
 
 // Type check the get companies by category options validation schema
-((): Equals<
-  keyof zod.infer<typeof GetCompaniesByCategoryOptionsValidationSchema>,
-  keyof GetCompaniesByCategoryOptions
-> => 1)();
+((): ValidationResult<GetCompaniesByCategoryOptions> | undefined => {
+  const result =
+    GetCompaniesByCategoryOptionsValidationSchema.safeParse(undefined);
+
+  return result.success ? result.data : undefined;
+})();
 
 // Type check the get companies by user options validation schema
-((): Equals<
-  keyof zod.infer<typeof GetCompaniesByUserOptionsValidationSchema>,
-  keyof GetCompaniesByUserOptions
-> => 1)();
+((): ValidationResult<GetCompaniesByUserOptions> | undefined => {
+  const result = GetCompaniesByUserOptionsValidationSchema.safeParse(undefined);
 
-// Type check the get companies options validation schema
-((): Equals<
-  keyof zod.infer<typeof GetUsersOptionsValidationSchema>,
-  keyof GetUsersOptions
-> => 1)();
+  return result.success ? result.data : undefined;
+})();
+
+// Type check the get users options validation schema
+((): ValidationResult<GetUsersOptions> | undefined => {
+  const result = GetUsersOptionsValidationSchema.safeParse(undefined);
+
+  return result.success ? result.data : undefined;
+})();
