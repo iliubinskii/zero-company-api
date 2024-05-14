@@ -6,7 +6,10 @@ const config = {
   collectCoverage: true,
   coverageDirectory: "coverage",
   coverageProvider: "v8",
-  setupFilesAfterEnv: ["jest-extended/all"]
+  coverageReporters: ["lcov"],
+  preset: "ts-jest",
+  setupFilesAfterEnv: ["jest-extended/all"],
+  testEnvironment: "node"
 };
 
 export default config;
