@@ -44,8 +44,21 @@ export interface paths {
         400: components["responses"]["InvalidQuery"];
       };
     };
+    /** Create a new company */
+    post: {
+      responses: {
+        201: components["responses"]["Company"];
+        400: components["responses"]["InvalidCompanyData"];
+      };
+    };
   };
   "/companies/{id}": {
+    /** Delete a company by ID */
+    delete: {
+      responses: {
+        200: components["responses"]["Delete"];
+      };
+    };
     /** Get a company by ID */
     get: {
       parameters: {
@@ -55,6 +68,14 @@ export interface paths {
       };
       responses: {
         200: components["responses"]["Company"];
+        404: components["responses"]["CompanyNotFound"];
+      };
+    };
+    /** Update a company by ID */
+    put: {
+      responses: {
+        200: components["responses"]["Company"];
+        400: components["responses"]["InvalidCompanyData"];
         404: components["responses"]["CompanyNotFound"];
       };
     };
@@ -198,6 +219,12 @@ export interface components {
         "application/json": components["schemas"]["InternalServerError"];
       };
     };
+    /** @description Invalid company data */
+    InvalidCompanyData: {
+      content: {
+        "application/json": components["schemas"]["InvalidCompanyData"];
+      };
+    };
     /** @description Invalid query */
     InvalidQuery: {
       content: {
@@ -249,6 +276,17 @@ export interface components {
     };
     Company: {
       _id: string;
+      categories: string[];
+      description: string;
+      foundedAt: string;
+      founders: components["schemas"]["Founder"][];
+      images: components["schemas"]["WebAccessibleImage"][];
+      logo: components["schemas"]["WebAccessibleImage"];
+      name: string;
+      privateCompany?: boolean;
+      recommended?: boolean;
+      targetValue: number;
+      website?: string;
     };
     CompanyList: {
       count: number;
@@ -264,6 +302,13 @@ export interface components {
     Delete: {
       affectedRows: number;
     };
+    Founder: {
+      confirmed?: boolean;
+      email: string;
+      firstName: string;
+      lastName: string;
+      share: number;
+    };
     Home: {
       schema: string;
       /** @enum {string} */
@@ -272,6 +317,15 @@ export interface components {
     InternalServerError: {
       /** @enum {string} */
       error: "InternalServerError";
+      errorMessage: string;
+    };
+    InvalidCompanyData: {
+      data: {
+        message: string;
+        path: string;
+      }[];
+      /** @enum {string} */
+      error: "InvalidCompanyData";
       errorMessage: string;
     };
     InvalidIdParam: {
@@ -323,6 +377,13 @@ export interface components {
       /** @enum {string} */
       error: "UserNotFound";
       errorMessage: string;
+    };
+    WebAccessibleImage: {
+      assetId: string;
+      height: number;
+      secureUrl: string;
+      url: string;
+      width: number;
     };
   };
 }

@@ -2,4 +2,6 @@ Add schema for companies to schema.yaml
 
 Add all company fields to Company schema
 
+Change all methods for companies from RouteOlds to Route
+
 VSCode extension: OpenAPI (Swagger) Editor

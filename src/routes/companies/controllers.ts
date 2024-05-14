@@ -4,15 +4,13 @@ import {
   CompanyUpdateValidationSchema,
   ErrorCode,
   GetCompaniesOptionsValidationSchema,
-  Routes,
-  RoutesOld
+  Routes
 } from "../../schema";
 import {
   assertDefined,
   buildErrorResponse,
   filterUndefinedProperties,
   sendResponse,
-  sendResponseOld,
   wrapAsyncHandler
 } from "../../utils";
 import { StatusCodes } from "http-status-codes";
@@ -37,16 +35,13 @@ export function createCompanyControllers(
           })
         );
 
-        // eslint-disable-next-line no-warning-comments -- Assigned to Alex
-        // TODO: Replace all sendResponseOld and RoutesOld with sendResponse and Routes
-        // Use "npm run parse-openapi" to convert the OpenAPI schema to TypeScript interfaces
-        sendResponseOld<RoutesOld["/companies"]["/"]["POST"]>(
+        sendResponse<Routes["/companies"]["post"]>(
           res,
           StatusCodes.CREATED,
           addedCompany
         );
       } else
-        sendResponseOld<RoutesOld["*"]["BAD_REQUEST"]["InvalidCompanyData"]>(
+        sendResponse<Routes["/companies"]["post"]>(
           res,
           StatusCodes.BAD_REQUEST,
           buildErrorResponse(ErrorCode.InvalidCompanyData, company.error)
@@ -57,11 +52,9 @@ export function createCompanyControllers(
 
       const affectedRows = await service.deleteCompany(id);
 
-      sendResponseOld<RoutesOld["/companies"]["/:id"]["DELETE"]>(
-        res,
-        StatusCodes.OK,
-        { affectedRows }
-      );
+      sendResponse<Routes["/companies/{id}"]["delete"]>(res, StatusCodes.OK, {
+        affectedRows
+      });
     }),
     getCompanies: wrapAsyncHandler(async (req, res) => {
       const options = GetCompaniesOptionsValidationSchema.safeParse(req.query);
@@ -89,8 +82,6 @@ export function createCompanyControllers(
       const company = await service.getCompany(id);
 
       if (company)
-        // eslint-disable-next-line no-warning-comments -- Assigned to Alex
-        // TODO: Use this as a sample
         sendResponse<Routes["/companies/{id}"]["get"]>(
           res,
           StatusCodes.OK,
@@ -115,19 +106,19 @@ export function createCompanyControllers(
         );
 
         if (updatedCompany)
-          sendResponseOld<RoutesOld["/companies"]["/:id"]["PUT"]["OK"]>(
+          sendResponse<Routes["/companies/{id}"]["put"]>(
             res,
             StatusCodes.OK,
             updatedCompany
           );
         else
-          sendResponseOld<RoutesOld["/companies"]["/:id"]["PUT"]["NOT_FOUND"]>(
+          sendResponse<Routes["/companies/{id}"]["put"]>(
             res,
             StatusCodes.NOT_FOUND,
             buildErrorResponse(ErrorCode.CompanyNotFound)
           );
       } else
-        sendResponseOld<RoutesOld["*"]["BAD_REQUEST"]["InvalidCompanyData"]>(
+        sendResponse<Routes["/companies/{id}"]["put"]>(
           res,
           StatusCodes.BAD_REQUEST,
           buildErrorResponse(ErrorCode.InvalidCompanyData, company.error)

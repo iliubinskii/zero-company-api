@@ -1,7 +1,5 @@
 import { Update, WebAccessibleImage } from "./common";
 
-// eslint-disable-next-line no-warning-comments -- Assigned to Alex
-// TODO: Add these fields in schema.yaml (see "# Company schema")
 export interface Company {
   readonly categories: readonly string[];
   readonly description: string;

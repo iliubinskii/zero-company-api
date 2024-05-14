@@ -19,8 +19,6 @@ export function createCompaniesRouter(controllers: CompanyControllers): Router {
 
   const router = Router();
 
-  // eslint-disable-next-line no-warning-comments -- Assigned to Alex
-  // TODO: Take paths for OpenAPI here
   router
     .get("/", controllers.getCompanies)
     .post(
