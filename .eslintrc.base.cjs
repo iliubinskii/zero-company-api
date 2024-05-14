@@ -63,6 +63,7 @@ const config = {
         allowedNames: []
       }
     ],
+    "@typescript-eslint/no-shadow": "warn",
     "@typescript-eslint/restrict-template-expressions": [
       "warn",
       { allowNumber: true }
@@ -97,6 +98,7 @@ const config = {
     "jsdoc/require-returns-type": "off",
     "no-magic-numbers": ["error", { ignore: [0, 1, -1] }],
     "no-redeclare": "off",
+    "no-shadow": "off",
     "no-type-assertion/no-type-assertion": "warn",
     "no-undefined": "off",
     "no-underscore-dangle": "off",

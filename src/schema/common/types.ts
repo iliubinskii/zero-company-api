@@ -46,6 +46,18 @@ export interface MultipleDocsResponse<T> {
   readonly total: number;
 }
 
+export type Update<T> = {
+  [K in keyof T]?: undefined extends T[K]
+    ? Exclude<T[K], undefined> | null
+    : T[K];
+};
+
+export type ValidationResult<T> = {
+  [K in keyof T]: undefined extends T[K]
+    ? ValidationResult<T[K]> | undefined
+    : ValidationResult<T[K]>;
+};
+
 export interface WebAccessibleImage {
   readonly assetId: string;
   readonly height: number;

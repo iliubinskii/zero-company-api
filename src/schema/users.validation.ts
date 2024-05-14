@@ -1,10 +1,10 @@
-import { ExistingUser, UserCreate, UserUpdate } from "./users";
+import { ExistingUser, Jwt, JwtUser, UserCreate, UserUpdate } from "./users";
 import {
   IdValidationSchema,
+  ValidationResult,
   preprocessBoolean,
   preprocessEmail
 } from "./common";
-import { Equals } from "ts-toolbelt/out/Any/Equals";
 import _ from "lodash";
 import zod from "zod";
 
@@ -45,20 +45,37 @@ export const UserUpdateValidationSchema = zod.strictObject({
   lastName: lastName.optional()
 });
 
-// Type check the user create validation schema
-((): Equals<
-  keyof zod.infer<typeof ExistingUserValidationSchema>,
-  keyof ExistingUser
-> => 1)();
+// Type check the existing user validation schema
+((): ValidationResult<ExistingUser> | undefined => {
+  const result = ExistingUserValidationSchema.safeParse(undefined);
+
+  return result.success ? result.data : undefined;
+})();
+
+// Type check the jwt validation schema
+((): ValidationResult<Jwt> | undefined => {
+  const result = JwtValidationSchema.safeParse(undefined);
+
+  return result.success ? result.data : undefined;
+})();
+
+// Type check the jwt user validation schema
+((): ValidationResult<JwtUser> | undefined => {
+  const result = JwtUserValidationSchema.safeParse(undefined);
+
+  return result.success ? result.data : undefined;
+})();
 
 // Type check the user create validation schema
-((): Equals<
-  keyof zod.infer<typeof UserCreateValidationSchema>,
-  keyof UserCreate
-> => 1)();
+((): ValidationResult<UserCreate> | undefined => {
+  const result = UserCreateValidationSchema.safeParse(undefined);
+
+  return result.success ? result.data : undefined;
+})();
 
 // Type check the user update validation schema
-((): Equals<
-  keyof zod.infer<typeof UserUpdateValidationSchema>,
-  keyof UserUpdate
-> => 1)();
+((): ValidationResult<UserUpdate> | undefined => {
+  const result = UserUpdateValidationSchema.safeParse(undefined);
+
+  return result.success ? result.data : undefined;
+})();

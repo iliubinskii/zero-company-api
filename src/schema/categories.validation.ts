@@ -1,6 +1,9 @@
 import { CategoryCreate, CategoryUpdate, ExistingCategory } from "./categories";
-import { IdValidationSchema, preprocessBoolean } from "./common";
-import { Equals } from "ts-toolbelt/out/Any/Equals";
+import {
+  IdValidationSchema,
+  ValidationResult,
+  preprocessBoolean
+} from "./common";
 import _ from "lodash";
 import zod from "zod";
 
@@ -35,20 +38,23 @@ export const CategoryUpdateValidationSchema = zod.strictObject({
   tagline: tagline.optional()
 });
 
-// Type check the category create validation schema
-((): Equals<
-  keyof zod.infer<typeof ExistingCategoryValidationSchema>,
-  keyof ExistingCategory
-> => 1)();
+// Type check the existing category validation schema
+((): ValidationResult<ExistingCategory> | undefined => {
+  const result = ExistingCategoryValidationSchema.safeParse(undefined);
+
+  return result.success ? result.data : undefined;
+})();
 
 // Type check the category create validation schema
-((): Equals<
-  keyof zod.infer<typeof CategoryCreateValidationSchema>,
-  keyof CategoryCreate
-> => 1)();
+((): ValidationResult<CategoryCreate> | undefined => {
+  const result = CategoryCreateValidationSchema.safeParse(undefined);
+
+  return result.success ? result.data : undefined;
+})();
 
 // Type check the category update validation schema
-((): Equals<
-  keyof zod.infer<typeof CategoryUpdateValidationSchema>,
-  keyof CategoryUpdate
-> => 1)();
+((): ValidationResult<CategoryUpdate> | undefined => {
+  const result = CategoryUpdateValidationSchema.safeParse(undefined);
+
+  return result.success ? result.data : undefined;
+})();

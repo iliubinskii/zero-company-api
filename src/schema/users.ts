@@ -1,3 +1,5 @@
+import { Update } from "./common";
+
 export interface ExistingUser extends User {
   readonly _id: string;
 }
@@ -20,4 +22,4 @@ export interface User {
 
 export interface UserCreate extends Omit<User, "email"> {}
 
-export interface UserUpdate extends Partial<Omit<User, "email">> {}
+export interface UserUpdate extends Update<Omit<User, "email">> {}
