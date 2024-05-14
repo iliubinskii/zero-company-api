@@ -19,7 +19,8 @@ const config = {
     {
       files: ["./src/schema/routes.ts"],
       rules: {
-        "no-magic-numbers": "off"
+        "no-magic-numbers": "off",
+        "typescript-sort-keys/interface": "off"
       }
     },
     {
