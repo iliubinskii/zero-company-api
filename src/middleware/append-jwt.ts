@@ -1,9 +1,9 @@
-import { ADMIN_EMAIL, JWT_SECRET } from "../config";
 import {
   AUTH_COOKIE_NAME,
   AUTH_HEADER_NAME,
   AUTH_HEADER_PREFIX
 } from "../consts";
+import { JWT_SECRET } from "../config";
 import { JwtValidationSchema } from "../schema";
 import { RequestHandler } from "express";
 import jwt from "jsonwebtoken";
@@ -20,15 +20,11 @@ export const appendJwt: RequestHandler = (req, _res, next) => {
           requestId: req.requestId
         });
       else {
-        const jwt = JwtValidationSchema.safeParse(decoded);
+        const parsed = JwtValidationSchema.safeParse(decoded);
 
-        if (jwt.success)
-          req.jwtUser = {
-            admin: ADMIN_EMAIL.includes(jwt.data.email),
-            email: jwt.data.email
-          };
+        if (parsed.success) req.jwt = parsed.data;
         else
-          logger.warn(lang.JwtVerificationFailed, jwt.error, {
+          logger.warn(lang.JwtVerificationFailed, parsed.error, {
             requestId: req.requestId
           });
       }

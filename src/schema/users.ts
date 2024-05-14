@@ -1,3 +1,17 @@
+export interface ExistingUser extends User {
+  readonly _id: string;
+}
+
+export interface Jwt {
+  readonly email: string;
+}
+
+export interface JwtUser {
+  readonly admin: boolean;
+  readonly email: string;
+  readonly user?: ExistingUser;
+}
+
 export interface User {
   readonly email: string;
   readonly firstName: string;
@@ -7,7 +21,3 @@ export interface User {
 export interface UserCreate extends Omit<User, "email"> {}
 
 export interface UserUpdate extends Partial<Omit<User, "email">> {}
-
-export interface ExistingUser extends User {
-  readonly _id: string;
-}

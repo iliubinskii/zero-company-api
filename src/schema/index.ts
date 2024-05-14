@@ -3,8 +3,6 @@ import version from "./version.json";
 // Should not re-export the named export 'schemaVersion' directly from default-exporting module
 export const schemaVersion = version.schemaVersion;
 
-export * from "./auth";
-export * from "./auth.validation";
 export * from "./categories";
 export * from "./categories.validation";
 export * from "./common";

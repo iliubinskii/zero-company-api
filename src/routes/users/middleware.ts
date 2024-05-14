@@ -5,7 +5,7 @@ import { UsersMiddleware } from "../../types";
 
 export const usersMiddleware: UsersMiddleware = {
   userEmailFromJwtUser: (req, _res, next) => {
-    req.userEmail = assertDefined(req.jwtUser).email;
+    req.userEmail = assertDefined(req.jwt).email;
     next();
   },
   userEmailFromParam: (req, res, next) => {

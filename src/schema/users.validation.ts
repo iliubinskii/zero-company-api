@@ -1,10 +1,16 @@
 import { ExistingUser, UserCreate, UserUpdate } from "./users";
-import { IdValidationSchema, preprocessEmail } from "./common";
+import {
+  IdValidationSchema,
+  preprocessBoolean,
+  preprocessEmail
+} from "./common";
 import { Equals } from "ts-toolbelt/out/Any/Equals";
 import _ from "lodash";
 import zod from "zod";
 
 const _id = IdValidationSchema;
+
+const admin = preprocessBoolean(zod.boolean());
 
 const email = preprocessEmail(zod.string().email());
 
@@ -20,6 +26,15 @@ const fields = {
 };
 
 export const ExistingUserValidationSchema = zod.strictObject(fields);
+
+// Do not use strictObject: JWT may contain additional fields
+export const JwtValidationSchema = zod.object({ email });
+
+export const JwtUserValidationSchema = zod.strictObject({
+  admin,
+  email,
+  user: ExistingUserValidationSchema.optional()
+});
 
 export const UserCreateValidationSchema = zod.strictObject(
   _.omit(fields, "_id", "email")
