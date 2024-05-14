@@ -12,6 +12,149 @@ export interface paths {
       };
     };
   };
+  "/companies": {
+    /** Get all companies */
+    get: {
+      responses: {
+        200: components["responses"]["CompanyList"];
+        400: components["responses"]["InvalidQuery"];
+      };
+    };
+    /** Create a new company */
+    post: {
+      responses: {
+        201: components["responses"]["Company"];
+        400: components["responses"]["InvalidCompanyData"];
+      };
+    };
+  };
+  "/companies/{id}": {
+    /** Get a company by ID */
+    get: {
+      parameters: {
+        path: {
+          id: components["parameters"]["Id"];
+        };
+      };
+      responses: {
+        200: components["responses"]["Company"];
+        404: components["responses"]["CompanyNotFound"];
+      };
+    };
+    /** Update a company by ID */
+    put: {
+      parameters: {
+        path: {
+          id: components["parameters"]["Id"];
+        };
+      };
+      responses: {
+        200: components["responses"]["Company"];
+        400: components["responses"]["InvalidCompanyData"];
+        404: components["responses"]["CompanyNotFound"];
+      };
+    };
+    /** Delete a company by ID */
+    delete: {
+      parameters: {
+        path: {
+          id: components["parameters"]["Id"];
+        };
+      };
+      responses: {
+        200: components["responses"]["Delete"];
+      };
+    };
+    parameters: {
+      path: {
+        id: components["parameters"]["Id"];
+      };
+    };
+  };
+  "/users": {
+    /** Get all users */
+    get: {
+      responses: {
+        200: components["responses"]["UserList"];
+        400: components["responses"]["InvalidQuery"];
+      };
+    };
+  };
+  "/users/{email}": {
+    /** Get a user by ID */
+    get: {
+      parameters: {
+        path: {
+          email: components["parameters"]["Email"];
+        };
+      };
+      responses: {
+        200: components["responses"]["User"];
+        404: components["responses"]["UserNotFound"];
+      };
+    };
+    /** Update a user by ID */
+    put: {
+      parameters: {
+        path: {
+          email: components["parameters"]["Email"];
+        };
+      };
+      responses: {
+        200: components["responses"]["User"];
+        400: components["responses"]["InvalidUserData"];
+        404: components["responses"]["UserNotFound"];
+      };
+    };
+    /** Create a new user */
+    post: {
+      parameters: {
+        path: {
+          email: components["parameters"]["Email"];
+        };
+      };
+      responses: {
+        201: components["responses"]["User"];
+        400: components["responses"]["InvalidUserData"];
+        409: components["responses"]["UserAlreadyExists"];
+      };
+    };
+    /** Delete a user by ID */
+    delete: {
+      parameters: {
+        path: {
+          email: components["parameters"]["Email"];
+        };
+      };
+      responses: {
+        200: components["responses"]["Delete"];
+      };
+    };
+    parameters: {
+      path: {
+        email: components["parameters"]["Email"];
+      };
+    };
+  };
+  "/users/{email}/companies": {
+    /** Get all companies for a user */
+    get: {
+      parameters: {
+        path: {
+          email: components["parameters"]["Email"];
+        };
+      };
+      responses: {
+        200: components["responses"]["CompanyList"];
+        400: components["responses"]["InvalidQuery"];
+      };
+    };
+    parameters: {
+      path: {
+        email: components["parameters"]["Email"];
+      };
+    };
+  };
   "/400": {
     /** Bad request */
     get: {
@@ -36,102 +179,129 @@ export interface paths {
       };
     };
   };
-  "/users": {
-    /** Get all users */
-    get: {
-      responses: {
-        200: components["responses"]["UserList"];
-        400: components["responses"]["InvalidQuery"];
-      };
-    };
-  };
-  "/users/{email}": {
-    /** Delete a user by ID */
-    delete: {
-      parameters: {
-        path: {
-          email: components["parameters"]["Email"];
-        };
-      };
-      responses: {
-        200: components["responses"]["Delete"];
-      };
-    };
-    /** Get a user by ID */
-    get: {
-      parameters: {
-        path: {
-          email: components["parameters"]["Email"];
-        };
-      };
-      responses: {
-        200: components["responses"]["User"];
-        404: components["responses"]["UserNotFound"];
-      };
-    };
-    parameters: {
-      path: {
-        email: components["parameters"]["Email"];
-      };
-    };
-    /** Create a new user */
-    post: {
-      parameters: {
-        path: {
-          email: components["parameters"]["Email"];
-        };
-      };
-      responses: {
-        201: components["responses"]["User"];
-        400: components["responses"]["InvalidUserData"];
-        409: components["responses"]["UserAlreadyExists"];
-      };
-    };
-    /** Update a user by ID */
-    put: {
-      parameters: {
-        path: {
-          email: components["parameters"]["Email"];
-        };
-      };
-      responses: {
-        200: components["responses"]["User"];
-        400: components["responses"]["InvalidUserData"];
-        404: components["responses"]["UserNotFound"];
-      };
-    };
-  };
-  "/users/{email}/companies": {
-    /** Get all companies for a user */
-    get: {
-      parameters: {
-        path: {
-          email: components["parameters"]["Email"];
-        };
-      };
-      responses: {
-        200: components["responses"]["CompanyList"];
-        400: components["responses"]["InvalidQuery"];
-      };
-    };
-    parameters: {
-      path: {
-        email: components["parameters"]["Email"];
-      };
-    };
-  };
 }
 
 export type webhooks = Record<string, never>;
 
 export interface components {
-  headers: never;
-  parameters: {
-    Email: string;
-    Id: string;
+  schemas: {
+    BadRequest: {
+      /** @enum {string} */
+      error: "BadRequest" | "InvalidEmailParam" | "InvalidIdParam";
+      errorMessage: string;
+    };
+    Company: {
+      _id: string;
+      categories: string[];
+      description: string;
+      foundedAt: string;
+      founders: components["schemas"]["Founder"][];
+      images: components["schemas"]["WebAccessibleImage"][];
+      logo: components["schemas"]["WebAccessibleImage"];
+      name: string;
+      privateCompany?: boolean;
+      recommended?: boolean;
+      targetValue: number;
+      website?: string;
+    };
+    CompanyList: {
+      count: number;
+      docs: components["schemas"]["Company"][];
+      nextCursor?: string[];
+      total: number;
+    };
+    CompanyNotFound: {
+      /** @enum {string} */
+      error: "CompanyNotFound";
+      errorMessage: string;
+    };
+    Delete: {
+      affectedRows: number;
+    };
+    Founder: {
+      confirmed?: boolean;
+      email: string;
+      firstName: string;
+      lastName: string;
+      share: number;
+    };
+    Home: {
+      schema: string;
+      /** @enum {string} */
+      status: "OK";
+    };
+    InternalServerError: {
+      /** @enum {string} */
+      error: "InternalServerError";
+      errorMessage: string;
+    };
+    InvalidCompanyData: {
+      /** @enum {string} */
+      error: "InvalidCompanyData";
+      errorMessage: string;
+      data: {
+        message: string;
+        path: string;
+      }[];
+    };
+    InvalidIdParam: {
+      /** @enum {string} */
+      error: "InvalidIdParam";
+      errorMessage: string;
+    };
+    InvalidQuery: {
+      /** @enum {string} */
+      error: "InvalidQuery";
+      errorMessage: string;
+      data: {
+        message: string;
+        path: string;
+      }[];
+    };
+    InvalidUserData: {
+      /** @enum {string} */
+      error: "InvalidUserData";
+      errorMessage: string;
+      data: {
+        message: string;
+        path: string;
+      }[];
+    };
+    NotFound: {
+      /** @enum {string} */
+      error: "NotFound";
+      errorMessage: string;
+    };
+    User: {
+      _id: string;
+      email: string;
+      firstName: string;
+      lastName: string;
+    };
+    UserAlreadyExists: {
+      /** @enum {string} */
+      error: "UserAlreadyExists";
+      errorMessage: string;
+    };
+    UserList: {
+      count: number;
+      docs: components["schemas"]["User"][];
+      nextCursor?: string[];
+      total: number;
+    };
+    UserNotFound: {
+      /** @enum {string} */
+      error: "UserNotFound";
+      errorMessage: string;
+    };
+    WebAccessibleImage: {
+      assetId: string;
+      height: number;
+      secureUrl: string;
+      url: string;
+      width: number;
+    };
   };
-  pathItems: never;
-  requestBodies: never;
   responses: {
     /** @description Bad request */
     BadRequest: {
@@ -149,6 +319,12 @@ export interface components {
     CompanyList: {
       content: {
         "application/json": components["schemas"]["CompanyList"];
+      };
+    };
+    /** @description Company not found */
+    CompanyNotFound: {
+      content: {
+        "application/json": components["schemas"]["CompanyNotFound"];
       };
     };
     /** @description Delete */
@@ -179,6 +355,12 @@ export interface components {
     InvalidUserData: {
       content: {
         "application/json": components["schemas"]["InvalidUserData"];
+      };
+    };
+    /** @description Invalid company data */
+    InvalidCompanyData: {
+      content: {
+        "application/json": components["schemas"]["InvalidCompanyData"];
       };
     };
     /** @description Not found */
@@ -212,85 +394,13 @@ export interface components {
       };
     };
   };
-  schemas: {
-    BadRequest: {
-      /** @enum {string} */
-      error: "BadRequest" | "InvalidEmailParam" | "InvalidIdParam";
-      errorMessage: string;
-    };
-    Company: {
-      _id: string;
-    };
-    CompanyList: {
-      count: number;
-      docs: components["schemas"]["Company"][];
-      nextCursor?: string[];
-      total: number;
-    };
-    Delete: {
-      affectedRows: number;
-    };
-    Home: {
-      schema: string;
-      /** @enum {string} */
-      status: "OK";
-    };
-    InternalServerError: {
-      /** @enum {string} */
-      error: "InternalServerError";
-      errorMessage: string;
-    };
-    InvalidIdParam: {
-      /** @enum {string} */
-      error: "InvalidIdParam";
-      errorMessage: string;
-    };
-    InvalidQuery: {
-      data: {
-        message: string;
-        path: string;
-      }[];
-      /** @enum {string} */
-      error: "InvalidQuery";
-      errorMessage: string;
-    };
-    InvalidUserData: {
-      data: {
-        message: string;
-        path: string;
-      }[];
-      /** @enum {string} */
-      error: "InvalidUserData";
-      errorMessage: string;
-    };
-    NotFound: {
-      /** @enum {string} */
-      error: "NotFound";
-      errorMessage: string;
-    };
-    User: {
-      _id: string;
-      email: string;
-      firstName: string;
-      lastName: string;
-    };
-    UserAlreadyExists: {
-      /** @enum {string} */
-      error: "UserAlreadyExists";
-      errorMessage: string;
-    };
-    UserList: {
-      count: number;
-      docs: components["schemas"]["User"][];
-      nextCursor?: string[];
-      total: number;
-    };
-    UserNotFound: {
-      /** @enum {string} */
-      error: "UserNotFound";
-      errorMessage: string;
-    };
+  parameters: {
+    Email: string;
+    Id: string;
   };
+  requestBodies: never;
+  headers: never;
+  pathItems: never;
 }
 
 export type $defs = Record<string, never>;

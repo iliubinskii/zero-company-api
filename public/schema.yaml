@@ -22,6 +22,59 @@ paths:
         "200":
           $ref: "#/components/responses/Home"
 
+  # Companies path
+  /companies:
+    get:
+      summary: Get all companies
+      tags:
+        - companies
+      responses:
+        "200":
+          $ref: "#/components/responses/CompanyList"
+        "400":
+          $ref: "#/components/responses/InvalidQuery"
+    post:
+      summary: Create a new company
+      tags:
+        - companies
+      responses:
+        "201":
+          $ref: "#/components/responses/Company"
+        "400":
+          $ref: "#/components/responses/InvalidCompanyData"
+
+  # Company path
+  /companies/{id}:
+    parameters:
+      - $ref: '#/components/parameters/Id'
+    delete:
+      summary: Delete a company by ID
+      tags:
+        - companies
+      responses:
+        "200":
+          $ref: "#/components/responses/Delete"
+    get:
+      summary: Get a company by ID
+      tags:
+        - companies
+      responses:
+        "200":
+          $ref: "#/components/responses/Company"
+        "404":
+          $ref: "#/components/responses/CompanyNotFound"
+    put:
+      summary: Update a company by ID
+      tags:
+        - companies
+      responses:
+        "200":
+          $ref: "#/components/responses/Company"
+        "400":
+          $ref: "#/components/responses/InvalidCompanyData"
+        "404":
+          $ref: "#/components/responses/CompanyNotFound"
+
   # Users path
   /users:
     get:
@@ -170,6 +223,14 @@ components:
           schema:
             $ref: "#/components/schemas/CompanyList"
 
+    # CompanyNotFound response
+    CompanyNotFound:
+      description: Company not found
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/CompanyNotFound"
+
     # Delete response
     Delete:
       description: Delete
@@ -209,6 +270,14 @@ components:
         application/json:
           schema:
             $ref: "#/components/schemas/InvalidUserData"
+
+    # InvalidCompanyData response
+    InvalidCompanyData:
+      description: Invalid company data
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/InvalidCompanyData"
 
     # NotFound response
     NotFound:
@@ -274,8 +343,44 @@ components:
       type: object
       required:
         - _id
+        - categories
+        - description
+        - foundedAt
+        - founders
+        - images
+        - logo
+        - name
+        - targetValue
       properties:
         _id:
+          type: string
+        categories:
+          type: array
+          items: 
+            type: string
+        description:
+          type: string
+        foundedAt:
+          type: string
+        founders:
+          type: array
+          items:
+            $ref: '#/components/schemas/Founder'
+        images:
+          type: array
+          items:
+            $ref: '#/components/schemas/WebAccessibleImage'
+        logo:
+          $ref: '#/components/schemas/WebAccessibleImage'
+        name:
+          type: string
+        privateCompany:
+          type: boolean
+        recommended:
+          type: boolean
+        targetValue:
+          type: number
+        website:
           type: string
 
     # CompanyList schema
@@ -299,6 +404,20 @@ components:
         total:
           type: integer
 
+    # CompanyNotFound schema
+    CompanyNotFound:
+      type: object
+      required:
+        - error
+        - errorMessage
+      properties:
+        error:
+          type: string
+          enum:
+            - CompanyNotFound
+        errorMessage:
+          type: string
+
     # Delete schema
     Delete:
       type: object
@@ -307,6 +426,26 @@ components:
       properties:
         affectedRows:
           type: integer
+
+    # Founder schema
+    Founder:
+      type: object
+      required:
+        - email
+        - firstName
+        - lastName
+        - share
+      properties:
+        confirmed:
+          type: boolean
+        email:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        share:
+          type: number
 
     # Home schema
     Home:
@@ -335,6 +474,33 @@ components:
             - InternalServerError
         errorMessage:
           type: string
+
+    # InvalidCompanyData schema
+    InvalidCompanyData:
+      type: object
+      required:
+        - error
+        - errorMessage
+        - data
+      properties:
+        error:
+          type: string
+          enum:
+            - InvalidCompanyData
+        errorMessage:
+          type: string
+        data:
+          type: array
+          items:
+            type: object
+            required:
+              - message
+              - path
+            properties:
+              message:
+                type: string
+              path:
+                type: string
 
     # InvalidIdParam schema
     InvalidIdParam:
@@ -484,3 +650,24 @@ components:
             - UserNotFound
         errorMessage:
           type: string
+
+    # WebAccessibleImage schema
+    WebAccessibleImage:
+      type: object
+      required:
+        - assetId
+        - height
+        - secureUrl
+        - url
+        - width
+      properties:
+        assetId:
+          type: string
+        height:
+          type: number
+        secureUrl:
+          type: string
+        url:
+          type: string
+        width:
+          type: number

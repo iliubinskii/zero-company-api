@@ -4,13 +4,13 @@ import {
   CompanyUpdateValidationSchema,
   ErrorCode,
   GetCompaniesOptionsValidationSchema,
-  RoutesOld
+  Routes
 } from "../../schema";
 import {
   assertDefined,
   buildErrorResponse,
   filterUndefinedProperties,
-  sendResponseOld,
+  sendResponse,
   wrapAsyncHandler
 } from "../../utils";
 import { StatusCodes } from "http-status-codes";
@@ -35,13 +35,13 @@ export function createCompanyControllers(
           })
         );
 
-        sendResponseOld<RoutesOld["/companies"]["/"]["POST"]>(
+        sendResponse<Routes["/companies"]["post"]>(
           res,
           StatusCodes.CREATED,
           addedCompany
         );
       } else
-        sendResponseOld<RoutesOld["*"]["BAD_REQUEST"]["InvalidCompanyData"]>(
+        sendResponse<Routes["/companies"]["post"]>(
           res,
           StatusCodes.BAD_REQUEST,
           buildErrorResponse(ErrorCode.InvalidCompanyData, company.error)
@@ -52,11 +52,9 @@ export function createCompanyControllers(
 
       const affectedRows = await service.deleteCompany(id);
 
-      sendResponseOld<RoutesOld["/companies"]["/:id"]["DELETE"]>(
-        res,
-        StatusCodes.OK,
-        { affectedRows }
-      );
+      sendResponse<Routes["/companies/{id}"]["delete"]>(res, StatusCodes.OK, {
+        affectedRows
+      });
     }),
     getCompanies: wrapAsyncHandler(async (req, res) => {
       const options = GetCompaniesOptionsValidationSchema.safeParse(req.query);
@@ -66,13 +64,13 @@ export function createCompanyControllers(
           filterUndefinedProperties(options.data)
         );
 
-        sendResponseOld<RoutesOld["/companies"]["/"]["GET"]>(
+        sendResponse<Routes["/companies"]["get"]>(
           res,
           StatusCodes.OK,
           companies
         );
       } else
-        sendResponseOld<RoutesOld["*"]["BAD_REQUEST"]["InvalidQuery"]>(
+        sendResponse<Routes["/companies"]["get"]>(
           res,
           StatusCodes.BAD_REQUEST,
           buildErrorResponse(ErrorCode.InvalidQuery, options.error)
@@ -84,13 +82,13 @@ export function createCompanyControllers(
       const company = await service.getCompany(id);
 
       if (company)
-        sendResponseOld<RoutesOld["/companies"]["/:id"]["GET"]["OK"]>(
+        sendResponse<Routes["/companies/{id}"]["get"]>(
           res,
           StatusCodes.OK,
           company
         );
       else
-        sendResponseOld<RoutesOld["/companies"]["/:id"]["GET"]["NOT_FOUND"]>(
+        sendResponse<Routes["/companies/{id}"]["get"]>(
           res,
           StatusCodes.NOT_FOUND,
           buildErrorResponse(ErrorCode.CompanyNotFound)
@@ -108,19 +106,19 @@ export function createCompanyControllers(
         );
 
         if (updatedCompany)
-          sendResponseOld<RoutesOld["/companies"]["/:id"]["PUT"]["OK"]>(
+          sendResponse<Routes["/companies/{id}"]["put"]>(
             res,
             StatusCodes.OK,
             updatedCompany
           );
         else
-          sendResponseOld<RoutesOld["/companies"]["/:id"]["PUT"]["NOT_FOUND"]>(
+          sendResponse<Routes["/companies/{id}"]["put"]>(
             res,
             StatusCodes.NOT_FOUND,
             buildErrorResponse(ErrorCode.CompanyNotFound)
           );
       } else
-        sendResponseOld<RoutesOld["*"]["BAD_REQUEST"]["InvalidCompanyData"]>(
+        sendResponse<Routes["/companies/{id}"]["put"]>(
           res,
           StatusCodes.BAD_REQUEST,
           buildErrorResponse(ErrorCode.InvalidCompanyData, company.error)
