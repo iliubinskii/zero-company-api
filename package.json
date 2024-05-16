@@ -15,6 +15,8 @@
   "scripts": {
     "build": "tsc",
     "build-dummy-data": "tsx utils/dummy-data.ts && npm run format",
+    "contributors-json": "python -m gitfame --bytype --excl \"\\.(ico|json)$\" --format json ./src >../zero-company-app/src/contributors/api.json",
+    "contributors-md": "python -m gitfame --bytype --excl \"\\.(ico|json)$\" ./src >./CONTRIBUTORS.md",
     "deploy-preview": "vercel",
     "deploy-prod": "vercel --prod",
     "dev": "nodemon",
