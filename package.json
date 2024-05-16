@@ -10,11 +10,28 @@
     "type": "git",
     "url": "https://github.com/iliubinskii/zero-company-api"
   },
-  "author": "Ilia Liubinskii",
+  "license": "Proprietary",
+  "author": "Ilia Liubinskii <ilia.liubinskii@gmail.com>",
+  "contributors": [
+    {
+      "name": "Alex Feldshteyn",
+      "email": "alexey.israel22@gmail.com"
+    },
+    {
+      "name": "David Liubinskii",
+      "email": "workdltest@gmail.com"
+    },
+    {
+      "name": "Ilia Liubinskii",
+      "email": "ilia.liubinskii@gmail.com"
+    }
+  ],
   "type": "commonjs",
   "scripts": {
     "build": "tsc",
     "build-dummy-data": "tsx utils/dummy-data.ts && npm run format",
+    "contributors-json": "python -m gitfame --bytype --excl \"\\.(ico|json|svg)$\" --format json ./src >../zero-company-app/src/contributors/api.json",
+    "contributors-md": "python -m gitfame --bytype --excl \"\\.(ico|json|svg)$\" ./src >./CONTRIBUTORS.md",
     "deploy-preview": "vercel",
     "deploy-prod": "vercel --prod",
     "dev": "nodemon",

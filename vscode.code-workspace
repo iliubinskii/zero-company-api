@@ -65,6 +65,7 @@
     "foldOnOpen.targets": ["AllBlockComments"],
     "javascript.suggestionActions.enabled": false,
     "javascript.updateImportsOnFileMove.enabled": "always",
+    "scss.validate": false,
     "search.exclude": {
       "dist": true,
       "package-lock.json": true
