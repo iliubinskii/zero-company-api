@@ -65,7 +65,7 @@ const fields = {
 export const ExistingCompanyValidationSchema = zod.strictObject(fields);
 
 export const CompanyCreateValidationSchema = zod.strictObject({
-  ..._.omit(fields, "_id", "foundedAt", "founders", "recommended"),
+  ..._.omit(fields, "_id", "foundedAt", "recommended"),
   founders: foundersCreate
 });
 
