@@ -16,14 +16,15 @@ const config = {
     "plugin:no-use-extend-native/recommended",
     "plugin:node/recommended",
     "plugin:promise/recommended",
-    "plugin:react/recommended",
-    "plugin:react-hooks/recommended",
     "plugin:regexp/recommended",
     "plugin:security/recommended-legacy",
     "plugin:sonarjs/recommended",
     "plugin:sort/recommended",
     "plugin:typescript-sort-keys/recommended",
     "plugin:unicorn/recommended",
+    "plugin:react/recommended",
+    "plugin:react-hooks/recommended",
+    "plugin:@next/next/recommended",
     "plugin:prettier/recommended"
   ],
   overrides: [
@@ -52,6 +53,7 @@ const config = {
     "unused-imports"
   ],
   rules: {
+    "@next/next/no-img-element": "off",
     "@typescript-eslint/explicit-function-return-type": [
       "warn",
       {
