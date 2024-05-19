@@ -22,9 +22,6 @@ const config = {
     "plugin:sort/recommended",
     "plugin:typescript-sort-keys/recommended",
     "plugin:unicorn/recommended",
-    "plugin:react/recommended",
-    "plugin:react-hooks/recommended",
-    "plugin:@next/next/recommended",
     "plugin:prettier/recommended"
   ],
   overrides: [
@@ -53,7 +50,6 @@ const config = {
     "unused-imports"
   ],
   rules: {
-    "@next/next/no-img-element": "off",
     "@typescript-eslint/explicit-function-return-type": [
       "warn",
       {
@@ -123,9 +119,6 @@ const config = {
     ],
     "quote-props": ["warn", "consistent-as-needed"],
     "quotes": ["error", "double"],
-    "react/jsx-sort-props": "warn",
-    "react/prop-types": "off",
-    "react/self-closing-comp": "warn",
     "security/detect-object-injection": "off",
     "sonarjs/prefer-immediate-return": "off",
     "sort/destructuring-properties": [
@@ -161,8 +154,7 @@ const config = {
     "unicorn/prefer-top-level-await": "off",
     "unicorn/prevent-abbreviations": "off",
     "unused-imports/no-unused-imports": "warn"
-  },
-  settings: { react: { version: "detect" } }
+  }
 };
 
 // eslint-disable-next-line import/no-commonjs -- Ok
