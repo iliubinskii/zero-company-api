@@ -90,6 +90,7 @@ const config = {
     "id-blacklist": "off",
     "id-length": "off",
     "id-match": "off",
+    "import/named": "off",
     "import/no-internal-modules": "warn",
     "import/no-self-import": "warn",
     "import/no-unresolved": "off",
