@@ -22,6 +22,74 @@ paths:
         "200":
           $ref: "#/components/responses/Home"
 
+  # Categories path
+  /categories:
+    get:
+      summary: Get all categories
+      tags:
+        - categories
+      responses:
+        "200":
+          $ref: "#/components/responses/CategoryList"
+        "400":
+          $ref: "#/components/responses/InvalidQuery"
+    post:
+      summary: Create a new category
+      tags:
+        - categories
+      responses:
+        "201":
+          $ref: "#/components/responses/Category"
+        "400":
+          $ref: "#/components/responses/InvalidCategoryData"
+
+  # Category path
+  /categories/{id}:
+    parameters:
+      - $ref: '#/components/parameters/Id'
+    delete:
+      summary: Delete a category by ID
+      tags:
+        - categories
+      responses:
+        "200":
+          $ref: "#/components/responses/Delete"
+    get:
+      summary: Get a category by ID
+      tags:
+        - categories
+      responses:
+        "200":
+          $ref: "#/components/responses/Category"
+        "404":
+          $ref: "#/components/responses/CategoryNotFound"
+    put:
+      summary: Update a category by ID
+      tags:
+        - categories
+      responses:
+        "200":
+          $ref: "#/components/responses/Category"
+        "400":
+          $ref: "#/components/responses/InvalidCategoryData"
+        "404":
+          $ref: "#/components/responses/CategoryNotFound"
+
+  # Category companies path
+  /categories/{id}/companies:
+    parameters:
+      - $ref: '#/components/parameters/Id'
+    get:
+      summary: Get all companies for a category
+      tags:
+        - categories
+      responses:
+        "200":
+          $ref: "#/components/responses/CompanyList"
+        "400":
+          $ref: "#/components/responses/InvalidQuery"
+
+
   # Companies path
   /companies:
     get:
@@ -207,6 +275,30 @@ components:
           schema:
             $ref: "#/components/schemas/BadRequest"
 
+    # Category response
+    Category:
+      description: Category
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Category"
+
+    # CategoryList response
+    CategoryList:
+      description: Category list
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/CategoryList"
+
+    # CategoryNotFound response
+    CategoryNotFound:
+      description: Category not found
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/CategoryNotFound"
+
     # Company response
     Company:
       description: Company
@@ -270,6 +362,14 @@ components:
         application/json:
           schema:
             $ref: "#/components/schemas/InvalidUserData"
+
+    # InvalidCategoryData response
+    InvalidCategoryData:
+      description: Invalid category data
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/InvalidCategoryData"
 
     # InvalidCompanyData response
     InvalidCompanyData:
@@ -335,6 +435,61 @@ components:
             - BadRequest
             - InvalidEmailParam
             - InvalidIdParam
+        errorMessage:
+          type: string
+
+    # Category schema
+    Category:
+      type: object
+      required:
+        - _id
+        - description
+        - name
+        - tagline
+      properties:
+        _id:
+          type: string
+        description:
+          type: string
+        name:
+          type: string
+        pinned:
+          type: boolean
+        tagline:
+          type: string
+
+    # CategoryList schema
+    CategoryList:
+      type: object
+      required:
+        - count
+        - docs
+        - total
+      properties:
+        count:
+          type: integer
+        docs:
+          type: array
+          items:
+            $ref: "#/components/schemas/Category"
+        nextCursor:
+          type: array
+          items:
+            type: string
+        total:
+          type: integer
+
+    # CategoryNotFound schema
+    CategoryNotFound:
+      type: object
+      required:
+        - error
+        - errorMessage
+      properties:
+        error:
+          type: string
+          enum:
+            - CategoryNotFound
         errorMessage:
           type: string
 
@@ -474,6 +629,33 @@ components:
             - InternalServerError
         errorMessage:
           type: string
+
+    # InvalidCategoryData schema
+    InvalidCategoryData:
+      type: object
+      required:
+        - error
+        - errorMessage
+        - data
+      properties:
+        error:
+          type: string
+          enum:
+            - InvalidCategoryData
+        errorMessage:
+          type: string
+        data:
+          type: array
+          items:
+            type: object
+            required:
+              - message
+              - path
+            properties:
+              message:
+                type: string
+              path:
+                type: string
 
     # InvalidCompanyData schema
     InvalidCompanyData:
