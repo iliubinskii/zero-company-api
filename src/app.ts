@@ -28,6 +28,7 @@ import { StatusCodes } from "http-status-codes";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import express, { NextFunction, Request, Response, json } from "express";
+import globToRegExp from "glob-to-regexp";
 import { lang } from "./langs";
 import { logger } from "./services";
 import passport from "passport";
@@ -64,7 +65,12 @@ export function createApp(): express.Express {
   app.use(logRequest);
   app.use(logResponse);
 
-  app.use(cors({ credentials: true, origin: CORS_ORIGIN }));
+  app.use(
+    cors({
+      credentials: true,
+      origin: globToRegExp(CORS_ORIGIN, { flags: "iu" })
+    })
+  );
 
   app.use(express.static("public"));
 

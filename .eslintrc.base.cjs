@@ -16,8 +16,6 @@ const config = {
     "plugin:no-use-extend-native/recommended",
     "plugin:node/recommended",
     "plugin:promise/recommended",
-    "plugin:react/recommended",
-    "plugin:react-hooks/recommended",
     "plugin:regexp/recommended",
     "plugin:security/recommended-legacy",
     "plugin:sonarjs/recommended",
@@ -92,6 +90,7 @@ const config = {
     "id-blacklist": "off",
     "id-length": "off",
     "id-match": "off",
+    "import/named": "off",
     "import/no-internal-modules": "warn",
     "import/no-self-import": "warn",
     "import/no-unresolved": "off",
@@ -121,9 +120,6 @@ const config = {
     ],
     "quote-props": ["warn", "consistent-as-needed"],
     "quotes": ["error", "double"],
-    "react/jsx-sort-props": "warn",
-    "react/prop-types": "off",
-    "react/self-closing-comp": "warn",
     "security/detect-object-injection": "off",
     "sonarjs/prefer-immediate-return": "off",
     "sort/destructuring-properties": [
@@ -159,8 +155,7 @@ const config = {
     "unicorn/prefer-top-level-await": "off",
     "unicorn/prevent-abbreviations": "off",
     "unused-imports/no-unused-imports": "warn"
-  },
-  settings: { react: { version: "detect" } }
+  }
 };
 
 // eslint-disable-next-line import/no-commonjs -- Ok
