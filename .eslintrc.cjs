@@ -106,6 +106,7 @@ const config = {
             "tsconfig",
             "tsx",
             "ttl",
+            "txt",
             "ucfirst",
             "unlink",
             "uploader",

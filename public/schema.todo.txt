@@ -1,7 +1,4 @@
-Add schema for companies to schema.yaml
-
-Add all company fields to Company schema
-
-Change all methods for companies from RouteOlds to Route
-
-VSCode extension: OpenAPI (Swagger) Editor
+Add schema for company images to schema.yaml
+Run `npm run parse-openapi` to generate interfaces from the updated schema
+Possible response codes: 200 OK, 404 Not found (with CompanyNotFound response)
+if company with `id` does not exist, 400 Bad request (with InvalidQuery response)
