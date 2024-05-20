@@ -1,6 +1,6 @@
 import { MAX_LIMIT } from "../../schema";
 import { MONGODB_ERROR } from "../../consts";
-import { UsersService } from "../../types";
+import type { UsersService } from "../../types";
 import { buildMongodbQuery } from "../../utils";
 import { getUserModel } from "./model";
 

@@ -1,7 +1,8 @@
-import { ErrorCode, Routes, UserEmailValidationSchema } from "../../schema";
+import { ErrorCode, UserEmailValidationSchema } from "../../schema";
 import { assertDefined, buildErrorResponse, sendResponse } from "../../utils";
+import type { Routes } from "../../schema";
 import { StatusCodes } from "http-status-codes";
-import { UsersMiddleware } from "../../types";
+import type { UsersMiddleware } from "../../types";
 
 export const usersMiddleware: UsersMiddleware = {
   userEmailFromJwtUser: (req, _res, next) => {

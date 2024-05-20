@@ -1,11 +1,11 @@
-import {
+import type {
   Company,
   CompanyUpdate,
   ExistingCompany,
   GetCompaniesOptions,
   MultipleDocsResponse
 } from "../schema";
-import { RequestHandler } from "express";
+import type { RequestHandler } from "express";
 
 export interface CompanyControllers {
   readonly addCompany: RequestHandler;

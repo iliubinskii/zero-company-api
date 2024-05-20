@@ -1,5 +1,5 @@
 import { MULTER_DESTINATION_PATH } from "../config";
-import { RequestHandler } from "express";
+import type { RequestHandler } from "express";
 import multer from "multer";
 import path from "node:path";
 import { v4 as uuidv4 } from "uuid";

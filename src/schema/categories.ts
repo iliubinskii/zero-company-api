@@ -1,4 +1,4 @@
-import { Update } from "./common";
+import type { Update } from "./common";
 
 export interface Category {
   readonly description: string;

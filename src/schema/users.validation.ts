@@ -1,10 +1,16 @@
-import { ExistingUser, Jwt, JwtUser, UserCreate, UserUpdate } from "./users";
+import type {
+  ExistingUser,
+  Jwt,
+  JwtUser,
+  UserCreate,
+  UserUpdate
+} from "./users";
 import {
   IdValidationSchema,
-  ValidationResult,
   preprocessBoolean,
   preprocessEmail
 } from "./common";
+import type { ValidationResult } from "./common";
 import _ from "lodash";
 import zod from "zod";
 

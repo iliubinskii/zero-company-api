@@ -5,7 +5,7 @@ import {
   requireJwtAdmin,
   requireJwtUser
 } from "../../middleware";
-import { CompanyControllers } from "../../types";
+import type { CompanyControllers } from "../../types";
 import { Router } from "express";
 import { companiesMiddleware } from "./middleware";
 

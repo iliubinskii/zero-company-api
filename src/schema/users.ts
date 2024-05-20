@@ -1,4 +1,4 @@
-import { Update } from "./common";
+import type { Update } from "./common";
 
 export interface ExistingUser extends User {
   readonly _id: string;
