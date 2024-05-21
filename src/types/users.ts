@@ -1,11 +1,11 @@
-import {
+import type {
   ExistingUser,
   GetUsersOptions,
   MultipleDocsResponse,
   User,
   UserUpdate
 } from "../schema";
-import { RequestHandler } from "express";
+import type { RequestHandler } from "express";
 
 export interface UserControllers {
   readonly addUser: RequestHandler;

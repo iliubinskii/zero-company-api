@@ -1,6 +1,6 @@
 /// <reference types="jest-extended" />
 
-import { Jwt } from "./schema";
+import type { Jwt } from "./schema";
 
 declare module "express-serve-static-core" {
   interface Request {

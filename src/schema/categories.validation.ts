@@ -1,9 +1,10 @@
-import { CategoryCreate, CategoryUpdate, ExistingCategory } from "./categories";
-import {
-  IdValidationSchema,
-  ValidationResult,
-  preprocessBoolean
-} from "./common";
+import type {
+  CategoryCreate,
+  CategoryUpdate,
+  ExistingCategory
+} from "./categories";
+import { IdValidationSchema, preprocessBoolean } from "./common";
+import type { ValidationResult } from "./common";
 import _ from "lodash";
 import zod from "zod";
 

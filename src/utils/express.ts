@@ -1,10 +1,14 @@
-import { ErrorCode, ErrorResponse, ErrorResponseWithData } from "../schema";
-import { NextFunction, Request, RequestHandler, Response } from "express";
-import { Readonly } from "ts-toolbelt/out/Object/Readonly";
-import { StatusCodes } from "http-status-codes";
+import type {
+  ErrorCode,
+  ErrorResponse,
+  ErrorResponseWithData
+} from "../schema";
+import type { NextFunction, Request, RequestHandler, Response } from "express";
+import type { Readonly } from "ts-toolbelt/out/Object/Readonly";
+import type { StatusCodes } from "http-status-codes";
 import { assertNumber } from "./assertions";
 import { lang } from "../langs";
-import zod from "zod";
+import type zod from "zod";
 
 /**
  * Builds an error response object.

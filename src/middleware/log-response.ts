@@ -1,4 +1,4 @@
-import { RequestHandler } from "express";
+import type { RequestHandler } from "express";
 import { lang } from "../langs";
 import { logger } from "../services";
 

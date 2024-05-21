@@ -1,5 +1,5 @@
-import { HttpMethod } from "../types";
-import { RequestHandler } from "express";
+import type { HttpMethod } from "../types";
+import type { RequestHandler } from "express";
 
 /**
  * Applies the given middleware to all paths except the ones specified

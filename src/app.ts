@@ -1,5 +1,6 @@
 import { CORS_ORIGIN, SESSION_SECRET } from "./config";
-import { ErrorCode, Routes, schemaVersion } from "./schema";
+import { ErrorCode, schemaVersion } from "./schema";
+import type { NextFunction, Request, Response } from "express";
 import {
   appendJwt,
   forceHttps,
@@ -24,10 +25,12 @@ import {
   testRouter
 } from "./routes";
 import { initMongodb, initPassport } from "./providers";
+import type { Routes } from "./schema";
 import { StatusCodes } from "http-status-codes";
 import cookieParser from "cookie-parser";
 import cors from "cors";
-import express, { NextFunction, Request, Response, json } from "express";
+import express, { json } from "express";
+import globToRegExp from "glob-to-regexp";
 import { lang } from "./langs";
 import { logger } from "./services";
 import passport from "passport";
@@ -64,7 +67,12 @@ export function createApp(): express.Express {
   app.use(logRequest);
   app.use(logResponse);
 
-  app.use(cors({ credentials: true, origin: CORS_ORIGIN }));
+  app.use(
+    cors({
+      credentials: true,
+      origin: globToRegExp(CORS_ORIGIN, { flags: "iu" })
+    })
+  );
 
   app.use(express.static("public"));
 

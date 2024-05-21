@@ -1,8 +1,9 @@
-import { Company, MAX_LIMIT } from "../../schema";
 import { buildMongodbQuery, filterUndefinedProperties } from "../../utils";
-import { CompaniesService } from "../../types";
-import { FilterQuery } from "mongoose";
-import { Writable } from "ts-toolbelt/out/Object/Writable";
+import type { CompaniesService } from "../../types";
+import type { Company } from "../../schema";
+import type { FilterQuery } from "mongoose";
+import { MAX_LIMIT } from "../../schema";
+import type { Writable } from "ts-toolbelt/out/Object/Writable";
 import { getCompanyModel } from "./model";
 
 /**

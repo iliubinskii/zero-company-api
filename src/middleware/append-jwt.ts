@@ -5,7 +5,7 @@ import {
 } from "../consts";
 import { JWT_SECRET } from "../config";
 import { JwtValidationSchema } from "../schema";
-import { RequestHandler } from "express";
+import type { RequestHandler } from "express";
 import jwt from "jsonwebtoken";
 import { lang } from "../langs";
 import { logger } from "../services";

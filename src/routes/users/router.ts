@@ -1,6 +1,6 @@
 import { requireJwtAdmin, requireJwtUser } from "../../middleware";
 import { Router } from "express";
-import { UserControllers } from "../../types";
+import type { UserControllers } from "../../types";
 import { usersMiddleware } from "./middleware";
 
 /**

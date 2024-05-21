@@ -43,6 +43,7 @@
   "include": [
     ".eslintrc.base.cjs",
     ".eslintrc.cjs",
+    ".eslintrc.next.cjs",
     ".prettierrc.mjs",
     ".stylelintrc.base.mjs",
     ".stylelintrc.mjs",

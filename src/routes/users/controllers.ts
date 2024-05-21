@@ -1,9 +1,12 @@
-import { CompaniesService, UserControllers, UsersService } from "../../types";
+import type {
+  CompaniesService,
+  UserControllers,
+  UsersService
+} from "../../types";
 import {
   ErrorCode,
   GetCompaniesByUserOptionsValidationSchema,
   GetUsersOptionsValidationSchema,
-  Routes,
   UserCreateValidationSchema,
   UserUpdateValidationSchema
 } from "../../schema";
@@ -14,6 +17,7 @@ import {
   sendResponse,
   wrapAsyncHandler
 } from "../../utils";
+import type { Routes } from "../../schema";
 import { StatusCodes } from "http-status-codes";
 
 /**

@@ -4,7 +4,8 @@ import {
   CLOUDINARY_BASE_FOLDER,
   CLOUDINARY_CLOUD_NAME
 } from "../config";
-import { UploadApiResponse, v2 as cloudinary } from "cloudinary";
+import type { UploadApiResponse } from "cloudinary";
+import { v2 as cloudinary } from "cloudinary";
 
 cloudinary.config({ secure: true });
 

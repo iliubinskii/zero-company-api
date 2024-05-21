@@ -1,4 +1,4 @@
-import {
+import type {
   GetCategoriesOptions,
   GetCompaniesByCategoryOptions,
   GetCompaniesByUserOptions,
@@ -7,11 +7,11 @@ import {
 } from "./get-all-options";
 import {
   IdValidationSchema,
-  ValidationResult,
   preprocessBoolean,
   preprocessNumber
 } from "./common";
 import { MAX_LIMIT } from "./consts";
+import type { ValidationResult } from "./common";
 import _ from "lodash";
 import zod from "zod";
 
