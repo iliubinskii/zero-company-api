@@ -14,10 +14,10 @@ import {
   assertDefined,
   buildErrorResponse,
   filterUndefinedProperties,
-  sendResponseOld,
+  sendResponse,
   wrapAsyncHandler
 } from "../../utils";
-import type { RoutesOld } from "../../schema";
+import type { Routes } from "../../schema";
 import { StatusCodes } from "http-status-codes";
 
 /**
@@ -39,13 +39,13 @@ export function createCategoryControllers(
           filterUndefinedProperties(category.data)
         );
 
-        sendResponseOld<RoutesOld["/categories"]["/"]["POST"]>(
+        sendResponse<Routes["/categories"]["post"]>(
           res,
           StatusCodes.CREATED,
           addedCategory
         );
       } else
-        sendResponseOld<RoutesOld["*"]["BAD_REQUEST"]["InvalidCategoryData"]>(
+        sendResponse<Routes["/categories"]["post"]>(
           res,
           StatusCodes.BAD_REQUEST,
           buildErrorResponse(ErrorCode.InvalidCategoryData, category.error)
@@ -56,11 +56,9 @@ export function createCategoryControllers(
 
       const affectedRows = await service.deleteCategory(id);
 
-      sendResponseOld<RoutesOld["/categories"]["/:id"]["DELETE"]>(
-        res,
-        StatusCodes.OK,
-        { affectedRows }
-      );
+      sendResponse<Routes["/categories/{id}"]["delete"]>(res, StatusCodes.OK, {
+        affectedRows
+      });
     }),
     getCategories: wrapAsyncHandler(async (req, res) => {
       const options = GetCategoriesOptionsValidationSchema.safeParse(req.query);
@@ -70,13 +68,13 @@ export function createCategoryControllers(
           filterUndefinedProperties(options.data)
         );
 
-        sendResponseOld<RoutesOld["/categories"]["/"]["GET"]>(
+        sendResponse<Routes["/categories"]["get"]>(
           res,
           StatusCodes.OK,
           categories
         );
       } else
-        sendResponseOld<RoutesOld["*"]["BAD_REQUEST"]["InvalidQuery"]>(
+        sendResponse<Routes["/categories"]["get"]>(
           res,
           StatusCodes.BAD_REQUEST,
           buildErrorResponse(ErrorCode.InvalidQuery, options.error)
@@ -88,13 +86,13 @@ export function createCategoryControllers(
       const category = await service.getCategory(id);
 
       if (category)
-        sendResponseOld<RoutesOld["/categories"]["/:id"]["GET"]["OK"]>(
+        sendResponse<Routes["/categories/{id}"]["get"]>(
           res,
           StatusCodes.OK,
           category
         );
       else
-        sendResponseOld<RoutesOld["/categories"]["/:id"]["GET"]["NOT_FOUND"]>(
+        sendResponse<Routes["/categories/{id}"]["get"]>(
           res,
           StatusCodes.NOT_FOUND,
           buildErrorResponse(ErrorCode.CategoryNotFound)
@@ -113,13 +111,13 @@ export function createCategoryControllers(
           category: id
         });
 
-        sendResponseOld<RoutesOld["/categories"]["/:id/companies"]["GET"]>(
+        sendResponse<Routes["/categories/{id}/companies"]["get"]>(
           res,
           StatusCodes.OK,
           companies
         );
       } else
-        sendResponseOld<RoutesOld["*"]["BAD_REQUEST"]["InvalidQuery"]>(
+        sendResponse<Routes["/categories/{id}/companies"]["get"]>(
           res,
           StatusCodes.BAD_REQUEST,
           buildErrorResponse(ErrorCode.InvalidQuery, options.error)
@@ -137,19 +135,19 @@ export function createCategoryControllers(
         );
 
         if (updatedCategory)
-          sendResponseOld<RoutesOld["/categories"]["/:id"]["PUT"]["OK"]>(
+          sendResponse<Routes["/categories/{id}"]["put"]>(
             res,
             StatusCodes.OK,
             updatedCategory
           );
         else
-          sendResponseOld<RoutesOld["/categories"]["/:id"]["PUT"]["NOT_FOUND"]>(
+          sendResponse<Routes["/categories/{id}"]["put"]>(
             res,
             StatusCodes.NOT_FOUND,
             buildErrorResponse(ErrorCode.CategoryNotFound)
           );
       } else
-        sendResponseOld<RoutesOld["*"]["BAD_REQUEST"]["InvalidCategoryData"]>(
+        sendResponse<Routes["/categories/{id}"]["put"]>(
           res,
           StatusCodes.BAD_REQUEST,
           buildErrorResponse(ErrorCode.InvalidCategoryData, category.error)

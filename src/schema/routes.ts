@@ -12,6 +12,84 @@ export interface paths {
       };
     };
   };
+  "/categories": {
+    /** Get all categories */
+    get: {
+      responses: {
+        200: components["responses"]["CategoryList"];
+        400: components["responses"]["InvalidQuery"];
+      };
+    };
+    /** Create a new category */
+    post: {
+      responses: {
+        201: components["responses"]["Category"];
+        400: components["responses"]["InvalidCategoryData"];
+      };
+    };
+  };
+  "/categories/{id}": {
+    /** Get a category by ID */
+    get: {
+      parameters: {
+        path: {
+          id: components["parameters"]["Id"];
+        };
+      };
+      responses: {
+        200: components["responses"]["Category"];
+        404: components["responses"]["CategoryNotFound"];
+      };
+    };
+    /** Update a category by ID */
+    put: {
+      parameters: {
+        path: {
+          id: components["parameters"]["Id"];
+        };
+      };
+      responses: {
+        200: components["responses"]["Category"];
+        400: components["responses"]["InvalidCategoryData"];
+        404: components["responses"]["CategoryNotFound"];
+      };
+    };
+    /** Delete a category by ID */
+    delete: {
+      parameters: {
+        path: {
+          id: components["parameters"]["Id"];
+        };
+      };
+      responses: {
+        200: components["responses"]["Delete"];
+      };
+    };
+    parameters: {
+      path: {
+        id: components["parameters"]["Id"];
+      };
+    };
+  };
+  "/categories/{id}/companies": {
+    /** Get all companies for a category */
+    get: {
+      parameters: {
+        path: {
+          id: components["parameters"]["Id"];
+        };
+      };
+      responses: {
+        200: components["responses"]["CompanyList"];
+        400: components["responses"]["InvalidQuery"];
+      };
+    };
+    parameters: {
+      path: {
+        id: components["parameters"]["Id"];
+      };
+    };
+  };
   "/companies": {
     /** Get all companies */
     get: {
@@ -190,6 +268,24 @@ export interface components {
       error: "BadRequest" | "InvalidEmailParam" | "InvalidIdParam";
       errorMessage: string;
     };
+    Category: {
+      _id: string;
+      description: string;
+      name: string;
+      pinned?: boolean;
+      tagline: string;
+    };
+    CategoryList: {
+      count: number;
+      docs: components["schemas"]["Category"][];
+      nextCursor?: string[];
+      total: number;
+    };
+    CategoryNotFound: {
+      /** @enum {string} */
+      error: "CategoryNotFound";
+      errorMessage: string;
+    };
     Company: {
       _id: string;
       categories: string[];
@@ -234,6 +330,15 @@ export interface components {
       /** @enum {string} */
       error: "InternalServerError";
       errorMessage: string;
+    };
+    InvalidCategoryData: {
+      /** @enum {string} */
+      error: "InvalidCategoryData";
+      errorMessage: string;
+      data: {
+        message: string;
+        path: string;
+      }[];
     };
     InvalidCompanyData: {
       /** @enum {string} */
@@ -309,6 +414,24 @@ export interface components {
         "application/json": components["schemas"]["BadRequest"];
       };
     };
+    /** @description Category */
+    Category: {
+      content: {
+        "application/json": components["schemas"]["Category"];
+      };
+    };
+    /** @description Category list */
+    CategoryList: {
+      content: {
+        "application/json": components["schemas"]["CategoryList"];
+      };
+    };
+    /** @description Category not found */
+    CategoryNotFound: {
+      content: {
+        "application/json": components["schemas"]["CategoryNotFound"];
+      };
+    };
     /** @description Company */
     Company: {
       content: {
@@ -355,6 +478,12 @@ export interface components {
     InvalidUserData: {
       content: {
         "application/json": components["schemas"]["InvalidUserData"];
+      };
+    };
+    /** @description Invalid category data */
+    InvalidCategoryData: {
+      content: {
+        "application/json": components["schemas"]["InvalidCategoryData"];
       };
     };
     /** @description Invalid company data */
