@@ -1,4 +1,4 @@
-import {
+import type {
   CategoriesService,
   CategoryControllers,
   CompaniesService
@@ -8,8 +8,7 @@ import {
   CategoryUpdateValidationSchema,
   ErrorCode,
   GetCategoriesOptionsValidationSchema,
-  GetCompaniesByCategoryOptionsValidationSchema,
-  RoutesOld
+  GetCompaniesByCategoryOptionsValidationSchema
 } from "../../schema";
 import {
   assertDefined,
@@ -18,6 +17,7 @@ import {
   sendResponseOld,
   wrapAsyncHandler
 } from "../../utils";
+import type { RoutesOld } from "../../schema";
 import { StatusCodes } from "http-status-codes";
 
 /**

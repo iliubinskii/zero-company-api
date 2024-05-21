@@ -50,6 +50,13 @@ const config = {
     "unused-imports"
   ],
   rules: {
+    "@typescript-eslint/consistent-type-imports": [
+      "warn",
+      {
+        disallowTypeAnnotations: false,
+        prefer: "type-imports"
+      }
+    ],
     "@typescript-eslint/explicit-function-return-type": [
       "warn",
       {
@@ -97,6 +104,7 @@ const config = {
     "init-declarations": "off",
     "jsdoc/require-param-type": "off",
     "jsdoc/require-returns-type": "off",
+    "no-duplicate-imports": "off",
     "no-magic-numbers": ["error", { ignore: [0, 1, -1] }],
     "no-redeclare": "off",
     "no-shadow": "off",

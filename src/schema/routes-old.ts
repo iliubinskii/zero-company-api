@@ -1,14 +1,14 @@
-import {
+import type {
   DeleteResponse,
   ErrorCode,
   ErrorResponse,
   ErrorResponseWithData,
   MultipleDocsResponse
 } from "./common";
-import { ExistingUser, JwtUser } from "./users";
-import { ExistingCategory } from "./categories";
-import { ExistingCompany } from "./companies";
-import { StatusCodes } from "http-status-codes";
+import type { ExistingUser, JwtUser } from "./users";
+import type { ExistingCategory } from "./categories";
+import type { ExistingCompany } from "./companies";
+import type { StatusCodes } from "http-status-codes";
 
 export interface RoutesOld {
   readonly "*": {

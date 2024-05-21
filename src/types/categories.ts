@@ -1,11 +1,11 @@
-import {
+import type {
   Category,
   CategoryUpdate,
   ExistingCategory,
   GetCategoriesOptions,
   MultipleDocsResponse
 } from "../schema";
-import { RequestHandler } from "express";
+import type { RequestHandler } from "express";
 
 export interface CategoryControllers {
   readonly addCategory: RequestHandler;

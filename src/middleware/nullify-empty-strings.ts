@@ -1,4 +1,4 @@
-import { RequestHandler } from "express";
+import type { RequestHandler } from "express";
 
 export const nullifyEmptyStrings: RequestHandler = (req, _res, next) => {
   // eslint-disable-next-line no-type-assertion/no-type-assertion -- Ok

@@ -1,13 +1,17 @@
-import { CompanyCreate, CompanyUpdate, ExistingCompany } from "./companies";
+import type {
+  CompanyCreate,
+  CompanyUpdate,
+  ExistingCompany
+} from "./companies";
 import {
   IdValidationSchema,
   ImageValidationSchema,
-  ValidationResult,
   preprocessBoolean,
   preprocessEmail,
   preprocessNumber
 } from "./common";
 import { MAX_CATEGORIES } from "./consts";
+import type { ValidationResult } from "./common";
 import _ from "lodash";
 import zod from "zod";
 

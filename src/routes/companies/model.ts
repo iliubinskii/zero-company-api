@@ -1,5 +1,5 @@
-import { Company } from "../../schema";
-import { Equals } from "ts-toolbelt/out/Any/Equals";
+import type { Company } from "../../schema";
+import type { Equals } from "ts-toolbelt/out/Any/Equals";
 import { getMongodbConnection } from "../../providers";
 import mongoose from "mongoose";
 

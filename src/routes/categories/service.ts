@@ -1,7 +1,8 @@
-import { Category, MAX_LIMIT } from "../../schema";
-import { CategoriesService } from "../../types";
-import { FilterQuery } from "mongoose";
-import { Writable } from "ts-toolbelt/out/Object/Writable";
+import type { CategoriesService } from "../../types";
+import type { Category } from "../../schema";
+import type { FilterQuery } from "mongoose";
+import { MAX_LIMIT } from "../../schema";
+import type { Writable } from "ts-toolbelt/out/Object/Writable";
 import { buildMongodbQuery } from "../../utils";
 import { getCategoryModel } from "./model";
 

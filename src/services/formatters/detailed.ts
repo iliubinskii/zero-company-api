@@ -1,7 +1,7 @@
 import { LOG_REQUEST_ID_LENGTH } from "../../consts";
 import { format } from "date-fns";
 import { ucfirst } from "../../utils";
-import winston from "winston";
+import type winston from "winston";
 
 /**
  * Custom log formatter

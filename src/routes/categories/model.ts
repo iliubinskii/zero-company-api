@@ -1,5 +1,5 @@
-import { Category } from "../../schema";
-import { Equals } from "ts-toolbelt/out/Any/Equals";
+import type { Category } from "../../schema";
+import type { Equals } from "ts-toolbelt/out/Any/Equals";
 import { getMongodbConnection } from "../../providers";
 import mongoose from "mongoose";
 

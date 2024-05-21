@@ -1,10 +1,9 @@
-import { CompaniesService, CompanyControllers } from "../../types";
+import type { CompaniesService, CompanyControllers } from "../../types";
 import {
   CompanyCreateValidationSchema,
   CompanyUpdateValidationSchema,
   ErrorCode,
-  GetCompaniesOptionsValidationSchema,
-  Routes
+  GetCompaniesOptionsValidationSchema
 } from "../../schema";
 import {
   assertDefined,
@@ -13,6 +12,7 @@ import {
   sendResponse,
   wrapAsyncHandler
 } from "../../utils";
+import type { Routes } from "../../schema";
 import { StatusCodes } from "http-status-codes";
 
 /**

@@ -1,4 +1,4 @@
-import { RequestHandler } from "express";
+import type { RequestHandler } from "express";
 import _ from "lodash";
 
 export const parseNestedFormData: RequestHandler = (req, _res, next) => {

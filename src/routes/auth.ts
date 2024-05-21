@@ -11,15 +11,16 @@ import {
   AUTH_COOKIE_NAME,
   JWT_EXPIRES_IN
 } from "../consts";
-import { Jwt, JwtValidationSchema, RoutesOld } from "../schema";
+import type { Jwt, RoutesOld } from "../schema";
 import {
   filterUndefinedProperties,
   sendResponseOld,
   wrapAsyncHandler
 } from "../utils";
+import { JwtValidationSchema } from "../schema";
 import { Router } from "express";
 import { StatusCodes } from "http-status-codes";
-import { UsersService } from "../types";
+import type { UsersService } from "../types";
 import jwt from "jsonwebtoken";
 import { lang } from "../langs";
 import { logger } from "../services";
