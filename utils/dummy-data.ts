@@ -6,7 +6,7 @@ import { faker } from "@faker-js/faker";
 import fs from "node:fs";
 
 const LIMIT = {
-  companies: 100
+  companies: 250
 } as const;
 
 const PRICE_STEP = 1000;
