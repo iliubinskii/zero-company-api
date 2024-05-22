@@ -41,7 +41,7 @@ export function initMongodb(): void {
 /**
  * Disconnect from MongoDB
  */
-export async function disconnectMongodb(): Promise<void> {
+export async function mongodbDisconnect(): Promise<void> {
   if (cachedConnection) {
     await cachedConnection.disconnect();
     cachedConnection = null;

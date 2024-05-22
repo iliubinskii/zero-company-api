@@ -24,7 +24,7 @@ import {
   createUsersService,
   testRouter
 } from "./routes";
-import { initMongodb, initPassport } from "./providers";
+import { initAuth0Passport, initMongodb } from "./providers";
 import type { Routes } from "./schema";
 import { StatusCodes } from "http-status-codes";
 import cookieParser from "cookie-parser";
@@ -44,7 +44,7 @@ export function createApp(): express.Express {
   logger.info(`${lang.ZeroApiServer} ${schemaVersion}`);
 
   initMongodb();
-  initPassport();
+  initAuth0Passport();
 
   const categoriesService = createCategoriesService();
 
