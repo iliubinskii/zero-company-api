@@ -1,7 +1,8 @@
 import type {
+  AuthUser,
+  AuthUserEssential,
   ExistingUser,
   Jwt,
-  JwtUser,
   UserCreate,
   UserUpdate
 } from "./users";
@@ -11,7 +12,6 @@ import {
   preprocessEmail
 } from "./common";
 import type { ValidationResult } from "./common";
-import _ from "lodash";
 import zod from "zod";
 
 const _id = IdValidationSchema;
@@ -33,18 +33,28 @@ const fields = {
 
 export const ExistingUserValidationSchema = zod.strictObject(fields);
 
-// Do not use strictObject: JWT may contain additional fields
-export const JwtValidationSchema = zod.object({ email });
-
-export const JwtUserValidationSchema = zod.strictObject({
+export const AuthUserValidationSchema = zod.strictObject({
   admin,
   email,
   user: ExistingUserValidationSchema.optional()
 });
 
-export const UserCreateValidationSchema = zod.strictObject(
-  _.omit(fields, "_id", "email")
-);
+export const AuthUserEssentialValidationSchema = zod.strictObject({
+  admin,
+  email,
+  user: ExistingUserValidationSchema.pick({
+    firstName: true,
+    lastName: true
+  }).optional()
+});
+
+// Do not use strictObject: JWT may contain additional fields
+export const JwtValidationSchema = zod.object({ email });
+
+export const UserCreateValidationSchema = ExistingUserValidationSchema.omit({
+  _id: true,
+  email: true
+});
 
 export const UserUpdateValidationSchema = zod.strictObject({
   firstName: firstName.optional(),
@@ -58,16 +68,23 @@ export const UserUpdateValidationSchema = zod.strictObject({
   return result.success ? result.data : undefined;
 })();
 
-// Type check the jwt validation schema
-((): ValidationResult<Jwt> | undefined => {
-  const result = JwtValidationSchema.safeParse(undefined);
+// Type check the jwt user validation schema
+((): ValidationResult<AuthUser> | undefined => {
+  const result = AuthUserValidationSchema.safeParse(undefined);
 
   return result.success ? result.data : undefined;
 })();
 
 // Type check the jwt user validation schema
-((): ValidationResult<JwtUser> | undefined => {
-  const result = JwtUserValidationSchema.safeParse(undefined);
+((): ValidationResult<AuthUserEssential> | undefined => {
+  const result = AuthUserEssentialValidationSchema.safeParse(undefined);
+
+  return result.success ? result.data : undefined;
+})();
+
+// Type check the jwt validation schema
+((): ValidationResult<Jwt> | undefined => {
+  const result = JwtValidationSchema.safeParse(undefined);
 
   return result.success ? result.data : undefined;
 })();

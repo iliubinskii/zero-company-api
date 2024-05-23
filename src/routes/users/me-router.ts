@@ -1,6 +1,6 @@
 import { Router } from "express";
 import type { UserControllers } from "../../types";
-import { requireJwtUser } from "../../middleware";
+import { requireJwt } from "../../middleware";
 import { usersMiddleware } from "./middleware";
 
 /**
@@ -9,19 +9,19 @@ import { usersMiddleware } from "./middleware";
  * @returns A router for me routes.
  */
 export function createMeRouter(controllers: UserControllers): Router {
-  const { userEmailFromJwtUser } = usersMiddleware;
+  const { userEmailFromJwt } = usersMiddleware;
 
   const router = Router();
 
   router
-    .get("/", requireJwtUser, userEmailFromJwtUser, controllers.getUser)
-    .post("/", requireJwtUser, userEmailFromJwtUser, controllers.addUser)
-    .put("/", requireJwtUser, userEmailFromJwtUser, controllers.updateUser)
-    .delete("/", requireJwtUser, userEmailFromJwtUser, controllers.deleteUser)
+    .get("/", requireJwt, userEmailFromJwt, controllers.getUser)
+    .post("/", requireJwt, userEmailFromJwt, controllers.addUser)
+    .put("/", requireJwt, userEmailFromJwt, controllers.updateUser)
+    .delete("/", requireJwt, userEmailFromJwt, controllers.deleteUser)
     .get(
       "/companies",
-      requireJwtUser,
-      userEmailFromJwtUser,
+      requireJwt,
+      userEmailFromJwt,
       controllers.getCompaniesByUser
     );
 

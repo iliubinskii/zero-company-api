@@ -12,7 +12,6 @@ import {
 } from "./common";
 import { MAX_LIMIT } from "./consts";
 import type { ValidationResult } from "./common";
-import _ from "lodash";
 import zod from "zod";
 
 const category = IdValidationSchema.optional();
@@ -67,13 +66,11 @@ export const GetCompaniesOptionsValidationSchema = zod.strictObject(
   fields.companies
 );
 
-export const GetCompaniesByCategoryOptionsValidationSchema = zod.strictObject(
-  _.omit(fields.companies, ["category"])
-);
+export const GetCompaniesByCategoryOptionsValidationSchema =
+  GetCompaniesOptionsValidationSchema.omit({ category: true });
 
-export const GetCompaniesByUserOptionsValidationSchema = zod.strictObject(
-  _.omit(fields.companies, ["founderEmail"])
-);
+export const GetCompaniesByUserOptionsValidationSchema =
+  GetCompaniesOptionsValidationSchema.omit({ founderEmail: true });
 
 export const GetUsersOptionsValidationSchema = zod.strictObject(fields.users);
 

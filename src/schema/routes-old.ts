@@ -1,3 +1,4 @@
+import type { AuthUser, ExistingUser } from "./users";
 import type {
   DeleteResponse,
   ErrorCode,
@@ -5,7 +6,6 @@ import type {
   ErrorResponseWithData,
   MultipleDocsResponse
 } from "./common";
-import type { ExistingUser, JwtUser } from "./users";
 import type { ExistingCategory } from "./categories";
 import type { ExistingCompany } from "./companies";
 import type { StatusCodes } from "http-status-codes";
@@ -71,7 +71,7 @@ export interface RoutesOld {
       readonly GET: null;
     };
     readonly "/me": {
-      readonly GET: [StatusCodes.OK, JwtUser | null];
+      readonly GET: [StatusCodes.OK, AuthUser | null];
     };
   };
   readonly "/categories": {

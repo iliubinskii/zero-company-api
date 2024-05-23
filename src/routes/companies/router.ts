@@ -2,8 +2,8 @@ import {
   nullifyEmptyStrings,
   parseNestedFormData,
   requireIdParam,
-  requireJwtAdmin,
-  requireJwtUser
+  requireJwt,
+  requireJwtAdmin
 } from "../../middleware";
 import type { CompanyControllers } from "../../types";
 import { Router } from "express";
@@ -23,7 +23,7 @@ export function createCompaniesRouter(controllers: CompanyControllers): Router {
     .get("/", controllers.getCompanies)
     .post(
       "/",
-      requireJwtUser,
+      requireJwt,
       parseFormData,
       nullifyEmptyStrings,
       webAccessibleStorage,

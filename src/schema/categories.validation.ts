@@ -5,7 +5,6 @@ import type {
 } from "./categories";
 import { IdValidationSchema, preprocessBoolean } from "./common";
 import type { ValidationResult } from "./common";
-import _ from "lodash";
 import zod from "zod";
 
 const _id = IdValidationSchema;
@@ -28,9 +27,8 @@ const fields = {
 
 export const ExistingCategoryValidationSchema = zod.strictObject(fields);
 
-export const CategoryCreateValidationSchema = zod.strictObject(
-  _.omit(fields, "_id")
-);
+export const CategoryCreateValidationSchema =
+  ExistingCategoryValidationSchema.omit({ _id: true });
 
 export const CategoryUpdateValidationSchema = zod.strictObject({
   description: description.optional(),

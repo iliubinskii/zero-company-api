@@ -17,7 +17,7 @@ export interface UserControllers {
 }
 
 export interface UsersMiddleware {
-  readonly userEmailFromJwtUser: RequestHandler;
+  readonly userEmailFromJwt: RequestHandler;
   readonly userEmailFromParam: RequestHandler;
 }
 

@@ -5,7 +5,7 @@ import { StatusCodes } from "http-status-codes";
 import type { UsersMiddleware } from "../../types";
 
 export const usersMiddleware: UsersMiddleware = {
-  userEmailFromJwtUser: (req, _res, next) => {
+  userEmailFromJwt: (req, _res, next) => {
     req.userEmail = assertDefined(req.jwt).email;
     next();
   },
