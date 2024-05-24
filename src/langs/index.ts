@@ -27,7 +27,7 @@ export const lang = {
   OK: "OK",
   SecureServerStarted: "Secure server started",
   ServerError: "Server error",
-  ServerStarted: "Server started",
+  ServerStartedOnPort: "Server started on port",
   Unauthorized: "Unauthorized",
   UserAlreadyExists: "User already exists",
   UserNotFound: "User not found",
