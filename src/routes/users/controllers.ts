@@ -44,19 +44,19 @@ export function createUserControllers(
         });
 
         if (addedUser)
-          sendResponse<Routes["/users/{email}"]["post"]>(
+          sendResponse<Routes["/users"]["post"]>(
             res,
             StatusCodes.CREATED,
             addedUser
           );
         else
-          sendResponse<Routes["/users/{email}"]["post"]>(
+          sendResponse<Routes["/users"]["post"]>(
             res,
             StatusCodes.CONFLICT,
             buildErrorResponse(ErrorCode.UserAlreadyExists)
           );
       } else
-        sendResponse<Routes["/users/{email}"]["post"]>(
+        sendResponse<Routes["/users"]["post"]>(
           res,
           StatusCodes.BAD_REQUEST,
           buildErrorResponse(ErrorCode.InvalidUserData, user.error)
@@ -67,7 +67,7 @@ export function createUserControllers(
 
       const affectedRows = await service.deleteUser(ref);
 
-      sendResponse<Routes["/users/{email}"]["delete"]>(res, StatusCodes.OK, {
+      sendResponse<Routes["/users/{id}"]["delete"]>(res, StatusCodes.OK, {
         affectedRows
       });
     }),
@@ -100,13 +100,13 @@ export function createUserControllers(
           parentRef
         );
 
-        sendResponse<Routes["/users/{email}/companies"]["get"]>(
+        sendResponse<Routes["/users/{id}/companies"]["get"]>(
           res,
           StatusCodes.OK,
           companies
         );
       } else
-        sendResponse<Routes["/users/{email}/companies"]["get"]>(
+        sendResponse<Routes["/users/{id}/companies"]["get"]>(
           res,
           StatusCodes.BAD_REQUEST,
           buildErrorResponse(ErrorCode.InvalidQuery, options.error)
@@ -118,13 +118,9 @@ export function createUserControllers(
       const user = await service.getUser(ref);
 
       if (user)
-        sendResponse<Routes["/users/{email}"]["get"]>(
-          res,
-          StatusCodes.OK,
-          user
-        );
+        sendResponse<Routes["/users/{id}"]["get"]>(res, StatusCodes.OK, user);
       else
-        sendResponse<Routes["/users/{email}"]["get"]>(
+        sendResponse<Routes["/users/{id}"]["get"]>(
           res,
           StatusCodes.NOT_FOUND,
           buildErrorResponse(ErrorCode.UserNotFound)
@@ -158,19 +154,19 @@ export function createUserControllers(
         );
 
         if (updatedUser)
-          sendResponse<Routes["/users/{email}"]["put"]>(
+          sendResponse<Routes["/users/{id}"]["put"]>(
             res,
             StatusCodes.OK,
             updatedUser
           );
         else
-          sendResponse<Routes["/users/{email}"]["put"]>(
+          sendResponse<Routes["/users/{id}"]["put"]>(
             res,
             StatusCodes.NOT_FOUND,
             buildErrorResponse(ErrorCode.UserNotFound)
           );
       } else
-        sendResponse<Routes["/users/{email}"]["put"]>(
+        sendResponse<Routes["/users/{id}"]["put"]>(
           res,
           StatusCodes.BAD_REQUEST,
           buildErrorResponse(ErrorCode.InvalidUserData, user.error)
