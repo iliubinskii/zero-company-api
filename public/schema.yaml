@@ -433,7 +433,6 @@ components:
           type: string
           enum:
             - BadRequest
-            - InvalidEmailParam
             - InvalidIdParam
         errorMessage:
           type: string
@@ -511,7 +510,7 @@ components:
           type: string
         categories:
           type: array
-          items: 
+          items:
             type: string
         description:
           type: string

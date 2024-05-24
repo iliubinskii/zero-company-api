@@ -22,6 +22,7 @@ import {
   createUserControllers,
   createUsersRouter,
   createUsersService,
+  getUserModel,
   testRouter
 } from "./routes";
 import { initAuth0Passport, initMongodb } from "./providers";
@@ -48,7 +49,7 @@ export function createApp(): express.Express {
 
   const categoriesService = createCategoriesService();
 
-  const companiesService = createCompaniesService();
+  const companiesService = createCompaniesService(getUserModel);
 
   const usersService = createUsersService();
 

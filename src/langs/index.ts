@@ -6,7 +6,6 @@ export const lang = {
   InternalServerError: "Internal server error",
   InvalidCategoryData: "Invalid category data",
   InvalidCompanyData: "Invalid company data",
-  InvalidEmailParam: "Invalid email parameter",
   InvalidIdParam: "Invalid ID parameter",
   InvalidParam: "Invalid parameter",
   InvalidQuery: "Invalid query",

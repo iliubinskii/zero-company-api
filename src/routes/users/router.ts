@@ -9,25 +9,25 @@ import { usersMiddleware } from "./middleware";
  * @returns A router for user routes.
  */
 export function createUsersRouter(controllers: UserControllers): Router {
-  const { userEmailFromParam } = usersMiddleware;
+  const { userRefFromIdParam } = usersMiddleware;
 
   const router = Router();
 
   router
     .get("/", requireJwt, controllers.getUsers)
-    .get("/:email", requireJwt, userEmailFromParam, controllers.getUser)
-    .post("/:email", requireJwtAdmin, userEmailFromParam, controllers.addUser)
-    .put("/:email", requireJwtAdmin, userEmailFromParam, controllers.updateUser)
+    .get("/:email", requireJwt, userRefFromIdParam, controllers.getUser)
+    .post("/:email", requireJwtAdmin, userRefFromIdParam, controllers.addUser)
+    .put("/:email", requireJwtAdmin, userRefFromIdParam, controllers.updateUser)
     .delete(
       "/:email",
       requireJwtAdmin,
-      userEmailFromParam,
+      userRefFromIdParam,
       controllers.deleteUser
     )
     .get(
       "/:email/companies",
       requireJwt,
-      userEmailFromParam,
+      userRefFromIdParam,
       controllers.getCompaniesByUser
     );
 

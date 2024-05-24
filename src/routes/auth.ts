@@ -67,7 +67,10 @@ export function createAuthRouter(usersService: UsersService): Router {
             email: payload.email
           };
 
-          const user = await usersService.getUser(payload.email);
+          const user = await usersService.getUser({
+            email: payload.email,
+            type: "email"
+          });
 
           if (user)
             userQueryParam.user = {
@@ -144,7 +147,10 @@ export function createAuthRouter(usersService: UsersService): Router {
         if (result) {
           const { email } = result;
 
-          const user = await usersService.getUser(email);
+          const user = await usersService.getUser({
+            email,
+            type: "email"
+          });
 
           sendResponseOld<RoutesOld["/auth"]["/me"]["GET"]>(
             res,

@@ -265,7 +265,7 @@ export interface components {
   schemas: {
     BadRequest: {
       /** @enum {string} */
-      error: "BadRequest" | "InvalidEmailParam" | "InvalidIdParam";
+      error: "BadRequest" | "InvalidIdParam";
       errorMessage: string;
     };
     Category: {

@@ -1,7 +1,5 @@
 import type {
   GetCategoriesOptions,
-  GetCompaniesByCategoryOptions,
-  GetCompaniesByUserOptions,
   GetCompaniesOptions,
   GetUsersOptions
 } from "./get-all-options";
@@ -14,11 +12,7 @@ import { MAX_LIMIT } from "./consts";
 import type { ValidationResult } from "./common";
 import zod from "zod";
 
-const category = IdValidationSchema.optional();
-
 const cursor = zod.tuple([zod.string().min(1), IdValidationSchema]).optional();
-
-const founderEmail = zod.string().min(1).optional();
 
 const includePrivateCompanies = preprocessBoolean(zod.boolean()).optional();
 
@@ -42,37 +36,26 @@ const sortOrder = {
   companies: zod.union([zod.literal("asc"), zod.literal("desc")]).optional()
 } as const;
 
-const fields = {
-  categories: { limit, offset, onlyPinned },
-  companies: {
-    category,
-    cursor,
-    founderEmail,
-    includePrivateCompanies,
-    limit,
-    offset,
-    onlyRecommended,
-    sortBy: sortBy.companies,
-    sortOrder: sortOrder.companies
-  },
-  users: { limit, offset }
-} as const;
+export const GetCategoriesOptionsValidationSchema = zod.strictObject({
+  limit,
+  offset,
+  onlyPinned
+});
 
-export const GetCategoriesOptionsValidationSchema = zod.strictObject(
-  fields.categories
-);
+export const GetCompaniesOptionsValidationSchema = zod.strictObject({
+  cursor,
+  includePrivateCompanies,
+  limit,
+  offset,
+  onlyRecommended,
+  sortBy: sortBy.companies,
+  sortOrder: sortOrder.companies
+});
 
-export const GetCompaniesOptionsValidationSchema = zod.strictObject(
-  fields.companies
-);
-
-export const GetCompaniesByCategoryOptionsValidationSchema =
-  GetCompaniesOptionsValidationSchema.omit({ category: true });
-
-export const GetCompaniesByUserOptionsValidationSchema =
-  GetCompaniesOptionsValidationSchema.omit({ founderEmail: true });
-
-export const GetUsersOptionsValidationSchema = zod.strictObject(fields.users);
+export const GetUsersOptionsValidationSchema = zod.strictObject({
+  limit,
+  offset
+});
 
 // Type check the get categories options validation schema
 ((): ValidationResult<GetCategoriesOptions> | undefined => {
@@ -84,21 +67,6 @@ export const GetUsersOptionsValidationSchema = zod.strictObject(fields.users);
 // Type check the get companies options validation schema
 ((): ValidationResult<GetCompaniesOptions> | undefined => {
   const result = GetCompaniesOptionsValidationSchema.safeParse(undefined);
-
-  return result.success ? result.data : undefined;
-})();
-
-// Type check the get companies by category options validation schema
-((): ValidationResult<GetCompaniesByCategoryOptions> | undefined => {
-  const result =
-    GetCompaniesByCategoryOptionsValidationSchema.safeParse(undefined);
-
-  return result.success ? result.data : undefined;
-})();
-
-// Type check the get companies by user options validation schema
-((): ValidationResult<GetCompaniesByUserOptions> | undefined => {
-  const result = GetCompaniesByUserOptionsValidationSchema.safeParse(undefined);
 
   return result.success ? result.data : undefined;
 })();

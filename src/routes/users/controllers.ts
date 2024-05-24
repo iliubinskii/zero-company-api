@@ -1,11 +1,12 @@
 import type {
   CompaniesService,
+  GetCompaniesParentRef,
   UserControllers,
   UsersService
 } from "../../types";
 import {
   ErrorCode,
-  GetCompaniesByUserOptionsValidationSchema,
+  GetCompaniesOptionsValidationSchema,
   GetUsersOptionsValidationSchema,
   UserCreateValidationSchema,
   UserUpdateValidationSchema
@@ -32,12 +33,15 @@ export function createUserControllers(
 ): UserControllers {
   return {
     addUser: wrapAsyncHandler(async (req, res) => {
-      const email = assertDefined(req.userEmail);
+      const jwt = assertDefined(req.jwt);
 
       const user = UserCreateValidationSchema.safeParse(req.body);
 
       if (user.success) {
-        const addedUser = await service.addUser({ ...user.data, email });
+        const addedUser = await service.addUser({
+          ...user.data,
+          email: jwt.email
+        });
 
         if (addedUser)
           sendResponse<Routes["/users/{email}"]["post"]>(
@@ -59,26 +63,42 @@ export function createUserControllers(
         );
     }),
     deleteUser: wrapAsyncHandler(async (req, res) => {
-      const email = assertDefined(req.userEmail);
+      const ref = assertDefined(req.userRef);
 
-      const affectedRows = await service.deleteUser(email);
+      const affectedRows = await service.deleteUser(ref);
 
       sendResponse<Routes["/users/{email}"]["delete"]>(res, StatusCodes.OK, {
         affectedRows
       });
     }),
     getCompaniesByUser: wrapAsyncHandler(async (req, res) => {
-      const email = assertDefined(req.userEmail);
+      const ref = assertDefined(req.userRef);
 
-      const options = GetCompaniesByUserOptionsValidationSchema.safeParse(
-        req.query
-      );
+      const options = GetCompaniesOptionsValidationSchema.safeParse(req.query);
 
       if (options.success) {
-        const companies = await companiesService.getCompanies({
-          ...filterUndefinedProperties(options.data),
-          founderEmail: email
-        });
+        const parentRef: GetCompaniesParentRef = (() => {
+          switch (ref.type) {
+            case "id": {
+              return {
+                founderId: ref.id,
+                type: "founderId"
+              };
+            }
+
+            case "email": {
+              return {
+                founderEmail: ref.email,
+                type: "founderEmail"
+              };
+            }
+          }
+        })();
+
+        const companies = await companiesService.getCompanies(
+          filterUndefinedProperties(options.data),
+          parentRef
+        );
 
         sendResponse<Routes["/users/{email}/companies"]["get"]>(
           res,
@@ -93,9 +113,9 @@ export function createUserControllers(
         );
     }),
     getUser: wrapAsyncHandler(async (req, res) => {
-      const email = assertDefined(req.userEmail);
+      const ref = assertDefined(req.userRef);
 
-      const user = await service.getUser(email);
+      const user = await service.getUser(ref);
 
       if (user)
         sendResponse<Routes["/users/{email}"]["get"]>(
@@ -127,13 +147,13 @@ export function createUserControllers(
         );
     }),
     updateUser: wrapAsyncHandler(async (req, res) => {
-      const email = assertDefined(req.userEmail);
+      const ref = assertDefined(req.userRef);
 
       const user = UserUpdateValidationSchema.safeParse(req.body);
 
       if (user.success) {
         const updatedUser = await service.updateUser(
-          email,
+          ref,
           filterUndefinedProperties(user.data)
         );
 

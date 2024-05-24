@@ -36,10 +36,12 @@ export interface CompaniesService {
   /**
    * Gets all companies from the database.
    * @param options - The options to use when getting companies.
+   * @param parentRef - The parent reference to use when getting companies.
    * @returns A promise that resolves with all companies in the database.
    */
   readonly getCompanies: (
-    options?: GetCompaniesOptions
+    options?: GetCompaniesOptions,
+    parentRef?: GetCompaniesParentRef
   ) => Promise<MultipleDocsResponse<ExistingCompany>>;
   /**
    * Gets a company from the database.
@@ -58,3 +60,17 @@ export interface CompaniesService {
     company: CompanyUpdate
   ) => Promise<ExistingCompany | undefined>;
 }
+
+export type GetCompaniesParentRef =
+  | {
+      readonly category: string;
+      readonly type: "category";
+    }
+  | {
+      readonly founderEmail: string;
+      readonly type: "founderEmail";
+    }
+  | {
+      readonly founderId: string;
+      readonly type: "founderId";
+    };

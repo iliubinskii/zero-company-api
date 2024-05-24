@@ -9,19 +9,19 @@ import { usersMiddleware } from "./middleware";
  * @returns A router for me routes.
  */
 export function createMeRouter(controllers: UserControllers): Router {
-  const { userEmailFromJwt } = usersMiddleware;
+  const { userRefFromJwt } = usersMiddleware;
 
   const router = Router();
 
   router
-    .get("/", requireJwt, userEmailFromJwt, controllers.getUser)
-    .post("/", requireJwt, userEmailFromJwt, controllers.addUser)
-    .put("/", requireJwt, userEmailFromJwt, controllers.updateUser)
-    .delete("/", requireJwt, userEmailFromJwt, controllers.deleteUser)
+    .get("/", requireJwt, userRefFromJwt, controllers.getUser)
+    .post("/", requireJwt, userRefFromJwt, controllers.addUser)
+    .put("/", requireJwt, userRefFromJwt, controllers.updateUser)
+    .delete("/", requireJwt, userRefFromJwt, controllers.deleteUser)
     .get(
       "/companies",
       requireJwt,
-      userEmailFromJwt,
+      userRefFromJwt,
       controllers.getCompaniesByUser
     );
 
