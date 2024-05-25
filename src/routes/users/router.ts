@@ -1,4 +1,4 @@
-import { requireJwtAdmin, requireJwtUser } from "../../middleware";
+import { requireIdParam, requireJwt, requireJwtAdmin } from "../../middleware";
 import { Router } from "express";
 import type { UserControllers } from "../../types";
 import { usersMiddleware } from "./middleware";
@@ -9,25 +9,39 @@ import { usersMiddleware } from "./middleware";
  * @returns A router for user routes.
  */
 export function createUsersRouter(controllers: UserControllers): Router {
-  const { userEmailFromParam } = usersMiddleware;
+  const { userRefFromIdParam } = usersMiddleware;
 
   const router = Router();
 
   router
-    .get("/", requireJwtUser, controllers.getUsers)
-    .get("/:email", requireJwtUser, userEmailFromParam, controllers.getUser)
-    .post("/:email", requireJwtAdmin, userEmailFromParam, controllers.addUser)
-    .put("/:email", requireJwtAdmin, userEmailFromParam, controllers.updateUser)
-    .delete(
-      "/:email",
+    .get("/", requireJwt, controllers.getUsers)
+    .post("/", requireJwt, controllers.addUser)
+    .get(
+      "/:id",
+      requireJwt,
+      requireIdParam,
+      userRefFromIdParam,
+      controllers.getUser
+    )
+    .put(
+      "/:id",
       requireJwtAdmin,
-      userEmailFromParam,
+      requireIdParam,
+      userRefFromIdParam,
+      controllers.updateUser
+    )
+    .delete(
+      "/:id",
+      requireJwtAdmin,
+      requireIdParam,
+      userRefFromIdParam,
       controllers.deleteUser
     )
     .get(
-      "/:email/companies",
-      requireJwtUser,
-      userEmailFromParam,
+      "/:id/companies",
+      requireJwt,
+      requireIdParam,
+      userRefFromIdParam,
       controllers.getCompaniesByUser
     );
 

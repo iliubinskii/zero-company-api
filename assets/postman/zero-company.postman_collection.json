@@ -115,7 +115,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"description\": \"Some description\",\r\n    \"name\": \"HiTech\",\r\n    \"tagline\": \"Some tagline\"\r\n}",
+              "raw": "{\r\n    \"description\": \"Some description\",\r\n    \"name\": \"HiTech\",\r\n    \"pinned\": false,\r\n    \"tagline\": \"Some tagline\"\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -357,6 +357,34 @@
           "response": []
         },
         {
+          "name": "Prepare category id for companies",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var { _id } = pm.response.json().docs.find(doc => doc.name === pm.environment.get(\"existingCategoryName\"));\r",
+                  "if (_id) pm.environment.set(\"lastCategoryId\", _id);"
+                ],
+                "type": "text/javascript",
+                "packages": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{apiUrl}}categories",
+              "host": ["{{apiUrl}}categories"]
+            }
+          },
+          "response": []
+        },
+        {
           "name": "Get companies",
           "request": {
             "auth": {
@@ -407,53 +435,6 @@
           "name": "Cursor testing",
           "item": [
             {
-              "name": "Get all / cursor next",
-              "event": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "exec": [
-                      "var { nextCursor } = pm.response.json();\r",
-                      "\r",
-                      "if (nextCursor) {\r",
-                      "  pm.environment.set(\"nextCursor[0]\", nextCursor[0]);\r",
-                      "  pm.environment.set(\"nextCursor[1]\", nextCursor[1]);\r",
-                      "}\r",
-                      ""
-                    ],
-                    "type": "text/javascript",
-                    "packages": {}
-                  }
-                }
-              ],
-              "request": {
-                "auth": {
-                  "type": "noauth"
-                },
-                "method": "GET",
-                "header": [],
-                "url": {
-                  "raw": "{{apiUrl}}companies?limit=3&cursor[0]={{nextCursor[0]}}&cursor[1]={{nextCursor[1]}}",
-                  "host": ["{{apiUrl}}companies"],
-                  "query": [
-                    {
-                      "key": "limit",
-                      "value": "3"
-                    },
-                    {
-                      "key": "cursor[0]",
-                      "value": "{{nextCursor[0]}}"
-                    },
-                    {
-                      "key": "cursor[1]",
-                      "value": "{{nextCursor[1]}}"
-                    }
-                  ]
-                }
-              },
-              "response": []
-            },
-            {
               "name": "Get all / cursor",
               "event": [
                 {
@@ -480,12 +461,59 @@
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "{{apiUrl}}companies?limit=3",
+                  "raw": "{{apiUrl}}companies?limit=5",
                   "host": ["{{apiUrl}}companies"],
                   "query": [
                     {
                       "key": "limit",
-                      "value": "3"
+                      "value": "5"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get all / cursor next",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "var { nextCursor } = pm.response.json();\r",
+                      "\r",
+                      "if (nextCursor) {\r",
+                      "  pm.environment.set(\"nextCursor[0]\", nextCursor[0]);\r",
+                      "  pm.environment.set(\"nextCursor[1]\", nextCursor[1]);\r",
+                      "}\r",
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {}
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{apiUrl}}companies?cursor[0]={{nextCursor[0]}}&cursor[1]={{nextCursor[1]}}&limit=90",
+                  "host": ["{{apiUrl}}companies"],
+                  "query": [
+                    {
+                      "key": "cursor[0]",
+                      "value": "{{nextCursor[0]}}"
+                    },
+                    {
+                      "key": "cursor[1]",
+                      "value": "{{nextCursor[1]}}"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "90"
                     }
                   ]
                 }
@@ -1265,7 +1293,7 @@
               "jwt": [
                 {
                   "key": "payload",
-                  "value": "{\r\n    \"email\": \"{{jwtEmail}}\"\r\n}\r\n",
+                  "value": "{\r\n    \"email\": \"{{exitingUserEmail}}\"\r\n}\r\n",
                   "type": "string"
                 },
                 {
@@ -1323,7 +1351,7 @@
               "jwt": [
                 {
                   "key": "payload",
-                  "value": "{\r\n    \"email\": \"{{jwtEmail}}\"\r\n}\r\n",
+                  "value": "{\r\n    \"email\": \"{{exitingUserEmail}}\"\r\n}\r\n",
                   "type": "string"
                 },
                 {
@@ -1518,7 +1546,10 @@
             {
               "listen": "test",
               "script": {
-                "exec": [""],
+                "exec": [
+                  "var { _id } = pm.response.json();\r",
+                  "if (_id) pm.environment.set(\"lastUserId\", _id);"
+                ],
                 "type": "text/javascript",
                 "packages": {}
               }
@@ -1530,7 +1561,7 @@
               "jwt": [
                 {
                   "key": "payload",
-                  "value": "{\r\n    \"email\": \"{{jwtAdminEmail}}\"\r\n}\r\n",
+                  "value": "{\r\n    \"email\": \"{{jwtEmail}}\"\r\n}\r\n",
                   "type": "string"
                 },
                 {
@@ -1582,9 +1613,8 @@
               }
             },
             "url": {
-              "raw": "{{apiUrl}}users/{{jwtEmail}}",
-              "host": ["{{apiUrl}}users"],
-              "path": ["{{jwtEmail}}"]
+              "raw": "{{apiUrl}}users",
+              "host": ["{{apiUrl}}users"]
             }
           },
           "response": []
@@ -1640,9 +1670,9 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{apiUrl}}users/{{jwtEmail}}",
+              "raw": "{{apiUrl}}users/{{lastUserId}}",
               "host": ["{{apiUrl}}users"],
-              "path": ["{{jwtEmail}}"]
+              "path": ["{{lastUserId}}"]
             }
           },
           "response": []
@@ -1707,9 +1737,9 @@
               }
             },
             "url": {
-              "raw": "{{apiUrl}}users/{{jwtEmail}}",
+              "raw": "{{apiUrl}}users/{{lastUserId}}",
               "host": ["{{apiUrl}}users"],
-              "path": ["{{jwtEmail}}"]
+              "path": ["{{lastUserId}}"]
             }
           },
           "response": []
@@ -1765,9 +1795,79 @@
             "method": "DELETE",
             "header": [],
             "url": {
-              "raw": "{{apiUrl}}users/{{jwtEmail}}",
+              "raw": "{{apiUrl}}users/{{lastUserId}}",
               "host": ["{{apiUrl}}users"],
-              "path": ["{{jwtEmail}}"]
+              "path": ["{{lastUserId}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Prepare user id for companies",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var { _id } = pm.response.json();\r",
+                  "if (_id) pm.environment.set(\"lastUserId\", _id);"
+                ],
+                "type": "text/javascript",
+                "packages": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "jwt",
+              "jwt": [
+                {
+                  "key": "payload",
+                  "value": "{\r\n    \"email\": \"{{exitingUserEmail}}\"\r\n}\r\n",
+                  "type": "string"
+                },
+                {
+                  "key": "secret",
+                  "value": "{{jwtSecret}}",
+                  "type": "string"
+                },
+                {
+                  "key": "addTokenTo",
+                  "value": "header",
+                  "type": "string"
+                },
+                {
+                  "key": "algorithm",
+                  "value": "HS256",
+                  "type": "string"
+                },
+                {
+                  "key": "isSecretBase64Encoded",
+                  "value": false,
+                  "type": "boolean"
+                },
+                {
+                  "key": "headerPrefix",
+                  "value": "Bearer",
+                  "type": "string"
+                },
+                {
+                  "key": "queryParamKey",
+                  "value": "token",
+                  "type": "string"
+                },
+                {
+                  "key": "header",
+                  "value": "{}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{apiUrl}}me",
+              "host": ["{{apiUrl}}me"]
             }
           },
           "response": []
@@ -1823,9 +1923,9 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{apiUrl}}users/{{jwtEmail}}/companies",
+              "raw": "{{apiUrl}}users/{{lastUserId}}/companies",
               "host": ["{{apiUrl}}users"],
-              "path": ["{{jwtEmail}}", "companies"]
+              "path": ["{{lastUserId}}", "companies"]
             }
           },
           "response": []
@@ -1881,9 +1981,9 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{apiUrl}}users/{{jwtEmail}}/companies?offset=1&limit=2",
+              "raw": "{{apiUrl}}users/{{lastUserId}}/companies?offset=1&limit=2",
               "host": ["{{apiUrl}}users"],
-              "path": ["{{jwtEmail}}", "companies"],
+              "path": ["{{lastUserId}}", "companies"],
               "query": [
                 {
                   "key": "offset",
@@ -1934,87 +2034,6 @@
             }
           },
           "response": []
-        }
-      ]
-    },
-    {
-      "name": "Test cases",
-      "item": [
-        {
-          "name": "Reject insecure requests",
-          "item": [
-            {
-              "name": "Accept (status 200)",
-              "item": [
-                {
-                  "name": "Get all categories",
-                  "request": {
-                    "auth": {
-                      "type": "noauth"
-                    },
-                    "method": "GET",
-                    "header": [],
-                    "url": {
-                      "raw": "{{insecureApiUrl}}categories",
-                      "host": ["{{insecureApiUrl}}categories"]
-                    }
-                  },
-                  "response": []
-                },
-                {
-                  "name": "Get all companies",
-                  "request": {
-                    "auth": {
-                      "type": "noauth"
-                    },
-                    "method": "GET",
-                    "header": [],
-                    "url": {
-                      "raw": "{{insecureApiUrl}}companies",
-                      "host": ["{{insecureApiUrl}}companies"]
-                    }
-                  },
-                  "response": []
-                },
-                {
-                  "name": "Get companies inside a category",
-                  "request": {
-                    "auth": {
-                      "type": "noauth"
-                    },
-                    "method": "GET",
-                    "header": [],
-                    "url": {
-                      "raw": "{{insecureApiUrl}}categories/{{lastCategoryId}}/companies",
-                      "host": ["{{insecureApiUrl}}categories"],
-                      "path": ["{{lastCategoryId}}", "companies"]
-                    }
-                  },
-                  "response": []
-                }
-              ]
-            },
-            {
-              "name": "Reject (status 405)",
-              "item": [
-                {
-                  "name": "Get all users",
-                  "request": {
-                    "auth": {
-                      "type": "noauth"
-                    },
-                    "method": "GET",
-                    "header": [],
-                    "url": {
-                      "raw": "{{insecureApiUrl}}",
-                      "host": ["{{insecureApiUrl}}"]
-                    }
-                  },
-                  "response": []
-                }
-              ]
-            }
-          ]
         }
       ]
     },

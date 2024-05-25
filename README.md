@@ -16,15 +16,11 @@
    - `git add --renormalize .`
 3. Install dependencies by running `npm install`.
 4. Create a `.env` file (see `.env.example`).
-5. Add SSL certificates or copy certificates generated in the zero-company-app repo:
-   - `certificates/localhost.pem`
-   - `certificates/localhost-key.pem`
 
 ## Development
 
 1. Start the development server by running `npm run dev`:
-   - HTTPS server runs on [https://localhost:3000](https://localhost:3000) (see `.env.example`).
-   - HTTP server runs on [http://localhost:3001](http://localhost:3001) (see `.env.example`).
+   - Server runs on [https://localhost:3000](https://localhost:3000).
 
 ## Contributions
 

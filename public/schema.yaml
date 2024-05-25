@@ -154,11 +154,22 @@ paths:
           $ref: "#/components/responses/UserList"
         "400":
           $ref: "#/components/responses/InvalidQuery"
+    post:
+      summary: Create a new user
+      tags:
+        - users
+      responses:
+        "201":
+          $ref: "#/components/responses/User"
+        "400":
+          $ref: "#/components/responses/InvalidUserData"
+        "409":
+          $ref: "#/components/responses/UserAlreadyExists"
 
   # User path
-  /users/{email}:
+  /users/{id}:
     parameters:
-      - $ref: '#/components/parameters/Email'
+      - $ref: '#/components/parameters/Id'
     delete:
       summary: Delete a user by ID
       tags:
@@ -175,17 +186,6 @@ paths:
           $ref: "#/components/responses/User"
         "404":
           $ref: "#/components/responses/UserNotFound"
-    post:
-      summary: Create a new user
-      tags:
-        - users
-      responses:
-        "201":
-          $ref: "#/components/responses/User"
-        "400":
-          $ref: "#/components/responses/InvalidUserData"
-        "409":
-          $ref: "#/components/responses/UserAlreadyExists"
     put:
       summary: Update a user by ID
       tags:
@@ -199,9 +199,9 @@ paths:
           $ref: "#/components/responses/UserNotFound"
 
   # User companies path
-  /users/{email}/companies:
+  /users/{id}/companies:
     parameters:
-      - $ref: '#/components/parameters/Email'
+      - $ref: '#/components/parameters/Id'
     get:
       summary: Get all companies for a user
       tags:
@@ -247,14 +247,6 @@ components:
 
   # Parameters
   parameters:
-
-    # Email parameter
-    Email:
-      name: email
-      in: path
-      required: true
-      schema:
-        type: string
 
     # Id parameter
     Id:
@@ -433,7 +425,6 @@ components:
           type: string
           enum:
             - BadRequest
-            - InvalidEmailParam
             - InvalidIdParam
         errorMessage:
           type: string
@@ -511,7 +502,7 @@ components:
           type: string
         categories:
           type: array
-          items: 
+          items:
             type: string
         description:
           type: string

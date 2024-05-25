@@ -157,13 +157,21 @@ export interface paths {
         400: components["responses"]["InvalidQuery"];
       };
     };
+    /** Create a new user */
+    post: {
+      responses: {
+        201: components["responses"]["User"];
+        400: components["responses"]["InvalidUserData"];
+        409: components["responses"]["UserAlreadyExists"];
+      };
+    };
   };
-  "/users/{email}": {
+  "/users/{id}": {
     /** Get a user by ID */
     get: {
       parameters: {
         path: {
-          email: components["parameters"]["Email"];
+          id: components["parameters"]["Id"];
         };
       };
       responses: {
@@ -175,7 +183,7 @@ export interface paths {
     put: {
       parameters: {
         path: {
-          email: components["parameters"]["Email"];
+          id: components["parameters"]["Id"];
         };
       };
       responses: {
@@ -184,24 +192,11 @@ export interface paths {
         404: components["responses"]["UserNotFound"];
       };
     };
-    /** Create a new user */
-    post: {
-      parameters: {
-        path: {
-          email: components["parameters"]["Email"];
-        };
-      };
-      responses: {
-        201: components["responses"]["User"];
-        400: components["responses"]["InvalidUserData"];
-        409: components["responses"]["UserAlreadyExists"];
-      };
-    };
     /** Delete a user by ID */
     delete: {
       parameters: {
         path: {
-          email: components["parameters"]["Email"];
+          id: components["parameters"]["Id"];
         };
       };
       responses: {
@@ -210,16 +205,16 @@ export interface paths {
     };
     parameters: {
       path: {
-        email: components["parameters"]["Email"];
+        id: components["parameters"]["Id"];
       };
     };
   };
-  "/users/{email}/companies": {
+  "/users/{id}/companies": {
     /** Get all companies for a user */
     get: {
       parameters: {
         path: {
-          email: components["parameters"]["Email"];
+          id: components["parameters"]["Id"];
         };
       };
       responses: {
@@ -229,7 +224,7 @@ export interface paths {
     };
     parameters: {
       path: {
-        email: components["parameters"]["Email"];
+        id: components["parameters"]["Id"];
       };
     };
   };
@@ -265,7 +260,7 @@ export interface components {
   schemas: {
     BadRequest: {
       /** @enum {string} */
-      error: "BadRequest" | "InvalidEmailParam" | "InvalidIdParam";
+      error: "BadRequest" | "InvalidIdParam";
       errorMessage: string;
     };
     Category: {
@@ -524,7 +519,6 @@ export interface components {
     };
   };
   parameters: {
-    Email: string;
     Id: string;
   };
   requestBodies: never;

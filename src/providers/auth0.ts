@@ -10,7 +10,7 @@ import passport from "passport";
 /**
  * Initializes the passport strategy.
  */
-export function initPassport(): void {
+export function initAuth0Passport(): void {
   const strategy = new Auth0Strategy(
     {
       callbackURL: AUTH0_CALLBACK_URL,

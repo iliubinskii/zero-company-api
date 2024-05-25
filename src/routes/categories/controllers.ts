@@ -8,7 +8,7 @@ import {
   CategoryUpdateValidationSchema,
   ErrorCode,
   GetCategoriesOptionsValidationSchema,
-  GetCompaniesByCategoryOptionsValidationSchema
+  GetCompaniesOptionsValidationSchema
 } from "../../schema";
 import {
   assertDefined,
@@ -101,15 +101,16 @@ export function createCategoryControllers(
     getCompaniesByCategory: wrapAsyncHandler(async (req, res) => {
       const id = assertDefined(req.idParam);
 
-      const options = GetCompaniesByCategoryOptionsValidationSchema.safeParse(
-        req.query
-      );
+      const options = GetCompaniesOptionsValidationSchema.safeParse(req.query);
 
       if (options.success) {
-        const companies = await companiesService.getCompanies({
-          ...filterUndefinedProperties(options.data),
-          category: id
-        });
+        const companies = await companiesService.getCompanies(
+          filterUndefinedProperties(options.data),
+          {
+            category: id,
+            type: "category"
+          }
+        );
 
         sendResponse<Routes["/categories/{id}/companies"]["get"]>(
           res,

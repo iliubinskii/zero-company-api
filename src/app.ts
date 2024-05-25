@@ -1,14 +1,7 @@
-import { CORS_ORIGIN, SESSION_SECRET } from "./config";
+import { CORS_ORIGIN, ENV, SESSION_SECRET } from "./config";
 import { ErrorCode, schemaVersion } from "./schema";
 import type { NextFunction, Request, Response } from "express";
-import {
-  appendJwt,
-  forceHttps,
-  logRequest,
-  logResponse,
-  middlewareExclusion,
-  requestId
-} from "./middleware";
+import { appendJwt, logRequest, logResponse, requestId } from "./middleware";
 import { buildErrorResponse, sendResponse } from "./utils";
 import {
   createAuthRouter,
@@ -22,9 +15,10 @@ import {
   createUserControllers,
   createUsersRouter,
   createUsersService,
+  getUserModel,
   testRouter
 } from "./routes";
-import { initMongodb, initPassport } from "./providers";
+import { initAuth0Passport, initMongodb } from "./providers";
 import type { Routes } from "./schema";
 import { StatusCodes } from "http-status-codes";
 import cookieParser from "cookie-parser";
@@ -44,11 +38,11 @@ export function createApp(): express.Express {
   logger.info(`${lang.ZeroApiServer} ${schemaVersion}`);
 
   initMongodb();
-  initPassport();
+  initAuth0Passport();
 
   const categoriesService = createCategoriesService();
 
-  const companiesService = createCompaniesService();
+  const companiesService = createCompaniesService(getUserModel);
 
   const usersService = createUsersService();
 
@@ -76,19 +70,10 @@ export function createApp(): express.Express {
 
   app.use(express.static("public"));
 
-  app.use(
-    middlewareExclusion(forceHttps, [
-      ["GET", "/"],
-      ["GET", "/categories"],
-      ["GET", /^\/categories\/\w+$/u],
-      ["GET", /^\/categories\/\w+\/companies$/u],
-      ["GET", "/companies"]
-    ])
-  );
-
   app.use(cookieParser());
   app.use(
     session({
+      cookie: { secure: ENV !== "development" },
       resave: false,
       saveUninitialized: false,
       secret: SESSION_SECRET

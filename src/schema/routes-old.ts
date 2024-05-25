@@ -1,3 +1,4 @@
+import type { AuthUser, ExistingUser } from "./users";
 import type {
   DeleteResponse,
   ErrorCode,
@@ -5,7 +6,6 @@ import type {
   ErrorResponseWithData,
   MultipleDocsResponse
 } from "./common";
-import type { ExistingUser, JwtUser } from "./users";
 import type { ExistingCategory } from "./categories";
 import type { ExistingCompany } from "./companies";
 import type { StatusCodes } from "http-status-codes";
@@ -71,7 +71,7 @@ export interface RoutesOld {
       readonly GET: null;
     };
     readonly "/me": {
-      readonly GET: [StatusCodes.OK, JwtUser | null];
+      readonly GET: [StatusCodes.OK, AuthUser | null];
     };
   };
   readonly "/categories": {
@@ -125,12 +125,12 @@ export interface RoutesOld {
   };
   readonly "/me": {
     readonly "/": {
-      readonly DELETE: RoutesOld["/users"]["/:email"]["DELETE"];
-      readonly GET: RoutesOld["/users"]["/:email"]["GET"];
+      readonly DELETE: RoutesOld["/users"]["/:id"]["DELETE"];
+      readonly GET: RoutesOld["/users"]["/:id"]["GET"];
       readonly POST: RoutesOld["/users"]["/"]["POST"];
-      readonly PUT: RoutesOld["/users"]["/:email"]["PUT"];
+      readonly PUT: RoutesOld["/users"]["/:id"]["PUT"];
     };
-    readonly "/companies": RoutesOld["/users"]["/:email/companies"]["GET"];
+    readonly "/companies": RoutesOld["/users"]["/:id/companies"]["GET"];
   };
   readonly "/test": {
     readonly "/async-reject": {
@@ -151,7 +151,7 @@ export interface RoutesOld {
         readonly CREATED: [StatusCodes.CREATED, ExistingUser];
       };
     };
-    readonly "/:email": {
+    readonly "/:id": {
       readonly DELETE: [StatusCodes.OK, DeleteResponse];
       readonly GET: {
         readonly NOT_FOUND: [
@@ -168,7 +168,7 @@ export interface RoutesOld {
         readonly OK: [StatusCodes.OK, ExistingUser];
       };
     };
-    readonly "/:email/companies": {
+    readonly "/:id/companies": {
       readonly GET: [StatusCodes.OK, MultipleDocsResponse<ExistingCompany>];
     };
   };

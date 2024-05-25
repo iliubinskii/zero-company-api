@@ -6,7 +6,6 @@ export enum ErrorCode {
   InternalServerError = "InternalServerError",
   InvalidCategoryData = "InvalidCategoryData",
   InvalidCompanyData = "InvalidCompanyData",
-  InvalidEmailParam = "InvalidEmailParam",
   InvalidIdParam = "InvalidIdParam",
   InvalidParam = "InvalidParam",
   InvalidQuery = "InvalidQuery",
