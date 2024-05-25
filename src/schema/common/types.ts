@@ -1,5 +1,4 @@
 export enum ErrorCode {
-  AuthenticationFailed = "AuthenticationFailed",
   BadRequest = "BadRequest",
   CategoryNotFound = "CategoryNotFound",
   CompanyNotFound = "CompanyNotFound",

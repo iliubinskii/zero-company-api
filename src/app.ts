@@ -1,4 +1,15 @@
-import { CORS_ORIGIN, ENV, SESSION_SECRET } from "./config";
+import {
+  AUTH0_CALLBACK_URL,
+  AUTH0_DOMAIN,
+  AUTH0_RETURN_URL,
+  COOKIE_DOMAIN,
+  CORS_ORIGIN,
+  ENV,
+  LOG_LEVEL,
+  MONGODB_DATABASE_NAME,
+  PORT,
+  SESSION_SECRET
+} from "./config";
 import { ErrorCode, schemaVersion } from "./schema";
 import type { NextFunction, Request, Response } from "express";
 import { appendJwt, logRequest, logResponse, requestId } from "./middleware";
@@ -16,6 +27,7 @@ import {
   createUsersRouter,
   createUsersService,
   getUserModel,
+  maintenanceRouter,
   testRouter
 } from "./routes";
 import { initAuth0Passport, initMongodb } from "./providers";
@@ -36,6 +48,15 @@ import session from "express-session";
  */
 export function createApp(): express.Express {
   logger.info(`${lang.ZeroApiServer} ${schemaVersion}`);
+  logger.info(`${lang.Environment}: ${ENV}`);
+  logger.info(`${lang.Port}: ${PORT}`);
+  logger.info(`${lang.Auth0CallbackUrl}: ${AUTH0_CALLBACK_URL}`);
+  logger.info(`${lang.Auth0Domain}: ${AUTH0_DOMAIN}`);
+  logger.info(`${lang.Auth0ReturnUrl}: ${AUTH0_RETURN_URL}`);
+  logger.info(`${lang.CookieDomain}: ${COOKIE_DOMAIN}`);
+  logger.info(`${lang.CorsOrigin}: ${CORS_ORIGIN}`);
+  logger.info(`${lang.LogLevel}: ${LOG_LEVEL}`);
+  logger.info(`${lang.MongodbDatabaseName}: ${MONGODB_DATABASE_NAME}`);
 
   initMongodb();
   initAuth0Passport();
@@ -98,6 +119,8 @@ export function createApp(): express.Express {
   app.use("/categories", createCategoriesRouter(categoryControllers));
 
   app.use("/companies", createCompaniesRouter(companyControllers));
+
+  app.use("/maintenance", maintenanceRouter);
 
   app.use("/me", createMeRouter(userControllers));
 

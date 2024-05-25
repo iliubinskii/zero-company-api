@@ -94,7 +94,12 @@ export function createAuthRouter(usersService: UsersService): Router {
               secure: ENV !== "development"
             })
             .redirect(`${AUTH0_RETURN_URL}${queryStr}`);
-        } else res.redirect(AUTH0_RETURN_URL);
+        } else {
+          logger.warn(lang.Auth0AuthenticationFailed, {
+            requestId: req.requestId
+          });
+          res.redirect(AUTH0_RETURN_URL);
+        }
       })
     )
     .get(
