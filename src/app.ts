@@ -149,6 +149,23 @@ export function createApp(): express.Express {
     );
   });
 
+  // eslint-disable-next-line no-warning-comments -- Postponed
+  // ToDo: Move to admin router
+  app.use("/admin/server-info", (_req, res) => {
+    logger.info(`${lang.ZeroApiServer} ${schemaVersion}`);
+    logger.info(`${lang.Environment}: ${ENV}`);
+    logger.info(`${lang.Port}: ${PORT}`);
+    logger.info(`${lang.Auth0CallbackUrl}: ${AUTH0_CALLBACK_URL}`);
+    logger.info(`${lang.Auth0Domain}: ${AUTH0_DOMAIN}`);
+    logger.info(`${lang.Auth0ReturnUrl}: ${AUTH0_RETURN_URL}`);
+    logger.info(`${lang.CookieDomain}: ${COOKIE_DOMAIN}`);
+    logger.info(`${lang.CorsOrigin}: ${CORS_ORIGIN}`);
+    logger.info(`${lang.LogLevel}: ${LOG_LEVEL}`);
+    logger.info(`${lang.MongodbDatabaseName}: ${MONGODB_DATABASE_NAME}`);
+
+    res.send(lang.ServerInfoLogged);
+  });
+
   app.all("*", (_req, res) => {
     sendResponse<Routes["/404"]["get"]>(
       res,

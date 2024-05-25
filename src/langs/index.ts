@@ -36,6 +36,7 @@ export const lang = {
   Port: "Port",
   SecureServerStarted: "Secure server started",
   ServerError: "Server error",
+  ServerInfoLogged: "Server info logged",
   ServerStartedOnPort: "Server started on port",
   Unauthorized: "Unauthorized",
   UserAlreadyExists: "User already exists",
