@@ -2,7 +2,7 @@ import {
   ADMIN_EMAIL,
   AUTH0_RETURN_URL,
   COOKIE_DOMAIN,
-  ENV,
+  COOKIE_SECURE,
   JWT_SECRET
 } from "../config";
 import {
@@ -91,7 +91,7 @@ export function createAuthRouter(usersService: UsersService): Router {
               httpOnly: true,
               path: "/",
               sameSite: "strict",
-              secure: ENV !== "development"
+              secure: COOKIE_SECURE
             })
             .redirect(`${AUTH0_RETURN_URL}${queryStr}`);
         } else {
@@ -120,7 +120,7 @@ export function createAuthRouter(usersService: UsersService): Router {
           httpOnly: true,
           path: "/",
           sameSite: "strict",
-          secure: ENV !== "development"
+          secure: COOKIE_SECURE
         })
         .redirect(`${AUTH0_RETURN_URL}${queryStr}`);
     })

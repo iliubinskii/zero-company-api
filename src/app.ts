@@ -3,6 +3,7 @@ import {
   AUTH0_DOMAIN,
   AUTH0_RETURN_URL,
   COOKIE_DOMAIN,
+  COOKIE_SECURE,
   CORS_ORIGIN,
   ENV,
   LOG_LEVEL,
@@ -54,6 +55,7 @@ export function createApp(): express.Express {
   logger.info(`${lang.Auth0Domain}: ${AUTH0_DOMAIN}`);
   logger.info(`${lang.Auth0ReturnUrl}: ${AUTH0_RETURN_URL}`);
   logger.info(`${lang.CookieDomain}: ${COOKIE_DOMAIN}`);
+  logger.info(`${lang.CookieSecure}: ${COOKIE_SECURE}`);
   logger.info(`${lang.CorsOrigin}: ${CORS_ORIGIN}`);
   logger.info(`${lang.LogLevel}: ${LOG_LEVEL}`);
   logger.info(`${lang.MongodbDatabaseName}: ${MONGODB_DATABASE_NAME}`);
@@ -94,7 +96,7 @@ export function createApp(): express.Express {
   app.use(cookieParser());
   app.use(
     session({
-      cookie: { secure: ENV !== "development" },
+      cookie: { secure: COOKIE_SECURE },
       resave: false,
       saveUninitialized: false,
       secret: SESSION_SECRET

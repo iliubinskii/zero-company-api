@@ -7,6 +7,7 @@ export const lang = {
   CategoryNotFound: "Category not found",
   CompanyNotFound: "Company not found",
   CookieDomain: "Cookie domain",
+  CookieSecure: "Cookie secure",
   CorsOrigin: "CORS origin",
   Environment: "Environment",
   InternalServerError: "Internal server error",
