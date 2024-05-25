@@ -36,6 +36,7 @@ import session from "express-session";
  */
 export function createApp(): express.Express {
   logger.info(`${lang.ZeroApiServer} ${schemaVersion}`);
+  logger.info(`${lang.Environment}: ${ENV}`);
 
   initMongodb();
   initAuth0Passport();
