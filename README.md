@@ -17,6 +17,7 @@
 3. Install dependencies by running `npm install`.
 4. Create a `.env` file (see `.env.example`).
 5. Create a temp folder for multer (see `MULTER_DESTINATION_PATH` variable in `.env.example`)
+6. Request access to postman collection if you need it for your part of work
 
 ## Development
 
@@ -25,7 +26,12 @@
 
 ## Recommended software
 
-1. VSCode
+1. AI tools:
+   - Copilot
+   - ChatGPT 4o
+2. Postman
+3. SmartGit
+4. VSCode
    - Configuration:
      - See `vscode.code-workspace` provides with the repo
    - Plugins:
@@ -43,7 +49,7 @@
      - Stylelint (stylelint.vscode-stylelint)
      - Tailwind CSS IntelliSense (bradlc.vscode-tailwindcss)
      - YAML (redhat.vscode-yaml)
-2. AI tools:
+5. AI tools:
    - Copilot
    - ChatGPT 4o
 
