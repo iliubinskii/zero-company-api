@@ -22,6 +22,30 @@
 1. Start the development server by running `npm run dev`:
    - Server runs on [https://localhost:3000](https://localhost:3000).
 
+## Recommended software
+
+1. VSCode
+   - Configuration:
+     - See `vscode.code-workspace` provides with the repo
+   - Plugins:
+     - ES6 String HTML (tobermory.es6-string-html)
+     - ESLint (dbaeumer.vscode-eslint)
+     - Fold on Open (prantlf.fold-on-open)
+     - GitHub Copilot (github.copilot)
+     - GitHub Copilot Chat (github.copilot-chat)
+     - HTML CSS Support (ecmel.vscode-html-css)
+     - Jest Runner (firsttris.vscode-jest-runner)
+     - MarkdownLint (davidanson.vscode-markdownlint)
+     - OpenAPI (Swagger) Editor (42crunch.vscode-openapi)
+     - Prettier - Code formatter (esbenp.prettier-vscode)
+     - Sort package.json (unional.vscode-sort-package-json)
+     - Stylelint (stylelint.vscode-stylelint)
+     - Tailwind CSS IntelliSense (bradlc.vscode-tailwindcss)
+     - YAML (redhat.vscode-yaml)
+2. AI tools:
+   - Copilot
+   - ChatGPT 4o
+
 ## Contributions
 
 1. Create a new feature branch `feature/<hyphened-branch-name>`.
