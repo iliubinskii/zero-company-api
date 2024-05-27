@@ -16,6 +16,7 @@
    - `git add --renormalize .`
 3. Install dependencies by running `npm install`.
 4. Create a `.env` file (see `.env.example`).
+5. Create a temp folder for multer (see `MULTER_DESTINATION_PATH` variable in `.env.example`)
 
 ## Development
 
