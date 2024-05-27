@@ -10,7 +10,7 @@ import {
   MONGODB_DATABASE_NAME,
   PORT
 } from "../config";
-import { ErrorCode, schemaVersion } from "../schema";
+import { ErrorCode, schema } from "../schema";
 import { buildErrorResponse, sendResponse } from "../utils";
 import { Router } from "express";
 import type { Routes } from "../schema";
@@ -22,7 +22,7 @@ export const maintenanceRouter = Router();
 
 maintenanceRouter
   .get("/server-info", (_req, res) => {
-    logger.info(`${lang.ZeroApiServer} ${schemaVersion}`);
+    logger.info(`${lang.ZeroApiServer} ${schema.info.version}`);
     logger.info(`${lang.Environment}: ${ENV}`);
     logger.info(`${lang.Port}: ${PORT}`);
     logger.info(`${lang.Auth0CallbackUrl}: ${AUTH0_CALLBACK_URL}`);

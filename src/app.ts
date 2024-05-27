@@ -11,7 +11,7 @@ import {
   PORT,
   SESSION_SECRET
 } from "./config";
-import { ErrorCode, schemaVersion } from "./schema";
+import { ErrorCode, schema } from "./schema";
 import type { NextFunction, Request, Response } from "express";
 import { appendJwt, logRequest, logResponse, requestId } from "./middleware";
 import { buildErrorResponse, sendResponse } from "./utils";
@@ -48,7 +48,7 @@ import session from "express-session";
  * @returns App
  */
 export function createApp(): express.Express {
-  logger.info(`${lang.ZeroApiServer} ${schemaVersion}`);
+  logger.info(`${lang.ZeroApiServer} ${schema.info.version}`);
   logger.info(`${lang.Environment}: ${ENV}`);
   logger.info(`${lang.Port}: ${PORT}`);
   logger.info(`${lang.Auth0CallbackUrl}: ${AUTH0_CALLBACK_URL}`);
