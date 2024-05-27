@@ -1,6 +1,7 @@
+import type { User, UserUpdate } from "../../schema";
 import { MAX_LIMIT } from "../../schema";
-import { MONGODB_ERROR } from "../../consts";
 import type { UsersService } from "../../types";
+import { createCrudService } from "../../services";
 import { getUserModel } from "./model";
 
 /**
@@ -8,30 +9,10 @@ import { getUserModel } from "./model";
  * @returns A MongoDB service for users.
  */
 export function createUsersService(): UsersService {
+  const crudService = createCrudService<User, UserUpdate>(getUserModel);
+
   return {
-    addUser: async user => {
-      try {
-        const UserModel = await getUserModel();
-
-        const model = new UserModel(user);
-
-        const addedUser = await model.save();
-
-        const { _id, ...rest } = addedUser.toObject();
-
-        return { _id: _id.toString(), ...rest };
-      } catch (err) {
-        if (
-          typeof err === "object" &&
-          err !== null &&
-          "code" in err &&
-          err.code === MONGODB_ERROR.DUPLICATE_KEY
-        )
-          return undefined;
-
-        throw err;
-      }
-    },
+    addUser: crudService.addItem,
     deleteUser: async ref => {
       const UserModel = await getUserModel();
 

@@ -1,0 +1,38 @@
+export interface CrudService<ITEM extends object, ITEM_UPDATE extends object> {
+  /**
+   * Adds an item to the database.
+   * @param item - The item to add.
+   * @returns A promise that resolves when the item has been added.
+   */
+  readonly addItem: (item: ITEM) => Promise<ExistingItem<ITEM> | undefined>;
+  /**
+   * Adds an item to the database.
+   * @param item - The item to add.
+   * @returns A promise that resolves when the item has been added.
+   */
+  readonly addItemGuaranteed: (item: ITEM) => Promise<ExistingItem<ITEM>>;
+  /**
+   * Deletes an item from the database.
+   * @param id - The ID of the item to delete.
+   * @returns - A promise that resolves with the number of affected rows.
+   */
+  readonly deleteItem: (id: string) => Promise<number>;
+  /**
+   * Gets an item from the database.
+   * @param id - The ID of the item to get.
+   * @returns A promise that resolves with the item, or `undefined` if the item was not found.   *
+   */
+  readonly getItem: (id: string) => Promise<ExistingItem<ITEM> | undefined>;
+  /**
+   * Gets all items from the database.
+   * @param id - The ID of the item to get.
+   * @param item - The item to update.
+   * @returns - A promise that resolves with all items in the database.
+   */
+  readonly updateItem: (
+    id: string,
+    item: ITEM_UPDATE
+  ) => Promise<ExistingItem<ITEM> | undefined>;
+}
+
+export type ExistingItem<ITEM> = ITEM & { readonly _id: string };

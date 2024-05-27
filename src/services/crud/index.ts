@@ -1,0 +1,1 @@
+export { createCrudService } from "./service";
