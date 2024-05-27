@@ -1,2 +1,2 @@
-export { logger } from "./logger";
-export { logServerInfo } from "./server-info";
+export * from "./logger";
+export * from "./server-info";
