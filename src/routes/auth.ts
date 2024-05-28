@@ -12,16 +12,14 @@ import {
   AUTH_COOKIE_NAME,
   JWT_EXPIRES_IN
 } from "../consts";
-import type { AuthUserEssential, Jwt, RoutesOld } from "../schema";
+import type { AuthUserEssential, Jwt } from "../schema";
 import { JwtValidationSchema, preprocessEmail } from "../schema";
 import {
   buildQuery,
   filterUndefinedProperties,
-  sendResponseOld,
   wrapAsyncHandler
 } from "../utils";
 import { Router } from "express";
-import { StatusCodes } from "http-status-codes";
 import type { UsersService } from "../types";
 import type { Writable } from "ts-toolbelt/out/Object/Writable";
 import jwt from "jsonwebtoken";
@@ -158,21 +156,18 @@ export function createAuthRouter(usersService: UsersService): Router {
             type: "email"
           });
 
-          sendResponseOld<RoutesOld["/auth"]["/me"]["GET"]>(
-            res,
-            StatusCodes.OK,
+          // eslint-disable-next-line no-warning-comments -- Postponed
+          // TODO: Use sendResponse
+          res.json(
             filterUndefinedProperties({
               admin: ADMIN_EMAIL.includes(email),
               email,
               user
             })
           );
-        } else
-          sendResponseOld<RoutesOld["/auth"]["/me"]["GET"]>(
-            res,
-            StatusCodes.OK,
-            null
-          );
+          // eslint-disable-next-line no-warning-comments -- Postponed
+          // TODO: Use sendResponse
+        } else res.json(null);
       })
     );
 

@@ -22,6 +22,16 @@ paths:
         "200":
           $ref: "#/components/responses/Home"
 
+  # Auth path
+  /auth/me:
+    get:
+      summary: Get authentication response
+      tags:
+        - auth
+      responses:
+        "200":
+          $ref: "#/components/responses/AuthUser"
+
   # Categories path
   /categories:
     get:
@@ -221,6 +231,16 @@ paths:
         "400":
           $ref: "#/components/responses/BadRequest"
 
+  # Unauthorized response
+  /401:
+    get:
+      summary: Unauthorized
+      tags:
+        - common
+      responses:
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+
   # NotFound response
   /404:
     get:
@@ -230,6 +250,16 @@ paths:
       responses:
         "404":
           $ref: "#/components/responses/NotFound"
+
+  # MethodNotAllowed response
+  /405:
+    get:
+      summary: Method not allowed
+      tags:
+        - common
+      responses:
+        "405":
+          $ref: "#/components/responses/MethodNotAllowed"
 
   # InternalServerError response
   /500:
@@ -265,6 +295,14 @@ components:
         application/json:
           schema:
             $ref: "#/components/schemas/AlreadyExists"
+
+    # Authentication response
+    AuthUser:
+      description: Authentication response
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/AuthUser"
 
     # BadRequest response
     BadRequest:
@@ -346,6 +384,14 @@ components:
           schema:
             $ref: "#/components/schemas/InvalidQuery"
 
+    # MethodNotAllowed response
+    MethodNotAllowed:
+      description: Method not allowed
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/MethodNotAllowed"
+
     # NotFound response
     NotFound:
       description: Not found
@@ -353,6 +399,14 @@ components:
         application/json:
           schema:
             $ref: "#/components/schemas/NotFound"
+
+    # Unauthorized response
+    Unauthorized:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Unauthorized"
 
     # User response
     User:
@@ -386,6 +440,21 @@ components:
             - AlreadyExists
         errorMessage:
           type: string
+
+    # AuthUser schema
+    AuthUser:
+      type: object
+      nullable: true
+      required:
+        - admin
+        - email
+      properties:
+        admin:
+          type: boolean
+        email:
+          type: string
+        user:
+          $ref: "#/components/schemas/User"
 
     # BadRequest schema
     BadRequest:
@@ -634,6 +703,20 @@ components:
               path:
                 type: string
 
+    # MethodNotAllowed schema
+    MethodNotAllowed:
+      type: object
+      required:
+        - error
+        - errorMessage
+      properties:
+        error:
+          type: string
+          enum:
+            - MethodNotAllowed
+        errorMessage:
+          type: string
+
     # NotFound schema
     NotFound:
       type: object
@@ -645,6 +728,20 @@ components:
           type: string
           enum:
             - NotFound
+        errorMessage:
+          type: string
+
+    # Unauthorized schema
+    Unauthorized:
+      type: object
+      required:
+        - error
+        - errorMessage
+      properties:
+        error:
+          type: string
+          enum:
+            - Unauthorized
         errorMessage:
           type: string
 
