@@ -1,3 +1,13 @@
+import type { RequestHandler } from "express";
+
+export interface CrudControllers {
+  readonly addItem: RequestHandler;
+  readonly addItemGuaranteed: RequestHandler;
+  readonly deleteItem: RequestHandler;
+  readonly getItem: RequestHandler;
+  readonly updateItem: RequestHandler;
+}
+
 export interface CrudService<ITEM extends object, ITEM_UPDATE extends object> {
   /**
    * Adds an item to the database.

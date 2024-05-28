@@ -27,6 +27,7 @@ export function createCompaniesService(
 
   return {
     addCompany: crudService.addItemGuaranteed,
+    crudService,
     deleteCompany: crudService.deleteItem,
     getCompanies: async (options = {}, parentRef) => {
       const {

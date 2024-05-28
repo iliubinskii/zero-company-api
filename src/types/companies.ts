@@ -5,6 +5,7 @@ import type {
   GetCompaniesOptions,
   MultipleDocsResponse
 } from "../schema";
+import type { CrudService } from "./crud";
 import type { RequestHandler } from "express";
 
 export interface CompanyControllers {
@@ -27,6 +28,7 @@ export interface CompaniesService {
    * @returns A promise that resolves when the company has been added.
    */
   readonly addCompany: (company: Company) => Promise<ExistingCompany>;
+  readonly crudService: CrudService<Company, CompanyUpdate>;
   /**
    * Deletes a company from the database.
    * @param id - The ID of the company to delete.

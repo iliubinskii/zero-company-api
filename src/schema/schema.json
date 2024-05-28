@@ -49,7 +49,7 @@
             "$ref": "#/components/responses/Category"
           },
           "400": {
-            "$ref": "#/components/responses/InvalidCategoryData"
+            "$ref": "#/components/responses/InvalidData"
           }
         }
       }
@@ -81,7 +81,7 @@
             "$ref": "#/components/responses/Category"
           },
           "404": {
-            "$ref": "#/components/responses/CategoryNotFound"
+            "$ref": "#/components/responses/NotFound"
           }
         }
       },
@@ -95,10 +95,10 @@
             "$ref": "#/components/responses/Category"
           },
           "400": {
-            "$ref": "#/components/responses/InvalidCategoryData"
+            "$ref": "#/components/responses/InvalidData"
           },
           "404": {
-            "$ref": "#/components/responses/CategoryNotFound"
+            "$ref": "#/components/responses/NotFound"
           }
         }
       }
@@ -149,7 +149,7 @@
             "$ref": "#/components/responses/Company"
           },
           "400": {
-            "$ref": "#/components/responses/InvalidCompanyData"
+            "$ref": "#/components/responses/InvalidData"
           }
         }
       }
@@ -181,7 +181,7 @@
             "$ref": "#/components/responses/Company"
           },
           "404": {
-            "$ref": "#/components/responses/CompanyNotFound"
+            "$ref": "#/components/responses/NotFound"
           }
         }
       },
@@ -195,10 +195,10 @@
             "$ref": "#/components/responses/Company"
           },
           "400": {
-            "$ref": "#/components/responses/InvalidCompanyData"
+            "$ref": "#/components/responses/InvalidData"
           },
           "404": {
-            "$ref": "#/components/responses/CompanyNotFound"
+            "$ref": "#/components/responses/NotFound"
           }
         }
       }
@@ -228,10 +228,10 @@
             "$ref": "#/components/responses/User"
           },
           "400": {
-            "$ref": "#/components/responses/InvalidUserData"
+            "$ref": "#/components/responses/InvalidData"
           },
           "409": {
-            "$ref": "#/components/responses/UserAlreadyExists"
+            "$ref": "#/components/responses/AlreadyExists"
           }
         }
       }
@@ -263,7 +263,7 @@
             "$ref": "#/components/responses/User"
           },
           "404": {
-            "$ref": "#/components/responses/UserNotFound"
+            "$ref": "#/components/responses/NotFound"
           }
         }
       },
@@ -277,10 +277,10 @@
             "$ref": "#/components/responses/User"
           },
           "400": {
-            "$ref": "#/components/responses/InvalidUserData"
+            "$ref": "#/components/responses/InvalidData"
           },
           "404": {
-            "$ref": "#/components/responses/UserNotFound"
+            "$ref": "#/components/responses/NotFound"
           }
         }
       }
@@ -358,6 +358,16 @@
       }
     },
     "responses": {
+      "AlreadyExists": {
+        "description": "User already exists",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/AlreadyExists"
+            }
+          }
+        }
+      },
       "BadRequest": {
         "description": "Bad request",
         "content": {
@@ -388,12 +398,12 @@
           }
         }
       },
-      "CategoryNotFound": {
+      "NotFound": {
         "description": "Category not found",
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/CategoryNotFound"
+              "$ref": "#/components/schemas/NotFound"
             }
           }
         }
@@ -414,16 +424,6 @@
           "application/json": {
             "schema": {
               "$ref": "#/components/schemas/CompanyList"
-            }
-          }
-        }
-      },
-      "CompanyNotFound": {
-        "description": "Company not found",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/CompanyNotFound"
             }
           }
         }
@@ -468,42 +468,12 @@
           }
         }
       },
-      "InvalidUserData": {
-        "description": "Invalid user data",
+      "InvalidData": {
+        "description": "Invalid data",
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/InvalidUserData"
-            }
-          }
-        }
-      },
-      "InvalidCategoryData": {
-        "description": "Invalid category data",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/InvalidCategoryData"
-            }
-          }
-        }
-      },
-      "InvalidCompanyData": {
-        "description": "Invalid company data",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/InvalidCompanyData"
-            }
-          }
-        }
-      },
-      "NotFound": {
-        "description": "Not found",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/NotFound"
+              "$ref": "#/components/schemas/InvalidData"
             }
           }
         }
@@ -518,16 +488,6 @@
           }
         }
       },
-      "UserAlreadyExists": {
-        "description": "User already exists",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/UserAlreadyExists"
-            }
-          }
-        }
-      },
       "UserList": {
         "description": "User list",
         "content": {
@@ -537,19 +497,27 @@
             }
           }
         }
-      },
-      "UserNotFound": {
-        "description": "User not found",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/UserNotFound"
-            }
-          }
-        }
       }
     },
     "schemas": {
+      "AlreadyExists": {
+        "type": "object",
+        "required": [
+          "error",
+          "errorMessage"
+        ],
+        "properties": {
+          "error": {
+            "type": "string",
+            "enum": [
+              "AlreadyExists"
+            ]
+          },
+          "errorMessage": {
+            "type": "string"
+          }
+        }
+      },
       "BadRequest": {
         "type": "object",
         "required": [
@@ -620,24 +588,6 @@
           },
           "total": {
             "type": "integer"
-          }
-        }
-      },
-      "CategoryNotFound": {
-        "type": "object",
-        "required": [
-          "error",
-          "errorMessage"
-        ],
-        "properties": {
-          "error": {
-            "type": "string",
-            "enum": [
-              "CategoryNotFound"
-            ]
-          },
-          "errorMessage": {
-            "type": "string"
           }
         }
       },
@@ -730,24 +680,6 @@
           }
         }
       },
-      "CompanyNotFound": {
-        "type": "object",
-        "required": [
-          "error",
-          "errorMessage"
-        ],
-        "properties": {
-          "error": {
-            "type": "string",
-            "enum": [
-              "CompanyNotFound"
-            ]
-          },
-          "errorMessage": {
-            "type": "string"
-          }
-        }
-      },
       "Delete": {
         "type": "object",
         "required": [
@@ -821,7 +753,7 @@
           }
         }
       },
-      "InvalidCategoryData": {
+      "InvalidData": {
         "type": "object",
         "required": [
           "error",
@@ -832,44 +764,7 @@
           "error": {
             "type": "string",
             "enum": [
-              "InvalidCategoryData"
-            ]
-          },
-          "errorMessage": {
-            "type": "string"
-          },
-          "data": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "required": [
-                "message",
-                "path"
-              ],
-              "properties": {
-                "message": {
-                  "type": "string"
-                },
-                "path": {
-                  "type": "string"
-                }
-              }
-            }
-          }
-        }
-      },
-      "InvalidCompanyData": {
-        "type": "object",
-        "required": [
-          "error",
-          "errorMessage",
-          "data"
-        ],
-        "properties": {
-          "error": {
-            "type": "string",
-            "enum": [
-              "InvalidCompanyData"
+              "InvalidData"
             ]
           },
           "errorMessage": {
@@ -950,43 +845,6 @@
           }
         }
       },
-      "InvalidUserData": {
-        "type": "object",
-        "required": [
-          "error",
-          "errorMessage",
-          "data"
-        ],
-        "properties": {
-          "error": {
-            "type": "string",
-            "enum": [
-              "InvalidUserData"
-            ]
-          },
-          "errorMessage": {
-            "type": "string"
-          },
-          "data": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "required": [
-                "message",
-                "path"
-              ],
-              "properties": {
-                "message": {
-                  "type": "string"
-                },
-                "path": {
-                  "type": "string"
-                }
-              }
-            }
-          }
-        }
-      },
       "NotFound": {
         "type": "object",
         "required": [
@@ -1028,24 +886,6 @@
           }
         }
       },
-      "UserAlreadyExists": {
-        "type": "object",
-        "required": [
-          "error",
-          "errorMessage"
-        ],
-        "properties": {
-          "error": {
-            "type": "string",
-            "enum": [
-              "UserAlreadyExists"
-            ]
-          },
-          "errorMessage": {
-            "type": "string"
-          }
-        }
-      },
       "UserList": {
         "type": "object",
         "required": [
@@ -1071,24 +911,6 @@
           },
           "total": {
             "type": "integer"
-          }
-        }
-      },
-      "UserNotFound": {
-        "type": "object",
-        "required": [
-          "error",
-          "errorMessage"
-        ],
-        "properties": {
-          "error": {
-            "type": "string",
-            "enum": [
-              "UserNotFound"
-            ]
-          },
-          "errorMessage": {
-            "type": "string"
           }
         }
       },

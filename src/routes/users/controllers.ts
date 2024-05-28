@@ -53,13 +53,13 @@ export function createUserControllers(
           sendResponse<Routes["/users"]["post"]>(
             res,
             StatusCodes.CONFLICT,
-            buildErrorResponse(ErrorCode.UserAlreadyExists)
+            buildErrorResponse(ErrorCode.AlreadyExists)
           );
       } else
         sendResponse<Routes["/users"]["post"]>(
           res,
           StatusCodes.BAD_REQUEST,
-          buildErrorResponse(ErrorCode.InvalidUserData, user.error)
+          buildErrorResponse(ErrorCode.InvalidData, user.error)
         );
     }),
     deleteUser: wrapAsyncHandler(async (req, res) => {
@@ -123,7 +123,7 @@ export function createUserControllers(
         sendResponse<Routes["/users/{id}"]["get"]>(
           res,
           StatusCodes.NOT_FOUND,
-          buildErrorResponse(ErrorCode.UserNotFound)
+          buildErrorResponse(ErrorCode.NotFound)
         );
     }),
     getUsers: wrapAsyncHandler(async (req, res) => {
@@ -163,13 +163,13 @@ export function createUserControllers(
           sendResponse<Routes["/users/{id}"]["put"]>(
             res,
             StatusCodes.NOT_FOUND,
-            buildErrorResponse(ErrorCode.UserNotFound)
+            buildErrorResponse(ErrorCode.NotFound)
           );
       } else
         sendResponse<Routes["/users/{id}"]["put"]>(
           res,
           StatusCodes.BAD_REQUEST,
-          buildErrorResponse(ErrorCode.InvalidUserData, user.error)
+          buildErrorResponse(ErrorCode.InvalidData, user.error)
         );
     })
   };

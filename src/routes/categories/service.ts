@@ -17,6 +17,7 @@ export function createCategoriesService(): CategoriesService {
 
   return {
     addCategory: crudService.addItemGuaranteed,
+    crudService,
     deleteCategory: crudService.deleteItem,
     getCategories: async ({
       limit = MAX_LIMIT,
