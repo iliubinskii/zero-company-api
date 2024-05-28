@@ -13,25 +13,13 @@ import type { StatusCodes } from "http-status-codes";
 export interface RoutesOld {
   readonly "*": {
     readonly BAD_REQUEST: {
-      readonly "InvalidCategoryData": [
+      readonly "InvalidData": [
         StatusCodes.BAD_REQUEST,
-        ErrorResponseWithData<ErrorCode.InvalidCategoryData>
-      ];
-      readonly "InvalidCompanyData": [
-        StatusCodes.BAD_REQUEST,
-        ErrorResponseWithData<ErrorCode.InvalidCompanyData>
-      ];
-      readonly "InvalidParam": [
-        StatusCodes.BAD_REQUEST,
-        ErrorResponse<ErrorCode.InvalidParam>
+        ErrorResponseWithData<ErrorCode.InvalidData>
       ];
       readonly "InvalidQuery": [
         StatusCodes.BAD_REQUEST,
         ErrorResponseWithData<ErrorCode.InvalidQuery>
-      ];
-      readonly "InvalidUserData": [
-        StatusCodes.BAD_REQUEST,
-        ErrorResponseWithData<ErrorCode.InvalidUserData>
       ];
     };
     readonly INTERNAL_SERVER_ERROR: [
@@ -84,14 +72,14 @@ export interface RoutesOld {
       readonly GET: {
         readonly NOT_FOUND: [
           StatusCodes.NOT_FOUND,
-          ErrorResponse<ErrorCode.CategoryNotFound>
+          ErrorResponse<ErrorCode.NotFound>
         ];
         readonly OK: [StatusCodes.OK, ExistingCategory];
       };
       readonly PUT: {
         readonly NOT_FOUND: [
           StatusCodes.NOT_FOUND,
-          ErrorResponse<ErrorCode.CategoryNotFound>
+          ErrorResponse<ErrorCode.NotFound>
         ];
         readonly OK: [StatusCodes.OK, ExistingCategory];
       };
@@ -110,14 +98,14 @@ export interface RoutesOld {
       readonly GET: {
         readonly NOT_FOUND: [
           StatusCodes.NOT_FOUND,
-          ErrorResponse<ErrorCode.CompanyNotFound>
+          ErrorResponse<ErrorCode.NotFound>
         ];
         readonly OK: [StatusCodes.OK, ExistingCompany];
       };
       readonly PUT: {
         readonly NOT_FOUND: [
           StatusCodes.NOT_FOUND,
-          ErrorResponse<ErrorCode.CompanyNotFound>
+          ErrorResponse<ErrorCode.NotFound>
         ];
         readonly OK: [StatusCodes.OK, ExistingCompany];
       };
@@ -146,7 +134,7 @@ export interface RoutesOld {
       readonly POST: {
         readonly CONFLICT: [
           StatusCodes.CONFLICT,
-          ErrorResponse<ErrorCode.UserAlreadyExists>
+          ErrorResponse<ErrorCode.AlreadyExists>
         ];
         readonly CREATED: [StatusCodes.CREATED, ExistingUser];
       };
@@ -156,14 +144,14 @@ export interface RoutesOld {
       readonly GET: {
         readonly NOT_FOUND: [
           StatusCodes.NOT_FOUND,
-          ErrorResponse<ErrorCode.UserNotFound>
+          ErrorResponse<ErrorCode.NotFound>
         ];
         readonly OK: [StatusCodes.OK, ExistingUser];
       };
       readonly PUT: {
         readonly NOT_FOUND: [
           StatusCodes.NOT_FOUND,
-          ErrorResponse<ErrorCode.UserNotFound>
+          ErrorResponse<ErrorCode.NotFound>
         ];
         readonly OK: [StatusCodes.OK, ExistingUser];
       };

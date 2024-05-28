@@ -49,6 +49,7 @@ const config = {
           // @sort
           [
             "autofix",
+            "bool",
             "camelcase",
             "cjs",
             "cloudinary",
@@ -59,6 +60,7 @@ const config = {
             "destructure",
             "ecma",
             "enum",
+            "envalid",
             "escompat",
             "eslintrc",
             "etag",

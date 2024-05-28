@@ -1,9 +1,15 @@
-import type { Company, GetCompaniesOptions, User } from "../../schema";
-import { buildMongodbQuery, filterUndefinedProperties } from "../../utils";
+import type {
+  Company,
+  CompanyUpdate,
+  GetCompaniesOptions,
+  User
+} from "../../schema";
 import type { CompaniesService } from "../../types";
 import type { FilterQuery } from "mongoose";
 import { MAX_LIMIT } from "../../schema";
 import type { Writable } from "ts-toolbelt/out/Object/Writable";
+import { createCrudService } from "../../services";
+import { filterUndefinedProperties } from "../../utils";
 import { getCompanyModel } from "./model";
 import type mongoose from "mongoose";
 
@@ -15,25 +21,14 @@ import type mongoose from "mongoose";
 export function createCompaniesService(
   getUserModel: GetUserModel
 ): CompaniesService {
+  const crudService = createCrudService<Company, CompanyUpdate>(
+    getCompanyModel
+  );
+
   return {
-    addCompany: async company => {
-      const CompanyModel = await getCompanyModel();
-
-      const model = new CompanyModel(company);
-
-      const addedCompany = await model.save();
-
-      const { _id, ...rest } = addedCompany.toObject();
-
-      return { _id: _id.toString(), ...rest };
-    },
-    deleteCompany: async id => {
-      const CompanyModel = await getCompanyModel();
-
-      const deletedCompany = await CompanyModel.findByIdAndDelete(id);
-
-      return deletedCompany ? 1 : 0;
-    },
+    addCompany: crudService.addItemGuaranteed,
+    crudService,
+    deleteCompany: crudService.deleteItem,
     getCompanies: async (options = {}, parentRef) => {
       const {
         limit = MAX_LIMIT,
@@ -44,9 +39,9 @@ export function createCompaniesService(
 
       const filter: Writable<FilterQuery<Company>> = buildFilter(options);
 
-      const sortOrderNumMap = { asc: 1, desc: -1 } as const;
+      const mongodbSortOrderMap = { asc: 1, desc: -1 } as const;
 
-      const sortOrderNum = sortOrderNumMap[sortOrder];
+      const mongodbSortOrder = mongodbSortOrderMap[sortOrder];
 
       const CompanyModel = await getCompanyModel();
 
@@ -85,8 +80,8 @@ export function createCompaniesService(
           .limit(limit)
           .sort(
             Object.fromEntries([
-              [sortBy, sortOrderNum],
-              ["_id", sortOrderNum]
+              [sortBy, mongodbSortOrder],
+              ["_id", mongodbSortOrder]
             ])
           ),
         CompanyModel.countDocuments(filter)
@@ -108,36 +103,8 @@ export function createCompaniesService(
         total
       });
     },
-    getCompany: async id => {
-      const CompanyModel = await getCompanyModel();
-
-      const company = await CompanyModel.findById(id);
-
-      if (company) {
-        const { _id, ...rest } = company.toObject();
-
-        return { _id: _id.toString(), ...rest };
-      }
-
-      return undefined;
-    },
-    updateCompany: async (id, company) => {
-      const CompanyModel = await getCompanyModel();
-
-      const updatedCompany = await CompanyModel.findByIdAndUpdate(
-        id,
-        buildMongodbQuery(company),
-        { new: true }
-      );
-
-      if (updatedCompany) {
-        const { _id, ...rest } = updatedCompany.toObject();
-
-        return { _id: _id.toString(), ...rest };
-      }
-
-      return undefined;
-    }
+    getCompany: crudService.getItem,
+    updateCompany: crudService.updateItem
   };
 }
 

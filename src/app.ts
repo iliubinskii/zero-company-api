@@ -1,17 +1,4 @@
-import {
-  AUTH0_CALLBACK_URL,
-  AUTH0_DOMAIN,
-  AUTH0_RETURN_URL,
-  COOKIE_DOMAIN,
-  COOKIE_SECURE,
-  CORS_ORIGIN,
-  ENV,
-  LOG_LEVEL,
-  MONGODB_DATABASE_NAME,
-  PORT,
-  SESSION_SECRET
-} from "./config";
-import { ErrorCode, schemaVersion } from "./schema";
+import { COOKIE_SECURE, CORS_ORIGIN, SESSION_SECRET } from "./config";
 import type { NextFunction, Request, Response } from "express";
 import { appendJwt, logRequest, logResponse, requestId } from "./middleware";
 import { buildErrorResponse, sendResponse } from "./utils";
@@ -32,6 +19,8 @@ import {
   testRouter
 } from "./routes";
 import { initAuth0Passport, initMongodb } from "./providers";
+import { logServerInfo, logger } from "./services";
+import { ErrorCode } from "./schema";
 import type { Routes } from "./schema";
 import { StatusCodes } from "http-status-codes";
 import cookieParser from "cookie-parser";
@@ -39,7 +28,6 @@ import cors from "cors";
 import express, { json } from "express";
 import globToRegExp from "glob-to-regexp";
 import { lang } from "./langs";
-import { logger } from "./services";
 import passport from "passport";
 import session from "express-session";
 
@@ -48,18 +36,7 @@ import session from "express-session";
  * @returns App
  */
 export function createApp(): express.Express {
-  logger.info(`${lang.ZeroApiServer} ${schemaVersion}`);
-  logger.info(`${lang.Environment}: ${ENV}`);
-  logger.info(`${lang.Port}: ${PORT}`);
-  logger.info(`${lang.Auth0CallbackUrl}: ${AUTH0_CALLBACK_URL}`);
-  logger.info(`${lang.Auth0Domain}: ${AUTH0_DOMAIN}`);
-  logger.info(`${lang.Auth0ReturnUrl}: ${AUTH0_RETURN_URL}`);
-  logger.info(`${lang.CookieDomain}: ${COOKIE_DOMAIN}`);
-  logger.info(`${lang.CookieSecure}: ${COOKIE_SECURE}`);
-  logger.info(`${lang.CorsOrigin}: ${CORS_ORIGIN}`);
-  logger.info(`${lang.LogLevel}: ${LOG_LEVEL}`);
-  logger.info(`${lang.MongodbDatabaseName}: ${MONGODB_DATABASE_NAME}`);
-
+  logServerInfo();
   initMongodb();
   initAuth0Passport();
 

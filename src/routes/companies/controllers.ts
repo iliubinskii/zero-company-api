@@ -6,7 +6,6 @@ import {
   GetCompaniesOptionsValidationSchema
 } from "../../schema";
 import {
-  assertDefined,
   buildErrorResponse,
   filterUndefinedProperties,
   sendResponse,
@@ -14,6 +13,7 @@ import {
 } from "../../utils";
 import type { Routes } from "../../schema";
 import { StatusCodes } from "http-status-codes";
+import { createCrudControllers } from "../../services";
 
 /**
  * Creates company controllers.
@@ -23,39 +23,44 @@ import { StatusCodes } from "http-status-codes";
 export function createCompanyControllers(
   service: CompaniesService
 ): CompanyControllers {
+  const { crudService } = service;
+
+  const crudControllers = createCrudControllers(
+    crudService,
+    {
+      safeParse: item => {
+        const result = CompanyCreateValidationSchema.safeParse(item);
+
+        if (result.success)
+          return {
+            data: filterUndefinedProperties({
+              ...result.data,
+              foundedAt: new Date().toISOString()
+            }),
+            success: true
+          };
+
+        return result;
+      }
+    },
+    {
+      safeParse: item => {
+        const result = CompanyUpdateValidationSchema.safeParse(item);
+
+        if (result.success)
+          return {
+            data: filterUndefinedProperties(result.data),
+            success: true
+          };
+
+        return result;
+      }
+    }
+  );
+
   return {
-    addCompany: wrapAsyncHandler(async (req, res) => {
-      const company = CompanyCreateValidationSchema.safeParse(req.body);
-
-      if (company.success) {
-        const addedCompany = await service.addCompany(
-          filterUndefinedProperties({
-            ...company.data,
-            foundedAt: new Date().toISOString()
-          })
-        );
-
-        sendResponse<Routes["/companies"]["post"]>(
-          res,
-          StatusCodes.CREATED,
-          addedCompany
-        );
-      } else
-        sendResponse<Routes["/companies"]["post"]>(
-          res,
-          StatusCodes.BAD_REQUEST,
-          buildErrorResponse(ErrorCode.InvalidCompanyData, company.error)
-        );
-    }),
-    deleteCompany: wrapAsyncHandler(async (req, res) => {
-      const id = assertDefined(req.idParam);
-
-      const affectedRows = await service.deleteCompany(id);
-
-      sendResponse<Routes["/companies/{id}"]["delete"]>(res, StatusCodes.OK, {
-        affectedRows
-      });
-    }),
+    addCompany: crudControllers.addItem,
+    deleteCompany: crudControllers.addItem,
     getCompanies: wrapAsyncHandler(async (req, res) => {
       const options = GetCompaniesOptionsValidationSchema.safeParse(req.query);
 
@@ -76,53 +81,7 @@ export function createCompanyControllers(
           buildErrorResponse(ErrorCode.InvalidQuery, options.error)
         );
     }),
-    getCompany: wrapAsyncHandler(async (req, res) => {
-      const id = assertDefined(req.idParam);
-
-      const company = await service.getCompany(id);
-
-      if (company)
-        sendResponse<Routes["/companies/{id}"]["get"]>(
-          res,
-          StatusCodes.OK,
-          company
-        );
-      else
-        sendResponse<Routes["/companies/{id}"]["get"]>(
-          res,
-          StatusCodes.NOT_FOUND,
-          buildErrorResponse(ErrorCode.CompanyNotFound)
-        );
-    }),
-    updateCompany: wrapAsyncHandler(async (req, res) => {
-      const id = assertDefined(req.idParam);
-
-      const company = CompanyUpdateValidationSchema.safeParse(req.body);
-
-      if (company.success) {
-        const updatedCompany = await service.updateCompany(
-          id,
-          filterUndefinedProperties(company.data)
-        );
-
-        if (updatedCompany)
-          sendResponse<Routes["/companies/{id}"]["put"]>(
-            res,
-            StatusCodes.OK,
-            updatedCompany
-          );
-        else
-          sendResponse<Routes["/companies/{id}"]["put"]>(
-            res,
-            StatusCodes.NOT_FOUND,
-            buildErrorResponse(ErrorCode.CompanyNotFound)
-          );
-      } else
-        sendResponse<Routes["/companies/{id}"]["put"]>(
-          res,
-          StatusCodes.BAD_REQUEST,
-          buildErrorResponse(ErrorCode.InvalidCompanyData, company.error)
-        );
-    })
+    getCompany: crudControllers.getItem,
+    updateCompany: crudControllers.updateItem
   };
 }

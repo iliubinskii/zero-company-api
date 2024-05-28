@@ -1,20 +1,14 @@
 export enum ErrorCode {
+  AlreadyExists = "AlreadyExists",
   BadRequest = "BadRequest",
-  CategoryNotFound = "CategoryNotFound",
-  CompanyNotFound = "CompanyNotFound",
   InternalServerError = "InternalServerError",
-  InvalidCategoryData = "InvalidCategoryData",
-  InvalidCompanyData = "InvalidCompanyData",
+  InvalidData = "InvalidData",
   InvalidIdParam = "InvalidIdParam",
-  InvalidParam = "InvalidParam",
   InvalidQuery = "InvalidQuery",
-  InvalidUserData = "InvalidUserData",
   MethodNotAllowed = "MethodNotAllowed",
   NotFound = "NotFound",
   OK = "OK",
-  Unauthorized = "Unauthorized",
-  UserAlreadyExists = "UserAlreadyExists",
-  UserNotFound = "UserNotFound"
+  Unauthorized = "Unauthorized"
 }
 
 export interface DeleteResponse {
