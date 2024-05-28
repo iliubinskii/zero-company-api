@@ -1,19 +1,21 @@
-export enum ErrorCode {
-  AlreadyExists = "AlreadyExists",
-  BadRequest = "BadRequest",
-  InternalServerError = "InternalServerError",
-  InvalidData = "InvalidData",
-  InvalidIdParam = "InvalidIdParam",
-  InvalidQuery = "InvalidQuery",
-  MethodNotAllowed = "MethodNotAllowed",
-  NotFound = "NotFound",
-  OK = "OK",
-  Unauthorized = "Unauthorized"
-}
+export const ErrorCode = {
+  AlreadyExists: "AlreadyExists",
+  BadRequest: "BadRequest",
+  InternalServerError: "InternalServerError",
+  InvalidData: "InvalidData",
+  InvalidIdParam: "InvalidIdParam",
+  InvalidQuery: "InvalidQuery",
+  MethodNotAllowed: "MethodNotAllowed",
+  NotFound: "NotFound",
+  OK: "OK",
+  Unauthorized: "Unauthorized"
+} as const;
 
 export interface DeleteResponse {
   readonly affectedRows: number;
 }
+
+export type ErrorCode = (typeof ErrorCode)[keyof typeof ErrorCode];
 
 export interface ErrorResponse<E extends ErrorCode> {
   readonly error: E;
