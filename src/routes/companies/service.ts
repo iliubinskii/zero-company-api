@@ -74,6 +74,8 @@ export function createCompaniesService(
           }
         }
 
+      // eslint-disable-next-line no-warning-comments -- Postponed
+      // TODO: Use a single aggregate query to get both the count and the documents
       const [companies, total] = await Promise.all([
         CompanyModel.find(filter)
           .skip(offset)
