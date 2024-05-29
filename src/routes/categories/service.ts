@@ -30,6 +30,8 @@ export function createCategoriesService(): CategoriesService {
 
       const CategoryModel = await getCategoryModel();
 
+      // eslint-disable-next-line no-warning-comments -- Postponed
+      // TODO: Use a single aggregate query to get both the count and the documents
       const [categories, total] = await Promise.all([
         CategoryModel.find(filter).skip(offset).limit(limit),
         CategoryModel.countDocuments(filter)

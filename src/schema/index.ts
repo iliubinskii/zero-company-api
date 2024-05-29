@@ -7,7 +7,6 @@ export * from "./consts";
 export * from "./get-all-options";
 export * from "./get-all-options.validation";
 export type { paths as Routes } from "./routes";
-export * from "./routes-old";
 export { default as schema } from "./schema.json";
 export * from "./users";
 export * from "./users.validation";

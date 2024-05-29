@@ -24,6 +24,19 @@
         }
       }
     },
+    "/auth/me": {
+      "get": {
+        "summary": "Get authentication response",
+        "tags": [
+          "auth"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/AuthUser"
+          }
+        }
+      }
+    },
     "/categories": {
       "get": {
         "summary": "Get all categories",
@@ -319,6 +332,19 @@
         }
       }
     },
+    "/401": {
+      "get": {
+        "summary": "Unauthorized",
+        "tags": [
+          "common"
+        ],
+        "responses": {
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },
     "/404": {
       "get": {
         "summary": "Not found",
@@ -328,6 +354,19 @@
         "responses": {
           "404": {
             "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/405": {
+      "get": {
+        "summary": "Method not allowed",
+        "tags": [
+          "common"
+        ],
+        "responses": {
+          "405": {
+            "$ref": "#/components/responses/MethodNotAllowed"
           }
         }
       }
@@ -359,11 +398,21 @@
     },
     "responses": {
       "AlreadyExists": {
-        "description": "User already exists",
+        "description": "Already exists",
         "content": {
           "application/json": {
             "schema": {
               "$ref": "#/components/schemas/AlreadyExists"
+            }
+          }
+        }
+      },
+      "AuthUser": {
+        "description": "Authentication response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/AuthUser"
             }
           }
         }
@@ -394,16 +443,6 @@
           "application/json": {
             "schema": {
               "$ref": "#/components/schemas/CategoryList"
-            }
-          }
-        }
-      },
-      "NotFound": {
-        "description": "Category not found",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/NotFound"
             }
           }
         }
@@ -458,6 +497,16 @@
           }
         }
       },
+      "InvalidData": {
+        "description": "Invalid data",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/InvalidData"
+            }
+          }
+        }
+      },
       "InvalidQuery": {
         "description": "Invalid query",
         "content": {
@@ -468,12 +517,32 @@
           }
         }
       },
-      "InvalidData": {
-        "description": "Invalid data",
+      "MethodNotAllowed": {
+        "description": "Method not allowed",
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/InvalidData"
+              "$ref": "#/components/schemas/MethodNotAllowed"
+            }
+          }
+        }
+      },
+      "NotFound": {
+        "description": "Not found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/NotFound"
+            }
+          }
+        }
+      },
+      "Unauthorized": {
+        "description": "Bad request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Unauthorized"
             }
           }
         }
@@ -515,6 +584,25 @@
           },
           "errorMessage": {
             "type": "string"
+          }
+        }
+      },
+      "AuthUser": {
+        "type": "object",
+        "nullable": true,
+        "required": [
+          "admin",
+          "email"
+        ],
+        "properties": {
+          "admin": {
+            "type": "boolean"
+          },
+          "email": {
+            "type": "string"
+          },
+          "user": {
+            "$ref": "#/components/schemas/User"
           }
         }
       },
@@ -584,7 +672,9 @@
             "type": "array",
             "items": {
               "type": "string"
-            }
+            },
+            "minItems": 2,
+            "maxItems": 2
           },
           "total": {
             "type": "integer"
@@ -673,7 +763,9 @@
             "type": "array",
             "items": {
               "type": "string"
-            }
+            },
+            "minItems": 2,
+            "maxItems": 2
           },
           "total": {
             "type": "integer"
@@ -845,6 +937,24 @@
           }
         }
       },
+      "MethodNotAllowed": {
+        "type": "object",
+        "required": [
+          "error",
+          "errorMessage"
+        ],
+        "properties": {
+          "error": {
+            "type": "string",
+            "enum": [
+              "MethodNotAllowed"
+            ]
+          },
+          "errorMessage": {
+            "type": "string"
+          }
+        }
+      },
       "NotFound": {
         "type": "object",
         "required": [
@@ -856,6 +966,24 @@
             "type": "string",
             "enum": [
               "NotFound"
+            ]
+          },
+          "errorMessage": {
+            "type": "string"
+          }
+        }
+      },
+      "Unauthorized": {
+        "type": "object",
+        "required": [
+          "error",
+          "errorMessage"
+        ],
+        "properties": {
+          "error": {
+            "type": "string",
+            "enum": [
+              "Unauthorized"
             ]
           },
           "errorMessage": {
@@ -907,7 +1035,9 @@
             "type": "array",
             "items": {
               "type": "string"
-            }
+            },
+            "minItems": 2,
+            "maxItems": 2
           },
           "total": {
             "type": "integer"

@@ -12,6 +12,14 @@ export interface paths {
       };
     };
   };
+  "/auth/me": {
+    /** Get authentication response */
+    get: {
+      responses: {
+        200: components["responses"]["AuthUser"];
+      };
+    };
+  };
   "/categories": {
     /** Get all categories */
     get: {
@@ -236,11 +244,27 @@ export interface paths {
       };
     };
   };
+  "/401": {
+    /** Unauthorized */
+    get: {
+      responses: {
+        401: components["responses"]["Unauthorized"];
+      };
+    };
+  };
   "/404": {
     /** Not found */
     get: {
       responses: {
         404: components["responses"]["NotFound"];
+      };
+    };
+  };
+  "/405": {
+    /** Method not allowed */
+    get: {
+      responses: {
+        405: components["responses"]["MethodNotAllowed"];
       };
     };
   };
@@ -263,6 +287,11 @@ export interface components {
       error: "AlreadyExists";
       errorMessage: string;
     };
+    AuthUser: {
+      admin: boolean;
+      email: string;
+      user?: components["schemas"]["User"];
+    } | null;
     BadRequest: {
       /** @enum {string} */
       error: "BadRequest" | "InvalidIdParam";
@@ -344,9 +373,19 @@ export interface components {
         path: string;
       }[];
     };
+    MethodNotAllowed: {
+      /** @enum {string} */
+      error: "MethodNotAllowed";
+      errorMessage: string;
+    };
     NotFound: {
       /** @enum {string} */
       error: "NotFound";
+      errorMessage: string;
+    };
+    Unauthorized: {
+      /** @enum {string} */
+      error: "Unauthorized";
       errorMessage: string;
     };
     User: {
@@ -370,10 +409,16 @@ export interface components {
     };
   };
   responses: {
-    /** @description User already exists */
+    /** @description Already exists */
     AlreadyExists: {
       content: {
         "application/json": components["schemas"]["AlreadyExists"];
+      };
+    };
+    /** @description Authentication response */
+    AuthUser: {
+      content: {
+        "application/json": components["schemas"]["AuthUser"];
       };
     };
     /** @description Bad request */
@@ -392,12 +437,6 @@ export interface components {
     CategoryList: {
       content: {
         "application/json": components["schemas"]["CategoryList"];
-      };
-    };
-    /** @description Category not found */
-    NotFound: {
-      content: {
-        "application/json": components["schemas"]["NotFound"];
       };
     };
     /** @description Company */
@@ -430,16 +469,34 @@ export interface components {
         "application/json": components["schemas"]["InternalServerError"];
       };
     };
+    /** @description Invalid data */
+    InvalidData: {
+      content: {
+        "application/json": components["schemas"]["InvalidData"];
+      };
+    };
     /** @description Invalid query */
     InvalidQuery: {
       content: {
         "application/json": components["schemas"]["InvalidQuery"];
       };
     };
-    /** @description Invalid data */
-    InvalidData: {
+    /** @description Method not allowed */
+    MethodNotAllowed: {
       content: {
-        "application/json": components["schemas"]["InvalidData"];
+        "application/json": components["schemas"]["MethodNotAllowed"];
+      };
+    };
+    /** @description Not found */
+    NotFound: {
+      content: {
+        "application/json": components["schemas"]["NotFound"];
+      };
+    };
+    /** @description Bad request */
+    Unauthorized: {
+      content: {
+        "application/json": components["schemas"]["Unauthorized"];
       };
     };
     /** @description User */

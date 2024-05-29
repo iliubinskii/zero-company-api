@@ -1,7 +1,7 @@
-import { buildErrorResponse, sendResponseOld } from "../utils";
+import { buildErrorResponse, sendResponse } from "../utils";
 import { ErrorCode } from "../schema";
 import type { RequestHandler } from "express";
-import type { RoutesOld } from "../schema";
+import type { Routes } from "../schema";
 import { StatusCodes } from "http-status-codes";
 
 /**
@@ -15,7 +15,7 @@ export const forceHttps: RequestHandler = (req, res, next) => {
   if (req.protocol === "https" || req.headers["x-forwarded-proto"] === "https")
     next();
   else
-    sendResponseOld<RoutesOld["*"]["UNSECURED_URL"]>(
+    sendResponse<Routes["/405"]["get"]>(
       res,
       StatusCodes.METHOD_NOT_ALLOWED,
       buildErrorResponse(ErrorCode.MethodNotAllowed)

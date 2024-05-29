@@ -107,30 +107,6 @@ export function createApp(): express.Express {
 
   app.use("/users", createUsersRouter(userControllers));
 
-  app.use("/400", (_req, res) => {
-    sendResponse<Routes["/400"]["get"]>(
-      res,
-      StatusCodes.BAD_REQUEST,
-      buildErrorResponse(ErrorCode.BadRequest)
-    );
-  });
-
-  app.use("/404", (_req, res) => {
-    sendResponse<Routes["/404"]["get"]>(
-      res,
-      StatusCodes.NOT_FOUND,
-      buildErrorResponse(ErrorCode.NotFound)
-    );
-  });
-
-  app.use("/500", (_req, res) => {
-    sendResponse<Routes["/500"]["get"]>(
-      res,
-      StatusCodes.INTERNAL_SERVER_ERROR,
-      buildErrorResponse(ErrorCode.InternalServerError)
-    );
-  });
-
   app.all("*", (_req, res) => {
     sendResponse<Routes["/404"]["get"]>(
       res,
