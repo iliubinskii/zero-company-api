@@ -1,24 +1,17 @@
-import { ErrorCode, Routes, UserEmailValidationSchema } from "../../schema";
-import { assertDefined, buildErrorResponse, sendResponse } from "../../utils";
-import { StatusCodes } from "http-status-codes";
-import { UsersMiddleware } from "../../types";
+import type { UsersMiddleware } from "../../types";
+import { assertDefined } from "../../utils";
 
 export const usersMiddleware: UsersMiddleware = {
-  userEmailFromJwtUser: (req, _res, next) => {
-    req.userEmail = assertDefined(req.jwt).email;
+  userRefFromIdParam: (req, _res, next) => {
+    const id = assertDefined(req.idParam);
+
+    req.userRef = { id, type: "id" };
     next();
   },
-  userEmailFromParam: (req, res, next) => {
-    const email = UserEmailValidationSchema.safeParse(req.params["email"]);
+  userRefFromJwt: (req, _res, next) => {
+    const { email } = assertDefined(req.jwt);
 
-    if (email.success) {
-      req.userEmail = email.data;
-      next();
-    } else
-      sendResponse<Routes["/400"]["get"]>(
-        res,
-        StatusCodes.BAD_REQUEST,
-        buildErrorResponse(ErrorCode.InvalidEmailParam)
-      );
+    req.userRef = { email, type: "email" };
+    next();
   }
 };

@@ -28,6 +28,4 @@ export const MONGODB_SESSIONS_TTL_SEC = 3600;
 
 export const MONGODB_SOCKET_TIMEOUT_MS = 10_000;
 
-export const SESSION_LIFETIME_MS = 3_600_000;
-
 export const TEST_DELAY_MS = 100;

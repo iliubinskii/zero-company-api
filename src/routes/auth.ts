@@ -2,6 +2,7 @@ import {
   ADMIN_EMAIL,
   AUTH0_RETURN_URL,
   COOKIE_DOMAIN,
+  COOKIE_SECURE,
   JWT_SECRET
 } from "../config";
 import {
@@ -11,15 +12,16 @@ import {
   AUTH_COOKIE_NAME,
   JWT_EXPIRES_IN
 } from "../consts";
-import { Jwt, JwtValidationSchema, RoutesOld } from "../schema";
+import type { AuthUserEssential, Jwt } from "../schema";
+import { JwtValidationSchema, preprocessEmail } from "../schema";
 import {
+  buildQuery,
   filterUndefinedProperties,
-  sendResponseOld,
   wrapAsyncHandler
 } from "../utils";
 import { Router } from "express";
-import { StatusCodes } from "http-status-codes";
-import { UsersService } from "../types";
+import type { UsersService } from "../types";
+import type { Writable } from "ts-toolbelt/out/Object/Writable";
 import jwt from "jsonwebtoken";
 import { lang } from "../langs";
 import { logger } from "../services";
@@ -41,30 +43,62 @@ export function createAuthRouter(usersService: UsersService): Router {
       passport.authenticate("auth0", {
         failureRedirect: AUTH0_RETURN_URL
       }),
-      (req, res, next) => {
+      wrapAsyncHandler(async (req, res) => {
         if (req.isAuthenticated()) {
-          const user = Auth0UserValidationSchema.parse(req.user);
+          const auth0User = Auth0UserValidationSchema.parse(req.user);
 
-          const token = jwt.sign({ email: user.emails[0].value }, JWT_SECRET, {
+          await new Promise<void>((resolve, reject) => {
+            req.logout((err: unknown) => {
+              // eslint-disable-next-line @typescript-eslint/prefer-promise-reject-errors -- Ok
+              if (err) reject(err);
+              else resolve();
+            });
+          });
+
+          const payload: Jwt = { email: auth0User.emails[0].value };
+
+          const token = jwt.sign(payload, JWT_SECRET, {
             expiresIn: JWT_EXPIRES_IN
           });
 
-          req.logout(err => {
-            if (err) next(err);
-            else
-              res
-                .cookie(AUTH_COOKIE_NAME, token, {
-                  domain: COOKIE_DOMAIN,
-                  expires: new Date(Date.now() + AUTH_COOKIE_LIFETIME_MS),
-                  httpOnly: true,
-                  path: "/",
-                  sameSite: "strict",
-                  secure: true
-                })
-                .redirect(AUTH0_RETURN_URL);
+          const userQueryParam: Writable<AuthUserEssential> = {
+            admin: ADMIN_EMAIL.includes(payload.email),
+            email: payload.email
+          };
+
+          const user = await usersService.getUser({
+            email: payload.email,
+            type: "email"
           });
-        } else res.redirect(AUTH0_RETURN_URL);
-      }
+
+          if (user)
+            userQueryParam.user = {
+              firstName: user.firstName,
+              lastName: user.lastName
+            };
+
+          const queryStr = buildQuery({
+            action: "login",
+            user: JSON.stringify(userQueryParam)
+          });
+
+          res
+            .cookie(AUTH_COOKIE_NAME, token, {
+              domain: COOKIE_DOMAIN,
+              expires: new Date(Date.now() + AUTH_COOKIE_LIFETIME_MS),
+              httpOnly: true,
+              path: "/",
+              sameSite: "strict",
+              secure: COOKIE_SECURE
+            })
+            .redirect(`${AUTH0_RETURN_URL}${queryStr}`);
+        } else {
+          logger.warn(lang.Auth0AuthenticationFailed, {
+            requestId: req.requestId
+          });
+          res.redirect(AUTH0_RETURN_URL);
+        }
+      })
     )
     .get(
       "/login",
@@ -75,6 +109,8 @@ export function createAuthRouter(usersService: UsersService): Router {
       }
     )
     .get("/logout", (_req, res) => {
+      const queryStr = buildQuery({ action: "logout" });
+
       res
         .cookie(AUTH_COOKIE_NAME, "", {
           domain: COOKIE_DOMAIN,
@@ -82,9 +118,9 @@ export function createAuthRouter(usersService: UsersService): Router {
           httpOnly: true,
           path: "/",
           sameSite: "strict",
-          secure: true
+          secure: COOKIE_SECURE
         })
-        .redirect(AUTH0_RETURN_URL);
+        .redirect(`${AUTH0_RETURN_URL}${queryStr}`);
     })
     .get(
       "/me",
@@ -115,23 +151,23 @@ export function createAuthRouter(usersService: UsersService): Router {
         if (result) {
           const { email } = result;
 
-          const user = await usersService.getUser(email);
+          const user = await usersService.getUser({
+            email,
+            type: "email"
+          });
 
-          sendResponseOld<RoutesOld["/auth"]["/me"]["GET"]>(
-            res,
-            StatusCodes.OK,
+          // eslint-disable-next-line no-warning-comments -- Postponed
+          // TODO: Use sendResponse
+          res.json(
             filterUndefinedProperties({
               admin: ADMIN_EMAIL.includes(email),
               email,
               user
             })
           );
-        } else
-          sendResponseOld<RoutesOld["/auth"]["/me"]["GET"]>(
-            res,
-            StatusCodes.OK,
-            null
-          );
+          // eslint-disable-next-line no-warning-comments -- Postponed
+          // TODO: Use sendResponse
+        } else res.json(null);
       })
     );
 
@@ -142,7 +178,7 @@ const Auth0UserValidationSchema = zod
   // Do not use strictObject: auth0 may return additional fields
   .object({
     emails: zod
-      .array(zod.strictObject({ value: zod.string() }))
+      .array(zod.strictObject({ value: preprocessEmail(zod.string().email()) }))
       .nonempty()
       .max(1)
   });

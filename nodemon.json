@@ -1,5 +1,6 @@
 {
   "exec": "tsx ./utils/dev-server.ts",
   "ext": "*",
+  "ignore": ["src/**/*.test.ts"],
   "watch": [".env", "src", "utils"]
 }

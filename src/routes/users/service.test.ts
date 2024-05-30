@@ -1,3 +1,6 @@
+/* eslint-disable sonarjs/no-duplicate-string -- Ok */
+
+import type { ExistingUser, UserUpdate } from "../../schema";
 import { assertDefined } from "../../utils";
 import { createUsersService } from "./service";
 import { faker } from "@faker-js/faker";
@@ -6,12 +9,23 @@ import { getUserModel } from "./model";
 describe("createUsersService", () => {
   const usersService = createUsersService();
 
-  describe("addUser", () => {
-    const data = {
+  const getData = (): Omit<ExistingUser, "_id"> => {
+    return {
       email: faker.internet.email(),
       firstName: faker.person.firstName(),
       lastName: faker.person.lastName()
     };
+  };
+
+  const getUpdate = (): UserUpdate => {
+    return {
+      firstName: faker.person.firstName(),
+      lastName: faker.person.lastName()
+    };
+  };
+
+  describe("addUser", () => {
+    const data = getData();
 
     it("should add a user", async () => {
       const user = await usersService.addUser(data);
@@ -29,52 +43,122 @@ describe("createUsersService", () => {
   });
 
   describe("deleteUser", () => {
-    const data = {
-      email: faker.internet.email(),
-      firstName: faker.person.firstName(),
-      lastName: faker.person.lastName()
-    };
+    describe("By email", () => {
+      const data = getData();
 
-    beforeAll(async () => {
-      await usersService.addUser(data);
+      beforeAll(async () => {
+        await usersService.addUser(data);
+      });
+
+      it("should delete a user", async () => {
+        const result = await usersService.deleteUser({
+          email: data.email,
+          type: "email"
+        });
+
+        expect(result).toBe(1);
+      });
+
+      it("should return 0 affected rows for missing user", async () => {
+        const result = await usersService.deleteUser({
+          email: data.email,
+          type: "email"
+        });
+
+        expect(result).toBe(0);
+      });
     });
 
-    it("should delete a user", async () => {
-      const result = await usersService.deleteUser(data.email);
+    describe("By id", () => {
+      const data = getData();
 
-      expect(result).toBe(1);
-    });
+      let id: string | undefined;
 
-    it("should return 0 affected rows for missing user", async () => {
-      const result = await usersService.deleteUser(data.email);
+      beforeAll(async () => {
+        const user = await usersService.addUser(data);
 
-      expect(result).toBe(0);
+        id = assertDefined(user)._id;
+      });
+
+      it("should delete a user", async () => {
+        const result = await usersService.deleteUser({
+          id: assertDefined(id),
+          type: "id"
+        });
+
+        expect(result).toBe(1);
+      });
+
+      it("should return 0 affected rows for missing user", async () => {
+        const result = await usersService.deleteUser({
+          id: assertDefined(id),
+          type: "id"
+        });
+
+        expect(result).toBe(0);
+      });
     });
   });
 
   describe("getUser", () => {
-    const data = {
-      email: faker.internet.email(),
-      firstName: faker.person.firstName(),
-      lastName: faker.person.lastName()
-    };
+    describe("By email", () => {
+      const data = getData();
 
-    beforeAll(async () => {
-      await usersService.addUser(data);
+      beforeAll(async () => {
+        await usersService.addUser(data);
+      });
+
+      it("should get a user", async () => {
+        const user = await usersService.getUser({
+          email: data.email,
+          type: "email"
+        });
+
+        const { _id } = assertDefined(user);
+
+        expect(user).toEqual({ ...data, _id });
+      });
+
+      it("should return undefined for missing user", async () => {
+        const user = await usersService.getUser({
+          email: faker.internet.email(),
+          type: "email"
+        });
+
+        expect(user).toBeUndefined();
+      });
     });
 
-    it("should get a user", async () => {
-      const user = await usersService.getUser(data.email);
+    describe("By id", () => {
+      const data = getData();
 
-      const { _id } = assertDefined(user);
+      let id: string | undefined;
 
-      expect(user).toEqual({ ...data, _id });
-    });
+      beforeAll(async () => {
+        const user = await usersService.addUser(data);
 
-    it("should return undefined for missing user", async () => {
-      const user = await usersService.getUser(faker.internet.email());
+        id = assertDefined(user)._id;
+      });
 
-      expect(user).toBeUndefined();
+      it("should get a user", async () => {
+        const user = await usersService.getUser({
+          id: assertDefined(id),
+          type: "id"
+        });
+
+        const { _id } = assertDefined(user);
+
+        expect(user).toEqual({ ...data, _id });
+      });
+
+      it("should return undefined for missing user", async () => {
+        const user = await usersService.getUser({
+          id: faker.database.mongodbObjectId(),
+          type: "id"
+        });
+
+        expect(user).toBeUndefined();
+      });
     });
   });
 
@@ -143,36 +227,86 @@ describe("createUsersService", () => {
   });
 
   describe("updateUser", () => {
-    const data = {
-      email: faker.internet.email(),
-      firstName: faker.person.firstName(),
-      lastName: faker.person.lastName()
-    };
+    describe("By email", () => {
+      const data = getData();
 
-    const update = {
-      firstName: faker.person.firstName(),
-      lastName: faker.person.lastName()
-    };
+      beforeAll(async () => {
+        await usersService.addUser(data);
+      });
 
-    beforeAll(async () => {
-      await usersService.addUser(data);
+      it("should update a user", async () => {
+        const update = getUpdate();
+
+        const user = await usersService.updateUser(
+          {
+            email: data.email,
+            type: "email"
+          },
+          update
+        );
+
+        const { _id } = assertDefined(user);
+
+        expect(user).toEqual({ ...data, ...update, _id });
+      });
+
+      it("should return undefined for missing user", async () => {
+        const update = getUpdate();
+
+        const user = await usersService.updateUser(
+          {
+            email: faker.internet.email(),
+            type: "email"
+          },
+
+          update
+        );
+
+        expect(user).toBeUndefined();
+      });
     });
 
-    it("should update a user", async () => {
-      const user = await usersService.updateUser(data.email, update);
+    describe("By id", () => {
+      const data = getData();
 
-      const { _id } = assertDefined(user);
+      let id: string | undefined;
 
-      expect(user).toEqual({ ...data, ...update, _id });
-    });
+      beforeAll(async () => {
+        const user = await usersService.addUser(data);
 
-    it("should return undefined for missing user", async () => {
-      const user = await usersService.updateUser(
-        faker.internet.email(),
-        update
-      );
+        id = assertDefined(user)._id;
+      });
 
-      expect(user).toBeUndefined();
+      it("should update a user", async () => {
+        const update = getUpdate();
+
+        const user = await usersService.updateUser(
+          {
+            id: assertDefined(id),
+            type: "id"
+          },
+          update
+        );
+
+        const { _id } = assertDefined(user);
+
+        expect(user).toEqual({ ...data, ...update, _id });
+      });
+
+      it("should return undefined for missing user", async () => {
+        const update = getUpdate();
+
+        const user = await usersService.updateUser(
+          {
+            id: faker.database.mongodbObjectId(),
+            type: "id"
+          },
+
+          update
+        );
+
+        expect(user).toBeUndefined();
+      });
     });
   });
 });

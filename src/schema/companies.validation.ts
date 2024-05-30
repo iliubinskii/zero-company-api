@@ -1,14 +1,17 @@
-import { CompanyCreate, CompanyUpdate, ExistingCompany } from "./companies";
+import type {
+  CompanyCreate,
+  CompanyUpdate,
+  ExistingCompany
+} from "./companies";
 import {
   IdValidationSchema,
   ImageValidationSchema,
-  ValidationResult,
   preprocessBoolean,
   preprocessEmail,
   preprocessNumber
 } from "./common";
 import { MAX_CATEGORIES } from "./consts";
-import _ from "lodash";
+import type { ValidationResult } from "./common";
 import zod from "zod";
 
 const _id = IdValidationSchema;
@@ -64,10 +67,13 @@ const fields = {
 
 export const ExistingCompanyValidationSchema = zod.strictObject(fields);
 
-export const CompanyCreateValidationSchema = zod.strictObject({
-  ..._.omit(fields, "_id", "foundedAt", "recommended"),
-  founders: foundersCreate
-});
+export const CompanyCreateValidationSchema =
+  ExistingCompanyValidationSchema.omit({
+    _id: true,
+    foundedAt: true,
+    founders: true,
+    recommended: true
+  }).merge(zod.object({ founders: foundersCreate }));
 
 export const CompanyUpdateValidationSchema = zod.strictObject({
   description: description.optional(),

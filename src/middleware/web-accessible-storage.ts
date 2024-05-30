@@ -1,6 +1,6 @@
 import { assertDefined, wrapAsyncHandler } from "../utils";
-import { RequestHandler } from "express";
-import { WebAccessibleImage } from "../schema";
+import type { RequestHandler } from "express";
+import type { WebAccessibleImage } from "../schema";
 import fs from "node:fs/promises";
 import { uploadImage } from "../providers";
 

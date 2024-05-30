@@ -1,12 +1,12 @@
 /* eslint-disable no-sync -- Ok */
 
-import { Category, Company, User } from "../src";
+import type { Category, Company, User } from "../src";
 import { dummy } from "../assets";
 import { faker } from "@faker-js/faker";
 import fs from "node:fs";
 
 const LIMIT = {
-  companies: 100
+  companies: 250
 } as const;
 
 const PRICE_STEP = 1000;

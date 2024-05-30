@@ -4,7 +4,7 @@
 
 import * as config from "./src/config";
 import { MongoMemoryServer } from "mongodb-memory-server";
-import { disconnectMongodb } from "./src/providers/mongodb";
+import { mongodbDisconnect } from "./src/providers/mongodb";
 
 jest.mock("./src/config");
 
@@ -19,7 +19,7 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  await disconnectMongodb();
+  await mongodbDisconnect();
 
   if (mongoServer) await mongoServer.stop();
 });

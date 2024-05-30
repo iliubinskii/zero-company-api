@@ -1,11 +1,12 @@
-import {
+import type {
   Company,
   CompanyUpdate,
   ExistingCompany,
   GetCompaniesOptions,
   MultipleDocsResponse
 } from "../schema";
-import { RequestHandler } from "express";
+import type { CrudService } from "./crud";
+import type { RequestHandler } from "express";
 
 export interface CompanyControllers {
   readonly addCompany: RequestHandler;
@@ -27,6 +28,7 @@ export interface CompaniesService {
    * @returns A promise that resolves when the company has been added.
    */
   readonly addCompany: (company: Company) => Promise<ExistingCompany>;
+  readonly crudService: CrudService<Company, CompanyUpdate>;
   /**
    * Deletes a company from the database.
    * @param id - The ID of the company to delete.
@@ -36,10 +38,12 @@ export interface CompaniesService {
   /**
    * Gets all companies from the database.
    * @param options - The options to use when getting companies.
+   * @param parentRef - The parent reference to use when getting companies.
    * @returns A promise that resolves with all companies in the database.
    */
   readonly getCompanies: (
-    options?: GetCompaniesOptions
+    options?: GetCompaniesOptions,
+    parentRef?: GetCompaniesParentRef
   ) => Promise<MultipleDocsResponse<ExistingCompany>>;
   /**
    * Gets a company from the database.
@@ -58,3 +62,17 @@ export interface CompaniesService {
     company: CompanyUpdate
   ) => Promise<ExistingCompany | undefined>;
 }
+
+export type GetCompaniesParentRef =
+  | {
+      readonly category: string;
+      readonly type: "category";
+    }
+  | {
+      readonly founderEmail: string;
+      readonly type: "founderEmail";
+    }
+  | {
+      readonly founderId: string;
+      readonly type: "founderId";
+    };

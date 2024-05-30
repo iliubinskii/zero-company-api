@@ -1,6 +1,7 @@
-import { ErrorCode, IdValidationSchema, Routes } from "../schema";
+import { ErrorCode, IdValidationSchema } from "../schema";
 import { buildErrorResponse, sendResponse } from "../utils";
-import { RequestHandler } from "express";
+import type { RequestHandler } from "express";
+import type { Routes } from "../schema";
 import { StatusCodes } from "http-status-codes";
 
 export const requireIdParam: RequestHandler = (req, res, next) => {

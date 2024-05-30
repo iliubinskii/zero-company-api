@@ -1,7 +1,6 @@
 import { MAX_LIMIT } from "../../schema";
 import { MONGODB_ERROR } from "../../consts";
-import { UsersService } from "../../types";
-import { buildMongodbQuery } from "../../utils";
+import type { UsersService } from "../../types";
 import { getUserModel } from "./model";
 
 /**
@@ -33,17 +32,37 @@ export function createUsersService(): UsersService {
         throw err;
       }
     },
-    deleteUser: async email => {
+    deleteUser: async ref => {
       const UserModel = await getUserModel();
 
-      const deletedUser = await UserModel.findOneAndDelete({ email });
+      const deletedUser = await (() => {
+        switch (ref.type) {
+          case "id": {
+            return UserModel.findByIdAndDelete(ref.id);
+          }
+
+          case "email": {
+            return UserModel.findOneAndDelete({ email: ref.email });
+          }
+        }
+      })();
 
       return deletedUser ? 1 : 0;
     },
-    getUser: async email => {
+    getUser: async ref => {
       const UserModel = await getUserModel();
 
-      const user = await UserModel.findOne({ email });
+      const user = await (() => {
+        switch (ref.type) {
+          case "id": {
+            return UserModel.findById(ref.id);
+          }
+
+          case "email": {
+            return UserModel.findOne({ email: ref.email });
+          }
+        }
+      })();
 
       if (user) {
         const { _id, ...rest } = user.toObject();
@@ -56,6 +75,8 @@ export function createUsersService(): UsersService {
     getUsers: async ({ limit = MAX_LIMIT, offset = 0 } = {}) => {
       const UserModel = await getUserModel();
 
+      // eslint-disable-next-line no-warning-comments -- Postponed
+      // TODO: Use a single aggregate query to get both the count and the documents
       const [users, total] = await Promise.all([
         UserModel.find().skip(offset).limit(limit),
         UserModel.countDocuments()
@@ -71,14 +92,24 @@ export function createUsersService(): UsersService {
         total
       };
     },
-    updateUser: async (email, user) => {
+    updateUser: async (ref, user) => {
       const UserModel = await getUserModel();
 
-      const updatedUser = await UserModel.findOneAndUpdate(
-        { email },
-        buildMongodbQuery(user),
-        { new: true }
-      );
+      const updatedUser = await (() => {
+        switch (ref.type) {
+          case "id": {
+            return UserModel.findByIdAndUpdate(ref.id, user, {
+              new: true
+            });
+          }
+
+          case "email": {
+            return UserModel.findOneAndUpdate({ email: ref.email }, user, {
+              new: true
+            });
+          }
+        }
+      })();
 
       if (updatedUser) {
         const { _id, ...rest } = updatedUser.toObject();

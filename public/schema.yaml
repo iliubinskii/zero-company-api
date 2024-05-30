@@ -4,7 +4,7 @@ openapi: 3.0.0
 info:
   title: Zero Company API
   description: An API for Zero Company application
-  version: 2024.5.11-1
+  version: 2024.5.26
 
 # Servers
 servers:
@@ -21,6 +21,83 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/Home"
+
+  # Auth path
+  /auth/me:
+    get:
+      summary: Get authentication response
+      tags:
+        - auth
+      responses:
+        "200":
+          $ref: "#/components/responses/AuthUser"
+
+  # Categories path
+  /categories:
+    get:
+      summary: Get all categories
+      tags:
+        - categories
+      responses:
+        "200":
+          $ref: "#/components/responses/CategoryList"
+        "400":
+          $ref: "#/components/responses/InvalidQuery"
+    post:
+      summary: Create a new category
+      tags:
+        - categories
+      responses:
+        "201":
+          $ref: "#/components/responses/Category"
+        "400":
+          $ref: "#/components/responses/InvalidData"
+
+  # Category path
+  /categories/{id}:
+    parameters:
+      - $ref: '#/components/parameters/Id'
+    delete:
+      summary: Delete a category by ID
+      tags:
+        - categories
+      responses:
+        "200":
+          $ref: "#/components/responses/Delete"
+    get:
+      summary: Get a category by ID
+      tags:
+        - categories
+      responses:
+        "200":
+          $ref: "#/components/responses/Category"
+        "404":
+          $ref: "#/components/responses/NotFound"
+    put:
+      summary: Update a category by ID
+      tags:
+        - categories
+      responses:
+        "200":
+          $ref: "#/components/responses/Category"
+        "400":
+          $ref: "#/components/responses/InvalidData"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  # Category companies path
+  /categories/{id}/companies:
+    parameters:
+      - $ref: '#/components/parameters/Id'
+    get:
+      summary: Get all companies for a category
+      tags:
+        - categories
+      responses:
+        "200":
+          $ref: "#/components/responses/CompanyList"
+        "400":
+          $ref: "#/components/responses/InvalidQuery"
 
   # Companies path
   /companies:
@@ -41,7 +118,7 @@ paths:
         "201":
           $ref: "#/components/responses/Company"
         "400":
-          $ref: "#/components/responses/InvalidCompanyData"
+          $ref: "#/components/responses/InvalidData"
 
   # Company path
   /companies/{id}:
@@ -62,7 +139,7 @@ paths:
         "200":
           $ref: "#/components/responses/Company"
         "404":
-          $ref: "#/components/responses/CompanyNotFound"
+          $ref: "#/components/responses/NotFound"
     put:
       summary: Update a company by ID
       tags:
@@ -71,9 +148,9 @@ paths:
         "200":
           $ref: "#/components/responses/Company"
         "400":
-          $ref: "#/components/responses/InvalidCompanyData"
+          $ref: "#/components/responses/InvalidData"
         "404":
-          $ref: "#/components/responses/CompanyNotFound"
+          $ref: "#/components/responses/NotFound"
 
   # Users path
   /users:
@@ -86,11 +163,22 @@ paths:
           $ref: "#/components/responses/UserList"
         "400":
           $ref: "#/components/responses/InvalidQuery"
+    post:
+      summary: Create a new user
+      tags:
+        - users
+      responses:
+        "201":
+          $ref: "#/components/responses/User"
+        "400":
+          $ref: "#/components/responses/InvalidData"
+        "409":
+          $ref: "#/components/responses/AlreadyExists"
 
   # User path
-  /users/{email}:
+  /users/{id}:
     parameters:
-      - $ref: '#/components/parameters/Email'
+      - $ref: '#/components/parameters/Id'
     delete:
       summary: Delete a user by ID
       tags:
@@ -106,18 +194,7 @@ paths:
         "200":
           $ref: "#/components/responses/User"
         "404":
-          $ref: "#/components/responses/UserNotFound"
-    post:
-      summary: Create a new user
-      tags:
-        - users
-      responses:
-        "201":
-          $ref: "#/components/responses/User"
-        "400":
-          $ref: "#/components/responses/InvalidUserData"
-        "409":
-          $ref: "#/components/responses/UserAlreadyExists"
+          $ref: "#/components/responses/NotFound"
     put:
       summary: Update a user by ID
       tags:
@@ -126,14 +203,14 @@ paths:
         "200":
           $ref: "#/components/responses/User"
         "400":
-          $ref: "#/components/responses/InvalidUserData"
+          $ref: "#/components/responses/InvalidData"
         "404":
-          $ref: "#/components/responses/UserNotFound"
+          $ref: "#/components/responses/NotFound"
 
   # User companies path
-  /users/{email}/companies:
+  /users/{id}/companies:
     parameters:
-      - $ref: '#/components/parameters/Email'
+      - $ref: '#/components/parameters/Id'
     get:
       summary: Get all companies for a user
       tags:
@@ -154,6 +231,16 @@ paths:
         "400":
           $ref: "#/components/responses/BadRequest"
 
+  # Unauthorized response
+  /401:
+    get:
+      summary: Unauthorized
+      tags:
+        - common
+      responses:
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+
   # NotFound response
   /404:
     get:
@@ -163,6 +250,16 @@ paths:
       responses:
         "404":
           $ref: "#/components/responses/NotFound"
+
+  # MethodNotAllowed response
+  /405:
+    get:
+      summary: Method not allowed
+      tags:
+        - common
+      responses:
+        "405":
+          $ref: "#/components/responses/MethodNotAllowed"
 
   # InternalServerError response
   /500:
@@ -180,14 +277,6 @@ components:
   # Parameters
   parameters:
 
-    # Email parameter
-    Email:
-      name: email
-      in: path
-      required: true
-      schema:
-        type: string
-
     # Id parameter
     Id:
       name: id
@@ -199,6 +288,22 @@ components:
   # Responses
   responses:
 
+    # AlreadyExists response
+    AlreadyExists:
+      description: Already exists
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/AlreadyExists"
+
+    # Authentication response
+    AuthUser:
+      description: Authentication response
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/AuthUser"
+
     # BadRequest response
     BadRequest:
       description: Bad request
@@ -206,6 +311,22 @@ components:
         application/json:
           schema:
             $ref: "#/components/schemas/BadRequest"
+
+    # Category response
+    Category:
+      description: Category
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Category"
+
+    # CategoryList response
+    CategoryList:
+      description: Category list
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/CategoryList"
 
     # Company response
     Company:
@@ -222,14 +343,6 @@ components:
         application/json:
           schema:
             $ref: "#/components/schemas/CompanyList"
-
-    # CompanyNotFound response
-    CompanyNotFound:
-      description: Company not found
-      content:
-        application/json:
-          schema:
-            $ref: "#/components/schemas/CompanyNotFound"
 
     # Delete response
     Delete:
@@ -255,6 +368,14 @@ components:
           schema:
             $ref: "#/components/schemas/InternalServerError"
 
+    # InvalidData response
+    InvalidData:
+      description: Invalid data
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/InvalidData"
+
     # InvalidQuery response
     InvalidQuery:
       description: Invalid query
@@ -263,21 +384,13 @@ components:
           schema:
             $ref: "#/components/schemas/InvalidQuery"
 
-    # InvalidUserData response
-    InvalidUserData:
-      description: Invalid user data
+    # MethodNotAllowed response
+    MethodNotAllowed:
+      description: Method not allowed
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/InvalidUserData"
-
-    # InvalidCompanyData response
-    InvalidCompanyData:
-      description: Invalid company data
-      content:
-        application/json:
-          schema:
-            $ref: "#/components/schemas/InvalidCompanyData"
+            $ref: "#/components/schemas/MethodNotAllowed"
 
     # NotFound response
     NotFound:
@@ -287,6 +400,14 @@ components:
           schema:
             $ref: "#/components/schemas/NotFound"
 
+    # Unauthorized response
+    Unauthorized:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Unauthorized"
+
     # User response
     User:
       description: User
@@ -294,14 +415,6 @@ components:
         application/json:
           schema:
             $ref: "#/components/schemas/User"
-
-    # UserAlreadyExists response
-    UserAlreadyExists:
-      description: User already exists
-      content:
-        application/json:
-          schema:
-            $ref: "#/components/schemas/UserAlreadyExists"
 
     # UserList response
     UserList:
@@ -311,16 +424,37 @@ components:
           schema:
             $ref: "#/components/schemas/UserList"
 
-    # UserNotFound response
-    UserNotFound:
-      description: User not found
-      content:
-        application/json:
-          schema:
-            $ref: "#/components/schemas/UserNotFound"
-
   # Schemas
   schemas:
+
+    # AlreadyExists schema
+    AlreadyExists:
+      type: object
+      required:
+        - error
+        - errorMessage
+      properties:
+        error:
+          type: string
+          enum:
+            - AlreadyExists
+        errorMessage:
+          type: string
+
+    # AuthUser schema
+    AuthUser:
+      type: object
+      nullable: true
+      required:
+        - admin
+        - email
+      properties:
+        admin:
+          type: boolean
+        email:
+          type: string
+        user:
+          $ref: "#/components/schemas/User"
 
     # BadRequest schema
     BadRequest:
@@ -333,10 +467,52 @@ components:
           type: string
           enum:
             - BadRequest
-            - InvalidEmailParam
             - InvalidIdParam
         errorMessage:
           type: string
+
+    # Category schema
+    Category:
+      type: object
+      required:
+        - _id
+        - description
+        - name
+        - tagline
+      properties:
+        _id:
+          type: string
+        description:
+          type: string
+        name:
+          type: string
+        pinned:
+          type: boolean
+        tagline:
+          type: string
+
+    # CategoryList schema
+    CategoryList:
+      type: object
+      required:
+        - count
+        - docs
+        - total
+      properties:
+        count:
+          type: integer
+        docs:
+          type: array
+          items:
+            $ref: "#/components/schemas/Category"
+        nextCursor:
+          type: array
+          items:
+            type: string
+          minItems: 2
+          maxItems: 2
+        total:
+          type: integer
 
     # Company schema
     Company:
@@ -356,7 +532,7 @@ components:
           type: string
         categories:
           type: array
-          items: 
+          items:
             type: string
         description:
           type: string
@@ -401,22 +577,10 @@ components:
           type: array
           items:
             type: string
+          minItems: 2
+          maxItems: 2
         total:
           type: integer
-
-    # CompanyNotFound schema
-    CompanyNotFound:
-      type: object
-      required:
-        - error
-        - errorMessage
-      properties:
-        error:
-          type: string
-          enum:
-            - CompanyNotFound
-        errorMessage:
-          type: string
 
     # Delete schema
     Delete:
@@ -475,8 +639,8 @@ components:
         errorMessage:
           type: string
 
-    # InvalidCompanyData schema
-    InvalidCompanyData:
+    # InvalidData schema
+    InvalidData:
       type: object
       required:
         - error
@@ -486,7 +650,7 @@ components:
         error:
           type: string
           enum:
-            - InvalidCompanyData
+            - InvalidData
         errorMessage:
           type: string
         data:
@@ -543,32 +707,19 @@ components:
               path:
                 type: string
 
-    # InvalidUserData schema
-    InvalidUserData:
+    # MethodNotAllowed schema
+    MethodNotAllowed:
       type: object
       required:
         - error
         - errorMessage
-        - data
       properties:
         error:
           type: string
           enum:
-            - InvalidUserData
+            - MethodNotAllowed
         errorMessage:
           type: string
-        data:
-          type: array
-          items:
-            type: object
-            required:
-              - message
-              - path
-            properties:
-              message:
-                type: string
-              path:
-                type: string
 
     # NotFound schema
     NotFound:
@@ -581,6 +732,20 @@ components:
           type: string
           enum:
             - NotFound
+        errorMessage:
+          type: string
+
+    # Unauthorized schema
+    Unauthorized:
+      type: object
+      required:
+        - error
+        - errorMessage
+      properties:
+        error:
+          type: string
+          enum:
+            - Unauthorized
         errorMessage:
           type: string
 
@@ -602,20 +767,6 @@ components:
         lastName:
           type: string
 
-    # UserAlreadyExists schema
-    UserAlreadyExists:
-      type: object
-      required:
-        - error
-        - errorMessage
-      properties:
-        error:
-          type: string
-          enum:
-            - UserAlreadyExists
-        errorMessage:
-          type: string
-
     # UserList schema
     UserList:
       type: object
@@ -634,22 +785,10 @@ components:
           type: array
           items:
             type: string
+          minItems: 2
+          maxItems: 2
         total:
           type: integer
-
-    # UserNotFound schema
-    UserNotFound:
-      type: object
-      required:
-        - error
-        - errorMessage
-      properties:
-        error:
-          type: string
-          enum:
-            - UserNotFound
-        errorMessage:
-          type: string
 
     # WebAccessibleImage schema
     WebAccessibleImage:

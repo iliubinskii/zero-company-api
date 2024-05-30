@@ -1,5 +1,5 @@
 import { requireIdParam, requireJwtAdmin } from "../../middleware";
-import { CategoryControllers } from "../../types";
+import type { CategoryControllers } from "../../types";
 import { Router } from "express";
 
 /**

@@ -1,10 +1,13 @@
-import { ErrorCode, ErrorResponse, ErrorResponseWithData } from "../schema";
-import { NextFunction, Request, RequestHandler, Response } from "express";
-import { Readonly } from "ts-toolbelt/out/Object/Readonly";
-import { StatusCodes } from "http-status-codes";
+import type {
+  ErrorCode,
+  ErrorResponse,
+  ErrorResponseWithData
+} from "../schema";
+import type { NextFunction, Request, RequestHandler, Response } from "express";
+import type { Readonly } from "ts-toolbelt/out/Object/Readonly";
 import { assertNumber } from "./assertions";
 import { lang } from "../langs";
-import zod from "zod";
+import type zod from "zod";
 
 /**
  * Builds an error response object.
@@ -97,20 +100,6 @@ export function sendResponse<
   >
 ): void {
   res.status(assertNumber(status)).json(json);
-}
-
-/**
- * Sends a response.
- * @param res - The express response object.
- * @param status - The status code.
- * @param json - The JSON response.
- */
-export function sendResponseOld<T extends [StatusCodes, unknown]>(
-  res: Response,
-  status: T[0],
-  json: T[1]
-): void {
-  res.status(status).json(json);
 }
 
 /**

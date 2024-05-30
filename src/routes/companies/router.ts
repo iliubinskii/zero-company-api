@@ -7,10 +7,10 @@ import {
   nullifyEmptyStrings,
   parseNestedFormData,
   requireIdParam,
-  requireJwtAdmin,
-  requireJwtUser
+  requireJwt,
+  requireJwtAdmin
 } from "../../middleware";
-import { CompanyControllers } from "../../types";
+import type { CompanyControllers } from "../../types";
 import { Router } from "express";
 import { companiesMiddleware } from "./middleware";
 import { getCompanyModel } from "./model";
@@ -35,7 +35,7 @@ export function createCompaniesRouter(controllers: CompanyControllers): Router {
     .get("/", controllers.getCompanies)
     .post(
       "/",
-      requireJwtUser,
+      requireJwt,
       parseFormData,
       nullifyEmptyStrings,
       webAccessibleStorage,

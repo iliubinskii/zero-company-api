@@ -8,6 +8,6 @@ export { parseFormData } from "./parse-form-data";
 export { parseNestedFormData } from "./parse-nested-form-data";
 export { requestId } from "./request-id";
 export { requireIdParam } from "./require-id-param";
+export { requireJwt } from "./require-jwt";
 export { requireJwtAdmin } from "./require-jwt-admin";
-export { requireJwtUser } from "./require-jwt-user";
 export { FieldType, webAccessibleStorage } from "./web-accessible-storage";

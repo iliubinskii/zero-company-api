@@ -1,4 +1,4 @@
-import { Update, WebAccessibleImage } from "./common";
+import type { Update, WebAccessibleImage } from "./common";
 
 export interface Company {
   readonly categories: readonly string[];

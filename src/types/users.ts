@@ -1,11 +1,11 @@
-import {
+import type {
   ExistingUser,
   GetUsersOptions,
   MultipleDocsResponse,
   User,
   UserUpdate
 } from "../schema";
-import { RequestHandler } from "express";
+import type { RequestHandler } from "express";
 
 export interface UserControllers {
   readonly addUser: RequestHandler;
@@ -17,9 +17,19 @@ export interface UserControllers {
 }
 
 export interface UsersMiddleware {
-  readonly userEmailFromJwtUser: RequestHandler;
-  readonly userEmailFromParam: RequestHandler;
+  readonly userRefFromIdParam: RequestHandler;
+  readonly userRefFromJwt: RequestHandler;
 }
+
+export type UserRef =
+  | {
+      readonly id: string;
+      readonly type: "id";
+    }
+  | {
+      readonly email: string;
+      readonly type: "email";
+    };
 
 export interface UsersService {
   /**
@@ -30,16 +40,16 @@ export interface UsersService {
   readonly addUser: (user: User) => Promise<ExistingUser | undefined>;
   /**
    * Deletes a user from the database.
-   * @param email - The e-mail of the user to delete.
+   * @param ref - The reference of the user to delete.
    * @returns A promise that resolves with the number of affected rows.
    */
-  readonly deleteUser: (email: string) => Promise<number>;
+  readonly deleteUser: (ref: UserRef) => Promise<number>;
   /**
    * Gets a user from the database.
-   * @param email - The e-mail of the user to get.
+   * @param ref - The reference of the user to get.
    * @returns A promise that resolves with the user, or `undefined` if the user was not found.
    */
-  readonly getUser: (email: string) => Promise<ExistingUser | undefined>;
+  readonly getUser: (ref: UserRef) => Promise<ExistingUser | undefined>;
   /**
    * Gets all users from the database.
    * @param options - The options to use when getting users.
@@ -50,12 +60,12 @@ export interface UsersService {
   ) => Promise<MultipleDocsResponse<ExistingUser>>;
   /**
    * Updates a user in the database.
-   * @param email - The e-mail of the user to update.
+   * @param ref - The reference of the user to update.
    * @param user - The user data to update.
    * @returns A promise that resolves with the updated user, or `undefined` if the user was not found.
    */
   readonly updateUser: (
-    email: string,
+    ref: UserRef,
     user: UserUpdate
   ) => Promise<ExistingUser | undefined>;
 }

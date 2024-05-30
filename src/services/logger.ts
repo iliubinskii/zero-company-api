@@ -1,5 +1,8 @@
 import { LOG_LEVEL } from "../config";
+import { simpleFormatter } from "./formatters";
 import winston from "winston";
+
+export const logger = createLogger(simpleFormatter);
 
 /**
  * Create logger

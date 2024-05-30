@@ -1,9 +1,13 @@
-import { CompaniesService, UserControllers, UsersService } from "../../types";
+import type {
+  CompaniesService,
+  GetCompaniesParentRef,
+  UserControllers,
+  UsersService
+} from "../../types";
 import {
   ErrorCode,
-  GetCompaniesByUserOptionsValidationSchema,
+  GetCompaniesOptionsValidationSchema,
   GetUsersOptionsValidationSchema,
-  Routes,
   UserCreateValidationSchema,
   UserUpdateValidationSchema
 } from "../../schema";
@@ -14,6 +18,7 @@ import {
   sendResponse,
   wrapAsyncHandler
 } from "../../utils";
+import type { Routes } from "../../schema";
 import { StatusCodes } from "http-status-codes";
 
 /**
@@ -28,82 +33,97 @@ export function createUserControllers(
 ): UserControllers {
   return {
     addUser: wrapAsyncHandler(async (req, res) => {
-      const email = assertDefined(req.userEmail);
+      const jwt = assertDefined(req.jwt);
 
       const user = UserCreateValidationSchema.safeParse(req.body);
 
       if (user.success) {
-        const addedUser = await service.addUser({ ...user.data, email });
+        const addedUser = await service.addUser({
+          ...user.data,
+          email: jwt.email
+        });
 
         if (addedUser)
-          sendResponse<Routes["/users/{email}"]["post"]>(
+          sendResponse<Routes["/users"]["post"]>(
             res,
             StatusCodes.CREATED,
             addedUser
           );
         else
-          sendResponse<Routes["/users/{email}"]["post"]>(
+          sendResponse<Routes["/users"]["post"]>(
             res,
             StatusCodes.CONFLICT,
-            buildErrorResponse(ErrorCode.UserAlreadyExists)
+            buildErrorResponse(ErrorCode.AlreadyExists)
           );
       } else
-        sendResponse<Routes["/users/{email}"]["post"]>(
+        sendResponse<Routes["/users"]["post"]>(
           res,
           StatusCodes.BAD_REQUEST,
-          buildErrorResponse(ErrorCode.InvalidUserData, user.error)
+          buildErrorResponse(ErrorCode.InvalidData, user.error)
         );
     }),
     deleteUser: wrapAsyncHandler(async (req, res) => {
-      const email = assertDefined(req.userEmail);
+      const ref = assertDefined(req.userRef);
 
-      const affectedRows = await service.deleteUser(email);
+      const affectedRows = await service.deleteUser(ref);
 
-      sendResponse<Routes["/users/{email}"]["delete"]>(res, StatusCodes.OK, {
+      sendResponse<Routes["/users/{id}"]["delete"]>(res, StatusCodes.OK, {
         affectedRows
       });
     }),
     getCompaniesByUser: wrapAsyncHandler(async (req, res) => {
-      const email = assertDefined(req.userEmail);
+      const ref = assertDefined(req.userRef);
 
-      const options = GetCompaniesByUserOptionsValidationSchema.safeParse(
-        req.query
-      );
+      const options = GetCompaniesOptionsValidationSchema.safeParse(req.query);
 
       if (options.success) {
-        const companies = await companiesService.getCompanies({
-          ...filterUndefinedProperties(options.data),
-          founderEmail: email
-        });
+        const parentRef: GetCompaniesParentRef = (() => {
+          switch (ref.type) {
+            case "id": {
+              return {
+                founderId: ref.id,
+                type: "founderId"
+              };
+            }
 
-        sendResponse<Routes["/users/{email}/companies"]["get"]>(
+            case "email": {
+              return {
+                founderEmail: ref.email,
+                type: "founderEmail"
+              };
+            }
+          }
+        })();
+
+        const companies = await companiesService.getCompanies(
+          filterUndefinedProperties(options.data),
+          parentRef
+        );
+
+        sendResponse<Routes["/users/{id}/companies"]["get"]>(
           res,
           StatusCodes.OK,
           companies
         );
       } else
-        sendResponse<Routes["/users/{email}/companies"]["get"]>(
+        sendResponse<Routes["/users/{id}/companies"]["get"]>(
           res,
           StatusCodes.BAD_REQUEST,
           buildErrorResponse(ErrorCode.InvalidQuery, options.error)
         );
     }),
     getUser: wrapAsyncHandler(async (req, res) => {
-      const email = assertDefined(req.userEmail);
+      const ref = assertDefined(req.userRef);
 
-      const user = await service.getUser(email);
+      const user = await service.getUser(ref);
 
       if (user)
-        sendResponse<Routes["/users/{email}"]["get"]>(
-          res,
-          StatusCodes.OK,
-          user
-        );
+        sendResponse<Routes["/users/{id}"]["get"]>(res, StatusCodes.OK, user);
       else
-        sendResponse<Routes["/users/{email}"]["get"]>(
+        sendResponse<Routes["/users/{id}"]["get"]>(
           res,
           StatusCodes.NOT_FOUND,
-          buildErrorResponse(ErrorCode.UserNotFound)
+          buildErrorResponse(ErrorCode.NotFound)
         );
     }),
     getUsers: wrapAsyncHandler(async (req, res) => {
@@ -123,33 +143,33 @@ export function createUserControllers(
         );
     }),
     updateUser: wrapAsyncHandler(async (req, res) => {
-      const email = assertDefined(req.userEmail);
+      const ref = assertDefined(req.userRef);
 
       const user = UserUpdateValidationSchema.safeParse(req.body);
 
       if (user.success) {
         const updatedUser = await service.updateUser(
-          email,
+          ref,
           filterUndefinedProperties(user.data)
         );
 
         if (updatedUser)
-          sendResponse<Routes["/users/{email}"]["put"]>(
+          sendResponse<Routes["/users/{id}"]["put"]>(
             res,
             StatusCodes.OK,
             updatedUser
           );
         else
-          sendResponse<Routes["/users/{email}"]["put"]>(
+          sendResponse<Routes["/users/{id}"]["put"]>(
             res,
             StatusCodes.NOT_FOUND,
-            buildErrorResponse(ErrorCode.UserNotFound)
+            buildErrorResponse(ErrorCode.NotFound)
           );
       } else
-        sendResponse<Routes["/users/{email}"]["put"]>(
+        sendResponse<Routes["/users/{id}"]["put"]>(
           res,
           StatusCodes.BAD_REQUEST,
-          buildErrorResponse(ErrorCode.InvalidUserData, user.error)
+          buildErrorResponse(ErrorCode.InvalidData, user.error)
         );
     })
   };

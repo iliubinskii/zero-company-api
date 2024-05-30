@@ -1,4 +1,20 @@
-import { Update } from "./common";
+import type { Update } from "./common";
+
+export interface AuthUser {
+  readonly admin: boolean;
+  readonly email: string;
+  readonly user?: ExistingUser;
+}
+
+// Being sent in a query string, keep short
+export interface AuthUserEssential {
+  readonly admin: boolean;
+  readonly email: string;
+  readonly user?: {
+    readonly firstName: string;
+    readonly lastName: string;
+  };
+}
 
 export interface ExistingUser extends User {
   readonly _id: string;
@@ -6,12 +22,6 @@ export interface ExistingUser extends User {
 
 export interface Jwt {
   readonly email: string;
-}
-
-export interface JwtUser {
-  readonly admin: boolean;
-  readonly email: string;
-  readonly user?: ExistingUser;
 }
 
 export interface User {

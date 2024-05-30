@@ -3,8 +3,8 @@
  * @param obj - The object to convert.
  * @returns The MongoDB query object.
  */
-export function buildMongodbQuery(
-  obj: Record<string, unknown>
+export function buildMongodbQuery<ITEM extends object>(
+  obj: ITEM
 ): Record<string, unknown> {
   const $set: Record<string, unknown> = {};
 

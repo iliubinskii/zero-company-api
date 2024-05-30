@@ -3,7 +3,7 @@ import {
   parseFormData,
   webAccessibleStorage
 } from "../../middleware";
-import { CompaniesMiddleware } from "../../types";
+import type { CompaniesMiddleware } from "../../types";
 
 export const companiesMiddleware: CompaniesMiddleware = {
   parseFormData: parseFormData({
