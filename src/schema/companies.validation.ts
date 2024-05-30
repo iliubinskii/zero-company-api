@@ -16,7 +16,11 @@ import zod from "zod";
 
 const _id = IdValidationSchema;
 
-const categories = zod.array(IdValidationSchema).nonempty().max(MAX_CATEGORIES);
+const categories = zod
+  .array(IdValidationSchema)
+  .nonempty()
+  .min(1)
+  .max(MAX_CATEGORIES);
 
 const description = zod.string().min(1);
 
