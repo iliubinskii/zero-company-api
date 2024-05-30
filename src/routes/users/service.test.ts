@@ -1,5 +1,3 @@
-/* eslint-disable sonarjs/no-duplicate-string -- Ok */
-
 import type { ExistingUser, UserUpdate } from "../../schema";
 import { assertDefined } from "../../utils";
 import { createUsersService } from "./service";
