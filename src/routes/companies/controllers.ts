@@ -60,7 +60,7 @@ export function createCompanyControllers(
 
   return {
     addCompany: crudControllers.addItem,
-    deleteCompany: crudControllers.addItem,
+    deleteCompany: crudControllers.deleteItem,
     getCompanies: wrapAsyncHandler(async (req, res) => {
       const options = GetCompaniesOptionsValidationSchema.safeParse(req.query);
 
