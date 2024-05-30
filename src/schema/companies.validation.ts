@@ -50,7 +50,7 @@ const targetValue = preprocessNumber(zod.number().int().positive());
 
 const website = zod.string().url().optional();
 
-const fields = {
+export const ExistingCompanyValidationSchema = zod.strictObject({
   _id,
   categories,
   description,
@@ -63,9 +63,7 @@ const fields = {
   recommended,
   targetValue,
   website
-};
-
-export const ExistingCompanyValidationSchema = zod.strictObject(fields);
+});
 
 export const CompanyCreateValidationSchema =
   ExistingCompanyValidationSchema.omit({
