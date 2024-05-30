@@ -8,6 +8,7 @@ import {
 import {
   buildErrorResponse,
   filterUndefinedProperties,
+  filterUndefinedPropertiesDeep,
   sendResponse,
   wrapAsyncHandler
 } from "../../utils";
@@ -33,7 +34,7 @@ export function createDocumentControllers(
 
         if (result.success)
           return {
-            data: filterUndefinedProperties(result.data),
+            data: filterUndefinedPropertiesDeep(result.data),
             success: true
           };
 
