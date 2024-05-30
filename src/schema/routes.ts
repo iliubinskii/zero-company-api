@@ -157,6 +157,65 @@ export interface paths {
       };
     };
   };
+  "/documents": {
+    /** Get all documents */
+    get: {
+      responses: {
+        200: components["responses"]["DocumentList"];
+        400: components["responses"]["InvalidQuery"];
+      };
+    };
+    /** Create a new document */
+    post: {
+      responses: {
+        201: components["responses"]["Document"];
+        400: components["responses"]["InvalidData"];
+      };
+    };
+  };
+  "/documents/{id}": {
+    /** Get a document by ID */
+    get: {
+      parameters: {
+        path: {
+          id: components["parameters"]["Id"];
+        };
+      };
+      responses: {
+        200: components["responses"]["Document"];
+        404: components["responses"]["NotFound"];
+      };
+    };
+    /** Update a document by ID */
+    put: {
+      parameters: {
+        path: {
+          id: components["parameters"]["Id"];
+        };
+      };
+      responses: {
+        200: components["responses"]["Document"];
+        400: components["responses"]["InvalidData"];
+        404: components["responses"]["NotFound"];
+      };
+    };
+    /** Delete a document by ID */
+    delete: {
+      parameters: {
+        path: {
+          id: components["parameters"]["Id"];
+        };
+      };
+      responses: {
+        200: components["responses"]["Delete"];
+      };
+    };
+    parameters: {
+      path: {
+        id: components["parameters"]["Id"];
+      };
+    };
+  };
   "/users": {
     /** Get all users */
     get: {
@@ -333,6 +392,28 @@ export interface components {
     Delete: {
       affectedRows: number;
     };
+    DigitalDocument: {
+      assetId: string;
+      secureUrl: string;
+      signatures: string[];
+      url: string;
+    };
+    Document: {
+      _id: string;
+      company: string;
+      createdAt: string;
+      doc?: components["schemas"]["DigitalDocument"];
+      metadata?: string;
+      signatories: components["schemas"]["Signatory"][];
+      /** @enum {string} */
+      type: "FoundingAgreement";
+    };
+    DocumentList: {
+      count: number;
+      docs: components["schemas"]["Document"][];
+      nextCursor?: string[];
+      total: number;
+    };
     Founder: {
       confirmed?: boolean;
       email: string;
@@ -382,6 +463,11 @@ export interface components {
       /** @enum {string} */
       error: "NotFound";
       errorMessage: string;
+    };
+    Signatory: {
+      email: string;
+      firstName?: string;
+      lastName?: string;
     };
     Unauthorized: {
       /** @enum {string} */
@@ -455,6 +541,18 @@ export interface components {
     Delete: {
       content: {
         "application/json": components["schemas"]["Delete"];
+      };
+    };
+    /** @description Document */
+    Document: {
+      content: {
+        "application/json": components["schemas"]["Document"];
+      };
+    };
+    /** @description Document list */
+    DocumentList: {
+      content: {
+        "application/json": components["schemas"]["DocumentList"];
       };
     };
     /** @description Home */

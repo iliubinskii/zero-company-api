@@ -14,6 +14,11 @@ export interface GetCompaniesOptions {
   readonly sortOrder?: "asc" | "desc";
 }
 
+export interface GetDocumentsOptions {
+  readonly limit?: number;
+  readonly offset?: number;
+}
+
 export interface GetUsersOptions {
   readonly limit?: number;
   readonly offset?: number;

@@ -10,6 +10,9 @@ import {
   createCompaniesRouter,
   createCompaniesService,
   createCompanyControllers,
+  createDocumentControllers,
+  createDocumentsRouter,
+  createDocumentsService,
   createMeRouter,
   createUserControllers,
   createUsersRouter,
@@ -44,6 +47,8 @@ export function createApp(): express.Express {
 
   const companiesService = createCompaniesService(getUserModel);
 
+  const documentsService = createDocumentsService(getUserModel);
+
   const usersService = createUsersService();
 
   const categoryControllers = createCategoryControllers(
@@ -52,6 +57,8 @@ export function createApp(): express.Express {
   );
 
   const companyControllers = createCompanyControllers(companiesService);
+
+  const documentControllers = createDocumentControllers(documentsService);
 
   const userControllers = createUserControllers(usersService, companiesService);
 
@@ -98,6 +105,8 @@ export function createApp(): express.Express {
   app.use("/categories", createCategoriesRouter(categoryControllers));
 
   app.use("/companies", createCompaniesRouter(companyControllers));
+
+  app.use("/documents", createDocumentsRouter(documentControllers));
 
   app.use("/maintenance", maintenanceRouter);
 

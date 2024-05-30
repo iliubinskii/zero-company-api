@@ -73,7 +73,7 @@ export const CompanyCreateValidationSchema =
     foundedAt: true,
     founders: true,
     recommended: true
-  }).merge(zod.object({ founders: foundersCreate }));
+  }).merge(zod.strictObject({ founders: foundersCreate }));
 
 export const CompanyUpdateValidationSchema = zod.strictObject({
   description: description.optional(),

@@ -6,19 +6,12 @@
 export function filterUndefinedProperties<T>(
   obj: T
 ): FilterUndefinedProperties<T> {
-  const result = { ...obj };
-
-  for (const key in result) {
-    const value = result[key];
-
-    // eslint-disable-next-line @typescript-eslint/no-dynamic-delete -- Ok
-    if (value === undefined) delete result[key];
-  }
-
   // eslint-disable-next-line no-type-assertion/no-type-assertion -- Ok
-  return result as FilterUndefinedProperties<T>;
+  return obj as FilterUndefinedProperties<T>;
 }
 
 export type FilterUndefinedProperties<T> = {
-  [K in keyof T]: undefined extends T[K] ? never : T[K];
+  [K in keyof T]: undefined extends T[K]
+    ? never
+    : FilterUndefinedProperties<T[K]>;
 };
