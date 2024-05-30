@@ -71,6 +71,7 @@ const config = {
         allowedNames: []
       }
     ],
+    "@typescript-eslint/no-dynamic-delete": "off",
     "@typescript-eslint/no-shadow": "warn",
     "@typescript-eslint/restrict-template-expressions": [
       "warn",
