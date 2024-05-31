@@ -1,4 +1,9 @@
-import { COOKIE_SECURE, CORS_ORIGIN, SESSION_SECRET } from "./config";
+import {
+  COOKIE_SECURE,
+  CORS_ORIGIN,
+  REDIS_PREFIX,
+  SESSION_SECRET
+} from "./config";
 import type { NextFunction, Request, Response } from "express";
 import { appendJwt, logRequest, logResponse, requestId } from "./middleware";
 import { buildErrorResponse, sendResponse } from "./utils";
@@ -21,9 +26,15 @@ import {
   maintenanceRouter,
   testRouter
 } from "./routes";
-import { initAuth0Passport, initMongodb } from "./providers";
+import {
+  getRedisClient,
+  initAuth0Passport,
+  initMongodb,
+  initRedis
+} from "./providers";
 import { logServerInfo, logger } from "./services";
 import { ErrorCode } from "./schema";
+import RedisStore from "connect-redis";
 import type { Routes } from "./schema";
 import { StatusCodes } from "http-status-codes";
 import cookieParser from "cookie-parser";
@@ -40,8 +51,9 @@ import session from "express-session";
  */
 export function createApp(): express.Express {
   logServerInfo();
-  initMongodb();
   initAuth0Passport();
+  initMongodb();
+  initRedis();
 
   const categoriesService = createCategoriesService();
 
@@ -83,7 +95,11 @@ export function createApp(): express.Express {
       cookie: { secure: COOKIE_SECURE },
       resave: false,
       saveUninitialized: false,
-      secret: SESSION_SECRET
+      secret: SESSION_SECRET,
+      store: new RedisStore({
+        client: getRedisClient(),
+        prefix: REDIS_PREFIX
+      })
     })
   );
   app.use(passport.initialize());

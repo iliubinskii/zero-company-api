@@ -10,6 +10,8 @@ import mongoose from "mongoose";
 // Cache the connection in serverless environments
 let cachedConnection: typeof mongoose | null = null;
 
+export const mongodbConnectionCacheResult = Boolean(cachedConnection);
+
 /**
  * Connect to MongoDB
  * @returns Connection
@@ -34,7 +36,8 @@ export function initMongodb(): void {
 
   for (const [event, message] of Object.entries(events))
     mongoose.connection.on(event, err => {
-      logger.info(message, err);
+      if (err) logger.error(message, err);
+      logger.info(message);
     });
 }
 

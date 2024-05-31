@@ -10,6 +10,10 @@ import {
   MONGODB_DATABASE_NAME,
   PORT
 } from "../config";
+import {
+  mongodbConnectionCacheResult,
+  redisClientCacheResult
+} from "../providers";
 import { lang } from "../langs";
 import { logger } from "./logger";
 import { schema } from "../schema";
@@ -29,4 +33,14 @@ export function logServerInfo(): void {
   logger.info(`${lang.CorsOrigin}: ${CORS_ORIGIN}`);
   logger.info(`${lang.LogLevel}: ${LOG_LEVEL}`);
   logger.info(`${lang.MongodbDatabaseName}: ${MONGODB_DATABASE_NAME}`);
+  logger.info(
+    mongodbConnectionCacheResult
+      ? lang.MongodbConnectionCacheHit
+      : lang.MongodbConnectionCacheMiss
+  );
+  logger.info(
+    redisClientCacheResult
+      ? lang.RedisClientCacheHit
+      : lang.RedisClientCacheMiss
+  );
 }

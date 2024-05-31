@@ -111,6 +111,7 @@ const config = {
             "readonly",
             "reconnectfailed",
             "redeclare",
+            "redis",
             "req",
             "resave",
             "schemas",

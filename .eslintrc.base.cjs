@@ -129,6 +129,7 @@ const config = {
         trailingComma: "none"
       }
     ],
+    "promise/always-return": "off",
     "quote-props": ["warn", "consistent-as-needed"],
     "quotes": ["error", "double"],
     "security/detect-object-injection": "off",
