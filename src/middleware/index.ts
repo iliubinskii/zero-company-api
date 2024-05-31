@@ -10,4 +10,5 @@ export { requestId } from "./request-id";
 export { requireIdParam } from "./require-id-param";
 export { requireJwt } from "./require-jwt";
 export { requireJwtAdmin } from "./require-jwt-admin";
+export { stripEmptyStrings } from "./strip-empty-strings";
 export { FieldType, webAccessibleStorage } from "./web-accessible-storage";

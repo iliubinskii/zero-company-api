@@ -58,6 +58,7 @@ const config = {
             "cors",
             "defs",
             "destructure",
+            "docu",
             "ecma",
             "enum",
             "envalid",

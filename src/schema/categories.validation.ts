@@ -17,15 +17,13 @@ const pinned = preprocessBoolean(zod.boolean());
 
 const tagline = zod.string().min(1);
 
-const fields = {
+export const ExistingCategoryValidationSchema = zod.strictObject({
   _id,
   description,
   name,
   pinned,
   tagline
-};
-
-export const ExistingCategoryValidationSchema = zod.strictObject(fields);
+});
 
 export const CategoryCreateValidationSchema =
   ExistingCategoryValidationSchema.omit({ _id: true });
