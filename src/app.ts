@@ -5,7 +5,13 @@ import {
   SESSION_SECRET
 } from "./config";
 import type { NextFunction, Request, Response } from "express";
-import { appendJwt, logRequest, logResponse, requestId } from "./middleware";
+import {
+  appendJwt,
+  logRequest,
+  logResponse,
+  parseNestedQuery,
+  requestId
+} from "./middleware";
 import { buildErrorResponse, sendResponse } from "./utils";
 import {
   createAuthRouter,
@@ -23,7 +29,6 @@ import {
   createUsersRouter,
   createUsersService,
   getUserModel,
-  maintenanceRouter,
   testRouter
 } from "./routes";
 import {
@@ -32,7 +37,6 @@ import {
   initMongodb,
   initRedis
 } from "./providers";
-import { logServerInfo, logger } from "./services";
 import { ErrorCode } from "./schema";
 import RedisStore from "connect-redis";
 import type { Routes } from "./schema";
@@ -42,6 +46,7 @@ import cors from "cors";
 import express, { json } from "express";
 import globToRegExp from "glob-to-regexp";
 import { lang } from "./langs";
+import { logger } from "./services";
 import passport from "passport";
 import session from "express-session";
 
@@ -49,11 +54,10 @@ import session from "express-session";
  * Create the Express app
  * @returns App
  */
-export function createApp(): express.Express {
-  logServerInfo();
+export async function createApp(): Promise<express.Express> {
   initAuth0Passport();
   initMongodb();
-  initRedis();
+  await initRedis();
 
   const categoriesService = createCategoriesService();
 
@@ -90,6 +94,9 @@ export function createApp(): express.Express {
   app.use(express.static("public"));
 
   app.use(cookieParser());
+  app.use(json());
+  app.use(parseNestedQuery);
+
   app.use(
     session({
       cookie: { secure: COOKIE_SECURE },
@@ -104,10 +111,7 @@ export function createApp(): express.Express {
   );
   app.use(passport.initialize());
   app.use(passport.session());
-
   app.use(appendJwt);
-
-  app.use(json());
 
   app.get("/", (_req, res) => {
     sendResponse<Routes["/"]["get"]>(res, StatusCodes.OK, {
@@ -123,8 +127,6 @@ export function createApp(): express.Express {
   app.use("/companies", createCompaniesRouter(companyControllers));
 
   app.use("/documents", createDocumentsRouter(documentControllers));
-
-  app.use("/maintenance", maintenanceRouter);
 
   app.use("/me", createMeRouter(userControllers));
 

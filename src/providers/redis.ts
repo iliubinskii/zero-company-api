@@ -4,9 +4,7 @@ import { lang } from "../langs";
 import { logger } from "../services";
 
 // Cache the connection in serverless environments
-let cachedClient: ReturnType<typeof createClient> | null = null;
-
-export const redisClientCacheResult = Boolean(cachedClient);
+let cachedClient: ReturnType<typeof createClient> | undefined;
 
 /**
  * Get Redis client
@@ -14,6 +12,8 @@ export const redisClientCacheResult = Boolean(cachedClient);
  */
 export function getRedisClient(): ReturnType<typeof createClient> {
   if (cachedClient) return cachedClient;
+
+  logger.info(lang.CreatingRedisClient);
 
   cachedClient = createClient({ url: REDIS_URL });
 
@@ -23,17 +23,22 @@ export function getRedisClient(): ReturnType<typeof createClient> {
 /**
  * Initialize Redis
  */
-export function initRedis(): void {
+export async function initRedis(): Promise<void> {
   const client = getRedisClient();
 
-  client
-    .connect()
-    // eslint-disable-next-line github/no-then -- Ok
-    .then(() => {
-      logger.info(lang.RedisConnected);
-    })
-    // eslint-disable-next-line github/no-then -- Ok
-    .catch((err: unknown) => {
-      logger.error(lang.RedisError, err);
-    });
+  try {
+    logger.info(lang.RedisConnecting);
+    await client.connect();
+    logger.info(lang.RedisConnected);
+  } catch (err) {
+    logger.error(lang.RedisError, err);
+  }
+}
+
+/**
+ * Check if Redis client exists
+ * @returns Whether Redis client exists
+ */
+export function redisClientExists(): boolean {
+  return Boolean(cachedClient);
 }

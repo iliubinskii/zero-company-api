@@ -3,6 +3,6 @@ export { uploadImage } from "./cloudinary";
 export {
   getMongodbConnection,
   initMongodb,
-  mongodbConnectionCacheResult
+  mongodbConnectionExists
 } from "./mongodb";
-export { getRedisClient, initRedis, redisClientCacheResult } from "./redis";
+export { getRedisClient, initRedis, redisClientExists } from "./redis";

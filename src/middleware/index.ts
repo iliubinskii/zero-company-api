@@ -6,6 +6,7 @@ export { middlewareExclusion } from "./middleware-exclusion";
 export { nullifyEmptyStrings } from "./nullify-empty-strings";
 export { parseFormData } from "./parse-form-data";
 export { parseNestedFormData } from "./parse-nested-form-data";
+export { parseNestedQuery } from "./parse-nested-query";
 export { requestId } from "./request-id";
 export { requireIdParam } from "./require-id-param";
 export { requireJwt } from "./require-jwt";
