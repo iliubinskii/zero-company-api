@@ -71,6 +71,7 @@
       "package-lock.json": true
     },
     "stylelint.validate": ["css", "less", "postcss", "scss"],
+    "tailwindCSS.experimental.classRegex": [["`([^`]*)`"]],
     "typescript.suggestionActions.enabled": false,
     "typescript.tsdk": "node_modules\\typescript\\lib",
     "typescript.updateImportsOnFileMove.enabled": "always",

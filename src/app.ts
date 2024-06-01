@@ -1,6 +1,17 @@
-import { COOKIE_SECURE, CORS_ORIGIN, SESSION_SECRET } from "./config";
+import {
+  COOKIE_SECURE,
+  CORS_ORIGIN,
+  REDIS_PREFIX,
+  SESSION_SECRET
+} from "./config";
 import type { NextFunction, Request, Response } from "express";
-import { appendJwt, logRequest, logResponse, requestId } from "./middleware";
+import {
+  appendJwt,
+  logRequest,
+  logResponse,
+  parseNestedQuery,
+  requestId
+} from "./middleware";
 import { buildErrorResponse, sendResponse } from "./utils";
 import {
   createAuthRouter,
@@ -18,12 +29,16 @@ import {
   createUsersRouter,
   createUsersService,
   getUserModel,
-  maintenanceRouter,
   testRouter
 } from "./routes";
-import { initAuth0Passport, initMongodb } from "./providers";
-import { logServerInfo, logger } from "./services";
+import {
+  getRedisClient,
+  initAuth0Passport,
+  initMongodb,
+  initRedis
+} from "./providers";
 import { ErrorCode } from "./schema";
+import RedisStore from "connect-redis";
 import type { Routes } from "./schema";
 import { StatusCodes } from "http-status-codes";
 import cookieParser from "cookie-parser";
@@ -31,6 +46,7 @@ import cors from "cors";
 import express, { json } from "express";
 import globToRegExp from "glob-to-regexp";
 import { lang } from "./langs";
+import { logger } from "./services";
 import passport from "passport";
 import session from "express-session";
 
@@ -38,10 +54,10 @@ import session from "express-session";
  * Create the Express app
  * @returns App
  */
-export function createApp(): express.Express {
-  logServerInfo();
-  initMongodb();
+export async function createApp(): Promise<express.Express> {
   initAuth0Passport();
+  initMongodb();
+  await initRedis();
 
   const categoriesService = createCategoriesService();
 
@@ -78,20 +94,24 @@ export function createApp(): express.Express {
   app.use(express.static("public"));
 
   app.use(cookieParser());
+  app.use(json());
+  app.use(parseNestedQuery);
+
   app.use(
     session({
       cookie: { secure: COOKIE_SECURE },
       resave: false,
       saveUninitialized: false,
-      secret: SESSION_SECRET
+      secret: SESSION_SECRET,
+      store: new RedisStore({
+        client: getRedisClient(),
+        prefix: REDIS_PREFIX
+      })
     })
   );
   app.use(passport.initialize());
   app.use(passport.session());
-
   app.use(appendJwt);
-
-  app.use(json());
 
   app.get("/", (_req, res) => {
     sendResponse<Routes["/"]["get"]>(res, StatusCodes.OK, {
@@ -107,8 +127,6 @@ export function createApp(): express.Express {
   app.use("/companies", createCompaniesRouter(companyControllers));
 
   app.use("/documents", createDocumentsRouter(documentControllers));
-
-  app.use("/maintenance", maintenanceRouter);
 
   app.use("/me", createMeRouter(userControllers));
 
