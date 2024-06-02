@@ -16,7 +16,11 @@ import zod from "zod";
 
 const _id = IdValidationSchema;
 
-const categories = zod.array(IdValidationSchema).nonempty().max(MAX_CATEGORIES);
+const categories = zod
+  .array(IdValidationSchema)
+  .nonempty()
+  .min(1)
+  .max(MAX_CATEGORIES);
 
 const description = zod.string().min(1);
 
@@ -50,7 +54,7 @@ const targetValue = preprocessNumber(zod.number().int().positive());
 
 const website = zod.string().url().optional();
 
-const fields = {
+export const ExistingCompanyValidationSchema = zod.strictObject({
   _id,
   categories,
   description,
@@ -63,9 +67,7 @@ const fields = {
   recommended,
   targetValue,
   website
-};
-
-export const ExistingCompanyValidationSchema = zod.strictObject(fields);
+});
 
 export const CompanyCreateValidationSchema =
   ExistingCompanyValidationSchema.omit({
@@ -73,7 +75,7 @@ export const CompanyCreateValidationSchema =
     foundedAt: true,
     founders: true,
     recommended: true
-  }).merge(zod.object({ founders: foundersCreate }));
+  }).merge(zod.strictObject({ founders: foundersCreate }));
 
 export const CompanyUpdateValidationSchema = zod.strictObject({
   description: description.optional(),

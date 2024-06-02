@@ -33,7 +33,10 @@ const env = cleanEnv(process.env, {
   MONGODB_URI: str(),
   MULTER_DESTINATION_PATH: str(),
   PORT: num(),
-  SESSION_SECRET: str()
+  REDIS_PREFIX: str(),
+  REDIS_URL: str(),
+  SESSION_SECRET: str(),
+  TEST_MONGODB_PORT: num({ default: 27_017 })
 });
 
 export const {
@@ -57,5 +60,8 @@ export const {
   MONGODB_URI,
   MULTER_DESTINATION_PATH,
   PORT,
-  SESSION_SECRET
+  REDIS_PREFIX,
+  REDIS_URL,
+  SESSION_SECRET,
+  TEST_MONGODB_PORT
 } = env;

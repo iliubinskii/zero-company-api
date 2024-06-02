@@ -1,3 +1,11 @@
+.DS_Store
+.env
+.vercel
+certificates
+coverage
+dist
+node_modules
+.DS_Store
 *.test.js
 *.test.jsx
 *.test.ts

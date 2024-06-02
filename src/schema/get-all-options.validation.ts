@@ -1,6 +1,7 @@
 import type {
   GetCategoriesOptions,
   GetCompaniesOptions,
+  GetDocumentsOptions,
   GetUsersOptions
 } from "./get-all-options";
 import {
@@ -52,6 +53,11 @@ export const GetCompaniesOptionsValidationSchema = zod.strictObject({
   sortOrder: sortOrder.companies
 });
 
+export const GetDocumentsOptionsValidationSchema = zod.strictObject({
+  limit,
+  offset
+});
+
 export const GetUsersOptionsValidationSchema = zod.strictObject({
   limit,
   offset
@@ -67,6 +73,13 @@ export const GetUsersOptionsValidationSchema = zod.strictObject({
 // Type check the get companies options validation schema
 ((): ValidationResult<GetCompaniesOptions> | undefined => {
   const result = GetCompaniesOptionsValidationSchema.safeParse(undefined);
+
+  return result.success ? result.data : undefined;
+})();
+
+// Type check the get documents options validation schema
+((): ValidationResult<GetDocumentsOptions> | undefined => {
+  const result = GetDocumentsOptionsValidationSchema.safeParse(undefined);
 
   return result.success ? result.data : undefined;
 })();

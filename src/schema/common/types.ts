@@ -1,3 +1,7 @@
+export const DocType = {
+  FoundingAgreement: "FoundingAgreement"
+} as const;
+
 export const ErrorCode = {
   AlreadyExists: "AlreadyExists",
   BadRequest: "BadRequest",
@@ -14,6 +18,15 @@ export const ErrorCode = {
 export interface DeleteResponse {
   readonly affectedRows: number;
 }
+
+export interface DigitalDocument {
+  readonly assetId: string;
+  readonly secureUrl: string;
+  readonly signatures: readonly string[];
+  readonly url: string;
+}
+
+export type DocType = (typeof DocType)[keyof typeof DocType];
 
 export type ErrorCode = (typeof ErrorCode)[keyof typeof ErrorCode];
 
@@ -38,6 +51,12 @@ export interface MultipleDocsResponse<T> {
   readonly docs: readonly T[];
   readonly nextCursor?: readonly [string, string];
   readonly total: number;
+}
+
+export interface Signatory {
+  readonly email: string;
+  readonly firstName?: string;
+  readonly lastName?: string;
 }
 
 export type Update<T> = {

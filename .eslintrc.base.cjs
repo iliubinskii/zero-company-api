@@ -71,6 +71,7 @@ const config = {
         allowedNames: []
       }
     ],
+    "@typescript-eslint/no-dynamic-delete": "off",
     "@typescript-eslint/no-shadow": "warn",
     "@typescript-eslint/restrict-template-expressions": [
       "warn",
@@ -128,9 +129,11 @@ const config = {
         trailingComma: "none"
       }
     ],
+    "promise/always-return": "off",
     "quote-props": ["warn", "consistent-as-needed"],
     "quotes": ["error", "double"],
     "security/detect-object-injection": "off",
+    "sonarjs/no-duplicate-string": "off",
     "sonarjs/prefer-immediate-return": "off",
     "sort/destructuring-properties": [
       "warn",

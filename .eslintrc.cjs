@@ -38,6 +38,20 @@ const config = {
     sourceType: "module"
   },
   rules: {
+    "node/no-unsupported-features/es-builtins": [
+      "error",
+      {
+        ignores: [],
+        version: ">=20.0.0"
+      }
+    ],
+    "node/no-unsupported-features/node-builtins": [
+      "warn",
+      {
+        ignores: [],
+        version: ">=20.0.0"
+      }
+    ],
     "spellcheck/spell-checker": [
       "warn",
       {
@@ -50,6 +64,7 @@ const config = {
           [
             "autofix",
             "bool",
+            "builtins",
             "camelcase",
             "cjs",
             "cloudinary",
@@ -58,6 +73,7 @@ const config = {
             "cors",
             "defs",
             "destructure",
+            "docu",
             "ecma",
             "enum",
             "envalid",
@@ -95,6 +111,7 @@ const config = {
             "readonly",
             "reconnectfailed",
             "redeclare",
+            "redis",
             "req",
             "resave",
             "schemas",

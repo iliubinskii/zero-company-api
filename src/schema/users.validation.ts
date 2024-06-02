@@ -24,14 +24,12 @@ const firstName = zod.string().min(1);
 
 const lastName = zod.string().min(1);
 
-const fields = {
+export const ExistingUserValidationSchema = zod.strictObject({
   _id,
   email,
   firstName,
   lastName
-};
-
-export const ExistingUserValidationSchema = zod.strictObject(fields);
+});
 
 export const AuthUserValidationSchema = zod.strictObject({
   admin,

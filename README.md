@@ -33,7 +33,7 @@
 3. SmartGit
 4. VSCode
    - Configuration:
-     - See `vscode.code-workspace` provides with the repo
+     - See `vscode.code-workspace` provided with the repo
    - Plugins:
      - ES6 String HTML (tobermory.es6-string-html)
      - ESLint (dbaeumer.vscode-eslint)

@@ -1,5 +1,12 @@
 import zod from "zod";
 
+export const DigitalDocumentValidationSchema = zod.strictObject({
+  assetId: zod.string(),
+  secureUrl: zod.string().url(),
+  signatures: zod.array(zod.string()),
+  url: zod.string().url()
+});
+
 export const IdValidationSchema = zod
   .string()
   .refine(value => /^[\da-f]{24}$/u.test(value));
@@ -12,7 +19,11 @@ export const ImageValidationSchema = zod.strictObject({
   width: preprocessNumber(zod.number().int().positive())
 });
 
-export const UserEmailValidationSchema = preprocessEmail(zod.string().email());
+export const SignatoryValidationSchema = zod.strictObject({
+  email: zod.string().email(),
+  firstName: zod.string().optional(),
+  lastName: zod.string().optional()
+});
 
 /**
  * Preprocesses a schema to convert string values to booleans.

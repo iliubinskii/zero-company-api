@@ -3,7 +3,7 @@
   "info": {
     "title": "Zero Company API",
     "description": "An API for Zero Company application",
-    "version": "2024.5.26"
+    "version": "2024.5.30"
   },
   "servers": [
     {
@@ -206,6 +206,85 @@
         "responses": {
           "200": {
             "$ref": "#/components/responses/Company"
+          },
+          "400": {
+            "$ref": "#/components/responses/InvalidData"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/documents": {
+      "get": {
+        "summary": "Get all documents",
+        "tags": [
+          "documents"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/DocumentList"
+          },
+          "400": {
+            "$ref": "#/components/responses/InvalidQuery"
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new document",
+        "tags": [
+          "documents"
+        ],
+        "responses": {
+          "201": {
+            "$ref": "#/components/responses/Document"
+          },
+          "400": {
+            "$ref": "#/components/responses/InvalidData"
+          }
+        }
+      }
+    },
+    "/documents/{id}": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/Id"
+        }
+      ],
+      "delete": {
+        "summary": "Delete a document by ID",
+        "tags": [
+          "documents"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Delete"
+          }
+        }
+      },
+      "get": {
+        "summary": "Get a document by ID",
+        "tags": [
+          "documents"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Document"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update a document by ID",
+        "tags": [
+          "documents"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Document"
           },
           "400": {
             "$ref": "#/components/responses/InvalidData"
@@ -473,6 +552,26 @@
           "application/json": {
             "schema": {
               "$ref": "#/components/schemas/Delete"
+            }
+          }
+        }
+      },
+      "Document": {
+        "description": "Document",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Document"
+            }
+          }
+        }
+      },
+      "DocumentList": {
+        "description": "Document list",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/DocumentList"
             }
           }
         }
@@ -783,6 +882,101 @@
           }
         }
       },
+      "DigitalDocument": {
+        "type": "object",
+        "required": [
+          "assetId",
+          "secureUrl",
+          "signatures",
+          "url"
+        ],
+        "properties": {
+          "assetId": {
+            "type": "string"
+          },
+          "secureUrl": {
+            "type": "string"
+          },
+          "signatures": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "url": {
+            "type": "string"
+          }
+        }
+      },
+      "Document": {
+        "type": "object",
+        "required": [
+          "_id",
+          "company",
+          "createdAt",
+          "signatories",
+          "type"
+        ],
+        "properties": {
+          "_id": {
+            "type": "string"
+          },
+          "company": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string"
+          },
+          "doc": {
+            "$ref": "#/components/schemas/DigitalDocument"
+          },
+          "metadata": {
+            "type": "string"
+          },
+          "signatories": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Signatory"
+            }
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "FoundingAgreement"
+            ]
+          }
+        }
+      },
+      "DocumentList": {
+        "type": "object",
+        "required": [
+          "count",
+          "docs",
+          "total"
+        ],
+        "properties": {
+          "count": {
+            "type": "integer"
+          },
+          "docs": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Document"
+            }
+          },
+          "nextCursor": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "minItems": 2,
+            "maxItems": 2
+          },
+          "total": {
+            "type": "integer"
+          }
+        }
+      },
       "Founder": {
         "type": "object",
         "required": [
@@ -969,6 +1163,23 @@
             ]
           },
           "errorMessage": {
+            "type": "string"
+          }
+        }
+      },
+      "Signatory": {
+        "type": "object",
+        "required": [
+          "email"
+        ],
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
             "type": "string"
           }
         }

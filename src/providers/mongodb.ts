@@ -8,7 +8,7 @@ import { logger } from "../services";
 import mongoose from "mongoose";
 
 // Cache the connection in serverless environments
-let cachedConnection: typeof mongoose | null = null;
+let cachedConnection: typeof mongoose | undefined;
 
 /**
  * Connect to MongoDB
@@ -16,6 +16,8 @@ let cachedConnection: typeof mongoose | null = null;
  */
 export async function getMongodbConnection(): Promise<typeof mongoose> {
   if (cachedConnection) return cachedConnection;
+
+  logger.info(lang.CreatingMongodbConnection);
 
   cachedConnection = await mongoose.connect(MONGODB_URI, {
     connectTimeoutMS: MONGODB_CONNECT_TIMEOUT_MS,
@@ -34,8 +36,17 @@ export function initMongodb(): void {
 
   for (const [event, message] of Object.entries(events))
     mongoose.connection.on(event, err => {
-      logger.info(message, err);
+      if (err) logger.error(message, err);
+      logger.info(message);
     });
+}
+
+/**
+ * Check if MongoDB connection exists
+ * @returns Whether MongoDB connection exists
+ */
+export function mongodbConnectionExists(): boolean {
+  return Boolean(cachedConnection);
 }
 
 /**
@@ -44,7 +55,7 @@ export function initMongodb(): void {
 export async function mongodbDisconnect(): Promise<void> {
   if (cachedConnection) {
     await cachedConnection.disconnect();
-    cachedConnection = null;
+    cachedConnection = undefined;
   }
 }
 
