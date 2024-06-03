@@ -1,4 +1,9 @@
-import { COOKIE_SECURE, CORS_ORIGIN, SESSION_SECRET } from "./config";
+import {
+  COOKIE_SECURE,
+  CORS_ORIGIN,
+  MONGODB_DATABASE_NAME,
+  SESSION_SECRET
+} from "./config";
 import type { NextFunction, Request, Response } from "express";
 import {
   appendJwt,
@@ -55,8 +60,7 @@ export async function createApp(): Promise<express.Express> {
 
   // Roll back to use MongoDB for session storage
   // await initRedis();
-
-  const connection = await getMongodbConnection();
+  await Promise.resolve();
 
   const categoriesService = createCategoriesService();
 
@@ -112,9 +116,13 @@ export async function createApp(): Promise<express.Express> {
       store: MongoStore.create({
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment -- Postponed
         // @ts-expect-error
-        client: connection.connection.getClient(),
+        clientPromise: (async () => {
+          const connection = await getMongodbConnection();
+
+          return connection.connection.getClient();
+        })(),
         collectionName: MONGODB_SESSIONS_COLLECTION,
-        dbName: connection.connection.db.databaseName
+        dbName: MONGODB_DATABASE_NAME
       })
     })
   );
