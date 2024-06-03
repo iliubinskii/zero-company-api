@@ -2,10 +2,15 @@
 
 ## Table of Contents
 
+- [Project specification](#project-specification)
 - [Initial Setup](#initial-setup)
 - [Development](#development)
 - [Contributions](#contributions)
 - [How To](#how-to)
+
+## Project Specification
+
+See [SPECIFICATION.md](SPECIFICATION.md) for more details about the project.
 
 ## Initial Setup
 
