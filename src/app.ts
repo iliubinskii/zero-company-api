@@ -1,9 +1,4 @@
-import {
-  COOKIE_SECURE,
-  CORS_ORIGIN,
-  REDIS_PREFIX,
-  SESSION_SECRET
-} from "./config";
+import { COOKIE_SECURE, CORS_ORIGIN, SESSION_SECRET } from "./config";
 import type { NextFunction, Request, Response } from "express";
 import {
   appendJwt,
@@ -32,13 +27,13 @@ import {
   testRouter
 } from "./routes";
 import {
-  getRedisClient,
+  getMongodbConnection,
   initAuth0Passport,
-  initMongodb,
-  initRedis
+  initMongodb
 } from "./providers";
 import { ErrorCode } from "./schema";
-import RedisStore from "connect-redis";
+import { MONGODB_SESSIONS_COLLECTION } from "./consts";
+import MongoStore from "connect-mongo";
 import type { Routes } from "./schema";
 import { StatusCodes } from "http-status-codes";
 import cookieParser from "cookie-parser";
@@ -57,7 +52,11 @@ import session from "express-session";
 export async function createApp(): Promise<express.Express> {
   initAuth0Passport();
   initMongodb();
-  await initRedis();
+
+  // Roll back to use MongoDB for session storage
+  // await initRedis();
+
+  const connection = await getMongodbConnection();
 
   const categoriesService = createCategoriesService();
 
@@ -103,9 +102,19 @@ export async function createApp(): Promise<express.Express> {
       resave: false,
       saveUninitialized: false,
       secret: SESSION_SECRET,
+      // Roll back to use MongoDB for session storage
+      /*
       store: new RedisStore({
         client: getRedisClient(),
         prefix: REDIS_PREFIX
+      }),
+      */
+      store: MongoStore.create({
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment -- Postponed
+        // @ts-expect-error
+        client: connection.connection.getClient(),
+        collectionName: MONGODB_SESSIONS_COLLECTION,
+        dbName: connection.connection.db.databaseName
       })
     })
   );
