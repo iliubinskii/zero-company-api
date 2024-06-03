@@ -1,8 +1,8 @@
 import {
   COOKIE_SECURE,
   CORS_ORIGIN,
-  MONGODB_DATABASE_NAME,
-  SESSION_SECRET
+  SESSION_SECRET,
+  SESSION_STORE_PROVIDER
 } from "./config";
 import type { NextFunction, Request, Response } from "express";
 import {
@@ -31,14 +31,9 @@ import {
   getUserModel,
   testRouter
 } from "./routes";
-import {
-  getMongodbConnection,
-  initAuth0Passport,
-  initMongodb
-} from "./providers";
+import { getSessionStore, logger } from "./services";
+import { initAuth0Passport, initMongodb, initRedis } from "./providers";
 import { ErrorCode } from "./schema";
-import { MONGODB_SESSIONS_COLLECTION } from "./consts";
-import MongoStore from "connect-mongo";
 import type { Routes } from "./schema";
 import { StatusCodes } from "http-status-codes";
 import cookieParser from "cookie-parser";
@@ -46,7 +41,6 @@ import cors from "cors";
 import express, { json } from "express";
 import globToRegExp from "glob-to-regexp";
 import { lang } from "./langs";
-import { logger } from "./services";
 import passport from "passport";
 import session from "express-session";
 
@@ -58,9 +52,7 @@ export async function createApp(): Promise<express.Express> {
   initAuth0Passport();
   initMongodb();
 
-  // Roll back to use MongoDB for session storage
-  // await initRedis();
-  await Promise.resolve();
+  if (SESSION_STORE_PROVIDER === "redis") await initRedis();
 
   const categoriesService = createCategoriesService();
 
@@ -106,24 +98,7 @@ export async function createApp(): Promise<express.Express> {
       resave: false,
       saveUninitialized: false,
       secret: SESSION_SECRET,
-      // Roll back to use MongoDB for session storage
-      /*
-      store: new RedisStore({
-        client: getRedisClient(),
-        prefix: REDIS_PREFIX
-      }),
-      */
-      store: MongoStore.create({
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment -- Postponed
-        // @ts-expect-error
-        clientPromise: (async () => {
-          const connection = await getMongodbConnection();
-
-          return connection.connection.getClient();
-        })(),
-        collectionName: MONGODB_SESSIONS_COLLECTION,
-        dbName: MONGODB_DATABASE_NAME
-      })
+      store: getSessionStore()
     })
   );
   app.use(passport.initialize());
