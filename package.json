@@ -36,6 +36,8 @@
     "deploy-preview": "vercel",
     "deploy-prod": "vercel --prod",
     "dev": "nodemon",
+    "docker:build": "docker build -t zero-company-api .",
+    "docker:start": "docker run --env-file .env -p 3000 zero-company-api",
     "format": "prettier --write \"**/*.{css,html,json,less,postcss,scss}\"",
     "install-deps": "npm install --save-prod --strict-peer-deps",
     "install-dev-deps": "npm install --save-dev --strict-peer-deps",

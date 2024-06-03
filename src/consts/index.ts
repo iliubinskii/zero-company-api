@@ -12,6 +12,8 @@ export const AUTH_HEADER_PREFIX = "Bearer ";
 
 export const AUTH0_SCOPE = "openid email profile";
 
+export const DOCKER_PORT = 3000;
+
 export const JWT_EXPIRES_IN = "24h";
 
 export const LOG_REQUEST_ID_LENGTH = 6;
