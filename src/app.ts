@@ -1,8 +1,8 @@
 import {
   COOKIE_SECURE,
   CORS_ORIGIN,
-  REDIS_PREFIX,
-  SESSION_SECRET
+  SESSION_SECRET,
+  SESSION_STORE_PROVIDER
 } from "./config";
 import type { NextFunction, Request, Response } from "express";
 import {
@@ -31,14 +31,9 @@ import {
   getUserModel,
   testRouter
 } from "./routes";
-import {
-  getRedisClient,
-  initAuth0Passport,
-  initMongodb,
-  initRedis
-} from "./providers";
+import { getSessionStore, logger } from "./services";
+import { initAuth0Passport, initMongodb, initRedis } from "./providers";
 import { ErrorCode } from "./schema";
-import RedisStore from "connect-redis";
 import type { Routes } from "./schema";
 import { StatusCodes } from "http-status-codes";
 import cookieParser from "cookie-parser";
@@ -46,7 +41,6 @@ import cors from "cors";
 import express, { json } from "express";
 import globToRegExp from "glob-to-regexp";
 import { lang } from "./langs";
-import { logger } from "./services";
 import passport from "passport";
 import session from "express-session";
 
@@ -57,7 +51,8 @@ import session from "express-session";
 export async function createApp(): Promise<express.Express> {
   initAuth0Passport();
   initMongodb();
-  await initRedis();
+
+  if (SESSION_STORE_PROVIDER === "redis") await initRedis();
 
   const categoriesService = createCategoriesService();
 
@@ -103,10 +98,7 @@ export async function createApp(): Promise<express.Express> {
       resave: false,
       saveUninitialized: false,
       secret: SESSION_SECRET,
-      store: new RedisStore({
-        client: getRedisClient(),
-        prefix: REDIS_PREFIX
-      })
+      store: getSessionStore()
     })
   );
   app.use(passport.initialize());
