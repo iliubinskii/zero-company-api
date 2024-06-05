@@ -152,6 +152,48 @@ paths:
         "404":
           $ref: "#/components/responses/NotFound"
 
+
+  # Company images path
+  /companies/{id}/images:
+    parameters:
+      - $ref: '#/components/parameters/Id'
+    post:
+      summary: Upload a new image for a company
+      tags:
+        - companies
+      responses:
+        "201":
+          $ref: "#/components/responses/Company"
+        "400":
+          $ref: "#/components/responses/InvalidData"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  /companies/{id}/images/{assetId}:
+    parameters:
+      - $ref: '#/components/parameters/Id'
+      - $ref: '#/components/parameters/AssetId'
+    delete:
+      summary: Delete an image for a company
+      tags:
+        - companies
+      responses:
+        "200":
+          $ref: "#/components/responses/Company"
+        "404":
+          $ref: "#/components/responses/NotFound"
+    put:
+      summary: Update an image for a company
+      tags:
+        - companies
+      responses:
+        "200":
+          $ref: "#/components/responses/Company"
+        "400":
+          $ref: "#/components/responses/InvalidData"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
   # Documents path
   /documents:
     get:
@@ -333,6 +375,12 @@ components:
     # Id parameter
     Id:
       name: id
+      in: path
+      required: true
+      schema:
+        type: string
+    AssetId:
+      name: assetId
       in: path
       required: true
       schema:

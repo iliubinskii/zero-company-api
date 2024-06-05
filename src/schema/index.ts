@@ -3,6 +3,8 @@ export * from "./categories.validation";
 export * from "./common";
 export * from "./companies";
 export * from "./companies.validation";
+export * from "./company-images";
+export * from "./company-images.validation";
 export * from "./consts";
 export * from "./documents";
 export * from "./documents.validation";

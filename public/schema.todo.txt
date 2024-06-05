@@ -1,0 +1,4 @@
+Add schema for company images to schema.yaml
+Run `npm run parse-openapi` to generate interfaces from the updated schema
+Possible response codes: 200 OK, 404 Not found (with CompanyNotFound response)
+if company with `id` does not exist, 400 Bad request (with InvalidQuery response)
