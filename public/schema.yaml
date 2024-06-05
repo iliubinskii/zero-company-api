@@ -152,6 +152,46 @@ paths:
         "404":
           $ref: "#/components/responses/NotFound"
 
+
+  # Company images path
+  /companies/{id}/images:
+    parameters:
+      - $ref: '#/components/parameters/Id'
+    post:
+      summary: Upload a new image for a company
+      tags:
+        - companies
+      responses:
+        "201":
+          $ref: "#/components/responses/Company"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "400":
+          $ref: "#/components/responses/InvalidData"
+
+  /companies/{id}/images/{assetId}:
+    parameters:
+      - $ref: '#/components/parameters/Id'
+      - $ref: '#/components/parameters/AssetId'
+    delete:
+      summary: Delete an image for a company
+      tags:
+        - companies
+      responses:
+        "200":
+          $ref: "#/components/responses/Delete"
+    put:
+      summary: Update an image for a company
+      tags:
+        - companies
+      responses:
+        "200":
+          $ref: "#/components/responses/Company"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "400":
+          $ref: "#/components/responses/InvalidData"
+
   # Documents path
   /documents:
     get:
@@ -316,13 +356,13 @@ paths:
 
   # InternalServerError response
   /500:
-    get:
-      summary: Internal server error
-      tags:
-        - common
-      responses:
-        "500":
-          $ref: "#/components/responses/InternalServerError"
+      get:
+        summary: Internal server error
+        tags:
+          - common
+        responses:
+          "500":
+            $ref: "#/components/responses/InternalServerError"
 
 # Components
 components:
@@ -333,6 +373,12 @@ components:
     # Id parameter
     Id:
       name: id
+      in: path
+      required: true
+      schema:
+        type: string
+    AssetId:
+      name: assetId
       in: path
       required: true
       schema:
@@ -396,6 +442,14 @@ components:
         application/json:
           schema:
             $ref: "#/components/schemas/CompanyList"
+
+    #CompanyImages response
+    CompanyImages:
+      description: Company images
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Company"
 
     # Delete response
     Delete:

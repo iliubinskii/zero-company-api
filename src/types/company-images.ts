@@ -1,5 +1,5 @@
-import { ExistingCompany, WebAccessibleImage } from "../schema";
-import { RequestHandler } from "express";
+import type { ExistingCompany, WebAccessibleImage } from "../schema";
+import type { RequestHandler } from "express";
 
 export interface CompanyImageControllers {
   readonly addImage: RequestHandler;
@@ -9,7 +9,7 @@ export interface CompanyImageControllers {
 
 export interface CompanyImagesMiddleware {
   readonly parseFormData: RequestHandler;
-  readonly webAccessibleStorage: RequestHandler;
+  webAccessibleStorage: RequestHandler;
 }
 
 export interface CompanyImagesService {
@@ -29,10 +29,7 @@ export interface CompanyImagesService {
    * @param assetId - The ID of the image to delete.
    * @returns A promise that resolves with the company with the deleted image, or `undefined` if the company or image was not found.
    */
-  readonly deleteImage: (
-    id: string,
-    assetId: string
-  ) => Promise<ExistingCompany | undefined>;
+  readonly deleteImage: (id: string, assetId: string) => Promise<number>;
   /**
    * Updates an image for a company.
    * @param id - The ID of the company to update the image for.

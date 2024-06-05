@@ -157,6 +157,60 @@ export interface paths {
       };
     };
   };
+  "/companies/{id}/images": {
+    /** Upload a new image for a company */
+    post: {
+      parameters: {
+        path: {
+          id: components["parameters"]["Id"];
+        };
+      };
+      responses: {
+        201: components["responses"]["Company"];
+        400: components["responses"]["InvalidData"];
+        404: components["responses"]["NotFound"];
+      };
+    };
+    parameters: {
+      path: {
+        id: components["parameters"]["Id"];
+      };
+    };
+  };
+  "/companies/{id}/images/{assetId}": {
+    /** Update an image for a company */
+    put: {
+      parameters: {
+        path: {
+          id: components["parameters"]["Id"];
+          assetId: components["parameters"]["AssetId"];
+        };
+      };
+      responses: {
+        200: components["responses"]["Company"];
+        400: components["responses"]["InvalidData"];
+        404: components["responses"]["NotFound"];
+      };
+    };
+    /** Delete an image for a company */
+    delete: {
+      parameters: {
+        path: {
+          id: components["parameters"]["Id"];
+          assetId: components["parameters"]["AssetId"];
+        };
+      };
+      responses: {
+        200: components["responses"]["Delete"];
+      };
+    };
+    parameters: {
+      path: {
+        id: components["parameters"]["Id"];
+        assetId: components["parameters"]["AssetId"];
+      };
+    };
+  };
   "/documents": {
     /** Get all documents */
     get: {
@@ -537,6 +591,12 @@ export interface components {
         "application/json": components["schemas"]["CompanyList"];
       };
     };
+    /** @description Company images */
+    CompanyImages: {
+      content: {
+        "application/json": components["schemas"]["Company"];
+      };
+    };
     /** @description Delete */
     Delete: {
       content: {
@@ -612,6 +672,7 @@ export interface components {
   };
   parameters: {
     Id: string;
+    AssetId: string;
   };
   requestBodies: never;
   headers: never;

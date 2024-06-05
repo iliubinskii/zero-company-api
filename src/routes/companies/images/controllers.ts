@@ -1,20 +1,16 @@
-/* eslint-disable sonarjs/no-all-duplicated-branches -- Temp */
-/* eslint-disable @typescript-eslint/require-await -- Temp */
-/* eslint-disable no-unused-expressions -- Temp */
-
-import { CompanyImageControllers, CompanyImagesService } from "../../../types";
-import { assertDefined, wrapAsyncHandler } from "../../../utils";
-import { CompanyImageCreateValidationSchema } from "../../../schema";
-
-// eslint-disable-next-line no-warning-comments -- Assigned to David
-/*
-TODO:
-Implement
-See /public/schema.todo.txt
-Use sendResponse<Routes["/companies/{id}/images"]["..."]>
-Use sendResponse<Routes["/companies/{id}/images/{assetId}"]["..."]>
-Possible response codes: 200 OK, 404 Not found if company with `id` does not exist
-*/
+import type {
+  CompanyImageControllers,
+  CompanyImagesService
+} from "../../../types";
+import { CompanyImageCreateValidationSchema, ErrorCode } from "../../../schema";
+import type { ExistingCompany, Routes } from "../../../schema";
+import {
+  assertDefined,
+  buildErrorResponse,
+  sendResponse,
+  wrapAsyncHandler
+} from "../../../utils";
+import { StatusCodes } from "http-status-codes";
 
 /**
  * Creates company controllers.
@@ -25,53 +21,85 @@ export function createCompanyImageControllers(
   service: CompanyImagesService
 ): CompanyImageControllers {
   return {
-    // eslint-disable-next-line no-warning-comments -- Assigned to David
-    // TODO: Implement
     addImage: wrapAsyncHandler(async (req, res) => {
       const id = assertDefined(req.idParam);
 
-      const company = CompanyImageCreateValidationSchema.safeParse(req.body);
+      const companyImage = CompanyImageCreateValidationSchema.safeParse(
+        req.body
+      );
 
-      id;
-      req;
-      res;
-      service;
+      if (companyImage.success) {
+        const existingCompany: ExistingCompany | undefined =
+          await service.addImage(id, companyImage.data.image);
 
-      if (company.success) {
-        // eslint-disable-next-line no-warning-comments -- Assigned to David
-        // TODO: Use service
-        // If service returns company respond with 200
-        // If service returns undefined respond with 404
-        // Use sendResponse<Routes["/companies/{id}/images"]["..."]>
-        // Use company.data.image
-      } else {
-        // eslint-disable-next-line no-warning-comments -- Assigned to David
-        // TODO: Respond with 400 Bad request
-        // Use sendResponse<Routes["/companies/{id}/images"]["..."]>
-        // Add company.error to response
-      }
+        if (existingCompany)
+          sendResponse<Routes["/companies/{id}/images"]["post"]>(
+            res,
+            StatusCodes.CREATED,
+            existingCompany
+          );
+        else
+          sendResponse<Routes["/companies/{id}/images"]["post"]>(
+            res,
+            StatusCodes.NOT_FOUND,
+            buildErrorResponse(ErrorCode.NotFound)
+          );
+      } else
+        sendResponse<Routes["/companies/{id}/images"]["post"]>(
+          res,
+          StatusCodes.BAD_REQUEST,
+          buildErrorResponse(ErrorCode.InvalidData, companyImage.error)
+        );
     }),
-    // eslint-disable-next-line no-warning-comments -- Assigned to David
-    // TODO: Implement
+
     deleteImage: wrapAsyncHandler(async (req, res) => {
       const id = assertDefined(req.idParam);
 
-      // eslint-disable-next-line no-warning-comments -- Assigned to David
-      // TODO: Add middleware similar to requireIdParam and use req.assetIdParam
       const assetId = assertDefined(req.params["assetId"]);
 
-      id;
-      assetId;
-      req;
-      res;
-      service;
+      const affectedRows = await service.deleteImage(id, assetId);
+
+      sendResponse<Routes["/companies/{id}/images/{assetId}"]["delete"]>(
+        res,
+        StatusCodes.OK,
+        { affectedRows }
+      );
     }),
-    // eslint-disable-next-line no-warning-comments -- Assigned to David
-    // TODO: Implement
+
     updateImage: wrapAsyncHandler(async (req, res) => {
-      req;
-      res;
-      service;
+      const id = assertDefined(req.idParam);
+
+      const assetId = assertDefined(req.params["assetId"]);
+
+      const companyImage = CompanyImageCreateValidationSchema.safeParse(
+        req.body
+      );
+
+      if (companyImage.success) {
+        const existingCompany = await service.updateImage(
+          id,
+          assetId,
+          companyImage.data.image
+        );
+
+        if (existingCompany)
+          sendResponse<Routes["/companies/{id}/images/{assetId}"]["put"]>(
+            res,
+            StatusCodes.OK,
+            existingCompany
+          );
+        else
+          sendResponse<Routes["/companies/{id}/images/{assetId}"]["put"]>(
+            res,
+            StatusCodes.NOT_FOUND,
+            buildErrorResponse(ErrorCode.NotFound)
+          );
+      } else
+        sendResponse<Routes["/companies/{id}/images/{assetId}"]["put"]>(
+          res,
+          StatusCodes.BAD_REQUEST,
+          buildErrorResponse(ErrorCode.InvalidData, companyImage.error)
+        );
     })
   };
 }

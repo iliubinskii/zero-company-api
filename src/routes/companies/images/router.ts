@@ -1,4 +1,4 @@
-import { CompanyImageControllers } from "../../../types";
+import type { CompanyImageControllers } from "../../../types";
 import { Router } from "express";
 import { companyImagesMiddleware } from "./middleware";
 

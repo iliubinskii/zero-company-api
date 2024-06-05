@@ -1,8 +1,6 @@
-/* eslint-disable no-unused-expressions -- Temp */
-
-import { Company } from "../../../schema";
-import { CompanyImagesService } from "../../../types";
-import mongoose from "mongoose";
+import type { Company, ExistingCompany } from "../../../schema";
+import type { CompanyImagesService } from "../../../types";
+import type mongoose from "mongoose";
 
 /**
  * Creates a MongoDB service for company images.
@@ -10,47 +8,73 @@ import mongoose from "mongoose";
  * @returns A MongoDB service for company images.
  */
 export function createCompanyImagesService(
-  getCompanyModel: GetCompanyModel
+  getCompanyModel: () => Promise<mongoose.Model<Company>>
 ): CompanyImagesService {
   return {
-    // eslint-disable-next-line no-warning-comments -- Assigned to David
-    // TODO: Implement
     addImage: async (id, image) => {
       const CompanyModel = await getCompanyModel();
 
-      id;
-      image;
-      CompanyModel;
+      const company = await CompanyModel.findById(id);
 
-      // eslint-disable-next-line no-warning-comments -- Assigned to David
-      // TODO: Return updated company or undefined
+      if (company) {
+        company.images.push(image);
+
+        const savedCompany = await company.save();
+
+        const { _id, ...rest } = savedCompany.toObject();
+
+        const existingCompany: ExistingCompany = {
+          _id: _id.toString(),
+          ...rest
+        };
+
+        return existingCompany;
+      }
       return undefined;
     },
-    // eslint-disable-next-line no-warning-comments -- Assigned to David
-    // TODO: Implement
+
     deleteImage: async (id, assetId) => {
       const CompanyModel = await getCompanyModel();
 
-      id;
-      assetId;
-      CompanyModel;
+      const company = await CompanyModel.findById(id);
 
-      // eslint-disable-next-line no-warning-comments -- Assigned to David
-      // TODO: Return updated company or undefined
-      return undefined;
+      if (company) {
+        const imageIndex = company.images.findIndex(
+          img => img.assetId === assetId
+        );
+        if (imageIndex === -1) return 0;
+
+        company.images.splice(imageIndex, 1);
+        await company.save();
+        return 1;
+      }
+      return 0;
     },
-    // eslint-disable-next-line no-warning-comments -- Assigned to David
-    // TODO: Implement
+
     updateImage: async (id, assetId, image) => {
       const CompanyModel = await getCompanyModel();
+      const company = await CompanyModel.findById(id);
 
-      id;
-      assetId;
-      image;
-      CompanyModel;
+      if (company) {
+        const imageIndex = company.images.findIndex(
+          img => img.assetId === assetId
+        );
 
-      // eslint-disable-next-line no-warning-comments -- Assigned to David
-      // TODO: Return updated company or undefined
+        if (imageIndex === -1) return undefined;
+
+        company.images[imageIndex] = image;
+
+        const savedCompany = await company.save();
+
+        const { _id, ...rest } = savedCompany.toObject();
+
+        const existingCompany: ExistingCompany = {
+          _id: _id.toString(),
+          ...rest
+        };
+
+        return existingCompany;
+      }
       return undefined;
     }
   };
