@@ -12,6 +12,15 @@ const emailArray = makeValidator(input =>
     .map(email => email.trim().toLowerCase())
 );
 
+const sessionStoreProviderValidator = makeValidator<
+  "memory" | "mongodb" | "redis"
+>(input => {
+  if (input === "memory" || input === "mongodb" || input === "redis")
+    return input;
+
+  throw new Error(`Invalid value for session store provider: ${input}`);
+});
+
 const env = cleanEnv(process.env, {
   ADMIN_EMAIL: emailArray(),
   AUTH0_CALLBACK_URL: str(),
@@ -24,18 +33,19 @@ const env = cleanEnv(process.env, {
   CLOUDINARY_BASE_FOLDER: str(),
   CLOUDINARY_CLOUD_NAME: str(),
   COOKIE_DOMAIN: str(),
-  COOKIE_SECURE: bool(),
+  COOKIE_SECURE: bool({ default: true }),
   CORS_ORIGIN: str(),
   ENV: str(),
   JWT_SECRET: str(),
-  LOG_LEVEL: str(),
+  LOG_LEVEL: str({ default: "info" }),
   MONGODB_DATABASE_NAME: str(),
   MONGODB_URI: str(),
   MULTER_DESTINATION_PATH: str(),
-  PORT: num(),
+  PORT: num({ default: 3000 }),
   REDIS_PREFIX: str(),
   REDIS_URL: str(),
   SESSION_SECRET: str(),
+  SESSION_STORE_PROVIDER: sessionStoreProviderValidator({ default: "memory" }),
   TEST_MONGODB_PORT: num({ default: 27_017 })
 });
 
@@ -63,5 +73,6 @@ export const {
   REDIS_PREFIX,
   REDIS_URL,
   SESSION_SECRET,
+  SESSION_STORE_PROVIDER,
   TEST_MONGODB_PORT
 } = env;

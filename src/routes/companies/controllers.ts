@@ -1,10 +1,11 @@
-import type { CompaniesService, CompanyControllers } from "../../types";
 import {
+  COMPANY_STATUS,
   CompanyCreateValidationSchema,
   CompanyUpdateValidationSchema,
   ErrorCode,
   GetCompaniesOptionsValidationSchema
 } from "../../schema";
+import type { CompaniesService, CompanyControllers } from "../../types";
 import {
   buildErrorResponse,
   filterUndefinedProperties,
@@ -35,7 +36,9 @@ export function createCompanyControllers(
           return {
             data: filterUndefinedProperties({
               ...result.data,
-              foundedAt: new Date().toISOString()
+              founders: [],
+              images: [],
+              status: COMPANY_STATUS.draft
             }),
             success: true
           };

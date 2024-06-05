@@ -1,30 +1,33 @@
 import type { Update, WebAccessibleImage } from "./common";
 
+export const COMPANY_STATUS = {
+  draft: "draft",
+  founded: "founded",
+  signing: "signing"
+} as const;
+
 export interface Company {
   readonly categories: readonly string[];
-  readonly description: string;
-  readonly foundedAt: string;
+  readonly country: string;
+  readonly description?: string;
+  readonly foundedAt?: string;
   readonly founders: readonly Founder[];
   readonly images: readonly WebAccessibleImage[];
-  readonly logo: WebAccessibleImage;
-  readonly name: string;
+  readonly logo?: WebAccessibleImage;
+  readonly name?: string;
   readonly privateCompany?: boolean;
   readonly recommended?: boolean;
-  readonly targetValue: number;
+  readonly status: (typeof COMPANY_STATUS)[keyof typeof COMPANY_STATUS];
+  readonly targetValue?: number;
   readonly website?: string;
 }
 
 export interface CompanyCreate
-  extends Omit<Company, "foundedAt" | "recommended"> {
-  readonly founders: readonly FounderCreate[];
-}
+  extends Pick<Company, "categories" | "country"> {}
 
 export interface CompanyUpdate
   extends Update<
-    Omit<
-      Company,
-      "categories" | "foundedAt" | "founders" | "recommended" | "targetValue"
-    >
+    Omit<Company, "categories" | "country" | "foundedAt" | "recommended">
   > {}
 
 export interface ExistingCompany extends Company {
@@ -32,11 +35,8 @@ export interface ExistingCompany extends Company {
 }
 
 export interface Founder {
-  readonly confirmed?: boolean;
   readonly email: string;
   readonly firstName: string;
   readonly lastName: string;
   readonly share: number;
 }
-
-export interface FounderCreate extends Omit<Founder, "confirmed"> {}

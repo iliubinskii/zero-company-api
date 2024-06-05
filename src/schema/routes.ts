@@ -427,15 +427,18 @@ export interface components {
     Company: {
       _id: string;
       categories: string[];
-      description: string;
-      foundedAt: string;
+      country: string;
+      description?: string;
+      foundedAt?: string;
       founders: components["schemas"]["Founder"][];
       images: components["schemas"]["WebAccessibleImage"][];
-      logo: components["schemas"]["WebAccessibleImage"];
-      name: string;
+      logo?: components["schemas"]["WebAccessibleImage"];
+      name?: string;
       privateCompany?: boolean;
       recommended?: boolean;
-      targetValue: number;
+      /** @enum {string} */
+      status: "draft" | "founded" | "signing";
+      targetValue?: number;
       website?: string;
     };
     CompanyList: {
@@ -470,7 +473,6 @@ export interface components {
       total: number;
     };
     Founder: {
-      confirmed?: boolean;
       email: string;
       firstName: string;
       lastName: string;

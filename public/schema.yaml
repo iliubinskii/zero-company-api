@@ -4,7 +4,7 @@ openapi: 3.0.0
 info:
   title: Zero Company API
   description: An API for Zero Company application
-  version: 2024.5.30
+  version: 2024.6.5
 
 # Servers
 servers:
@@ -637,13 +637,10 @@ components:
       required:
         - _id
         - categories
-        - description
-        - foundedAt
+        - country
         - founders
         - images
-        - logo
-        - name
-        - targetValue
+        - status
       properties:
         _id:
           type: string
@@ -651,6 +648,10 @@ components:
           type: array
           items:
             type: string
+        country:
+          type: string
+          minLength: 2
+          maxLength: 2
         description:
           type: string
         foundedAt:
@@ -671,6 +672,12 @@ components:
           type: boolean
         recommended:
           type: boolean
+        status:
+          type: string
+          enum:
+            - draft
+            - founded
+            - signing
         targetValue:
           type: number
         website:
@@ -789,8 +796,6 @@ components:
         - lastName
         - share
       properties:
-        confirmed:
-          type: boolean
         email:
           type: string
         firstName:

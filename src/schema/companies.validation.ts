@@ -1,8 +1,10 @@
-import type {
-  CompanyCreate,
-  CompanyUpdate,
-  ExistingCompany
+import {
+  COMPANY_STATUS,
+  type CompanyCreate,
+  type CompanyUpdate,
+  type ExistingCompany
 } from "./companies";
+import { COUNTRY_CODE_SIZE, MAX_CATEGORIES } from "./consts";
 import {
   IdValidationSchema,
   ImageValidationSchema,
@@ -10,7 +12,6 @@ import {
   preprocessEmail,
   preprocessNumber
 } from "./common";
-import { MAX_CATEGORIES } from "./consts";
 import type { ValidationResult } from "./common";
 import zod from "zod";
 
@@ -22,41 +23,45 @@ const categories = zod
   .min(1)
   .max(MAX_CATEGORIES);
 
-const description = zod.string().min(1);
+const country = zod.string().length(COUNTRY_CODE_SIZE);
 
-const foundedAt = zod.string().min(1);
+const description = zod.string().min(1).optional();
+
+const foundedAt = zod.string().min(1).optional();
 
 const founder = zod.strictObject({
-  confirmed: preprocessBoolean(zod.boolean()).optional(),
   email: preprocessEmail(zod.string().email()),
   firstName: zod.string().min(1),
   lastName: zod.string().min(1),
   share: preprocessNumber(zod.number().int().positive())
 });
 
-const founderCreate = founder.omit({ confirmed: true });
+const founders = zod.array(founder);
 
-const founders = zod.array(founder).nonempty();
+const images = zod.array(ImageValidationSchema);
 
-const foundersCreate = zod.array(founderCreate).nonempty();
+const logo = ImageValidationSchema.optional();
 
-const images = zod.array(ImageValidationSchema).nonempty();
-
-const logo = ImageValidationSchema;
-
-const name = zod.string().min(1);
+const name = zod.string().min(1).optional();
 
 const privateCompany = preprocessBoolean(zod.boolean()).optional();
 
 const recommended = preprocessBoolean(zod.boolean()).optional();
 
-const targetValue = preprocessNumber(zod.number().int().positive());
+const status = zod.enum([
+  COMPANY_STATUS.draft,
+  COMPANY_STATUS.founded,
+  COMPANY_STATUS.signing
+]);
+
+const targetValue = preprocessNumber(zod.number().int().positive()).optional();
 
 const website = zod.string().url().optional();
 
 export const ExistingCompanyValidationSchema = zod.strictObject({
   _id,
   categories,
+  country,
   description,
   foundedAt,
   founders,
@@ -65,20 +70,19 @@ export const ExistingCompanyValidationSchema = zod.strictObject({
   name,
   privateCompany,
   recommended,
+  status,
   targetValue,
   website
 });
 
-export const CompanyCreateValidationSchema =
-  ExistingCompanyValidationSchema.omit({
-    _id: true,
-    foundedAt: true,
-    founders: true,
-    recommended: true
-  }).merge(zod.strictObject({ founders: foundersCreate }));
+export const CompanyCreateValidationSchema = zod.strictObject({
+  categories,
+  country
+});
 
 export const CompanyUpdateValidationSchema = zod.strictObject({
   description: description.optional(),
+  founders: founders.optional(),
   images: images.optional(),
   logo: logo.optional(),
   name: name.optional(),

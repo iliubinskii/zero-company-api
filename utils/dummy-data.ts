@@ -1,6 +1,6 @@
 /* eslint-disable no-sync -- Ok */
 
-import type { Category, Company, User } from "../src";
+import { COMPANY_STATUS, type Category, type Company, type User } from "../src";
 import { dummy } from "../assets";
 import { faker } from "@faker-js/faker";
 import fs from "node:fs";
@@ -23,13 +23,13 @@ const companies = faker.helpers.uniqueArray((): Company => {
     categories: faker.helpers
       .uniqueArray(dummy.categories, faker.number.int({ max: 2, min: 1 }))
       .map(category => category._id.$oid),
+    country: "us",
     description: faker.lorem.paragraph(),
     foundedAt: faker.date.past().toISOString(),
     founders: faker.helpers
       .uniqueArray(dummy.users, faker.number.int({ max: 3, min: 1 }))
       .map(({ email, firstName, lastName }) => {
         return {
-          confirmed: true,
           email,
           firstName,
           lastName,
@@ -65,6 +65,7 @@ const companies = faker.helpers.uniqueArray((): Company => {
     recommended: faker.datatype.boolean({
       probability: PROBABILITY.recommendedTrue
     }),
+    status: COMPANY_STATUS.founded,
     targetValue,
     website: faker.internet.url()
   };
@@ -84,11 +85,17 @@ fs.writeFileSync("assets/dummy/companies.json", JSON.stringify(companies));
 ((): DummyCategory[] => dummy.categories)();
 
 // Type check the companies schema
-((): Company[] => dummy.companies)();
+((): DummyCompany[] => dummy.companies)();
 
 // Type check the users schema
-((): User[] => dummy.users)();
+((): DummyUser[] => dummy.users)();
 
 interface DummyCategory extends Category {
   readonly _id: { readonly $oid: string };
 }
+
+interface DummyCompany extends Omit<Company, "status"> {
+  readonly status: string;
+}
+
+interface DummyUser extends User {}

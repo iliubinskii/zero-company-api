@@ -8,6 +8,10 @@
 	},
 	"item": [
 		{
+			"name": "Bugs",
+			"item": []
+		},
+		{
 			"name": "Categories",
 			"item": [
 				{
@@ -563,6 +567,593 @@
 					]
 				},
 				{
+					"name": "Test cases",
+					"item": [
+						{
+							"name": "Delete company",
+							"item": [
+								{
+									"name": "Create new company",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"// import Ajv\r",
+													"const Ajv = require('ajv');\r",
+													"const ajv = new Ajv();\r",
+													"\r",
+													"// JSON shema\r",
+													"const schema = {\r",
+													"  \"type\": \"object\",\r",
+													"  \"properties\": {\r",
+													"    \"_id\": { \"type\": \"string\" },\r",
+													"    \"categories\": {\r",
+													"      \"type\": \"array\",\r",
+													"      \"items\": { \"type\": \"string\" }\r",
+													"    },\r",
+													"    \"description\": { \"type\": \"string\" },\r",
+													"    \"foundedAt\": { \"type\": \"string\" },\r",
+													"    \"founders\": {\r",
+													"      \"type\": \"array\",\r",
+													"      \"items\": {\r",
+													"        \"type\": \"object\",\r",
+													"        \"properties\": {\r",
+													"          \"confirmed\": { \"type\": \"boolean\" },\r",
+													"          \"email\": { \"type\": \"string\" },\r",
+													"          \"firstName\": { \"type\": \"string\" },\r",
+													"          \"lastName\": { \"type\": \"string\" },\r",
+													"          \"share\": { \"type\": \"number\" }\r",
+													"        },\r",
+													"        \"required\": [\r",
+													"            \"confirmed\", // Is this field is required?\r",
+													"            \"email\", \r",
+													"            \"firstName\", \r",
+													"            \"lastName\", \r",
+													"            \"share\"]\r",
+													"      }\r",
+													"    },\r",
+													"    \"images\": {\r",
+													"      \"type\": \"array\",\r",
+													"      \"items\": {\r",
+													"        \"type\": \"object\",\r",
+													"        \"properties\": {\r",
+													"          \"assetId\": { \"type\": \"string\" },\r",
+													"          \"height\": { \"type\": \"number\" },\r",
+													"          \"secureUrl\": { \"type\": \"string\" },\r",
+													"          \"url\": { \"type\": \"string\" },\r",
+													"          \"width\": { \"type\": \"number\" }\r",
+													"        },\r",
+													"        \"required\": [\"assetId\", \"height\", \"secureUrl\", \"url\", \"width\"]\r",
+													"      }\r",
+													"    },\r",
+													"    \"logo\": {\r",
+													"      \"type\": \"object\",\r",
+													"      \"properties\": {\r",
+													"        \"assetId\": { \"type\": \"string\" },\r",
+													"        \"height\": { \"type\": \"number\" },\r",
+													"        \"secureUrl\": { \"type\": \"string\" },\r",
+													"        \"url\": { \"type\": \"string\" },\r",
+													"        \"width\": { \"type\": \"number\" }\r",
+													"      },\r",
+													"      \"required\": [\"assetId\", \"height\", \"secureUrl\", \"url\", \"width\"]\r",
+													"    },\r",
+													"    \"name\": { \"type\": \"string\" },\r",
+													"    \"privateCompany\": { \"type\": \"boolean\" },\r",
+													"    \"recommended\": { \"type\": \"boolean\" },\r",
+													"    \"targetValue\": { \"type\": \"number\" },\r",
+													"    \"website\": { \"type\": \"string\" }\r",
+													"  },\r",
+													"  \"required\": [\r",
+													"    \"_id\",\r",
+													"    \"categories\",\r",
+													"    \"description\",\r",
+													"    \"foundedAt\",\r",
+													"    \"founders\",\r",
+													"    \"images\",\r",
+													"    \"logo\",\r",
+													"    \"name\",\r",
+													"//    \"privateCompany\",\r",
+													"//    \"recommended\",\r",
+													"    \"targetValue\",\r",
+													"    \"website\"\r",
+													"  ]\r",
+													"};\r",
+													"\r",
+													"// Checking status code\r",
+													"pm.test(\"Status code = 201\", function() {\r",
+													"    pm.response.to.have.status(201);\r",
+													"    console.log(\"Status code check passed\")\r",
+													"});\r",
+													"\r",
+													"// Checking if the response fits JSON schema\r",
+													"pm.test('Response meets JSON schema', function () {\r",
+													"  const responseJson = pm.response.json();\r",
+													"  const validate = ajv.compile(schema);\r",
+													"  const valid = validate(responseJson);\r",
+													"\r",
+													"  if (!valid) {\r",
+													"    console.log(\"JSON shema validation errors:\",validate.errors);\r",
+													"  }\r",
+													"\r",
+													"  pm.expect(valid, 'FAIL: JSON schema').to.be.true;\r",
+													"  console.log(\"JSON schema validation passed\");\r",
+													"\r",
+													"});\r",
+													"\r",
+													"// Saving _id enviroment  varianle\r",
+													"var { _id } = pm.response.json();\r",
+													"if (_id) {\r",
+													"    pm.environment.set(\"lastCompanyId\", _id);\r",
+													"    console.log(\"ID saved to enviroment: \", _id)\r",
+													"    } else {\r",
+													"        console.log(\"ID not found in response\")\r",
+													"    }\r",
+													"\r",
+													"// Next request\r",
+													"// почему-то эта команда не работает ((\r",
+													"if( _id) {\r",
+													"    pm.execution.setNextRequest(\"Chek creation company by ID\");\r",
+													"}"
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "jwt",
+											"jwt": [
+												{
+													"key": "payload",
+													"value": "{\r\n    \"email\": \"{{jwtEmail}}\"\r\n}\r\n",
+													"type": "string"
+												},
+												{
+													"key": "secret",
+													"value": "{{jwtSecret}}",
+													"type": "string"
+												},
+												{
+													"key": "addTokenTo",
+													"value": "header",
+													"type": "string"
+												},
+												{
+													"key": "algorithm",
+													"value": "HS256",
+													"type": "string"
+												},
+												{
+													"key": "isSecretBase64Encoded",
+													"value": false,
+													"type": "boolean"
+												},
+												{
+													"key": "headerPrefix",
+													"value": "Bearer",
+													"type": "string"
+												},
+												{
+													"key": "queryParamKey",
+													"value": "token",
+													"type": "string"
+												},
+												{
+													"key": "header",
+													"value": "{}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "formdata",
+											"formdata": [
+												{
+													"key": "categories[]",
+													"value": "{{lastCategoryId}}",
+													"type": "text"
+												},
+												{
+													"key": "description",
+													"value": "Some description",
+													"type": "text"
+												},
+												{
+													"key": "founders[0].email",
+													"value": "{{jwtEmail}}",
+													"type": "text"
+												},
+												{
+													"key": "founders[0].firstName",
+													"value": "John",
+													"type": "text"
+												},
+												{
+													"key": "founders[0].lastName",
+													"value": "Smith",
+													"type": "text"
+												},
+												{
+													"key": "founders[0].share",
+													"value": "10000",
+													"type": "text"
+												},
+												{
+													"key": "images",
+													"type": "file",
+													"src": [
+														"postman-cloud:///1ef0f5bf-6b21-4040-837f-bfde7f95d8e5",
+														"postman-cloud:///1ef0f5bf-09b8-47e0-b450-a4dc2f9cf24b"
+													]
+												},
+												{
+													"key": "name",
+													"value": "Travel aggregator",
+													"type": "text"
+												},
+												{
+													"key": "logo",
+													"type": "file",
+													"src": "postman-cloud:///1ef0f5c0-3202-41a0-8659-1d68543d1d87"
+												},
+												{
+													"key": "targetValue",
+													"value": "100000",
+													"type": "text"
+												},
+												{
+													"key": "website",
+													"value": "http://cats.com/",
+													"type": "text"
+												}
+											]
+										},
+										"url": {
+											"raw": "{{apiUrl}}companies",
+											"host": [
+												"{{apiUrl}}companies"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Chek creation company by ID",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"const Ajv = require('ajv');\r",
+													"const ajv = new Ajv();\r",
+													"\r",
+													"const schema = {\r",
+													"  \"type\": \"object\",\r",
+													"  \"properties\": {\r",
+													"    \"_id\": { \"type\": \"string\" },\r",
+													"    \"categories\": {\r",
+													"      \"type\": \"array\",\r",
+													"      \"items\": { \"type\": \"string\" }\r",
+													"    },\r",
+													"    \"description\": { \"type\": \"string\" },\r",
+													"    \"foundedAt\": { \"type\": \"string\" },\r",
+													"    \"founders\": {\r",
+													"      \"type\": \"array\",\r",
+													"      \"items\": {\r",
+													"        \"type\": \"object\",\r",
+													"        \"properties\": {\r",
+													"          \"confirmed\": { \"type\": \"boolean\" },\r",
+													"          \"email\": { \"type\": \"string\" },\r",
+													"          \"firstName\": { \"type\": \"string\" },\r",
+													"          \"lastName\": { \"type\": \"string\" },\r",
+													"          \"share\": { \"type\": \"number\" }\r",
+													"        },\r",
+													"        \"required\": [\r",
+													"            \"confirmed\", // Is this field is required?\r",
+													"            \"email\", \r",
+													"            \"firstName\", \r",
+													"            \"lastName\", \r",
+													"            \"share\"]\r",
+													"      }\r",
+													"    },\r",
+													"    \"images\": {\r",
+													"      \"type\": \"array\",\r",
+													"      \"items\": {\r",
+													"        \"type\": \"object\",\r",
+													"        \"properties\": {\r",
+													"          \"assetId\": { \"type\": \"string\" },\r",
+													"          \"height\": { \"type\": \"number\" },\r",
+													"          \"secureUrl\": { \"type\": \"string\" },\r",
+													"          \"url\": { \"type\": \"string\" },\r",
+													"          \"width\": { \"type\": \"number\" }\r",
+													"        },\r",
+													"        \"required\": [\"assetId\", \"height\", \"secureUrl\", \"url\", \"width\"]\r",
+													"      }\r",
+													"    },\r",
+													"    \"logo\": {\r",
+													"      \"type\": \"object\",\r",
+													"      \"properties\": {\r",
+													"        \"assetId\": { \"type\": \"string\" },\r",
+													"        \"height\": { \"type\": \"number\" },\r",
+													"        \"secureUrl\": { \"type\": \"string\" },\r",
+													"        \"url\": { \"type\": \"string\" },\r",
+													"        \"width\": { \"type\": \"number\" }\r",
+													"      },\r",
+													"      \"required\": [\"assetId\", \"height\", \"secureUrl\", \"url\", \"width\"]\r",
+													"    },\r",
+													"    \"name\": { \"type\": \"string\" },\r",
+													"    \"privateCompany\": { \"type\": \"boolean\" },\r",
+													"    \"recommended\": { \"type\": \"boolean\" },\r",
+													"    \"targetValue\": { \"type\": \"number\" },\r",
+													"    \"website\": { \"type\": \"string\" }\r",
+													"  },\r",
+													"  \"required\": [\r",
+													"    \"_id\",\r",
+													"    \"categories\",\r",
+													"    \"description\",\r",
+													"    \"foundedAt\",\r",
+													"    \"founders\",\r",
+													"    \"images\",\r",
+													"    \"logo\",\r",
+													"    \"name\",\r",
+													"//    \"privateCompany\",\r",
+													"//    \"recommended\",\r",
+													"    \"targetValue\",\r",
+													"    \"website\"\r",
+													"  ]\r",
+													"};\r",
+													"\r",
+													"pm.test(\"Status code = 200\", function() {\r",
+													"    pm.response.to.have.status(200);\r",
+													"    console.log(\"Status code check passed\")\r",
+													"});\r",
+													"\r",
+													"pm.test('Response meets JSON schema', function () {\r",
+													"  const responseJson = pm.response.json();\r",
+													"  const validate = ajv.compile(schema);\r",
+													"  const valid = validate(responseJson);\r",
+													"\r",
+													"  if (!valid) {\r",
+													"    console.log(\"JSON shema validation errors:\",validate.errors);\r",
+													"  }\r",
+													"\r",
+													"  pm.expect(valid, 'FAIL: JSON schema').to.be.true;\r",
+													"  console.log(\"JSON schema validation passed\");\r",
+													"\r",
+													"});\r",
+													"\r",
+													"pm.execution.setNextRequest(\"Delete created company by ID\");\r",
+													""
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{apiUrl}}companies/{{lastCompanyId}}",
+											"host": [
+												"{{apiUrl}}companies"
+											],
+											"path": [
+												"{{lastCompanyId}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Delete created company by ID",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"const Ajv = require('ajv');\r",
+													"const ajv = new Ajv();\r",
+													"\r",
+													"const schema = {\r",
+													"  \"type\": \"object\",\r",
+													"  \"properties\": {\r",
+													"    \"affectedRows\": { \"type\": \"number\" }\r",
+													"  },\r",
+													"  \"required\": [\"affectedRows\"]\r",
+													"};\r",
+													"\r",
+													"pm.test(\"Status code = 200\", function() {\r",
+													"    pm.response.to.have.status(200);\r",
+													"    console.log(\"Status code check passed\")\r",
+													"});\r",
+													"\r",
+													"pm.test('Response meets JSON schema', function () {\r",
+													"  const responseJson = pm.response.json();\r",
+													"  const validate = ajv.compile(schema);\r",
+													"  const valid = validate(responseJson);\r",
+													"\r",
+													"  if (!valid) {\r",
+													"    console.log(\"JSON shema validation errors:\",validate.errors);\r",
+													"  }\r",
+													"\r",
+													"  pm.expect(valid, 'FAIL: JSON schema').to.be.true;\r",
+													"  console.log(\"JSON schema validation passed\");\r",
+													"\r",
+													"});\r",
+													"\r",
+													"pm.test('affectedRows is 1', function () {\r",
+													"  const responseJson = pm.response.json();\r",
+													"  if (responseJson.affectedRows !== 1) {\r",
+													"    console.log(`Error: Company with id ${pm.environment.get('lastCompanyId')} wasn't found`, responseJson.affectedRows);\r",
+													"  } \r",
+													"  pm.expect(responseJson.affectedRows, 'affectedRows should be 1').to.eql(1);\r",
+													"  console.log(\"Passed. One entery was deleted\");\r",
+													"});\r",
+													"\r",
+													"\r",
+													"\r",
+													"\r",
+													"pm.execution.setNextRequest(\"Attempt to get deleted company by ID\");\r",
+													""
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "jwt",
+											"jwt": [
+												{
+													"key": "payload",
+													"value": "{\r\n    \"email\": \"{{jwtAdminEmail}}\"\r\n}\r\n",
+													"type": "string"
+												},
+												{
+													"key": "secret",
+													"value": "{{jwtSecret}}",
+													"type": "string"
+												},
+												{
+													"key": "addTokenTo",
+													"value": "header",
+													"type": "string"
+												},
+												{
+													"key": "algorithm",
+													"value": "HS256",
+													"type": "string"
+												},
+												{
+													"key": "isSecretBase64Encoded",
+													"value": false,
+													"type": "boolean"
+												},
+												{
+													"key": "headerPrefix",
+													"value": "Bearer",
+													"type": "string"
+												},
+												{
+													"key": "queryParamKey",
+													"value": "token",
+													"type": "string"
+												},
+												{
+													"key": "header",
+													"value": "{}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "{{apiUrl}}companies/{{lastCompanyId}}",
+											"host": [
+												"{{apiUrl}}companies"
+											],
+											"path": [
+												"{{lastCompanyId}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Attempt to get deleted company by ID",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"const Ajv = require('ajv');\r",
+													"const ajv = new Ajv();\r",
+													"\r",
+													"const schema = {\r",
+													"  \"type\": \"object\",\r",
+													"  \"properties\": {\r",
+													"    \"error\": { \"type\": \"string\" },\r",
+													"    \"errorMessage\": { \"type\": \"string\" }\r",
+													"  },\r",
+													"  \"required\": [\"error\", \"errorMessage\"]\r",
+													"};\r",
+													"\r",
+													"\r",
+													"pm.test(\"Status code = 404\", function() {\r",
+													"    pm.response.to.have.status(404);\r",
+													"    console.log(\"Status code check passed\")\r",
+													"});\r",
+													"\r",
+													"pm.test('Response fits JSON schema', function () {\r",
+													"  const responseJson = pm.response.json();\r",
+													"  const validate = ajv.compile(schema);\r",
+													"  const valid = validate(responseJson);\r",
+													"\r",
+													"  if (!valid) {\r",
+													"    console.log(\"JSON shema validation errors:\",validate.errors);\r",
+													"  }\r",
+													"\r",
+													"  pm.expect(valid, 'FAIL: JSON schema').to.be.true;\r",
+													"  console.log(\"JSON schema validation passed\");\r",
+													"\r",
+													"});\r",
+													"\r",
+													"pm.execution.setNextRequest(\"null\");\r",
+													""
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{apiUrl}}companies/{{lastCompanyId}}",
+											"host": [
+												"{{apiUrl}}companies"
+											],
+											"path": [
+												"{{lastCompanyId}}"
+											]
+										}
+									},
+									"response": []
+								}
+							],
+							"description": "_Previous steps:_\n\n1. _Create new category_\n    \n\n#### **Steps:**\n\n1. **Create new company**\n    \n\n- validation Staus code == 201\n    \n- validation Response body == JSON schema\n    \n- Saving ID company\n    \n\n1. **Check creation by ID**\n    \n\n- validation Staus code == 200\n    \n- validation Response body == JSON schema\n    \n\n1. **Delete company**\n    \n\n- validation Staus code == 200\n    \n- validation Response body == JSON schema\n    \n- checking if the company was deleted (affectedRows == 1)\n    \n\n1. **Attempt to get the company**\n    \n\n- validation Staus code == 404\n    \n- validation Response body == JSON schema"
+						},
+						{
+							"name": "Update company",
+							"item": []
+						}
+					]
+				},
+				{
 					"name": "Get all",
 					"request": {
 						"auth": {
@@ -1101,6 +1692,36 @@
 					"name": "CRUD",
 					"item": [
 						{
+							"name": "Prepare",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var { _id } = pm.response.json().docs.find(doc => doc.name === pm.environment.get(\"existingCategoryName\"));\r",
+											"if (_id) pm.environment.set(\"lastCategoryId\", _id);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{apiUrl}}categories",
+									"host": [
+										"{{apiUrl}}categories"
+									]
+								}
+							},
+							"response": []
+						},
+						{
 							"name": "Should add company",
 							"event": [
 								{
@@ -1122,7 +1743,7 @@
 											"    pm.expect(result.name).to.eql(\"Travel aggregator\");\r",
 											"});\r",
 											"\r",
-											"if (result.nextCursor) {\r",
+											"if (result._id) {\r",
 											"    pm.environment.set(\"lastCompanyId\", result._id);\r",
 											"}"
 										],
@@ -1303,7 +1924,20 @@
 									"listen": "test",
 									"script": {
 										"exec": [
-											""
+											"pm.test(\"Should be `200 Ok` status\", () => {\r",
+											"    pm.expect(pm.response.status).to.eql(\"OK\");\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Should be `JSON` content type\", () => {\r",
+											"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+											"});\r",
+											"\r",
+											"const result = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Should be previously created document\", () => {\r",
+											"    pm.expect(result._id).to.eql(pm.environment.get(\"lastCompanyId\"));\r",
+											"    pm.expect(result.name).to.eql(\"Travel aggregator 2\");\r",
+											"});"
 										],
 										"type": "text/javascript",
 										"packages": {}
@@ -1391,7 +2025,32 @@
 							"response": []
 						},
 						{
-							"name": "Should get update company",
+							"name": "Should get updated company",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Should be `200 Ok` status\", () => {\r",
+											"    pm.expect(pm.response.status).to.eql(\"OK\");\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Should be `JSON` content type\", () => {\r",
+											"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+											"});\r",
+											"\r",
+											"const result = pm.response.json();\r",
+											"\r",
+											"pm.test(\"Should be previously created document\", () => {\r",
+											"    pm.expect(result._id).to.eql(pm.environment.get(\"lastCompanyId\"));\r",
+											"    pm.expect(result.name).to.eql(\"Travel aggregator 2\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
 							"request": {
 								"auth": {
 									"type": "noauth"
@@ -1698,11 +2357,6 @@
 											"    pm.expect(result.docs[0]._id).to.eql(ids[2]);\r",
 											"    pm.expect(result.docs[1]._id).to.eql(ids[3]);\r",
 											"});\r",
-											"\r",
-											"if (result.nextCursor) {\r",
-											"  pm.environment.set(\"nextCursor[0]\", result.nextCursor[0]);\r",
-											"  pm.environment.set(\"nextCursor[1]\", result.nextCursor[1]);\r",
-											"}\r",
 											""
 										],
 										"type": "text/javascript",
@@ -1738,6 +2392,94 @@
 								}
 							},
 							"response": []
+						}
+					]
+				},
+				{
+					"name": "Fixed test cases",
+					"item": [
+						{
+							"name": "Update one",
+							"item": [
+								{
+									"name": "Empty data should not hang server",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "jwt",
+											"jwt": [
+												{
+													"key": "payload",
+													"value": "{\r\n    \"email\": \"{{jwtAdminEmail}}\"\r\n}\r\n",
+													"type": "string"
+												},
+												{
+													"key": "secret",
+													"value": "{{jwtSecret}}",
+													"type": "string"
+												},
+												{
+													"key": "addTokenTo",
+													"value": "header",
+													"type": "string"
+												},
+												{
+													"key": "algorithm",
+													"value": "HS256",
+													"type": "string"
+												},
+												{
+													"key": "isSecretBase64Encoded",
+													"value": false,
+													"type": "boolean"
+												},
+												{
+													"key": "headerPrefix",
+													"value": "Bearer",
+													"type": "string"
+												},
+												{
+													"key": "queryParamKey",
+													"value": "token",
+													"type": "string"
+												},
+												{
+													"key": "header",
+													"value": "{}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "formdata",
+											"formdata": []
+										},
+										"url": {
+											"raw": "{{apiUrl}}companies/{{lastCompanyId}}",
+											"host": [
+												"{{apiUrl}}companies"
+											],
+											"path": [
+												"{{lastCompanyId}}"
+											]
+										}
+									},
+									"response": []
+								}
+							]
 						}
 					]
 				}
@@ -2292,6 +3034,28 @@
 								"type": "text/javascript",
 								"packages": {}
 							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"function generateRandomString(length) {\r",
+									"    let characters = 'abcdefghijklmnopqrstuvwxyz';\r",
+									"    let result = '';\r",
+									"    let charactersLength = characters.length;\r",
+									"    for (let i = 0; i < length; i++) {\r",
+									"        result += characters.charAt(Math.floor(Math.random() * charactersLength));\r",
+									"    }\r",
+									"    return result;\r",
+									"}\r",
+									"\r",
+									"let randomEmail = generateRandomString(10) + '@x.tyweuyag';\r",
+									"\r",
+									"pm.environment.set(\"randomEmail\", randomEmail);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
 						}
 					],
 					"request": {
@@ -2300,7 +3064,7 @@
 							"jwt": [
 								{
 									"key": "payload",
-									"value": "{\r\n    \"email\": \"{{jwtEmail}}\"\r\n}\r\n",
+									"value": "{\r\n    \"email\": \"{{randomEmail}}\"\r\n}\r\n",
 									"type": "string"
 								},
 								{
@@ -2809,6 +3573,47 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "Get YAML schema",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is successful\", function() {\r",
+							"    pm.response.to.have.status(200);\r",
+							"    console.log(\"Schema fetch status code check passed\");\r",
+							"});\r",
+							"\r",
+							"\r",
+							"const yamlContent = pm.response.text();\r",
+							"\r",
+							"if (yamlContent) {\r",
+							"    pm.environment.set(\"schemaYaml\", JSON.stringify(yamlContent));\r",
+							"    console.log(\"Schema loaded and set to environment schemaYaml\");\r",
+							"} else {\r",
+							"    console.error(\"Failed to YAML schema didn't loaded.\");\r",
+							"}\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{apiUrl}}schema.yaml",
+					"host": [
+						"{{apiUrl}}schema",
+						"yaml"
+					]
+				}
+			},
+			"response": []
 		},
 		{
 			"name": "Index",

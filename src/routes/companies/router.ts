@@ -4,12 +4,12 @@ import {
   createCompanyImagesService
 } from "./images";
 import {
-  nullifyEmptyStrings,
+  nullifyEmptyStringsDeep,
   parseNestedFormData,
   requireIdParam,
   requireJwt,
   requireJwtAdmin,
-  stripEmptyStrings
+  stripEmptyStringsDeep
 } from "../../middleware";
 import type { CompanyControllers } from "../../types";
 import { Router } from "express";
@@ -38,7 +38,7 @@ export function createCompaniesRouter(controllers: CompanyControllers): Router {
       "/",
       requireJwt,
       parseFormData,
-      stripEmptyStrings,
+      stripEmptyStringsDeep,
       webAccessibleStorage,
       parseNestedFormData,
       controllers.addCompany
@@ -49,7 +49,7 @@ export function createCompaniesRouter(controllers: CompanyControllers): Router {
       requireJwtAdmin,
       requireIdParam,
       parseFormData,
-      nullifyEmptyStrings,
+      nullifyEmptyStringsDeep,
       webAccessibleStorage,
       parseNestedFormData,
       controllers.updateCompany

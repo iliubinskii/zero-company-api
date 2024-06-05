@@ -22,7 +22,7 @@ const doc = DigitalDocumentValidationSchema.optional();
 
 const metadata = zod.string().min(1).optional();
 
-const signatories = zod.array(SignatoryValidationSchema);
+const signatories = zod.array(SignatoryValidationSchema).nonempty();
 
 const type = zod.enum([DocType.FoundingAgreement]);
 
