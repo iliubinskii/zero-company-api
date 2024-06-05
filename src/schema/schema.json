@@ -785,13 +785,10 @@
         "required": [
           "_id",
           "categories",
-          "description",
-          "foundedAt",
+          "country",
           "founders",
           "images",
-          "logo",
-          "name",
-          "targetValue"
+          "status"
         ],
         "properties": {
           "_id": {
@@ -802,6 +799,11 @@
             "items": {
               "type": "string"
             }
+          },
+          "country": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 2
           },
           "description": {
             "type": "string"
@@ -832,6 +834,14 @@
           },
           "recommended": {
             "type": "boolean"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "draft",
+              "founded",
+              "signing"
+            ]
           },
           "targetValue": {
             "type": "number"
@@ -986,9 +996,6 @@
           "share"
         ],
         "properties": {
-          "confirmed": {
-            "type": "boolean"
-          },
           "email": {
             "type": "string"
           },
