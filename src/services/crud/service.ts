@@ -1,6 +1,6 @@
+import { buildMongodbQuery, toObject } from "../../utils";
 import type { CrudService } from "../../types";
 import { MONGODB_ERROR } from "../../consts";
-import { buildMongodbQuery } from "../../utils";
 import type mongoose from "mongoose";
 
 /**
@@ -21,7 +21,7 @@ export function createCrudService<
 
         const addedItem = await model.save();
 
-        return addedItem.toObject();
+        return toObject(addedItem);
       } catch (err) {
         if (
           typeof err === "object" &&
@@ -41,7 +41,7 @@ export function createCrudService<
 
       const addedItem = await model.save();
 
-      return addedItem.toObject();
+      return toObject(addedItem);
     },
     deleteItem: async id => {
       const Model = await getModel();
@@ -55,7 +55,7 @@ export function createCrudService<
 
       const item = await Model.findById(id);
 
-      return item ? item.toObject() : undefined;
+      return item ? toObject(item) : undefined;
     },
     updateItem: async (id, item) => {
       const Model = await getModel();
@@ -66,7 +66,7 @@ export function createCrudService<
         { new: true }
       );
 
-      if (updatedCategory) return updatedCategory.toObject();
+      if (updatedCategory) return toObject(updatedCategory);
 
       return undefined;
     }

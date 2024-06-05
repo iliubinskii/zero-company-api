@@ -4,12 +4,12 @@ import type {
   GetCompaniesOptions,
   User
 } from "../../schema";
+import { filterUndefinedProperties, toObject } from "../../utils";
 import type { CompaniesService } from "../../types";
 import type { FilterQuery } from "mongoose";
 import { MAX_LIMIT } from "../../schema";
 import type { Writable } from "ts-toolbelt/out/Object/Writable";
 import { createCrudService } from "../../services";
-import { filterUndefinedProperties } from "../../utils";
 import { getCompanyModel } from "./model";
 import type mongoose from "mongoose";
 
@@ -93,11 +93,7 @@ export function createCompaniesService(
 
       return filterUndefinedProperties({
         count: companies.length,
-        docs: companies.map(company => {
-          const { _id, ...rest } = company.toObject();
-
-          return { _id: _id.toString(), ...rest };
-        }),
+        docs: companies.map(toObject),
         nextCursor:
           companies.length === limit && lastCompany
             ? [lastCompany[sortBy], lastCompany._id.toString()]
