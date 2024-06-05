@@ -29,7 +29,10 @@ export interface CompanyImagesService {
    * @param assetId - The ID of the image to delete.
    * @returns A promise that resolves with the company with the deleted image, or `undefined` if the company or image was not found.
    */
-  readonly deleteImage: (id: string, assetId: string) => Promise<number>;
+  readonly deleteImage: (
+    id: string,
+    assetId: string
+  ) => Promise<ExistingCompany | undefined>;
   /**
    * Updates an image for a company.
    * @param id - The ID of the company to update the image for.

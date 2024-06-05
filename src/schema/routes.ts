@@ -201,7 +201,8 @@ export interface paths {
         };
       };
       responses: {
-        200: components["responses"]["Delete"];
+        200: components["responses"]["Company"];
+        404: components["responses"]["NotFound"];
       };
     };
     parameters: {
@@ -589,12 +590,6 @@ export interface components {
     CompanyList: {
       content: {
         "application/json": components["schemas"]["CompanyList"];
-      };
-    };
-    /** @description Company images */
-    CompanyImages: {
-      content: {
-        "application/json": components["schemas"]["Company"];
       };
     };
     /** @description Delete */

@@ -14,10 +14,6 @@ export function createCompanyImagesRouter(
 
   const router = Router();
 
-  // eslint-disable-next-line no-warning-comments -- Assigned to David
-  // TODO:
-  // Add other middleware as needed
-  // Write postman tests for these routes
   router
     .post("/", parseFormData, webAccessibleStorage, controllers.addImage)
     .put(

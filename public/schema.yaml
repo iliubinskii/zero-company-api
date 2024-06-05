@@ -164,10 +164,10 @@ paths:
       responses:
         "201":
           $ref: "#/components/responses/Company"
-        "404":
-          $ref: "#/components/responses/NotFound"
         "400":
           $ref: "#/components/responses/InvalidData"
+        "404":
+          $ref: "#/components/responses/NotFound"
 
   /companies/{id}/images/{assetId}:
     parameters:
@@ -179,7 +179,9 @@ paths:
         - companies
       responses:
         "200":
-          $ref: "#/components/responses/Delete"
+          $ref: "#/components/responses/Company"
+        "404":
+          $ref: "#/components/responses/NotFound"
     put:
       summary: Update an image for a company
       tags:
@@ -187,10 +189,10 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/Company"
-        "404":
-          $ref: "#/components/responses/NotFound"
         "400":
           $ref: "#/components/responses/InvalidData"
+        "404":
+          $ref: "#/components/responses/NotFound"
 
   # Documents path
   /documents:
@@ -356,13 +358,13 @@ paths:
 
   # InternalServerError response
   /500:
-      get:
-        summary: Internal server error
-        tags:
-          - common
-        responses:
-          "500":
-            $ref: "#/components/responses/InternalServerError"
+    get:
+      summary: Internal server error
+      tags:
+        - common
+      responses:
+        "500":
+          $ref: "#/components/responses/InternalServerError"
 
 # Components
 components:
@@ -442,14 +444,6 @@ components:
         application/json:
           schema:
             $ref: "#/components/schemas/CompanyList"
-
-    #CompanyImages response
-    CompanyImages:
-      description: Company images
-      content:
-        application/json:
-          schema:
-            $ref: "#/components/schemas/Company"
 
     # Delete response
     Delete:

@@ -1,4 +1,4 @@
-import type { Company, ExistingCompany } from "../../../schema";
+import type { Company } from "../../../schema";
 import type { CompanyImagesService } from "../../../types";
 import type mongoose from "mongoose";
 
@@ -14,69 +14,35 @@ export function createCompanyImagesService(
     addImage: async (id, image) => {
       const CompanyModel = await getCompanyModel();
 
-      const company = await CompanyModel.findById(id);
+      const company = await CompanyModel.findByIdAndUpdate(
+        id,
+        { $push: { images: image } },
+        { new: true, runValidators: true }
+      );
 
-      if (company) {
-        company.images.push(image);
-
-        const savedCompany = await company.save();
-
-        const { _id, ...rest } = savedCompany.toObject();
-
-        const existingCompany: ExistingCompany = {
-          _id: _id.toString(),
-          ...rest
-        };
-
-        return existingCompany;
-      }
-      return undefined;
+      return company ? company.toObject() : undefined;
     },
-
     deleteImage: async (id, assetId) => {
       const CompanyModel = await getCompanyModel();
 
-      const company = await CompanyModel.findById(id);
+      const company = await CompanyModel.findByIdAndUpdate(
+        id,
+        { $pull: { images: { assetId } } },
+        { new: true }
+      );
 
-      if (company) {
-        const imageIndex = company.images.findIndex(
-          img => img.assetId === assetId
-        );
-        if (imageIndex === -1) return 0;
-
-        company.images.splice(imageIndex, 1);
-        await company.save();
-        return 1;
-      }
-      return 0;
+      return company ? company.toObject() : undefined;
     },
-
     updateImage: async (id, assetId, image) => {
       const CompanyModel = await getCompanyModel();
-      const company = await CompanyModel.findById(id);
 
-      if (company) {
-        const imageIndex = company.images.findIndex(
-          img => img.assetId === assetId
-        );
+      const company = await CompanyModel.findOneAndUpdate(
+        { "_id": id, "images.assetId": assetId },
+        { $set: { "images.$": image } },
+        { new: true, runValidators: true }
+      );
 
-        if (imageIndex === -1) return undefined;
-
-        const updatedImage = { ...image, assetId };
-        company.images[imageIndex] = updatedImage;
-
-        const savedCompany = await company.save();
-
-        const { _id, ...rest } = savedCompany.toObject();
-
-        const existingCompany: ExistingCompany = {
-          _id: _id.toString(),
-          ...rest
-        };
-
-        return existingCompany;
-      }
-      return undefined;
+      return company ? company.toObject() : undefined;
     }
   };
 }

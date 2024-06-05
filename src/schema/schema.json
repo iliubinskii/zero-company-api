@@ -256,7 +256,10 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Delete"
+            "$ref": "#/components/responses/Company"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
           }
         }
       },
@@ -612,16 +615,6 @@
           "application/json": {
             "schema": {
               "$ref": "#/components/schemas/CompanyList"
-            }
-          }
-        }
-      },
-      "CompanyImages": {
-        "description": "Company images",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/Company"
             }
           }
         }

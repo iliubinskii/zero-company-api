@@ -132,6 +132,7 @@ const config = {
             "uri",
             "urls",
             "uuidv4",
+            "validators",
             "ver",
             "vercel",
             "webhooks",
