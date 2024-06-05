@@ -3,7 +3,7 @@
   "info": {
     "title": "Zero Company API",
     "description": "An API for Zero Company application",
-    "version": "2024.5.30"
+    "version": "2024.6.5"
   },
   "servers": [
     {
