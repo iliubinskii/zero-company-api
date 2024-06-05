@@ -1,5 +1,5 @@
 import {
-  COMPANY_STATUS,
+  CompanyStatus,
   IdValidationSchema,
   preprocessBoolean,
   preprocessNumber
@@ -39,9 +39,9 @@ const sortOrder = {
 } as const;
 
 const status = zod.enum([
-  COMPANY_STATUS.draft,
-  COMPANY_STATUS.founded,
-  COMPANY_STATUS.signing
+  CompanyStatus.draft,
+  CompanyStatus.founded,
+  CompanyStatus.signing
 ]);
 
 export const GetCategoriesOptionsValidationSchema = zod.strictObject({

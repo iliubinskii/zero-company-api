@@ -1,4 +1,4 @@
-import type { COMPANY_STATUS } from "./common";
+import type { CompanyStatus } from "./common";
 
 export interface GetCategoriesOptions {
   readonly limit?: number;
@@ -14,7 +14,7 @@ export interface GetCompaniesOptions {
   readonly onlyRecommended?: boolean;
   readonly sortBy?: "foundedAt" | "name";
   readonly sortOrder?: "asc" | "desc";
-  readonly status?: COMPANY_STATUS;
+  readonly status?: CompanyStatus;
 }
 
 export interface GetDocumentsOptions {

@@ -1,17 +1,17 @@
-import {
-  COMPANY_STATUS,
-  IdValidationSchema,
-  ImageValidationSchema,
-  preprocessBoolean,
-  preprocessEmail,
-  preprocessNumber
-} from "./common";
 import { COUNTRY_CODE_SIZE, MAX_CATEGORIES } from "./consts";
 import {
   type CompanyCreate,
   type CompanyUpdate,
   type ExistingCompany
 } from "./companies";
+import {
+  CompanyStatus,
+  IdValidationSchema,
+  ImageValidationSchema,
+  preprocessBoolean,
+  preprocessEmail,
+  preprocessNumber
+} from "./common";
 import type { ValidationResult } from "./common";
 import zod from "zod";
 
@@ -49,9 +49,9 @@ const privateCompany = preprocessBoolean(zod.boolean()).optional();
 const recommended = preprocessBoolean(zod.boolean()).optional();
 
 const status = zod.enum([
-  COMPANY_STATUS.draft,
-  COMPANY_STATUS.founded,
-  COMPANY_STATUS.signing
+  CompanyStatus.draft,
+  CompanyStatus.founded,
+  CompanyStatus.signing
 ]);
 
 const targetValue = preprocessNumber(zod.number().int().positive()).optional();

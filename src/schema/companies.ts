@@ -1,4 +1,4 @@
-import type { COMPANY_STATUS, Update, WebAccessibleImage } from "./common";
+import type { CompanyStatus, Update, WebAccessibleImage } from "./common";
 
 export interface Company {
   readonly categories: readonly string[];
@@ -11,7 +11,7 @@ export interface Company {
   readonly name?: string;
   readonly privateCompany?: boolean;
   readonly recommended?: boolean;
-  readonly status: COMPANY_STATUS;
+  readonly status: CompanyStatus;
   readonly targetValue?: number;
   readonly website?: string;
 }

@@ -1,6 +1,6 @@
 /* eslint-disable no-sync -- Ok */
 
-import { COMPANY_STATUS, type Category, type Company, type User } from "../src";
+import { type Category, type Company, CompanyStatus, type User } from "../src";
 import { dummy } from "../assets";
 import { faker } from "@faker-js/faker";
 import fs from "node:fs";
@@ -65,7 +65,7 @@ const companies = faker.helpers.uniqueArray((): Company => {
     recommended: faker.datatype.boolean({
       probability: PROBABILITY.recommendedTrue
     }),
-    status: COMPANY_STATUS.founded,
+    status: CompanyStatus.founded,
     targetValue,
     website: faker.internet.url()
   };

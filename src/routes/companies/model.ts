@@ -1,4 +1,4 @@
-import { COMPANY_STATUS, type Company } from "../../schema";
+import { type Company, CompanyStatus } from "../../schema";
 import type { Equals } from "ts-toolbelt/out/Any/Equals";
 import { getMongodbConnection } from "../../providers";
 import mongoose from "mongoose";
@@ -44,7 +44,7 @@ const Schema = {
   privateCompany: { type: Boolean },
   recommended: { type: Boolean },
   status: {
-    enum: Object.values(COMPANY_STATUS),
+    enum: Object.values(CompanyStatus),
     required: true,
     type: String
   },

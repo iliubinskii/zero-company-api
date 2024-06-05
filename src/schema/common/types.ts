@@ -1,4 +1,4 @@
-export const COMPANY_STATUS = {
+export const CompanyStatus = {
   draft: "draft",
   founded: "founded",
   signing: "signing"
@@ -22,8 +22,7 @@ export const ErrorCode = {
   Unauthorized: "Unauthorized"
 } as const;
 
-export type COMPANY_STATUS =
-  (typeof COMPANY_STATUS)[keyof typeof COMPANY_STATUS];
+export type CompanyStatus = (typeof CompanyStatus)[keyof typeof CompanyStatus];
 
 export interface DeleteResponse {
   readonly affectedRows: number;
