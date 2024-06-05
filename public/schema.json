@@ -709,7 +709,7 @@
   "info": {
     "description": "An API for Zero Company application",
     "title": "Zero Company API",
-    "version": "2024.5.30"
+    "version": "2024.6.5"
   },
   "openapi": "3.0.0",
   "paths": {
