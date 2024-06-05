@@ -1,5 +1,8 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-# install dependencies
-npm install --no-audit
+# If package.json or package-lock.json changed
+if git diff-tree -r --name-only --no-commit-id ORIG_HEAD HEAD | grep -qE 'package(-lock)?.json'; then
+  # Install dependencies
+  npm install --no-audit
+fi

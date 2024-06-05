@@ -6,6 +6,7 @@ export const lang = {
   Auth0CallbackUrl: "Auth0 callback URL",
   Auth0Domain: "Auth0 domain",
   Auth0ReturnUrl: "Auth0 return URL",
+  AuthenticationFailed: "Authentication failed",
   BadRequest: "Bad request",
   CookieDomain: "Cookie domain",
   CookieSecure: "Cookie secure",

@@ -13,13 +13,14 @@ import {
   JWT_EXPIRES_IN
 } from "../consts";
 import type { AuthUserEssential, Jwt } from "../schema";
-import { JwtValidationSchema, preprocessEmail } from "../schema";
+import { ErrorCode, JwtValidationSchema, preprocessEmail } from "../schema";
 import {
   buildQuery,
   filterUndefinedProperties,
   wrapAsyncHandler
 } from "../utils";
 import { Router } from "express";
+import { URL } from "node:url";
 import type { UsersService } from "../types";
 import type { Writable } from "ts-toolbelt/out/Object/Writable";
 import jwt from "jsonwebtoken";
@@ -27,7 +28,6 @@ import { lang } from "../langs";
 import { logger } from "../services";
 import passport from "passport";
 import zod from "zod";
-
 /**
  * Create the authentication router.
  * @param usersService - The users service.
@@ -41,19 +41,14 @@ export function createAuthRouter(usersService: UsersService): Router {
       "/callback",
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument -- Postponed
       passport.authenticate("auth0", {
-        failureRedirect: AUTH0_RETURN_URL
+        // eslint-disable-next-line no-warning-comments -- Postponed
+        // TODO: Use failureReturnUrl
+        failureRedirect: AUTH0_RETURN_URL,
+        keepSessionInfo: true
       }),
       wrapAsyncHandler(async (req, res) => {
         if (req.isAuthenticated()) {
           const auth0User = Auth0UserValidationSchema.parse(req.user);
-
-          await new Promise<void>((resolve, reject) => {
-            req.logout((err: unknown) => {
-              // eslint-disable-next-line @typescript-eslint/prefer-promise-reject-errors -- Ok
-              if (err) reject(err);
-              else resolve();
-            });
-          });
 
           const payload: Jwt = { email: auth0User.emails[0].value };
 
@@ -82,6 +77,22 @@ export function createAuthRouter(usersService: UsersService): Router {
             user: JSON.stringify(userQueryParam)
           });
 
+          const successReturnUrl =
+            typeof req.session.successReturnUrl === "string"
+              ? new URL(
+                  req.session.successReturnUrl,
+                  AUTH0_RETURN_URL
+                ).toString()
+              : AUTH0_RETURN_URL;
+
+          await new Promise<void>((resolve, reject) => {
+            req.logout((err: unknown) => {
+              // eslint-disable-next-line @typescript-eslint/prefer-promise-reject-errors -- Ok
+              if (err) reject(err);
+              else resolve();
+            });
+          });
+
           res
             .cookie(AUTH_COOKIE_NAME, token, {
               domain: COOKIE_DOMAIN,
@@ -91,22 +102,45 @@ export function createAuthRouter(usersService: UsersService): Router {
               sameSite: "strict",
               secure: COOKIE_SECURE
             })
-            .redirect(`${AUTH0_RETURN_URL}${queryStr}`);
+            .redirect(`${successReturnUrl}${queryStr}`);
         } else {
+          const failureReturnUrl =
+            typeof req.session.failureReturnUrl === "string"
+              ? new URL(
+                  req.session.failureReturnUrl,
+                  AUTH0_RETURN_URL
+                ).toString()
+              : AUTH0_RETURN_URL;
+
           logger.warn(lang.Auth0AuthenticationFailed, {
             requestId: req.requestId
           });
-          res.redirect(AUTH0_RETURN_URL);
+          res.redirect(
+            `${failureReturnUrl}?error=${ErrorCode.AuthenticationFailed}&errorMessage=${lang.AuthenticationFailed}`
+          );
         }
       })
     )
     .get(
       "/login",
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument -- Postponed
-      passport.authenticate("auth0", { scope: AUTH0_SCOPE }),
-      (_req, res) => {
-        res.redirect(AUTH0_RETURN_URL);
-      }
+      (req, _res, next) => {
+        const { failureReturnUrl, successReturnUrl } = req.query;
+
+        if (typeof failureReturnUrl === "string")
+          req.session.failureReturnUrl = failureReturnUrl;
+        else delete req.session.failureReturnUrl;
+
+        if (typeof successReturnUrl === "string")
+          req.session.successReturnUrl = successReturnUrl;
+        else delete req.session.successReturnUrl;
+
+        req.session.save(err => {
+          if (err) next(err);
+          else next();
+        });
+      },
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument -- Ok
+      passport.authenticate("auth0", { scope: AUTH0_SCOPE })
     )
     .get("/logout", (_req, res) => {
       const queryStr = buildQuery({ action: "logout" });
@@ -156,8 +190,6 @@ export function createAuthRouter(usersService: UsersService): Router {
             type: "email"
           });
 
-          // eslint-disable-next-line no-warning-comments -- Postponed
-          // TODO: Use sendResponse
           res.json(
             filterUndefinedProperties({
               admin: ADMIN_EMAIL.includes(email),
@@ -165,8 +197,6 @@ export function createAuthRouter(usersService: UsersService): Router {
               user
             })
           );
-          // eslint-disable-next-line no-warning-comments -- Postponed
-          // TODO: Use sendResponse
         } else res.json(null);
       })
     );
@@ -174,11 +204,10 @@ export function createAuthRouter(usersService: UsersService): Router {
   return router;
 }
 
-const Auth0UserValidationSchema = zod
-  // Do not use strictObject: auth0 may return additional fields
-  .object({
-    emails: zod
-      .array(zod.strictObject({ value: preprocessEmail(zod.string().email()) }))
-      .nonempty()
-      .max(1)
-  });
+// Do not use strictObject: auth0 may return additional fields
+const Auth0UserValidationSchema = zod.object({
+  emails: zod
+    .array(zod.strictObject({ value: preprocessEmail(zod.string().email()) }))
+    .nonempty()
+    .max(1)
+});

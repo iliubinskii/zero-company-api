@@ -4,6 +4,7 @@ export const DocType = {
 
 export const ErrorCode = {
   AlreadyExists: "AlreadyExists",
+  AuthenticationFailed: "AuthenticationFailed",
   BadRequest: "BadRequest",
   InternalServerError: "InternalServerError",
   InvalidData: "InvalidData",

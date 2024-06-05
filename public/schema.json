@@ -303,6 +303,11 @@
             },
             "type": "array"
           },
+          "country": {
+            "maxLength": 2,
+            "minLength": 2,
+            "type": "string"
+          },
           "description": {
             "type": "string"
           },
@@ -333,6 +338,10 @@
           "recommended": {
             "type": "boolean"
           },
+          "status": {
+            "enum": ["draft", "founded", "signing"],
+            "type": "string"
+          },
           "targetValue": {
             "type": "number"
           },
@@ -343,13 +352,10 @@
         "required": [
           "_id",
           "categories",
-          "description",
-          "foundedAt",
+          "country",
           "founders",
           "images",
-          "logo",
-          "name",
-          "targetValue"
+          "status"
         ],
         "type": "object"
       },
@@ -468,9 +474,6 @@
       },
       "Founder": {
         "properties": {
-          "confirmed": {
-            "type": "boolean"
-          },
           "email": {
             "type": "string"
           },
