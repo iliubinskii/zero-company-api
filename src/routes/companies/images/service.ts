@@ -62,7 +62,8 @@ export function createCompanyImagesService(
 
         if (imageIndex === -1) return undefined;
 
-        company.images[imageIndex] = image;
+        const updatedImage = { ...image, assetId };
+        company.images[imageIndex] = updatedImage;
 
         const savedCompany = await company.save();
 
