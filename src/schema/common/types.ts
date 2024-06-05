@@ -1,3 +1,9 @@
+export const COMPANY_STATUS = {
+  draft: "draft",
+  founded: "founded",
+  signing: "signing"
+} as const;
+
 export const DocType = {
   FoundingAgreement: "FoundingAgreement"
 } as const;
@@ -15,6 +21,9 @@ export const ErrorCode = {
   OK: "OK",
   Unauthorized: "Unauthorized"
 } as const;
+
+export type COMPANY_STATUS =
+  (typeof COMPANY_STATUS)[keyof typeof COMPANY_STATUS];
 
 export interface DeleteResponse {
   readonly affectedRows: number;

@@ -1,17 +1,17 @@
 import {
   COMPANY_STATUS,
-  type CompanyCreate,
-  type CompanyUpdate,
-  type ExistingCompany
-} from "./companies";
-import { COUNTRY_CODE_SIZE, MAX_CATEGORIES } from "./consts";
-import {
   IdValidationSchema,
   ImageValidationSchema,
   preprocessBoolean,
   preprocessEmail,
   preprocessNumber
 } from "./common";
+import { COUNTRY_CODE_SIZE, MAX_CATEGORIES } from "./consts";
+import {
+  type CompanyCreate,
+  type CompanyUpdate,
+  type ExistingCompany
+} from "./companies";
 import type { ValidationResult } from "./common";
 import zod from "zod";
 

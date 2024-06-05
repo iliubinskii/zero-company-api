@@ -118,6 +118,7 @@ export interface GetUserModel {
  * @param options.onlyRecommended - Whether to get only recommended companies.
  * @param options.sortBy - The field to sort companies by.
  * @param options.sortOrder - The order to sort companies by.
+ * @param options.status - The status of the companies.
  * @returns The filter to get companies.
  */
 function buildFilter({
@@ -125,7 +126,8 @@ function buildFilter({
   includePrivateCompanies = false,
   onlyRecommended = false,
   sortBy = "name",
-  sortOrder = "asc"
+  sortOrder = "asc",
+  status
 }: GetCompaniesOptions = {}): FilterQuery<Company> {
   const filter: Writable<FilterQuery<Company>> = {};
 
@@ -147,6 +149,8 @@ function buildFilter({
   } else filter["privateCompany"] = { $ne: true };
 
   if (onlyRecommended) filter["recommended"] = true;
+
+  if (status) filter["status"] = status;
 
   return filter;
 }

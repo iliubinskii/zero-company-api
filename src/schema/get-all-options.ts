@@ -1,3 +1,5 @@
+import type { COMPANY_STATUS } from "./common";
+
 export interface GetCategoriesOptions {
   readonly limit?: number;
   readonly offset?: number;
@@ -12,6 +14,7 @@ export interface GetCompaniesOptions {
   readonly onlyRecommended?: boolean;
   readonly sortBy?: "foundedAt" | "name";
   readonly sortOrder?: "asc" | "desc";
+  readonly status?: COMPANY_STATUS;
 }
 
 export interface GetDocumentsOptions {

@@ -1,14 +1,15 @@
+import {
+  COMPANY_STATUS,
+  IdValidationSchema,
+  preprocessBoolean,
+  preprocessNumber
+} from "./common";
 import type {
   GetCategoriesOptions,
   GetCompaniesOptions,
   GetDocumentsOptions,
   GetUsersOptions
 } from "./get-all-options";
-import {
-  IdValidationSchema,
-  preprocessBoolean,
-  preprocessNumber
-} from "./common";
 import { MAX_LIMIT } from "./consts";
 import type { ValidationResult } from "./common";
 import zod from "zod";
@@ -37,6 +38,12 @@ const sortOrder = {
   companies: zod.union([zod.literal("asc"), zod.literal("desc")]).optional()
 } as const;
 
+const status = zod.enum([
+  COMPANY_STATUS.draft,
+  COMPANY_STATUS.founded,
+  COMPANY_STATUS.signing
+]);
+
 export const GetCategoriesOptionsValidationSchema = zod.strictObject({
   limit,
   offset,
@@ -50,7 +57,8 @@ export const GetCompaniesOptionsValidationSchema = zod.strictObject({
   offset,
   onlyRecommended,
   sortBy: sortBy.companies,
-  sortOrder: sortOrder.companies
+  sortOrder: sortOrder.companies,
+  status
 });
 
 export const GetDocumentsOptionsValidationSchema = zod.strictObject({

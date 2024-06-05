@@ -1,10 +1,4 @@
-import type { Update, WebAccessibleImage } from "./common";
-
-export const COMPANY_STATUS = {
-  draft: "draft",
-  founded: "founded",
-  signing: "signing"
-} as const;
+import type { COMPANY_STATUS, Update, WebAccessibleImage } from "./common";
 
 export interface Company {
   readonly categories: readonly string[];
@@ -17,7 +11,7 @@ export interface Company {
   readonly name?: string;
   readonly privateCompany?: boolean;
   readonly recommended?: boolean;
-  readonly status: (typeof COMPANY_STATUS)[keyof typeof COMPANY_STATUS];
+  readonly status: COMPANY_STATUS;
   readonly targetValue?: number;
   readonly website?: string;
 }
