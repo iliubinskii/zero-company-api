@@ -42,11 +42,9 @@ const sortOrder = {
   companies: zod.union([zod.literal("asc"), zod.literal("desc")]).optional()
 } as const;
 
-const status = zod.enum([
-  CompanyStatus.draft,
-  CompanyStatus.founded,
-  CompanyStatus.signing
-]);
+const status = zod
+  .enum([CompanyStatus.draft, CompanyStatus.founded, CompanyStatus.signing])
+  .optional();
 
 export const GetCategoriesOptionsValidationSchema = zod.strictObject({
   limit,
