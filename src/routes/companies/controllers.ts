@@ -36,6 +36,7 @@ export function createCompanyControllers(
           return {
             data: filterUndefinedProperties({
               ...result.data,
+              createdAt: new Date().toISOString(),
               founders: [],
               images: [],
               status: CompanyStatus.draft

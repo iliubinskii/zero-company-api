@@ -25,6 +25,8 @@ const categories = zod
 
 const country = zod.string().length(COUNTRY_CODE_SIZE);
 
+const createdAt = zod.string().min(1);
+
 const description = zod.string().min(1).optional();
 
 const foundedAt = zod.string().min(1).optional();
@@ -62,6 +64,7 @@ export const ExistingCompanyValidationSchema = zod.strictObject({
   _id,
   categories,
   country,
+  createdAt,
   description,
   foundedAt,
   founders,

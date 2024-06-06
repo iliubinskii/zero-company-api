@@ -859,6 +859,7 @@
           "_id",
           "categories",
           "country",
+          "createdAt",
           "founders",
           "images",
           "status"
@@ -877,6 +878,9 @@
             "type": "string",
             "minLength": 2,
             "maxLength": 2
+          },
+          "createdAt": {
+            "type": "string"
           },
           "description": {
             "type": "string"

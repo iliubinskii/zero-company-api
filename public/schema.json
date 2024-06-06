@@ -1,6 +1,14 @@
 {
   "components": {
     "parameters": {
+      "AssetId": {
+        "in": "path",
+        "name": "assetId",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
       "Id": {
         "in": "path",
         "name": "id",
@@ -308,6 +316,9 @@
             "minLength": 2,
             "type": "string"
           },
+          "createdAt": {
+            "type": "string"
+          },
           "description": {
             "type": "string"
           },
@@ -353,6 +364,7 @@
           "_id",
           "categories",
           "country",
+          "createdAt",
           "founders",
           "images",
           "status"
@@ -944,6 +956,65 @@
           }
         },
         "summary": "Update a company by ID",
+        "tags": ["companies"]
+      }
+    },
+    "/companies/{id}/images": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/Id"
+        }
+      ],
+      "post": {
+        "responses": {
+          "201": {
+            "$ref": "#/components/responses/Company"
+          },
+          "400": {
+            "$ref": "#/components/responses/InvalidData"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        },
+        "summary": "Upload a new image for a company",
+        "tags": ["companies"]
+      }
+    },
+    "/companies/{id}/images/{assetId}": {
+      "delete": {
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Company"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        },
+        "summary": "Delete an image for a company",
+        "tags": ["companies"]
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/Id"
+        },
+        {
+          "$ref": "#/components/parameters/AssetId"
+        }
+      ],
+      "put": {
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Company"
+          },
+          "400": {
+            "$ref": "#/components/responses/InvalidData"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        },
+        "summary": "Update an image for a company",
         "tags": ["companies"]
       }
     },

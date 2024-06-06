@@ -428,6 +428,7 @@ export interface components {
       _id: string;
       categories: string[];
       country: string;
+      createdAt: string;
       description?: string;
       foundedAt?: string;
       founders: components["schemas"]["Founder"][];

@@ -30,7 +30,11 @@ const onlyRecommended = preprocessBoolean(zod.boolean()).optional();
 
 const sortBy = {
   companies: zod
-    .union([zod.literal("foundedAt"), zod.literal("name")])
+    .union([
+      zod.literal("createdAt"),
+      zod.literal("foundedAt"),
+      zod.literal("name")
+    ])
     .optional()
 } as const;
 

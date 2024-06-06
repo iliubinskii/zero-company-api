@@ -6,6 +6,7 @@ import mongoose from "mongoose";
 const Schema = {
   categories: { required: true, type: [String] },
   country: { required: true, type: String },
+  createdAt: { required: true, type: String },
   description: { type: String },
   foundedAt: { type: String },
   founders: {

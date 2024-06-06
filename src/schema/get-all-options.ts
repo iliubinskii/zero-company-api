@@ -12,7 +12,7 @@ export interface GetCompaniesOptions {
   readonly limit?: number;
   readonly offset?: number;
   readonly onlyRecommended?: boolean;
-  readonly sortBy?: "foundedAt" | "name";
+  readonly sortBy?: "createdAt" | "foundedAt" | "name";
   readonly sortOrder?: "asc" | "desc";
   readonly status?: CompanyStatus;
 }

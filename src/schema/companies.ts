@@ -3,6 +3,7 @@ import type { CompanyStatus, Update, WebAccessibleImage } from "./common";
 export interface Company {
   readonly categories: readonly string[];
   readonly country: string;
+  readonly createdAt: string;
   readonly description?: string;
   readonly foundedAt?: string;
   readonly founders: readonly Founder[];
@@ -21,7 +22,16 @@ export interface CompanyCreate
 
 export interface CompanyUpdate
   extends Update<
-    Omit<Company, "categories" | "country" | "foundedAt" | "recommended">
+    Pick<
+      Company,
+      | "description"
+      | "founders"
+      | "images"
+      | "logo"
+      | "name"
+      | "privateCompany"
+      | "website"
+    >
   > {}
 
 export interface ExistingCompany extends Company {
