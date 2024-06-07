@@ -850,9 +850,6 @@ components:
       type: object
       required:
         - email
-        - firstName
-        - lastName
-        - share
       properties:
         email:
           type: string

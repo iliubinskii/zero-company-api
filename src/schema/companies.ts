@@ -40,7 +40,7 @@ export interface ExistingCompany extends Company {
 
 export interface Founder {
   readonly email: string;
-  readonly firstName: string;
-  readonly lastName: string;
-  readonly share: number;
+  readonly firstName?: string | undefined;
+  readonly lastName?: string | undefined;
+  readonly share?: number | undefined;
 }

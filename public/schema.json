@@ -499,7 +499,7 @@
             "type": "number"
           }
         },
-        "required": ["email", "firstName", "lastName", "share"],
+        "required": ["email"],
         "type": "object"
       },
       "Home": {

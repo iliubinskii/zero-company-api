@@ -14,9 +14,9 @@ const Schema = {
     type: [
       {
         email: { required: true, type: String },
-        firstName: { required: true, type: String },
-        lastName: { required: true, type: String },
-        share: { required: true, type: Number }
+        firstName: { type: String },
+        lastName: { type: String },
+        share: { type: Number }
       }
     ]
   },

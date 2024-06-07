@@ -525,9 +525,9 @@ export interface components {
     };
     Founder: {
       email: string;
-      firstName: string;
-      lastName: string;
-      share: number;
+      firstName?: string;
+      lastName?: string;
+      share?: number;
     };
     Home: {
       schema: string;

@@ -7,6 +7,7 @@ import {
   GetCompaniesOptionsValidationSchema
 } from "../../schema";
 import {
+  assertDefined,
   buildErrorResponse,
   sendResponse,
   wrapAsyncHandler
@@ -28,7 +29,9 @@ export function createCompanyControllers(
   const crudControllers = createCrudControllers(
     crudService,
     {
-      safeParse: item => {
+      safeParse: (item, _params, req) => {
+        const { email } = assertDefined(assertDefined(req).jwt);
+
         const result = CompanyCreateValidationSchema.safeParse(item);
 
         if (result.success)
@@ -36,7 +39,7 @@ export function createCompanyControllers(
             data: {
               ...result.data,
               createdAt: new Date().toISOString(),
-              founders: [],
+              founders: [{ email }],
               images: [],
               status: CompanyStatus.draft
             },

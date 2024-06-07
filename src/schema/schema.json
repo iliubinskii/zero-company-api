@@ -1149,10 +1149,7 @@
       "Founder": {
         "type": "object",
         "required": [
-          "email",
-          "firstName",
-          "lastName",
-          "share"
+          "email"
         ],
         "properties": {
           "email": {

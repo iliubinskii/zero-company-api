@@ -32,9 +32,9 @@ const foundedAt = zod.string().min(1).optional();
 
 const founder = zod.strictObject({
   email: preprocessEmail(zod.string().email()),
-  firstName: zod.string().min(1),
-  lastName: zod.string().min(1),
-  share: preprocessNumber(zod.number().int().positive())
+  firstName: zod.string().min(1).optional(),
+  lastName: zod.string().min(1).optional(),
+  share: preprocessNumber(zod.number().int().positive()).optional()
 });
 
 const founders = zod.array(founder);
