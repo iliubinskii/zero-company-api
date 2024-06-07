@@ -1087,6 +1087,78 @@
         "tags": ["documents"]
       }
     },
+    "/me": {
+      "delete": {
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Delete"
+          }
+        },
+        "summary": "Delete a user by ID",
+        "tags": ["users"]
+      },
+      "get": {
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/User"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        },
+        "summary": "Get a user by ID",
+        "tags": ["users"]
+      },
+      "post": {
+        "responses": {
+          "201": {
+            "$ref": "#/components/responses/User"
+          },
+          "400": {
+            "$ref": "#/components/responses/InvalidData"
+          },
+          "409": {
+            "$ref": "#/components/responses/AlreadyExists"
+          }
+        },
+        "summary": "Create a new user",
+        "tags": ["users"]
+      },
+      "put": {
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/User"
+          },
+          "400": {
+            "$ref": "#/components/responses/InvalidData"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        },
+        "summary": "Update a user by ID",
+        "tags": ["users"]
+      }
+    },
+    "/me/companies": {
+      "get": {
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/CompanyList"
+          },
+          "400": {
+            "$ref": "#/components/responses/InvalidQuery"
+          }
+        },
+        "summary": "Get all companies for a user",
+        "tags": ["users"]
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/Id"
+        }
+      ]
+    },
     "/users": {
       "get": {
         "responses": {
