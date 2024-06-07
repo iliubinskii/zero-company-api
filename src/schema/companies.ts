@@ -4,17 +4,17 @@ export interface Company {
   readonly categories: readonly string[];
   readonly country: string;
   readonly createdAt: string;
-  readonly description?: string;
-  readonly foundedAt?: string;
+  readonly description?: string | undefined;
+  readonly foundedAt?: string | undefined;
   readonly founders: readonly Founder[];
   readonly images: readonly WebAccessibleImage[];
-  readonly logo?: WebAccessibleImage;
-  readonly name?: string;
-  readonly privateCompany?: boolean;
-  readonly recommended?: boolean;
+  readonly logo?: WebAccessibleImage | undefined;
+  readonly name?: string | undefined;
+  readonly privateCompany?: boolean | undefined;
+  readonly recommended?: boolean | undefined;
   readonly status: CompanyStatus;
-  readonly targetValue?: number;
-  readonly website?: string;
+  readonly targetValue?: number | undefined;
+  readonly website?: string | undefined;
 }
 
 export interface CompanyCreate

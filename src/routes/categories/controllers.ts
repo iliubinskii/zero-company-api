@@ -13,7 +13,6 @@ import {
 import {
   assertDefined,
   buildErrorResponse,
-  filterUndefinedProperties,
   sendResponse,
   wrapAsyncHandler
 } from "../../utils";
@@ -36,19 +35,7 @@ export function createCategoryControllers(
   const crudControllers = createCrudControllers(
     crudService,
     CategoryCreateValidationSchema,
-    {
-      safeParse: item => {
-        const result = CategoryUpdateValidationSchema.safeParse(item);
-
-        if (result.success)
-          return {
-            data: filterUndefinedProperties(result.data),
-            success: true
-          };
-
-        return result;
-      }
-    }
+    CategoryUpdateValidationSchema
   );
 
   return {
@@ -58,9 +45,7 @@ export function createCategoryControllers(
       const options = GetCategoriesOptionsValidationSchema.safeParse(req.query);
 
       if (options.success) {
-        const categories = await service.getCategories(
-          filterUndefinedProperties(options.data)
-        );
+        const categories = await service.getCategories(options.data);
 
         sendResponse<Routes["/categories"]["get"]>(
           res,
@@ -81,13 +66,10 @@ export function createCategoryControllers(
       const options = GetCompaniesOptionsValidationSchema.safeParse(req.query);
 
       if (options.success) {
-        const companies = await companiesService.getCompanies(
-          filterUndefinedProperties(options.data),
-          {
-            category: id,
-            type: "category"
-          }
-        );
+        const companies = await companiesService.getCompanies(options.data, {
+          category: id,
+          type: "category"
+        });
 
         sendResponse<Routes["/categories/{id}/companies"]["get"]>(
           res,

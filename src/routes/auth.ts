@@ -14,11 +14,7 @@ import {
 } from "../consts";
 import type { AuthUserEssential, Jwt } from "../schema";
 import { ErrorCode, JwtValidationSchema, preprocessEmail } from "../schema";
-import {
-  buildQuery,
-  filterUndefinedProperties,
-  wrapAsyncHandler
-} from "../utils";
+import { buildQuery, wrapAsyncHandler } from "../utils";
 import { Router } from "express";
 import { URL } from "node:url";
 import type { UsersService } from "../types";
@@ -190,13 +186,11 @@ export function createAuthRouter(usersService: UsersService): Router {
             type: "email"
           });
 
-          res.json(
-            filterUndefinedProperties({
-              admin: ADMIN_EMAIL.includes(email),
-              email,
-              user
-            })
-          );
+          res.json({
+            admin: ADMIN_EMAIL.includes(email),
+            email,
+            user
+          });
         } else res.json(null);
       })
     );

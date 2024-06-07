@@ -11,7 +11,6 @@ import type {
   GetUsersOptions
 } from "./get-all-options";
 import { MAX_LIMIT } from "./consts";
-import type { ValidationResult } from "./common";
 import zod from "zod";
 
 const cursor = zod.tuple([zod.string().min(1), IdValidationSchema]).optional();
@@ -74,28 +73,28 @@ export const GetUsersOptionsValidationSchema = zod.strictObject({
 });
 
 // Type check the get categories options validation schema
-((): ValidationResult<GetCategoriesOptions> | undefined => {
+((): GetCategoriesOptions | undefined => {
   const result = GetCategoriesOptionsValidationSchema.safeParse(undefined);
 
   return result.success ? result.data : undefined;
 })();
 
 // Type check the get companies options validation schema
-((): ValidationResult<GetCompaniesOptions> | undefined => {
+((): GetCompaniesOptions | undefined => {
   const result = GetCompaniesOptionsValidationSchema.safeParse(undefined);
 
   return result.success ? result.data : undefined;
 })();
 
 // Type check the get documents options validation schema
-((): ValidationResult<GetDocumentsOptions> | undefined => {
+((): GetDocumentsOptions | undefined => {
   const result = GetDocumentsOptionsValidationSchema.safeParse(undefined);
 
   return result.success ? result.data : undefined;
 })();
 
 // Type check the get users options validation schema
-((): ValidationResult<GetUsersOptions> | undefined => {
+((): GetUsersOptions | undefined => {
   const result = GetUsersOptionsValidationSchema.safeParse(undefined);
 
   return result.success ? result.data : undefined;

@@ -4,7 +4,6 @@ import type {
   GetCompaniesOptions,
   User
 } from "../../schema";
-import { filterUndefinedProperties, toObject } from "../../utils";
 import type { CompaniesService } from "../../types";
 import type { FilterQuery } from "mongoose";
 import { MAX_LIMIT } from "../../schema";
@@ -12,6 +11,7 @@ import type { Writable } from "ts-toolbelt/out/Object/Writable";
 import { createCrudService } from "../../services";
 import { getCompanyModel } from "./model";
 import type mongoose from "mongoose";
+import { toObject } from "../../utils";
 
 /**
  * Creates a MongoDB service for companies.
@@ -91,15 +91,24 @@ export function createCompaniesService(
 
       const lastCompany = companies.at(-1);
 
-      return filterUndefinedProperties({
+      const nextCursor = ((): [string, string] | undefined => {
+        if (companies.length === limit && lastCompany) {
+          const cursor0 = lastCompany[sortBy];
+
+          const cursor1 = lastCompany._id.toString();
+
+          if (cursor0) return [cursor0, cursor1];
+        }
+
+        return undefined;
+      })();
+
+      return {
         count: companies.length,
         docs: companies.map(toObject),
-        nextCursor:
-          companies.length === limit && lastCompany
-            ? [lastCompany[sortBy], lastCompany._id.toString()]
-            : undefined,
+        nextCursor,
         total
-      });
+      };
     },
     getCompany: crudService.getItem,
     updateCompany: crudService.updateItem

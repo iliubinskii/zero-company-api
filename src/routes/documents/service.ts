@@ -1,5 +1,4 @@
 import type { Document, DocumentUpdate, User } from "../../schema";
-import { filterUndefinedProperties, toObject } from "../../utils";
 import type { DocumentsService } from "../../types";
 import type { FilterQuery } from "mongoose";
 import { MAX_LIMIT } from "../../schema";
@@ -7,6 +6,7 @@ import type { Writable } from "ts-toolbelt/out/Object/Writable";
 import { createCrudService } from "../../services";
 import { getDocumentModel } from "./model";
 import type mongoose from "mongoose";
+import { toObject } from "../../utils";
 
 /**
  * Creates a MongoDB service for documents.
@@ -68,11 +68,11 @@ export function createDocumentsService(
         DocumentModel.countDocuments(filter)
       ]);
 
-      return filterUndefinedProperties({
+      return {
         count: documents.length,
         docs: documents.map(toObject),
         total
-      });
+      };
     },
     updateDocument: crudService.updateItem
   };

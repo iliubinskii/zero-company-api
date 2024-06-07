@@ -3,8 +3,8 @@ import type { DigitalDocument, DocType, Signatory, Update } from "./common";
 export interface Document {
   readonly company: string;
   readonly createdAt: string;
-  readonly doc?: DigitalDocument;
-  readonly metadata?: string;
+  readonly doc?: DigitalDocument | undefined;
+  readonly metadata?: string | undefined;
   readonly signatories: readonly Signatory[];
   readonly type: DocType;
 }

@@ -1,3 +1,5 @@
+import type { Readonly } from "ts-toolbelt/out/Object/Readonly";
+
 export const CompanyStatus = {
   draft: "draft",
   founded: "founded",
@@ -58,26 +60,32 @@ export interface FieldError {
 export interface MultipleDocsResponse<T> {
   readonly count: number;
   readonly docs: readonly T[];
-  readonly nextCursor?: readonly [string, string];
+  readonly nextCursor?: readonly [string, string] | undefined;
   readonly total: number;
 }
 
+export type SchemaItem = {
+  responses: {
+    [K: PropertyKey]: { content: { "application/json": object } };
+  };
+};
+
+export type SchemaResponse<T extends SchemaItem = never> = Readonly<
+  T["responses"][keyof T["responses"]]["content"]["application/json"],
+  PropertyKey,
+  "deep"
+>;
+
 export interface Signatory {
   readonly email: string;
-  readonly firstName?: string;
-  readonly lastName?: string;
+  readonly firstName?: string | undefined;
+  readonly lastName?: string | undefined;
 }
 
 export type Update<T> = {
   [K in keyof T]?: undefined extends T[K]
-    ? Exclude<T[K], undefined> | null
-    : T[K];
-};
-
-export type ValidationResult<T> = {
-  [K in keyof T]: undefined extends T[K]
-    ? ValidationResult<T[K]> | undefined
-    : ValidationResult<T[K]>;
+    ? T[K] | undefined | null
+    : T[K] | undefined;
 };
 
 export interface WebAccessibleImage {

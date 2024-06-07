@@ -12,7 +12,6 @@ import {
   preprocessEmail,
   preprocessNumber
 } from "./common";
-import type { ValidationResult } from "./common";
 import zod from "zod";
 
 const _id = IdValidationSchema;
@@ -94,21 +93,21 @@ export const CompanyUpdateValidationSchema = zod.strictObject({
 });
 
 // Type check the existing company validation schema
-((): ValidationResult<ExistingCompany> | undefined => {
+((): ExistingCompany | undefined => {
   const result = ExistingCompanyValidationSchema.safeParse(undefined);
 
   return result.success ? result.data : undefined;
 })();
 
 // Type check the company create validation schema
-((): ValidationResult<CompanyCreate> | undefined => {
+((): CompanyCreate | undefined => {
   const result = CompanyCreateValidationSchema.safeParse(undefined);
 
   return result.success ? result.data : undefined;
 })();
 
 // Type check the company update validation schema
-((): ValidationResult<CompanyUpdate> | undefined => {
+((): CompanyUpdate | undefined => {
   const result = CompanyUpdateValidationSchema.safeParse(undefined);
 
   return result.success ? result.data : undefined;
