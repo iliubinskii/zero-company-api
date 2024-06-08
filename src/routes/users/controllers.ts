@@ -14,7 +14,6 @@ import {
 import {
   assertDefined,
   buildErrorResponse,
-  filterUndefinedProperties,
   sendResponse,
   wrapAsyncHandler
 } from "../../utils";
@@ -96,7 +95,7 @@ export function createUserControllers(
         })();
 
         const companies = await companiesService.getCompanies(
-          filterUndefinedProperties(options.data),
+          options.data,
           parentRef
         );
 
@@ -130,9 +129,7 @@ export function createUserControllers(
       const options = GetUsersOptionsValidationSchema.safeParse(req.query);
 
       if (options.success) {
-        const users = await service.getUsers(
-          filterUndefinedProperties(options.data)
-        );
+        const users = await service.getUsers(options.data);
 
         sendResponse<Routes["/users"]["get"]>(res, StatusCodes.OK, users);
       } else
@@ -148,10 +145,7 @@ export function createUserControllers(
       const user = UserUpdateValidationSchema.safeParse(req.body);
 
       if (user.success) {
-        const updatedUser = await service.updateUser(
-          ref,
-          filterUndefinedProperties(user.data)
-        );
+        const updatedUser = await service.updateUser(ref, user.data);
 
         if (updatedUser)
           sendResponse<Routes["/users/{id}"]["put"]>(

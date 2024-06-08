@@ -2,6 +2,7 @@ import { MAX_LIMIT } from "../../schema";
 import { MONGODB_ERROR } from "../../consts";
 import type { UsersService } from "../../types";
 import { getUserModel } from "./model";
+import { toObject } from "../../utils";
 
 /**
  * Creates a MongoDB service for users.
@@ -17,9 +18,7 @@ export function createUsersService(): UsersService {
 
         const addedUser = await model.save();
 
-        const { _id, ...rest } = addedUser.toObject();
-
-        return { _id: _id.toString(), ...rest };
+        return toObject(addedUser);
       } catch (err) {
         if (
           typeof err === "object" &&
@@ -64,13 +63,7 @@ export function createUsersService(): UsersService {
         }
       })();
 
-      if (user) {
-        const { _id, ...rest } = user.toObject();
-
-        return { _id: _id.toString(), ...rest };
-      }
-
-      return undefined;
+      return user ? toObject(user) : undefined;
     },
     getUsers: async ({ limit = MAX_LIMIT, offset = 0 } = {}) => {
       const UserModel = await getUserModel();
@@ -84,11 +77,7 @@ export function createUsersService(): UsersService {
 
       return {
         count: users.length,
-        docs: users.map(user => {
-          const { _id, ...rest } = user.toObject();
-
-          return { _id: _id.toString(), ...rest };
-        }),
+        docs: users.map(toObject),
         total
       };
     },
@@ -111,13 +100,7 @@ export function createUsersService(): UsersService {
         }
       })();
 
-      if (updatedUser) {
-        const { _id, ...rest } = updatedUser.toObject();
-
-        return { _id: _id.toString(), ...rest };
-      }
-
-      return undefined;
+      return updatedUser ? toObject(updatedUser) : undefined;
     }
   };
 }

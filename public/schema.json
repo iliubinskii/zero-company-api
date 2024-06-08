@@ -1,6 +1,14 @@
 {
   "components": {
     "parameters": {
+      "AssetId": {
+        "in": "path",
+        "name": "assetId",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
       "Id": {
         "in": "path",
         "name": "id",
@@ -308,6 +316,9 @@
             "minLength": 2,
             "type": "string"
           },
+          "createdAt": {
+            "type": "string"
+          },
           "description": {
             "type": "string"
           },
@@ -353,6 +364,7 @@
           "_id",
           "categories",
           "country",
+          "createdAt",
           "founders",
           "images",
           "status"
@@ -487,7 +499,7 @@
             "type": "number"
           }
         },
-        "required": ["email", "firstName", "lastName", "share"],
+        "required": ["email"],
         "type": "object"
       },
       "Home": {
@@ -709,7 +721,7 @@
   "info": {
     "description": "An API for Zero Company application",
     "title": "Zero Company API",
-    "version": "2024.6.5"
+    "version": "2024.6.7"
   },
   "openapi": "3.0.0",
   "paths": {
@@ -947,6 +959,65 @@
         "tags": ["companies"]
       }
     },
+    "/companies/{id}/images": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/Id"
+        }
+      ],
+      "post": {
+        "responses": {
+          "201": {
+            "$ref": "#/components/responses/Company"
+          },
+          "400": {
+            "$ref": "#/components/responses/InvalidData"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        },
+        "summary": "Upload a new image for a company",
+        "tags": ["companies"]
+      }
+    },
+    "/companies/{id}/images/{assetId}": {
+      "delete": {
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Company"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        },
+        "summary": "Delete an image for a company",
+        "tags": ["companies"]
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/Id"
+        },
+        {
+          "$ref": "#/components/parameters/AssetId"
+        }
+      ],
+      "put": {
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Company"
+          },
+          "400": {
+            "$ref": "#/components/responses/InvalidData"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        },
+        "summary": "Update an image for a company",
+        "tags": ["companies"]
+      }
+    },
     "/documents": {
       "get": {
         "responses": {
@@ -1015,6 +1086,78 @@
         "summary": "Update a document by ID",
         "tags": ["documents"]
       }
+    },
+    "/me": {
+      "delete": {
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Delete"
+          }
+        },
+        "summary": "Delete a user by ID",
+        "tags": ["users"]
+      },
+      "get": {
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/User"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        },
+        "summary": "Get a user by ID",
+        "tags": ["users"]
+      },
+      "post": {
+        "responses": {
+          "201": {
+            "$ref": "#/components/responses/User"
+          },
+          "400": {
+            "$ref": "#/components/responses/InvalidData"
+          },
+          "409": {
+            "$ref": "#/components/responses/AlreadyExists"
+          }
+        },
+        "summary": "Create a new user",
+        "tags": ["users"]
+      },
+      "put": {
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/User"
+          },
+          "400": {
+            "$ref": "#/components/responses/InvalidData"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        },
+        "summary": "Update a user by ID",
+        "tags": ["users"]
+      }
+    },
+    "/me/companies": {
+      "get": {
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/CompanyList"
+          },
+          "400": {
+            "$ref": "#/components/responses/InvalidQuery"
+          }
+        },
+        "summary": "Get all companies for a user",
+        "tags": ["users"]
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/Id"
+        }
+      ]
     },
     "/users": {
       "get": {

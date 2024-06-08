@@ -7,8 +7,6 @@ import {
 } from "../../schema";
 import {
   buildErrorResponse,
-  filterUndefinedProperties,
-  filterUndefinedPropertiesDeep,
   sendResponse,
   wrapAsyncHandler
 } from "../../utils";
@@ -28,32 +26,8 @@ export function createDocumentControllers(
 
   const crudControllers = createCrudControllers(
     crudService,
-    {
-      safeParse: item => {
-        const result = DocumentCreateValidationSchema.safeParse(item);
-
-        if (result.success)
-          return {
-            data: filterUndefinedPropertiesDeep(result.data),
-            success: true
-          };
-
-        return result;
-      }
-    },
-    {
-      safeParse: item => {
-        const result = DocumentUpdateValidationSchema.safeParse(item);
-
-        if (result.success)
-          return {
-            data: filterUndefinedProperties(result.data),
-            success: true
-          };
-
-        return result;
-      }
-    }
+    DocumentCreateValidationSchema,
+    DocumentUpdateValidationSchema
   );
 
   return {
@@ -64,9 +38,7 @@ export function createDocumentControllers(
       const options = GetDocumentsOptionsValidationSchema.safeParse(req.query);
 
       if (options.success) {
-        const documents = await service.getDocuments(
-          filterUndefinedProperties(options.data)
-        );
+        const documents = await service.getDocuments(options.data);
 
         sendResponse<Routes["/documents"]["get"]>(
           res,

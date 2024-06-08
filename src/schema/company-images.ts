@@ -1,4 +1,4 @@
-import { WebAccessibleImage } from "./common";
+import type { WebAccessibleImage } from "./common";
 
 export interface CompanyImageCreate {
   readonly image: WebAccessibleImage;

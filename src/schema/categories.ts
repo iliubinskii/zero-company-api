@@ -3,7 +3,7 @@ import type { Update } from "./common";
 export interface Category {
   readonly description: string;
   readonly name: string;
-  readonly pinned?: boolean;
+  readonly pinned?: boolean | undefined;
   readonly tagline: string;
 }
 

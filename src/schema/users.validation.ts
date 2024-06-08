@@ -11,7 +11,6 @@ import {
   preprocessBoolean,
   preprocessEmail
 } from "./common";
-import type { ValidationResult } from "./common";
 import zod from "zod";
 
 const _id = IdValidationSchema;
@@ -60,42 +59,42 @@ export const UserUpdateValidationSchema = zod.strictObject({
 });
 
 // Type check the existing user validation schema
-((): ValidationResult<ExistingUser> | undefined => {
+((): ExistingUser | undefined => {
   const result = ExistingUserValidationSchema.safeParse(undefined);
 
   return result.success ? result.data : undefined;
 })();
 
 // Type check the jwt user validation schema
-((): ValidationResult<AuthUser> | undefined => {
+((): AuthUser | undefined => {
   const result = AuthUserValidationSchema.safeParse(undefined);
 
   return result.success ? result.data : undefined;
 })();
 
 // Type check the jwt user validation schema
-((): ValidationResult<AuthUserEssential> | undefined => {
+((): AuthUserEssential | undefined => {
   const result = AuthUserEssentialValidationSchema.safeParse(undefined);
 
   return result.success ? result.data : undefined;
 })();
 
 // Type check the jwt validation schema
-((): ValidationResult<Jwt> | undefined => {
+((): Jwt | undefined => {
   const result = JwtValidationSchema.safeParse(undefined);
 
   return result.success ? result.data : undefined;
 })();
 
 // Type check the user create validation schema
-((): ValidationResult<UserCreate> | undefined => {
+((): UserCreate | undefined => {
   const result = UserCreateValidationSchema.safeParse(undefined);
 
   return result.success ? result.data : undefined;
 })();
 
 // Type check the user update validation schema
-((): ValidationResult<UserUpdate> | undefined => {
+((): UserUpdate | undefined => {
   const result = UserUpdateValidationSchema.safeParse(undefined);
 
   return result.success ? result.data : undefined;

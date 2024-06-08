@@ -4,7 +4,7 @@ openapi: 3.0.0
 info:
   title: Zero Company API
   description: An API for Zero Company application
-  version: 2024.6.5
+  version: 2024.6.7
 
 # Servers
 servers:
@@ -246,6 +246,61 @@ paths:
           $ref: "#/components/responses/InvalidData"
         "404":
           $ref: "#/components/responses/NotFound"
+
+  # Me path
+  /me:
+    delete:
+      summary: Delete a user by ID
+      tags:
+        - users
+      responses:
+        "200":
+          $ref: "#/components/responses/Delete"
+    get:
+      summary: Get a user by ID
+      tags:
+        - users
+      responses:
+        "200":
+          $ref: "#/components/responses/User"
+        "404":
+          $ref: "#/components/responses/NotFound"
+    post:
+      summary: Create a new user
+      tags:
+        - users
+      responses:
+        "201":
+          $ref: "#/components/responses/User"
+        "400":
+          $ref: "#/components/responses/InvalidData"
+        "409":
+          $ref: "#/components/responses/AlreadyExists"
+    put:
+      summary: Update a user by ID
+      tags:
+        - users
+      responses:
+        "200":
+          $ref: "#/components/responses/User"
+        "400":
+          $ref: "#/components/responses/InvalidData"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  # Me companies path
+  /me/companies:
+    parameters:
+      - $ref: '#/components/parameters/Id'
+    get:
+      summary: Get all companies for a user
+      tags:
+        - users
+      responses:
+        "200":
+          $ref: "#/components/responses/CompanyList"
+        "400":
+          $ref: "#/components/responses/InvalidQuery"
 
   # Users path
   /users:
@@ -638,6 +693,7 @@ components:
         - _id
         - categories
         - country
+        - createdAt
         - founders
         - images
         - status
@@ -652,6 +708,8 @@ components:
           type: string
           minLength: 2
           maxLength: 2
+        createdAt:
+          type: string
         description:
           type: string
         foundedAt:
@@ -792,9 +850,6 @@ components:
       type: object
       required:
         - email
-        - firstName
-        - lastName
-        - share
       properties:
         email:
           type: string

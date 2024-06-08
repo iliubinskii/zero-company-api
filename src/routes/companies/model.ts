@@ -1,4 +1,4 @@
-import { COMPANY_STATUS, type Company } from "../../schema";
+import { type Company, CompanyStatus } from "../../schema";
 import type { Equals } from "ts-toolbelt/out/Any/Equals";
 import { getMongodbConnection } from "../../providers";
 import mongoose from "mongoose";
@@ -6,6 +6,7 @@ import mongoose from "mongoose";
 const Schema = {
   categories: { required: true, type: [String] },
   country: { required: true, type: String },
+  createdAt: { required: true, type: String },
   description: { type: String },
   foundedAt: { type: String },
   founders: {
@@ -13,9 +14,9 @@ const Schema = {
     type: [
       {
         email: { required: true, type: String },
-        firstName: { required: true, type: String },
-        lastName: { required: true, type: String },
-        share: { required: true, type: Number }
+        firstName: { type: String },
+        lastName: { type: String },
+        share: { type: Number }
       }
     ]
   },
@@ -44,7 +45,7 @@ const Schema = {
   privateCompany: { type: Boolean },
   recommended: { type: Boolean },
   status: {
-    enum: Object.values(COMPANY_STATUS),
+    enum: Object.values(CompanyStatus),
     required: true,
     type: String
   },

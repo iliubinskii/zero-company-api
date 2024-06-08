@@ -4,8 +4,8 @@ import type { Jwt } from "./schema";
 
 declare module "express-serve-static-core" {
   interface Request {
-    idParam?: string;
-    jwt?: Jwt;
+    idParam?: string | undefined;
+    jwt?: Jwt | undefined;
     readonly logout: () => void;
     requestId: string;
     userRef?:
@@ -16,13 +16,14 @@ declare module "express-serve-static-core" {
       | {
           readonly email: string;
           readonly type: "email";
-        };
+        }
+      | undefined;
   }
 }
 
 declare module "express-session" {
   interface SessionData {
-    failureReturnUrl?: string;
-    successReturnUrl?: string;
+    failureReturnUrl?: string | undefined;
+    successReturnUrl?: string | undefined;
   }
 }

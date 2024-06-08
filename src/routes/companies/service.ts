@@ -9,9 +9,9 @@ import type { FilterQuery } from "mongoose";
 import { MAX_LIMIT } from "../../schema";
 import type { Writable } from "ts-toolbelt/out/Object/Writable";
 import { createCrudService } from "../../services";
-import { filterUndefinedProperties } from "../../utils";
 import { getCompanyModel } from "./model";
 import type mongoose from "mongoose";
+import { toObject } from "../../utils";
 
 /**
  * Creates a MongoDB service for companies.
@@ -91,19 +91,24 @@ export function createCompaniesService(
 
       const lastCompany = companies.at(-1);
 
-      return filterUndefinedProperties({
-        count: companies.length,
-        docs: companies.map(company => {
-          const { _id, ...rest } = company.toObject();
+      const nextCursor = ((): [string, string] | undefined => {
+        if (companies.length === limit && lastCompany) {
+          const cursor0 = lastCompany[sortBy];
 
-          return { _id: _id.toString(), ...rest };
-        }),
-        nextCursor:
-          companies.length === limit && lastCompany
-            ? [lastCompany[sortBy], lastCompany._id.toString()]
-            : undefined,
+          const cursor1 = lastCompany._id.toString();
+
+          if (cursor0) return [cursor0, cursor1];
+        }
+
+        return undefined;
+      })();
+
+      return {
+        count: companies.length,
+        docs: companies.map(toObject),
+        nextCursor,
         total
-      });
+      };
     },
     getCompany: crudService.getItem,
     updateCompany: crudService.updateItem
@@ -122,6 +127,7 @@ export interface GetUserModel {
  * @param options.onlyRecommended - Whether to get only recommended companies.
  * @param options.sortBy - The field to sort companies by.
  * @param options.sortOrder - The order to sort companies by.
+ * @param options.status - The status of the companies.
  * @returns The filter to get companies.
  */
 function buildFilter({
@@ -129,7 +135,8 @@ function buildFilter({
   includePrivateCompanies = false,
   onlyRecommended = false,
   sortBy = "name",
-  sortOrder = "asc"
+  sortOrder = "asc",
+  status
 }: GetCompaniesOptions = {}): FilterQuery<Company> {
   const filter: Writable<FilterQuery<Company>> = {};
 
@@ -151,6 +158,8 @@ function buildFilter({
   } else filter["privateCompany"] = { $ne: true };
 
   if (onlyRecommended) filter["recommended"] = true;
+
+  if (status) filter["status"] = status;
 
   return filter;
 }

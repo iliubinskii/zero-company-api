@@ -5,6 +5,7 @@ import {
   wrapAsyncHandler
 } from "../../utils";
 import { ErrorCode } from "../../schema";
+import type { Request } from "express";
 import { StatusCodes } from "http-status-codes";
 import type zod from "zod";
 
@@ -25,7 +26,7 @@ export function createCrudControllers<
 ): CrudControllers {
   return {
     addItem: wrapAsyncHandler(async (req, res) => {
-      const item = CreateValidationSchema.safeParse(req.body);
+      const item = CreateValidationSchema.safeParse(req.body, {}, req);
 
       if (item.success) {
         const addedItem = await service.addItem(item.data);
@@ -41,7 +42,7 @@ export function createCrudControllers<
           .json(buildErrorResponse(ErrorCode.InvalidData, item.error));
     }),
     addItemGuaranteed: wrapAsyncHandler(async (req, res) => {
-      const item = CreateValidationSchema.safeParse(req.body);
+      const item = CreateValidationSchema.safeParse(req.body, {}, req);
 
       if (item.success) {
         const addedItem = await service.addItemGuaranteed(item.data);
@@ -73,7 +74,7 @@ export function createCrudControllers<
     updateItem: wrapAsyncHandler(async (req, res) => {
       const id = assertDefined(req.idParam);
 
-      const item = UpdateValidationSchema.safeParse(req.body);
+      const item = UpdateValidationSchema.safeParse(req.body, {}, req);
 
       if (item.success) {
         const updatedItem = await service.updateItem(id, item.data);
@@ -93,6 +94,8 @@ export function createCrudControllers<
 
 export interface ValidationSchemaInterface<T extends object> {
   readonly safeParse: (
-    item: unknown
+    item: unknown,
+    params: Partial<zod.ParseParams>,
+    req: Request
   ) => zod.SafeParseSuccess<T> | zod.SafeParseError<unknown>;
 }

@@ -1,14 +1,14 @@
+import type { CompaniesService, CompanyControllers } from "../../types";
 import {
-  COMPANY_STATUS,
   CompanyCreateValidationSchema,
+  CompanyStatus,
   CompanyUpdateValidationSchema,
   ErrorCode,
   GetCompaniesOptionsValidationSchema
 } from "../../schema";
-import type { CompaniesService, CompanyControllers } from "../../types";
 import {
+  assertDefined,
   buildErrorResponse,
-  filterUndefinedProperties,
   sendResponse,
   wrapAsyncHandler
 } from "../../utils";
@@ -29,36 +29,27 @@ export function createCompanyControllers(
   const crudControllers = createCrudControllers(
     crudService,
     {
-      safeParse: item => {
+      safeParse: (item, _params, req) => {
+        const { email } = assertDefined(assertDefined(req).jwt);
+
         const result = CompanyCreateValidationSchema.safeParse(item);
 
         if (result.success)
           return {
-            data: filterUndefinedProperties({
+            data: {
               ...result.data,
-              founders: [],
+              createdAt: new Date().toISOString(),
+              founders: [{ email }],
               images: [],
-              status: COMPANY_STATUS.draft
-            }),
+              status: CompanyStatus.draft
+            },
             success: true
           };
 
         return result;
       }
     },
-    {
-      safeParse: item => {
-        const result = CompanyUpdateValidationSchema.safeParse(item);
-
-        if (result.success)
-          return {
-            data: filterUndefinedProperties(result.data),
-            success: true
-          };
-
-        return result;
-      }
-    }
+    CompanyUpdateValidationSchema
   );
 
   return {
@@ -68,9 +59,7 @@ export function createCompanyControllers(
       const options = GetCompaniesOptionsValidationSchema.safeParse(req.query);
 
       if (options.success) {
-        const companies = await service.getCompanies(
-          filterUndefinedProperties(options.data)
-        );
+        const companies = await service.getCompanies(options.data);
 
         sendResponse<Routes["/companies"]["get"]>(
           res,

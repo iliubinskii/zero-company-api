@@ -271,6 +271,56 @@ export interface paths {
       };
     };
   };
+  "/me": {
+    /** Get a user by ID */
+    get: {
+      responses: {
+        200: components["responses"]["User"];
+        404: components["responses"]["NotFound"];
+      };
+    };
+    /** Update a user by ID */
+    put: {
+      responses: {
+        200: components["responses"]["User"];
+        400: components["responses"]["InvalidData"];
+        404: components["responses"]["NotFound"];
+      };
+    };
+    /** Create a new user */
+    post: {
+      responses: {
+        201: components["responses"]["User"];
+        400: components["responses"]["InvalidData"];
+        409: components["responses"]["AlreadyExists"];
+      };
+    };
+    /** Delete a user by ID */
+    delete: {
+      responses: {
+        200: components["responses"]["Delete"];
+      };
+    };
+  };
+  "/me/companies": {
+    /** Get all companies for a user */
+    get: {
+      parameters: {
+        path: {
+          id: components["parameters"]["Id"];
+        };
+      };
+      responses: {
+        200: components["responses"]["CompanyList"];
+        400: components["responses"]["InvalidQuery"];
+      };
+    };
+    parameters: {
+      path: {
+        id: components["parameters"]["Id"];
+      };
+    };
+  };
   "/users": {
     /** Get all users */
     get: {
@@ -428,6 +478,7 @@ export interface components {
       _id: string;
       categories: string[];
       country: string;
+      createdAt: string;
       description?: string;
       foundedAt?: string;
       founders: components["schemas"]["Founder"][];
@@ -474,9 +525,9 @@ export interface components {
     };
     Founder: {
       email: string;
-      firstName: string;
-      lastName: string;
-      share: number;
+      firstName?: string;
+      lastName?: string;
+      share?: number;
     };
     Home: {
       schema: string;

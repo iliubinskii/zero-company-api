@@ -5,6 +5,7 @@ import { MAX_LIMIT } from "../../schema";
 import type { Writable } from "ts-toolbelt/out/Object/Writable";
 import { createCrudService } from "../../services";
 import { getCategoryModel } from "./model";
+import { toObject } from "../../utils";
 
 /**
  * Creates a MongoDB service for categories.
@@ -39,11 +40,7 @@ export function createCategoriesService(): CategoriesService {
 
       return {
         count: categories.length,
-        docs: categories.map(category => {
-          const { _id, ...rest } = category.toObject();
-
-          return { _id: _id.toString(), ...rest };
-        }),
+        docs: categories.map(toObject),
         total
       };
     },

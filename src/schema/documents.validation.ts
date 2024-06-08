@@ -9,7 +9,6 @@ import type {
   DocumentUpdate,
   ExistingDocument
 } from "./documents";
-import type { ValidationResult } from "./common";
 import zod from "zod";
 
 const _id = IdValidationSchema;
@@ -44,21 +43,21 @@ export const DocumentUpdateValidationSchema = zod.strictObject({
 });
 
 // Type check the existing document validation schema
-((): ValidationResult<ExistingDocument> | undefined => {
+((): ExistingDocument | undefined => {
   const result = ExistingDocumentValidationSchema.safeParse(undefined);
 
   return result.success ? result.data : undefined;
 })();
 
 // Type check the document create validation schema
-((): ValidationResult<DocumentCreate> | undefined => {
+((): DocumentCreate | undefined => {
   const result = DocumentCreateValidationSchema.safeParse(undefined);
 
   return result.success ? result.data : undefined;
 })();
 
 // Type check the document update validation schema
-((): ValidationResult<DocumentUpdate> | undefined => {
+((): DocumentUpdate | undefined => {
   const result = DocumentUpdateValidationSchema.safeParse(undefined);
 
   return result.success ? result.data : undefined;
