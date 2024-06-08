@@ -1,11 +1,16 @@
-import type { CompanyStatus, Update, WebAccessibleImage } from "./common";
+import type {
+  CompanyStatus,
+  MultipleDocsResponse,
+  Update,
+  WebAccessibleImage
+} from "./common";
 
 export interface Company {
   readonly categories: readonly string[];
   readonly country: string;
-  readonly createdAt: string;
+  readonly createdAt: Date;
   readonly description?: string | undefined;
-  readonly foundedAt?: string | undefined;
+  readonly foundedAt?: Date | undefined;
   readonly founders: readonly Founder[];
   readonly images: readonly WebAccessibleImage[];
   readonly logo?: WebAccessibleImage | undefined;
@@ -37,6 +42,8 @@ export interface CompanyUpdate
 export interface ExistingCompany extends Company {
   readonly _id: string;
 }
+
+export type ExistingCompanies = MultipleDocsResponse<ExistingCompany>;
 
 export interface Founder {
   readonly email: string;

@@ -21,6 +21,9 @@ export function buildQuery(query: Query): string {
 
             break;
           }
+
+          default:
+          // Not reachable
         }
     })()
   );

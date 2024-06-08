@@ -1,7 +1,6 @@
 import type { Company } from "../../../schema";
 import type { CompanyImagesService } from "../../../types";
 import type mongoose from "mongoose";
-import { toObject } from "../../../utils";
 
 /**
  * Creates a MongoDB service for company images.
@@ -21,7 +20,7 @@ export function createCompanyImagesService(
         { new: true, runValidators: true }
       );
 
-      return company ? toObject(company) : undefined;
+      return company;
     },
     deleteImage: async (id, assetId) => {
       const CompanyModel = await getCompanyModel();
@@ -32,7 +31,7 @@ export function createCompanyImagesService(
         { new: true }
       );
 
-      return company ? toObject(company) : undefined;
+      return company;
     },
     updateImage: async (id, assetId, image) => {
       const CompanyModel = await getCompanyModel();
@@ -43,7 +42,7 @@ export function createCompanyImagesService(
         { new: true, runValidators: true }
       );
 
-      return company ? toObject(company) : undefined;
+      return company;
     }
   };
 }

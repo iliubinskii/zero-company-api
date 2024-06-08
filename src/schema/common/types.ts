@@ -57,6 +57,12 @@ export interface FieldError {
   readonly path: string;
 }
 
+export type JsonTransform<T> = T extends { toJSON(): infer R }
+  ? R
+  : T extends object
+    ? { [K in keyof T]: JsonTransform<T[K]> }
+    : T;
+
 export interface MultipleDocsResponse<T> {
   readonly count: number;
   readonly docs: readonly T[];

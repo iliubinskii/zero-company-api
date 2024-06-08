@@ -24,11 +24,11 @@ const categories = zod
 
 const country = zod.string().length(COUNTRY_CODE_SIZE);
 
-const createdAt = zod.string().min(1);
+const createdAt = zod.date();
 
 const description = zod.string().min(1).optional();
 
-const foundedAt = zod.string().min(1).optional();
+const foundedAt = zod.date().optional();
 
 const founder = zod.strictObject({
   email: preprocessEmail(zod.string().email()),

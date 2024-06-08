@@ -1,8 +1,14 @@
-import type { DigitalDocument, DocType, Signatory, Update } from "./common";
+import type {
+  DigitalDocument,
+  DocType,
+  MultipleDocsResponse,
+  Signatory,
+  Update
+} from "./common";
 
 export interface Document {
   readonly company: string;
-  readonly createdAt: string;
+  readonly createdAt: Date;
   readonly doc?: DigitalDocument | undefined;
   readonly metadata?: string | undefined;
   readonly signatories: readonly Signatory[];
@@ -16,3 +22,5 @@ export interface DocumentUpdate extends Update<Pick<Document, "doc">> {}
 export interface ExistingDocument extends Document {
   readonly _id: string;
 }
+
+export type ExistingDocuments = MultipleDocsResponse<ExistingDocument>;

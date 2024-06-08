@@ -1,7 +1,8 @@
 /* eslint-disable no-magic-numbers -- Ok */
 /* eslint-disable no-sync -- Ok */
 
-import { type Category, type Company, CompanyStatus, type User } from "../src";
+import type { Category, Company, User } from "../src";
+import { CompanyStatus } from "../src";
 import { dummy } from "../assets";
 import { faker } from "@faker-js/faker";
 import fs from "node:fs";
@@ -16,16 +17,14 @@ const companies = Array.from(
     const targetValue = faker.number.int({ max: 1000, min: 100 }) * PRICE_STEP;
 
     return {
-      _id: {
-        $oid: `50811f77bcf86cd79943${(i + 1).toString().padStart(4, "0")}`
-      },
+      _id: makeId(`50811f77bcf86cd79943${(i + 1).toString().padStart(4, "0")}`),
       categories: faker.helpers
         .uniqueArray(dummy.categories, faker.number.int({ max: 2, min: 1 }))
-        .map(category => category._id.$oid),
+        .map(category => category._id),
       country: "us",
-      createdAt: faker.date.recent().toISOString(),
+      createdAt: makeDate(faker.date.past()),
       description: faker.lorem.paragraph(),
-      foundedAt: faker.date.past().toISOString(),
+      foundedAt: makeDate(faker.date.past()),
       founders: faker.helpers
         .uniqueArray(dummy.users, faker.number.int({ max: 3, min: 1 }))
         .map(({ email, firstName, lastName }) => {
@@ -87,15 +86,47 @@ fs.writeFileSync("assets/dummy/companies.json", JSON.stringify(companies));
 // Type check the users schema
 ((): DummyUser[] => dummy.users)();
 
-interface DummyCategory extends Category {
-  readonly _id: { readonly $oid: string };
+/**
+ * Create a date object
+ * @param date - The date
+ * @returns The date object
+ */
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type -- Ok
+function makeDate(date: Date) {
+  return { $date: date.toISOString() } as const;
 }
 
-interface DummyCompany extends Omit<Company, "status"> {
-  readonly _id: { readonly $oid: string };
+/**
+ * Create an ObjectId
+ * @param id - The id
+ * @returns The ObjectId
+ */
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type -- Ok
+function makeId(id: string) {
+  return { $oid: id } as const;
+}
+
+interface DummyCategory extends Category {
+  readonly _id: DummyObjectId;
+}
+
+interface DummyCompany
+  extends Omit<Company, "categories" | "createdAt" | "foundedAt" | "status"> {
+  readonly _id: DummyObjectId;
+  readonly categories: readonly DummyObjectId[];
+  readonly createdAt: DummyDate;
+  readonly foundedAt: DummyDate;
   readonly status: string;
 }
 
 interface DummyUser extends User {
-  readonly _id: { readonly $oid: string };
+  readonly _id: DummyObjectId;
+}
+
+interface DummyDate {
+  readonly $date: string;
+}
+
+interface DummyObjectId {
+  readonly $oid: string;
 }

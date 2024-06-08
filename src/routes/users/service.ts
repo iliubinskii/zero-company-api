@@ -2,7 +2,6 @@ import { MAX_LIMIT } from "../../schema";
 import { MONGODB_ERROR } from "../../consts";
 import type { UsersService } from "../../types";
 import { getUserModel } from "./model";
-import { toObject } from "../../utils";
 
 /**
  * Creates a MongoDB service for users.
@@ -18,7 +17,7 @@ export function createUsersService(): UsersService {
 
         const addedUser = await model.save();
 
-        return toObject(addedUser);
+        return addedUser;
       } catch (err) {
         if (
           typeof err === "object" &&
@@ -26,7 +25,7 @@ export function createUsersService(): UsersService {
           "code" in err &&
           err.code === MONGODB_ERROR.DUPLICATE_KEY
         )
-          return undefined;
+          return null;
 
         throw err;
       }
@@ -63,7 +62,7 @@ export function createUsersService(): UsersService {
         }
       })();
 
-      return user ? toObject(user) : undefined;
+      return user;
     },
     getUsers: async ({ limit = MAX_LIMIT, offset = 0 } = {}) => {
       const UserModel = await getUserModel();
@@ -77,7 +76,7 @@ export function createUsersService(): UsersService {
 
       return {
         count: users.length,
-        docs: users.map(toObject),
+        docs: users,
         total
       };
     },
@@ -100,7 +99,7 @@ export function createUsersService(): UsersService {
         }
       })();
 
-      return updatedUser ? toObject(updatedUser) : undefined;
+      return updatedUser;
     }
   };
 }

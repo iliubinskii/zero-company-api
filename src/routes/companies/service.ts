@@ -11,7 +11,6 @@ import type { Writable } from "ts-toolbelt/out/Object/Writable";
 import { createCrudService } from "../../services";
 import { getCompanyModel } from "./model";
 import type mongoose from "mongoose";
-import { toObject } from "../../utils";
 
 /**
  * Creates a MongoDB service for companies.
@@ -97,7 +96,7 @@ export function createCompaniesService(
 
           const cursor1 = lastCompany._id.toString();
 
-          if (cursor0) return [cursor0, cursor1];
+          if (cursor0) return [cursor0.toString(), cursor1];
         }
 
         return undefined;
@@ -105,7 +104,7 @@ export function createCompaniesService(
 
       return {
         count: companies.length,
-        docs: companies.map(toObject),
+        docs: companies,
         nextCursor,
         total
       };

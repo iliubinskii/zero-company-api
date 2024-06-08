@@ -3,13 +3,14 @@ import type {
   CompanyImagesService
 } from "../../../types";
 import { CompanyImageCreateValidationSchema, ErrorCode } from "../../../schema";
-import type { ExistingCompany, Routes } from "../../../schema";
 import {
   assertDefined,
+  assertValidForJsonStringify,
   buildErrorResponse,
   sendResponse,
   wrapAsyncHandler
 } from "../../../utils";
+import type { Routes } from "../../../schema";
 import { StatusCodes } from "http-status-codes";
 
 /**
@@ -27,16 +28,13 @@ export function createCompanyImageControllers(
       const image = CompanyImageCreateValidationSchema.safeParse(req.body);
 
       if (image.success) {
-        const company: ExistingCompany | undefined = await service.addImage(
-          id,
-          image.data.image
-        );
+        const company = await service.addImage(id, image.data.image);
 
         if (company)
           sendResponse<Routes["/companies/{id}/images"]["post"]>(
             res,
             StatusCodes.CREATED,
-            company
+            assertValidForJsonStringify(company)
           );
         else
           sendResponse<Routes["/companies/{id}/images"]["post"]>(
@@ -62,7 +60,7 @@ export function createCompanyImageControllers(
         sendResponse<Routes["/companies/{id}/images/{assetId}"]["delete"]>(
           res,
           StatusCodes.OK,
-          company
+          assertValidForJsonStringify(company)
         );
       else
         sendResponse<Routes["/companies/{id}/images/{assetId}"]["delete"]>(
@@ -89,7 +87,7 @@ export function createCompanyImageControllers(
           sendResponse<Routes["/companies/{id}/images/{assetId}"]["put"]>(
             res,
             StatusCodes.OK,
-            company
+            assertValidForJsonStringify(company)
           );
         else
           sendResponse<Routes["/companies/{id}/images/{assetId}"]["put"]>(

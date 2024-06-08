@@ -1,6 +1,6 @@
-import { buildMongodbQuery, toObject } from "../../utils";
-import type { CrudService } from "../../types";
+import type { CrudService, ExistingItem } from "../../types";
 import { MONGODB_ERROR } from "../../consts";
+import { buildMongodbQuery } from "../../utils";
 import type mongoose from "mongoose";
 
 /**
@@ -21,7 +21,7 @@ export function createCrudService<
 
         const addedItem = await model.save();
 
-        return toObject(addedItem);
+        return assertExistingItemNullable(addedItem);
       } catch (err) {
         if (
           typeof err === "object" &&
@@ -29,7 +29,7 @@ export function createCrudService<
           "code" in err &&
           err.code === MONGODB_ERROR.DUPLICATE_KEY
         )
-          return undefined;
+          return null;
 
         throw err;
       }
@@ -41,7 +41,7 @@ export function createCrudService<
 
       const addedItem = await model.save();
 
-      return toObject(addedItem);
+      return assertExistingItem(addedItem);
     },
     deleteItem: async id => {
       const Model = await getModel();
@@ -55,7 +55,7 @@ export function createCrudService<
 
       const item = await Model.findById(id);
 
-      return item ? toObject(item) : undefined;
+      return assertExistingItemNullable(item);
     },
     updateItem: async (id, item) => {
       const Model = await getModel();
@@ -66,13 +66,35 @@ export function createCrudService<
         { new: true }
       );
 
-      if (updatedCategory) return toObject(updatedCategory);
-
-      return undefined;
+      return assertExistingItemNullable(updatedCategory);
     }
   };
 }
 
 export interface GetModel<ITEM extends object> {
   (): Promise<mongoose.Model<ITEM>>;
+}
+
+/**
+ * Asserts that an item has a valid ObjectId.
+ * @param item - The item to assert.
+ * @returns The item with a valid ObjectId.
+ */
+function assertExistingItem<ITEM extends object>(
+  item: ITEM
+): ExistingItem<ITEM> {
+  // eslint-disable-next-line no-type-assertion/no-type-assertion -- Ok
+  return item as ExistingItem<ITEM>;
+}
+
+/**
+ * Asserts that an item has a valid ObjectId or is null.
+ * @param item - The item to assert.
+ * @returns The item with a valid ObjectId or null.
+ */
+function assertExistingItemNullable<ITEM extends object>(
+  item: ITEM | null
+): ExistingItem<ITEM> | null {
+  // eslint-disable-next-line no-type-assertion/no-type-assertion -- Ok
+  return item as ExistingItem<ITEM>;
 }

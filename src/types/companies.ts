@@ -7,6 +7,7 @@ import type {
 } from "../schema";
 import type { CrudService } from "./crud";
 import type { RequestHandler } from "express";
+import type mongoose from "mongoose";
 
 export interface CompanyControllers {
   readonly addCompany: RequestHandler;
@@ -27,7 +28,7 @@ export interface CompaniesService {
    * @param company - The company to add.
    * @returns A promise that resolves when the company has been added.
    */
-  readonly addCompany: (company: Company) => Promise<ExistingCompany>;
+  readonly addCompany: (company: Company) => Promise<RawExistingCompany>;
   readonly crudService: CrudService<Company, CompanyUpdate>;
   /**
    * Deletes a company from the database.
@@ -44,13 +45,13 @@ export interface CompaniesService {
   readonly getCompanies: (
     options?: GetCompaniesOptions,
     parentRef?: GetCompaniesParentRef
-  ) => Promise<MultipleDocsResponse<ExistingCompany>>;
+  ) => Promise<RawExistingCompanies>;
   /**
    * Gets a company from the database.
    * @param id - The ID of the company to get.
    * @returns A promise that resolves with the company, or `undefined` if the company was not found.
    */
-  readonly getCompany: (id: string) => Promise<ExistingCompany | undefined>;
+  readonly getCompany: (id: string) => Promise<RawExistingCompany | null>;
   /**
    * Updates a company in the database.
    * @param id - The ID of the company to update.
@@ -60,7 +61,7 @@ export interface CompaniesService {
   readonly updateCompany: (
     id: string,
     company: CompanyUpdate
-  ) => Promise<ExistingCompany | undefined>;
+  ) => Promise<RawExistingCompany | null>;
 }
 
 export type GetCompaniesParentRef =
@@ -76,3 +77,9 @@ export type GetCompaniesParentRef =
       readonly founderId: string;
       readonly type: "founderId";
     };
+
+export interface RawExistingCompany extends Omit<ExistingCompany, "_id"> {
+  readonly _id: mongoose.Types.ObjectId;
+}
+
+export type RawExistingCompanies = MultipleDocsResponse<RawExistingCompany>;

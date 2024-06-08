@@ -4,11 +4,11 @@ import { getMongodbConnection } from "../../providers";
 import mongoose from "mongoose";
 
 const Schema = {
-  categories: { required: true, type: [String] },
+  categories: { required: true, type: [mongoose.Types.ObjectId] },
   country: { required: true, type: String },
-  createdAt: { required: true, type: String },
+  createdAt: { required: true, type: Date },
   description: { type: String },
-  foundedAt: { type: String },
+  foundedAt: { type: Date },
   founders: {
     required: true,
     type: [

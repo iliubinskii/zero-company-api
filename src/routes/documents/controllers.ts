@@ -6,6 +6,7 @@ import {
   GetDocumentsOptionsValidationSchema
 } from "../../schema";
 import {
+  assertValidForJsonStringify,
   buildErrorResponse,
   sendResponse,
   wrapAsyncHandler
@@ -43,7 +44,7 @@ export function createDocumentControllers(
         sendResponse<Routes["/documents"]["get"]>(
           res,
           StatusCodes.OK,
-          documents
+          assertValidForJsonStringify(documents)
         );
       } else
         sendResponse<Routes["/documents"]["get"]>(

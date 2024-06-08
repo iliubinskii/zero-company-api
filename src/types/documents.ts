@@ -7,6 +7,7 @@ import type {
 } from "../schema";
 import type { CrudService } from "./crud";
 import type { RequestHandler } from "express";
+import type mongoose from "mongoose";
 
 export interface DocumentControllers {
   readonly addDocument: RequestHandler;
@@ -22,7 +23,7 @@ export interface DocumentsService {
    * @param document - The document to add.
    * @returns A promise that resolves when the document has been added.
    */
-  readonly addDocument: (document: Document) => Promise<ExistingDocument>;
+  readonly addDocument: (document: Document) => Promise<RawExistingDocument>;
   readonly crudService: CrudService<Document, DocumentUpdate>;
   /**
    * Deletes a document from the database.
@@ -35,7 +36,7 @@ export interface DocumentsService {
    * @param id - The ID of the document to get.
    * @returns A promise that resolves with the document, or `undefined` if the document was not found.
    */
-  readonly getDocument: (id: string) => Promise<ExistingDocument | undefined>;
+  readonly getDocument: (id: string) => Promise<RawExistingDocument | null>;
   /**
    * Gets all documents from the database.
    * @param options - The options to use when getting documents.
@@ -44,7 +45,7 @@ export interface DocumentsService {
   readonly getDocuments: (
     options?: GetDocumentsOptions,
     parentRef?: GetDocumentsParentRef
-  ) => Promise<MultipleDocsResponse<ExistingDocument>>;
+  ) => Promise<RawExistingDocuments>;
   /**
    * Updates a document in the database.
    * @param id - The ID of the document to update.
@@ -54,7 +55,7 @@ export interface DocumentsService {
   readonly updateDocument: (
     id: string,
     document: DocumentUpdate
-  ) => Promise<ExistingDocument | undefined>;
+  ) => Promise<RawExistingDocument | null>;
 }
 
 export type GetDocumentsParentRef =
@@ -70,3 +71,9 @@ export type GetDocumentsParentRef =
       readonly founderId: string;
       readonly type: "founderId";
     };
+
+export interface RawExistingDocument extends Omit<ExistingDocument, "_id"> {
+  readonly _id: mongoose.Types.ObjectId;
+}
+
+export type RawExistingDocuments = MultipleDocsResponse<RawExistingDocument>;

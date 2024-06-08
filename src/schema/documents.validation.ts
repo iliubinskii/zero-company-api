@@ -15,7 +15,7 @@ const _id = IdValidationSchema;
 
 const company = zod.string().min(1);
 
-const createdAt = zod.string().min(1);
+const createdAt = zod.date();
 
 const doc = DigitalDocumentValidationSchema.optional();
 

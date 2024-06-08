@@ -7,6 +7,7 @@ import type {
 } from "../schema";
 import type { CrudService } from "./crud";
 import type { RequestHandler } from "express";
+import type mongoose from "mongoose";
 
 export interface CategoryControllers {
   readonly addCategory: RequestHandler;
@@ -23,7 +24,7 @@ export interface CategoriesService {
    * @param category - The category to add.
    * @returns A promise that resolves when the category has been added.
    */
-  readonly addCategory: (category: Category) => Promise<ExistingCategory>;
+  readonly addCategory: (category: Category) => Promise<RawExistingCategory>;
   readonly crudService: CrudService<Category, CategoryUpdate>;
   /**
    * Deletes a category from the database.
@@ -38,13 +39,13 @@ export interface CategoriesService {
    */
   readonly getCategories: (
     options?: GetCategoriesOptions
-  ) => Promise<MultipleDocsResponse<ExistingCategory>>;
+  ) => Promise<RawExistingCategories>;
   /**
    * Gets a category from the database.
    * @param id - The ID of the category to get.
    * @returns A promise that resolves with the category, or `undefined` if the category was not found.
    */
-  readonly getCategory: (id: string) => Promise<ExistingCategory | undefined>;
+  readonly getCategory: (id: string) => Promise<RawExistingCategory | null>;
   /**
    * Updates a category in the database.
    * @param id - The ID of the category to update.
@@ -54,5 +55,11 @@ export interface CategoriesService {
   readonly updateCategory: (
     id: string,
     category: CategoryUpdate
-  ) => Promise<ExistingCategory | undefined>;
+  ) => Promise<RawExistingCategory | null>;
 }
+
+export interface RawExistingCategory extends Omit<ExistingCategory, "_id"> {
+  readonly _id: mongoose.Types.ObjectId;
+}
+
+export type RawExistingCategories = MultipleDocsResponse<RawExistingCategory>;

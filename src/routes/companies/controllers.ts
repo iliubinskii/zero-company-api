@@ -8,6 +8,7 @@ import {
 } from "../../schema";
 import {
   assertDefined,
+  assertValidForJsonStringify,
   buildErrorResponse,
   sendResponse,
   wrapAsyncHandler
@@ -38,7 +39,7 @@ export function createCompanyControllers(
           return {
             data: {
               ...result.data,
-              createdAt: new Date().toISOString(),
+              createdAt: new Date(),
               founders: [{ email }],
               images: [],
               status: CompanyStatus.draft
@@ -64,7 +65,7 @@ export function createCompanyControllers(
         sendResponse<Routes["/companies"]["get"]>(
           res,
           StatusCodes.OK,
-          companies
+          assertValidForJsonStringify(companies)
         );
       } else
         sendResponse<Routes["/companies"]["get"]>(

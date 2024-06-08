@@ -13,6 +13,7 @@ import {
 } from "../../schema";
 import {
   assertDefined,
+  assertValidForJsonStringify,
   buildErrorResponse,
   sendResponse,
   wrapAsyncHandler
@@ -46,7 +47,7 @@ export function createUserControllers(
           sendResponse<Routes["/users"]["post"]>(
             res,
             StatusCodes.CREATED,
-            addedUser
+            assertValidForJsonStringify(addedUser)
           );
         else
           sendResponse<Routes["/users"]["post"]>(
@@ -102,7 +103,7 @@ export function createUserControllers(
         sendResponse<Routes["/users/{id}/companies"]["get"]>(
           res,
           StatusCodes.OK,
-          companies
+          assertValidForJsonStringify(companies)
         );
       } else
         sendResponse<Routes["/users/{id}/companies"]["get"]>(
@@ -117,7 +118,11 @@ export function createUserControllers(
       const user = await service.getUser(ref);
 
       if (user)
-        sendResponse<Routes["/users/{id}"]["get"]>(res, StatusCodes.OK, user);
+        sendResponse<Routes["/users/{id}"]["get"]>(
+          res,
+          StatusCodes.OK,
+          assertValidForJsonStringify(user)
+        );
       else
         sendResponse<Routes["/users/{id}"]["get"]>(
           res,
@@ -131,7 +136,11 @@ export function createUserControllers(
       if (options.success) {
         const users = await service.getUsers(options.data);
 
-        sendResponse<Routes["/users"]["get"]>(res, StatusCodes.OK, users);
+        sendResponse<Routes["/users"]["get"]>(
+          res,
+          StatusCodes.OK,
+          assertValidForJsonStringify(users)
+        );
       } else
         sendResponse<Routes["/users"]["get"]>(
           res,
@@ -151,7 +160,7 @@ export function createUserControllers(
           sendResponse<Routes["/users/{id}"]["put"]>(
             res,
             StatusCodes.OK,
-            updatedUser
+            assertValidForJsonStringify(updatedUser)
           );
         else
           sendResponse<Routes["/users/{id}"]["put"]>(

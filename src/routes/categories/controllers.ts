@@ -12,6 +12,7 @@ import {
 } from "../../schema";
 import {
   assertDefined,
+  assertValidForJsonStringify,
   buildErrorResponse,
   sendResponse,
   wrapAsyncHandler
@@ -50,7 +51,7 @@ export function createCategoryControllers(
         sendResponse<Routes["/categories"]["get"]>(
           res,
           StatusCodes.OK,
-          categories
+          assertValidForJsonStringify(categories)
         );
       } else
         sendResponse<Routes["/categories"]["get"]>(
@@ -74,7 +75,7 @@ export function createCategoryControllers(
         sendResponse<Routes["/categories/{id}/companies"]["get"]>(
           res,
           StatusCodes.OK,
-          companies
+          assertValidForJsonStringify(companies)
         );
       } else
         sendResponse<Routes["/categories/{id}/companies"]["get"]>(

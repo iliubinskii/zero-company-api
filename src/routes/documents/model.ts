@@ -5,7 +5,7 @@ import mongoose from "mongoose";
 
 const Schema = {
   company: { required: true, type: String },
-  createdAt: { required: true, type: String },
+  createdAt: { required: true, type: Date },
   doc: {
     type: {
       assetId: { required: true, type: String },

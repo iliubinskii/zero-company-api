@@ -1,4 +1,5 @@
 import type { RequestHandler } from "express";
+import type mongoose from "mongoose";
 
 export interface CrudControllers {
   readonly addItem: RequestHandler;
@@ -14,7 +15,7 @@ export interface CrudService<ITEM extends object, ITEM_UPDATE extends object> {
    * @param item - The item to add.
    * @returns A promise that resolves when the item has been added.
    */
-  readonly addItem: (item: ITEM) => Promise<ExistingItem<ITEM> | undefined>;
+  readonly addItem: (item: ITEM) => Promise<ExistingItem<ITEM> | null>;
   /**
    * Adds an item to the database.
    * @param item - The item to add.
@@ -32,7 +33,7 @@ export interface CrudService<ITEM extends object, ITEM_UPDATE extends object> {
    * @param id - The ID of the item to get.
    * @returns A promise that resolves with the item, or `undefined` if the item was not found.   *
    */
-  readonly getItem: (id: string) => Promise<ExistingItem<ITEM> | undefined>;
+  readonly getItem: (id: string) => Promise<ExistingItem<ITEM> | null>;
   /**
    * Gets all items from the database.
    * @param id - The ID of the item to get.
@@ -42,7 +43,9 @@ export interface CrudService<ITEM extends object, ITEM_UPDATE extends object> {
   readonly updateItem: (
     id: string,
     item: ITEM_UPDATE
-  ) => Promise<ExistingItem<ITEM> | undefined>;
+  ) => Promise<ExistingItem<ITEM> | null>;
 }
 
-export type ExistingItem<ITEM> = ITEM & { readonly _id: string };
+export type ExistingItem<ITEM> = ITEM & {
+  readonly _id: mongoose.Types.ObjectId;
+};
