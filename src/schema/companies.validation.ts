@@ -26,21 +26,21 @@ const country = zod.string().length(COUNTRY_CODE_SIZE);
 
 const createdAt = zod.date();
 
-const description = zod.string().min(1).optional();
+const description = zod.string().min(1).nullable().optional();
 
-const foundedAt = zod.date().optional();
+const foundedAt = zod.date().nullable().optional();
 
 const founders = zod.array(founder);
 
 const images = zod.array(ImageValidationSchema);
 
-const logo = ImageValidationSchema.optional();
+const logo = ImageValidationSchema.nullable().optional();
 
-const name = zod.string().min(1).optional();
+const name = zod.string().min(1).nullable().optional();
 
-const privateCompany = preprocessBoolean(zod.boolean()).optional();
+const privateCompany = preprocessBoolean(zod.boolean()).nullable().optional();
 
-const recommended = preprocessBoolean(zod.boolean()).optional();
+const recommended = preprocessBoolean(zod.boolean()).nullable().optional();
 
 const status = zod.enum([
   CompanyStatus.draft,
@@ -48,9 +48,11 @@ const status = zod.enum([
   CompanyStatus.signing
 ]);
 
-const targetValue = preprocessNumber(zod.number().int().positive()).optional();
+const targetValue = preprocessNumber(zod.number().int().positive())
+  .nullable()
+  .optional();
 
-const website = zod.string().url().optional();
+const website = zod.string().url().nullable().optional();
 
 export const ExistingCompanyValidationSchema = zod.strictObject({
   _id,
