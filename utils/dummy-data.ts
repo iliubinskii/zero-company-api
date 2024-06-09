@@ -40,23 +40,31 @@ const companies = Array.from(
         }),
       images: faker.helpers.uniqueArray(
         () => {
+          const index = getIndex();
+
           return {
             assetId: faker.string.hexadecimal({ length: 32 }),
             height: 900,
-            secureUrl: `https://picsum.photos/id/${index()}/1600/900`,
-            url: `http://picsum.photos/id/${index()}/1600/900`,
+            name: `Image ${index}.jpg`,
+            secureUrl: `https://picsum.photos/id/${index}/1600/900`,
+            url: `http://picsum.photos/id/${index}/1600/900`,
             width: 1600
           };
         },
         faker.number.int({ max: 5, min: 1 })
       ),
-      logo: {
-        assetId: faker.string.hexadecimal({ length: 32 }),
-        height: 512,
-        secureUrl: `https://picsum.photos/id/${index()}/512/512`,
-        url: `http://picsum.photos/id/${index()}/512/512`,
-        width: 512
-      },
+      logo: (() => {
+        const index = getIndex();
+
+        return {
+          assetId: faker.string.hexadecimal({ length: 32 }),
+          height: 512,
+          name: `Image ${index}.jpg`,
+          secureUrl: `https://picsum.photos/id/${index}/512/512`,
+          url: `http://picsum.photos/id/${index}/512/512`,
+          width: 512
+        };
+      })(),
       name: faker.commerce.productName(),
       privateCompany: faker.datatype.boolean({ probability: 0.1 }),
       recommended: faker.datatype.boolean({ probability: 0.9 }),
@@ -69,7 +77,7 @@ const companies = Array.from(
      * Generate a random index for the picsum photos
      * @returns The random index
      */
-    function index(): number {
+    function getIndex(): number {
       return faker.number.int({ max: 100, min: 1 });
     }
   }

@@ -1423,6 +1423,7 @@
         "required": [
           "assetId",
           "height",
+          "name",
           "secureUrl",
           "url",
           "width"
@@ -1433,6 +1434,9 @@
           },
           "height": {
             "type": "number"
+          },
+          "name": {
+            "type": "string"
           },
           "secureUrl": {
             "type": "string"

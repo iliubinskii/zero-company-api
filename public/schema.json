@@ -703,6 +703,9 @@
           "height": {
             "type": "number"
           },
+          "name": {
+            "type": "string"
+          },
           "secureUrl": {
             "type": "string"
           },
@@ -713,7 +716,7 @@
             "type": "number"
           }
         },
-        "required": ["assetId", "height", "secureUrl", "url", "width"],
+        "required": ["assetId", "height", "name", "secureUrl", "url", "width"],
         "type": "object"
       }
     }

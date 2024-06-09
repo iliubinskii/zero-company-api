@@ -1058,6 +1058,7 @@ components:
       required:
         - assetId
         - height
+        - name
         - secureUrl
         - url
         - width
@@ -1066,6 +1067,8 @@ components:
           type: string
         height:
           type: number
+        name:
+          type: string
         secureUrl:
           type: string
         url:

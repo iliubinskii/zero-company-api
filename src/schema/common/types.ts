@@ -104,6 +104,7 @@ export type Update<T> = {
 export interface WebAccessibleImage {
   readonly assetId: string;
   readonly height: number;
+  readonly name: string;
   readonly secureUrl: string;
   readonly url: string;
   readonly width: number;

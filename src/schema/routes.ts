@@ -597,6 +597,7 @@ export interface components {
     WebAccessibleImage: {
       assetId: string;
       height: number;
+      name: string;
       secureUrl: string;
       url: string;
       width: number;

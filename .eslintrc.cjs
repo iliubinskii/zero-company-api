@@ -86,6 +86,7 @@ const config = {
             "globals",
             "gmail",
             "ico",
+            "jpg",
             "jsdoc",
             "jsx",
             "lang",
