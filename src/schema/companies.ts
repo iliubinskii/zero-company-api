@@ -30,12 +30,14 @@ export interface CompanyUpdate
   extends Update<
     Pick<
       Company,
+      | "categories"
       | "description"
       | "founders"
       | "images"
       | "logo"
       | "name"
       | "privateCompany"
+      | "targetValue"
       | "website"
     >
   > {}

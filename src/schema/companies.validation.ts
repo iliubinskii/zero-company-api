@@ -78,12 +78,14 @@ export const CompanyCreateValidationSchema = zod.strictObject({
 });
 
 export const CompanyUpdateValidationSchema = zod.strictObject({
+  categories: categories.optional(),
   description: description.optional(),
   founders: founders.optional(),
   images: images.optional(),
   logo: logo.optional(),
   name: name.optional(),
   privateCompany: privateCompany.nullable().optional(),
+  targetValue: targetValue.nullable().optional(),
   website: website.nullable().optional()
 });
 
