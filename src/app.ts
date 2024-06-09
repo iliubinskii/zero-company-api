@@ -21,6 +21,8 @@ import {
   createCompaniesRouter,
   createCompaniesService,
   createCompanyControllers,
+  createCompanyImageControllers,
+  createCompanyImagesService,
   createDocumentControllers,
   createDocumentsRouter,
   createDocumentsService,
@@ -28,7 +30,6 @@ import {
   createUserControllers,
   createUsersRouter,
   createUsersService,
-  getUserModel,
   testRouter
 } from "./routes";
 import { getSessionStore, logger } from "./services";
@@ -56,9 +57,11 @@ export async function createApp(): Promise<express.Express> {
 
   const categoriesService = createCategoriesService();
 
-  const companiesService = createCompaniesService(getUserModel);
+  const companiesService = createCompaniesService();
 
-  const documentsService = createDocumentsService(getUserModel);
+  const companyImagesService = createCompanyImagesService();
+
+  const documentsService = createDocumentsService();
 
   const usersService = createUsersService();
 
@@ -68,6 +71,9 @@ export async function createApp(): Promise<express.Express> {
   );
 
   const companyControllers = createCompanyControllers(companiesService);
+
+  const companyImageControllers =
+    createCompanyImageControllers(companyImagesService);
 
   const documentControllers = createDocumentControllers(documentsService);
 
@@ -116,7 +122,10 @@ export async function createApp(): Promise<express.Express> {
 
   app.use("/categories", createCategoriesRouter(categoryControllers));
 
-  app.use("/companies", createCompaniesRouter(companyControllers));
+  app.use(
+    "/companies",
+    createCompaniesRouter(companyControllers, companyImageControllers)
+  );
 
   app.use("/documents", createDocumentsRouter(documentControllers));
 

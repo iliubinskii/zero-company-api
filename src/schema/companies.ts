@@ -1,20 +1,26 @@
-import type { CompanyStatus, Update, WebAccessibleImage } from "./common";
+import type {
+  CompanyStatus,
+  Founder,
+  MultipleDocsResponse,
+  Update,
+  WebAccessibleImage
+} from "./common";
 
 export interface Company {
   readonly categories: readonly string[];
   readonly country: string;
-  readonly createdAt: string;
-  readonly description?: string | undefined;
-  readonly foundedAt?: string | undefined;
+  readonly createdAt: Date;
+  readonly description?: string | null | undefined;
+  readonly foundedAt?: Date | null | undefined;
   readonly founders: readonly Founder[];
   readonly images: readonly WebAccessibleImage[];
-  readonly logo?: WebAccessibleImage | undefined;
-  readonly name?: string | undefined;
-  readonly privateCompany?: boolean | undefined;
-  readonly recommended?: boolean | undefined;
+  readonly logo?: WebAccessibleImage | null | undefined;
+  readonly name?: string | null | undefined;
+  readonly privateCompany?: boolean | null | undefined;
+  readonly recommended?: boolean | null | undefined;
   readonly status: CompanyStatus;
-  readonly targetValue?: number | undefined;
-  readonly website?: string | undefined;
+  readonly targetValue?: number | null | undefined;
+  readonly website?: string | null | undefined;
 }
 
 export interface CompanyCreate
@@ -24,12 +30,14 @@ export interface CompanyUpdate
   extends Update<
     Pick<
       Company,
+      | "categories"
       | "description"
       | "founders"
       | "images"
       | "logo"
       | "name"
       | "privateCompany"
+      | "targetValue"
       | "website"
     >
   > {}
@@ -38,9 +46,4 @@ export interface ExistingCompany extends Company {
   readonly _id: string;
 }
 
-export interface Founder {
-  readonly email: string;
-  readonly firstName?: string | undefined;
-  readonly lastName?: string | undefined;
-  readonly share?: number | undefined;
-}
+export type ExistingCompanies = MultipleDocsResponse<ExistingCompany>;

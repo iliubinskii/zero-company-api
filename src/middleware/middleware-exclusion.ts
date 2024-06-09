@@ -1,4 +1,3 @@
-import type { HttpMethod } from "../types";
 import type { RequestHandler } from "express";
 
 /**
@@ -30,3 +29,5 @@ export function middlewareExclusion(
 }
 
 export type ExclusionRoute = readonly [HttpMethod, string | RegExp];
+
+export type HttpMethod = "DELETE" | "GET" | "PATCH" | "POST" | "PUT";

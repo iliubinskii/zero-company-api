@@ -1,30 +1,40 @@
-import type { Document, DocumentUpdate, User } from "../../schema";
+import type { Document, User } from "../../schema";
+import { getDocumentModel, getUserModel } from "../../schema-mongodb";
 import type { DocumentsService } from "../../types";
 import type { FilterQuery } from "mongoose";
 import { MAX_LIMIT } from "../../schema";
 import type { Writable } from "ts-toolbelt/out/Object/Writable";
-import { createCrudService } from "../../services";
-import { getDocumentModel } from "./model";
 import type mongoose from "mongoose";
-import { toObject } from "../../utils";
 
 /**
  * Creates a MongoDB service for documents.
- * @param getUserModel - The function to get the user model.
  * @returns A MongoDB service for documents.
  */
-export function createDocumentsService(
-  getUserModel: GetUserModel
-): DocumentsService {
-  const crudService = createCrudService<Document, DocumentUpdate>(
-    getDocumentModel
-  );
-
+export function createDocumentsService(): DocumentsService {
   return {
-    addDocument: crudService.addItemGuaranteed,
-    crudService,
-    deleteDocument: crudService.deleteItem,
-    getDocument: crudService.getItem,
+    addDocument: async document => {
+      const DocumentModel = await getDocumentModel();
+
+      const model = new DocumentModel(document);
+
+      const addedItem = await model.save();
+
+      return addedItem;
+    },
+    deleteDocument: async id => {
+      const DocumentModel = await getDocumentModel();
+
+      const deletedCategory = await DocumentModel.findByIdAndDelete(id);
+
+      return deletedCategory ? 1 : 0;
+    },
+    getDocument: async id => {
+      const DocumentModel = await getDocumentModel();
+
+      const document = await DocumentModel.findById(id);
+
+      return document;
+    },
     getDocuments: async (options = {}, parentRef) => {
       const { limit = MAX_LIMIT, offset = 0 } = options;
 
@@ -61,8 +71,6 @@ export function createDocumentsService(
           }
         }
 
-      // eslint-disable-next-line no-warning-comments -- Postponed
-      // TODO: Use a single aggregate query to get both the count and the documents
       const [documents, total] = await Promise.all([
         DocumentModel.find(filter).skip(offset).limit(limit),
         DocumentModel.countDocuments(filter)
@@ -70,11 +78,21 @@ export function createDocumentsService(
 
       return {
         count: documents.length,
-        docs: documents.map(toObject),
+        docs: documents,
         total
       };
     },
-    updateDocument: crudService.updateItem
+    updateDocument: async (id, document) => {
+      const DocumentModel = await getDocumentModel();
+
+      const updatedCategory = await DocumentModel.findByIdAndUpdate(
+        id,
+        document,
+        { new: true }
+      );
+
+      return updatedCategory;
+    }
   };
 }
 

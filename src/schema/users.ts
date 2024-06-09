@@ -1,4 +1,4 @@
-import type { Update } from "./common";
+import type { MultipleDocsResponse, Update } from "./common";
 
 export interface AuthUser {
   readonly admin: boolean;
@@ -21,6 +21,8 @@ export interface AuthUserEssential {
 export interface ExistingUser extends User {
   readonly _id: string;
 }
+
+export type ExistingUsers = MultipleDocsResponse<ExistingUser>;
 
 export interface Jwt {
   readonly email: string;

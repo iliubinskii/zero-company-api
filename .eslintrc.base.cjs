@@ -109,7 +109,7 @@ const config = {
     "jsdoc/require-returns-type": "off",
     "n/no-missing-import": "off",
     "no-duplicate-imports": "off",
-    "no-magic-numbers": ["error", { ignore: [-1, 0, 1, 100] }],
+    "no-magic-numbers": ["error", { ignore: [-1, 0, 0.5, 1, 2, 100] }],
     "no-redeclare": "off",
     "no-shadow": "off",
     "no-type-assertion/no-type-assertion": "warn",

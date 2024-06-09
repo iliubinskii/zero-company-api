@@ -8,8 +8,8 @@ import {
   CompanyStatus,
   IdValidationSchema,
   ImageValidationSchema,
+  founder,
   preprocessBoolean,
-  preprocessEmail,
   preprocessNumber
 } from "./common";
 import zod from "zod";
@@ -24,30 +24,23 @@ const categories = zod
 
 const country = zod.string().length(COUNTRY_CODE_SIZE);
 
-const createdAt = zod.string().min(1);
+const createdAt = zod.date();
 
-const description = zod.string().min(1).optional();
+const description = zod.string().min(1).nullable().optional();
 
-const foundedAt = zod.string().min(1).optional();
-
-const founder = zod.strictObject({
-  email: preprocessEmail(zod.string().email()),
-  firstName: zod.string().min(1).optional(),
-  lastName: zod.string().min(1).optional(),
-  share: preprocessNumber(zod.number().int().positive()).optional()
-});
+const foundedAt = zod.date().nullable().optional();
 
 const founders = zod.array(founder);
 
 const images = zod.array(ImageValidationSchema);
 
-const logo = ImageValidationSchema.optional();
+const logo = ImageValidationSchema.nullable().optional();
 
-const name = zod.string().min(1).optional();
+const name = zod.string().min(1).nullable().optional();
 
-const privateCompany = preprocessBoolean(zod.boolean()).optional();
+const privateCompany = preprocessBoolean(zod.boolean()).nullable().optional();
 
-const recommended = preprocessBoolean(zod.boolean()).optional();
+const recommended = preprocessBoolean(zod.boolean()).nullable().optional();
 
 const status = zod.enum([
   CompanyStatus.draft,
@@ -55,9 +48,11 @@ const status = zod.enum([
   CompanyStatus.signing
 ]);
 
-const targetValue = preprocessNumber(zod.number().int().positive()).optional();
+const targetValue = preprocessNumber(zod.number().int().positive())
+  .nullable()
+  .optional();
 
-const website = zod.string().url().optional();
+const website = zod.string().url().nullable().optional();
 
 export const ExistingCompanyValidationSchema = zod.strictObject({
   _id,
@@ -83,12 +78,14 @@ export const CompanyCreateValidationSchema = zod.strictObject({
 });
 
 export const CompanyUpdateValidationSchema = zod.strictObject({
+  categories: categories.optional(),
   description: description.optional(),
   founders: founders.optional(),
   images: images.optional(),
   logo: logo.optional(),
   name: name.optional(),
   privateCompany: privateCompany.nullable().optional(),
+  targetValue: targetValue.nullable().optional(),
   website: website.nullable().optional()
 });
 

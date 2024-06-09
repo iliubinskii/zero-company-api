@@ -58,5 +58,35 @@
     "email": "liam.davis@example.com",
     "firstName": "Liam",
     "lastName": "Davis"
+  },
+  {
+    "_id": { "$oid": "50801f77bcf86cd79943901b" },
+    "email": "charlotte.clark@example.com",
+    "firstName": "Charlotte",
+    "lastName": "Clark"
+  },
+  {
+    "_id": { "$oid": "50801f77bcf86cd79943901c" },
+    "email": "james.jones@example.com",
+    "firstName": "James",
+    "lastName": "Jones"
+  },
+  {
+    "_id": { "$oid": "50801f77bcf86cd79943901d" },
+    "email": "amelia.garcia@example.com",
+    "firstName": "Amelia",
+    "lastName": "Garcia"
+  },
+  {
+    "_id": { "$oid": "50801f77bcf86cd79943901e" },
+    "email": "benjamin.miller@example.com",
+    "firstName": "Benjamin",
+    "lastName": "Miller"
+  },
+  {
+    "_id": { "$oid": "50801f77bcf86cd79943901f" },
+    "email": "harper.martin@example.com",
+    "firstName": "Harper",
+    "lastName": "Martin"
   }
 ]

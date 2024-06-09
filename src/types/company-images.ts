@@ -1,5 +1,6 @@
-import type { ExistingCompany, WebAccessibleImage } from "../schema";
+import type { RawExistingCompany } from "./companies";
 import type { RequestHandler } from "express";
+import type { WebAccessibleImage } from "../schema";
 
 export interface CompanyImageControllers {
   readonly addImage: RequestHandler;
@@ -22,7 +23,7 @@ export interface CompanyImagesService {
   readonly addImage: (
     id: string,
     image: WebAccessibleImage
-  ) => Promise<ExistingCompany | undefined>;
+  ) => Promise<RawExistingCompany | null>;
   /**
    * Deletes an image from a company.
    * @param id - The ID of the company to delete the image from.
@@ -32,7 +33,7 @@ export interface CompanyImagesService {
   readonly deleteImage: (
     id: string,
     assetId: string
-  ) => Promise<ExistingCompany | undefined>;
+  ) => Promise<RawExistingCompany | null>;
   /**
    * Updates an image for a company.
    * @param id - The ID of the company to update the image for.
@@ -44,5 +45,5 @@ export interface CompanyImagesService {
     id: string,
     assetId: string,
     image: WebAccessibleImage
-  ) => Promise<ExistingCompany | undefined>;
+  ) => Promise<RawExistingCompany | null>;
 }

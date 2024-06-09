@@ -1,16 +1,13 @@
 import type { Company } from "../../../schema";
 import type { CompanyImagesService } from "../../../types";
+import { getCompanyModel } from "../../../schema-mongodb";
 import type mongoose from "mongoose";
-import { toObject } from "../../../utils";
 
 /**
  * Creates a MongoDB service for company images.
- * @param getCompanyModel - A function that returns the company model.
  * @returns A MongoDB service for company images.
  */
-export function createCompanyImagesService(
-  getCompanyModel: () => Promise<mongoose.Model<Company>>
-): CompanyImagesService {
+export function createCompanyImagesService(): CompanyImagesService {
   return {
     addImage: async (id, image) => {
       const CompanyModel = await getCompanyModel();
@@ -21,7 +18,7 @@ export function createCompanyImagesService(
         { new: true, runValidators: true }
       );
 
-      return company ? toObject(company) : undefined;
+      return company;
     },
     deleteImage: async (id, assetId) => {
       const CompanyModel = await getCompanyModel();
@@ -32,7 +29,7 @@ export function createCompanyImagesService(
         { new: true }
       );
 
-      return company ? toObject(company) : undefined;
+      return company;
     },
     updateImage: async (id, assetId, image) => {
       const CompanyModel = await getCompanyModel();
@@ -43,7 +40,7 @@ export function createCompanyImagesService(
         { new: true, runValidators: true }
       );
 
-      return company ? toObject(company) : undefined;
+      return company;
     }
   };
 }

@@ -1,8 +1,4 @@
-import {
-  createCompanyImageControllers,
-  createCompanyImagesRouter,
-  createCompanyImagesService
-} from "./images";
+import type { CompanyControllers, CompanyImageControllers } from "../../types";
 import {
   nullifyEmptyStringsDeep,
   parseNestedFormData,
@@ -11,26 +7,23 @@ import {
   requireJwtAdmin,
   stripEmptyStringsDeep
 } from "../../middleware";
-import type { CompanyControllers } from "../../types";
 import { Router } from "express";
 import { companiesMiddleware } from "./middleware";
-import { getCompanyModel } from "./model";
+import { createCompanyImagesRouter } from "./images";
 
 /**
  * Creates a router for company routes.
  * @param controllers - The controllers for the company routes.
+ * @param imageControllers - The controllers for the company image routes.
  * @returns A router for company routes.
  */
-export function createCompaniesRouter(controllers: CompanyControllers): Router {
+export function createCompaniesRouter(
+  controllers: CompanyControllers,
+  imageControllers: CompanyImageControllers
+): Router {
   const { parseFormData, webAccessibleStorage } = companiesMiddleware;
 
   const router = Router();
-
-  const imagesService = createCompanyImagesService(getCompanyModel);
-
-  const imageControllers = createCompanyImageControllers(imagesService);
-
-  const imagesRouter = createCompanyImagesRouter(imageControllers);
 
   router
     .get("/", controllers.getCompanies)
@@ -55,7 +48,12 @@ export function createCompaniesRouter(controllers: CompanyControllers): Router {
       controllers.updateCompany
     )
     .delete("/:id", requireJwtAdmin, requireIdParam, controllers.deleteCompany)
-    .use("/:id/images", requireJwtAdmin, requireIdParam, imagesRouter);
+    .use(
+      "/:id/images",
+      requireJwtAdmin,
+      requireIdParam,
+      createCompanyImagesRouter(imageControllers)
+    );
 
   return router;
 }

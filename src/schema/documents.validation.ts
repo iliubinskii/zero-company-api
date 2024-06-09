@@ -15,11 +15,11 @@ const _id = IdValidationSchema;
 
 const company = zod.string().min(1);
 
-const createdAt = zod.string().min(1);
+const createdAt = zod.date();
 
-const doc = DigitalDocumentValidationSchema.optional();
+const doc = DigitalDocumentValidationSchema.nullable().optional();
 
-const metadata = zod.string().min(1).optional();
+const metadata = zod.string().min(1).nullable().optional();
 
 const signatories = zod.array(SignatoryValidationSchema).nonempty();
 

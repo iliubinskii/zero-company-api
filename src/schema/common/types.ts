@@ -57,10 +57,23 @@ export interface FieldError {
   readonly path: string;
 }
 
+export interface Founder {
+  readonly email: string;
+  readonly firstName?: string | null | undefined;
+  readonly lastName?: string | null | undefined;
+  readonly share?: number | null | undefined;
+}
+
+export type JsonTransform<T> = T extends { toJSON(): infer R }
+  ? R
+  : T extends object
+    ? { [K in keyof T]: JsonTransform<T[K]> }
+    : T;
+
 export interface MultipleDocsResponse<T> {
   readonly count: number;
   readonly docs: readonly T[];
-  readonly nextCursor?: readonly [string, string] | undefined;
+  readonly nextCursor?: readonly [string, string] | null | undefined;
   readonly total: number;
 }
 
@@ -78,8 +91,8 @@ export type SchemaResponse<T extends SchemaItem = never> = Readonly<
 
 export interface Signatory {
   readonly email: string;
-  readonly firstName?: string | undefined;
-  readonly lastName?: string | undefined;
+  readonly firstName?: string | null | undefined;
+  readonly lastName?: string | null | undefined;
 }
 
 export type Update<T> = {

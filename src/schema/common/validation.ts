@@ -1,3 +1,4 @@
+import { omit } from "lodash";
 import zod from "zod";
 
 export const DigitalDocumentValidationSchema = zod.strictObject({
@@ -6,6 +7,16 @@ export const DigitalDocumentValidationSchema = zod.strictObject({
   signatures: zod.array(zod.string()),
   url: zod.string().url()
 });
+
+export const founder = zod
+  .strictObject({
+    _id: zod.any().optional(),
+    email: preprocessEmail(zod.string().email()),
+    firstName: zod.string().min(1).nullable().optional(),
+    lastName: zod.string().min(1).nullable().optional(),
+    share: preprocessNumber(zod.number().int().positive()).nullable().optional()
+  })
+  .transform(obj => omit(obj, ["_id"]));
 
 export const IdValidationSchema = zod
   .string()
@@ -21,8 +32,8 @@ export const ImageValidationSchema = zod.strictObject({
 
 export const SignatoryValidationSchema = zod.strictObject({
   email: zod.string().email(),
-  firstName: zod.string().optional(),
-  lastName: zod.string().optional()
+  firstName: zod.string().nullable().optional(),
+  lastName: zod.string().nullable().optional()
 });
 
 /**

@@ -1,5 +1,8 @@
 export { createCompanyControllers } from "./controllers";
-export { companiesMiddleware } from "./middleware";
-export { getCompanyModel } from "./model";
+export {
+  createCompanyImageControllers,
+  createCompanyImagesRouter,
+  createCompanyImagesService
+} from "./images";
 export { createCompaniesRouter } from "./router";
 export { createCompaniesService } from "./service";
