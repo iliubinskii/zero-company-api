@@ -3,7 +3,7 @@ import type { MultipleDocsResponse, Update } from "./common";
 export interface Category {
   readonly description: string;
   readonly name: string;
-  readonly pinned?: boolean | undefined;
+  readonly pinned?: boolean | null | undefined;
   readonly tagline: string;
 }
 

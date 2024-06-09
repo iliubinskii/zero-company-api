@@ -1,7 +1,7 @@
 import { MAX_LIMIT } from "../../schema";
 import { MONGODB_ERROR } from "../../consts";
 import type { UsersService } from "../../types";
-import { getUserModel } from "./model";
+import { getUserModel } from "../../schema-mongodb";
 
 /**
  * Creates a MongoDB service for users.
@@ -67,8 +67,6 @@ export function createUsersService(): UsersService {
     getUsers: async ({ limit = MAX_LIMIT, offset = 0 } = {}) => {
       const UserModel = await getUserModel();
 
-      // eslint-disable-next-line no-warning-comments -- Postponed
-      // TODO: Use a single aggregate query to get both the count and the documents
       const [users, total] = await Promise.all([
         UserModel.find().skip(offset).limit(limit),
         UserModel.countDocuments()

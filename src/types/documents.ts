@@ -5,7 +5,6 @@ import type {
   GetDocumentsOptions,
   MultipleDocsResponse
 } from "../schema";
-import type { CrudService } from "./crud";
 import type { RequestHandler } from "express";
 import type mongoose from "mongoose";
 
@@ -24,7 +23,6 @@ export interface DocumentsService {
    * @returns A promise that resolves when the document has been added.
    */
   readonly addDocument: (document: Document) => Promise<RawExistingDocument>;
-  readonly crudService: CrudService<Document, DocumentUpdate>;
   /**
    * Deletes a document from the database.
    * @param id - The ID of the document to delete.

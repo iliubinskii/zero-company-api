@@ -1,24 +1,32 @@
-import type { Category, CategoryUpdate } from "../../schema";
 import type { CategoriesService } from "../../types";
+import type { Category } from "../../schema";
 import type { FilterQuery } from "mongoose";
 import { MAX_LIMIT } from "../../schema";
 import type { Writable } from "ts-toolbelt/out/Object/Writable";
-import { createCrudService } from "../../services";
-import { getCategoryModel } from "./model";
+import { getCategoryModel } from "../../schema-mongodb";
 
 /**
  * Creates a MongoDB service for categories.
  * @returns A MongoDB service for categories.
  */
 export function createCategoriesService(): CategoriesService {
-  const crudService = createCrudService<Category, CategoryUpdate>(
-    getCategoryModel
-  );
-
   return {
-    addCategory: crudService.addItemGuaranteed,
-    crudService,
-    deleteCategory: crudService.deleteItem,
+    addCategory: async category => {
+      const CategoryModel = await getCategoryModel();
+
+      const model = new CategoryModel(category);
+
+      const addedItem = await model.save();
+
+      return addedItem;
+    },
+    deleteCategory: async id => {
+      const CategoryModel = await getCategoryModel();
+
+      const deletedCategory = await CategoryModel.findByIdAndDelete(id);
+
+      return deletedCategory ? 1 : 0;
+    },
     getCategories: async ({
       limit = MAX_LIMIT,
       offset = 0,
@@ -30,8 +38,6 @@ export function createCategoriesService(): CategoriesService {
 
       const CategoryModel = await getCategoryModel();
 
-      // eslint-disable-next-line no-warning-comments -- Postponed
-      // TODO: Use a single aggregate query to get both the count and the documents
       const [categories, total] = await Promise.all([
         CategoryModel.find(filter).skip(offset).limit(limit),
         CategoryModel.countDocuments(filter)
@@ -43,7 +49,23 @@ export function createCategoriesService(): CategoriesService {
         total
       };
     },
-    getCategory: crudService.getItem,
-    updateCategory: crudService.updateItem
+    getCategory: async id => {
+      const CompanyModel = await getCategoryModel();
+
+      const category = await CompanyModel.findById(id);
+
+      return category;
+    },
+    updateCategory: async (id, category) => {
+      const CategoryModel = await getCategoryModel();
+
+      const updatedCategory = await CategoryModel.findByIdAndUpdate(
+        id,
+        category,
+        { new: true }
+      );
+
+      return updatedCategory;
+    }
   };
 }

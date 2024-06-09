@@ -9,8 +9,8 @@ import type {
 export interface Document {
   readonly company: string;
   readonly createdAt: Date;
-  readonly doc?: DigitalDocument | undefined;
-  readonly metadata?: string | undefined;
+  readonly doc?: DigitalDocument | null | undefined;
+  readonly metadata?: string | null | undefined;
   readonly signatories: readonly Signatory[];
   readonly type: DocType;
 }

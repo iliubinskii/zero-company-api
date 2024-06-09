@@ -1,5 +1,6 @@
 import type {
   CompanyStatus,
+  Founder,
   MultipleDocsResponse,
   Update,
   WebAccessibleImage
@@ -9,17 +10,17 @@ export interface Company {
   readonly categories: readonly string[];
   readonly country: string;
   readonly createdAt: Date;
-  readonly description?: string | undefined;
-  readonly foundedAt?: Date | undefined;
+  readonly description?: string | null | undefined;
+  readonly foundedAt?: Date | null | undefined;
   readonly founders: readonly Founder[];
   readonly images: readonly WebAccessibleImage[];
-  readonly logo?: WebAccessibleImage | undefined;
-  readonly name?: string | undefined;
-  readonly privateCompany?: boolean | undefined;
-  readonly recommended?: boolean | undefined;
+  readonly logo?: WebAccessibleImage | null | undefined;
+  readonly name?: string | null | undefined;
+  readonly privateCompany?: boolean | null | undefined;
+  readonly recommended?: boolean | null | undefined;
   readonly status: CompanyStatus;
-  readonly targetValue?: number | undefined;
-  readonly website?: string | undefined;
+  readonly targetValue?: number | null | undefined;
+  readonly website?: string | null | undefined;
 }
 
 export interface CompanyCreate
@@ -44,10 +45,3 @@ export interface ExistingCompany extends Company {
 }
 
 export type ExistingCompanies = MultipleDocsResponse<ExistingCompany>;
-
-export interface Founder {
-  readonly email: string;
-  readonly firstName?: string | undefined;
-  readonly lastName?: string | undefined;
-  readonly share?: number | undefined;
-}

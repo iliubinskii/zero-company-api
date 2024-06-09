@@ -19,7 +19,6 @@ import {
 } from "../../utils";
 import type { Routes } from "../../schema";
 import { StatusCodes } from "http-status-codes";
-import { createCrudControllers } from "../../services";
 
 /**
  * Creates category controllers.
@@ -31,17 +30,34 @@ export function createCategoryControllers(
   service: CategoriesService,
   companiesService: CompaniesService
 ): CategoryControllers {
-  const { crudService } = service;
-
-  const crudControllers = createCrudControllers(
-    crudService,
-    CategoryCreateValidationSchema,
-    CategoryUpdateValidationSchema
-  );
-
   return {
-    addCategory: crudControllers.addItem,
-    deleteCategory: crudControllers.deleteItem,
+    addCategory: wrapAsyncHandler(async (req, res) => {
+      const category = CategoryCreateValidationSchema.safeParse(req.body);
+
+      if (category.success) {
+        const addedCategory = await service.addCategory(category.data);
+
+        sendResponse<Routes["/categories"]["post"]>(
+          res,
+          StatusCodes.CREATED,
+          assertValidForJsonStringify(addedCategory)
+        );
+      } else
+        sendResponse<Routes["/categories"]["post"]>(
+          res,
+          StatusCodes.BAD_REQUEST,
+          buildErrorResponse(ErrorCode.InvalidData, category.error)
+        );
+    }),
+    deleteCategory: wrapAsyncHandler(async (req, res) => {
+      const id = assertDefined(req.idParam);
+
+      const affectedRows = await service.deleteCategory(id);
+
+      sendResponse<Routes["/categories/{id}"]["delete"]>(res, StatusCodes.OK, {
+        affectedRows
+      });
+    }),
     getCategories: wrapAsyncHandler(async (req, res) => {
       const options = GetCategoriesOptionsValidationSchema.safeParse(req.query);
 
@@ -60,7 +76,24 @@ export function createCategoryControllers(
           buildErrorResponse(ErrorCode.InvalidQuery, options.error)
         );
     }),
-    getCategory: crudControllers.getItem,
+    getCategory: wrapAsyncHandler(async (req, res) => {
+      const id = assertDefined(req.idParam);
+
+      const category = await service.getCategory(id);
+
+      if (category)
+        sendResponse<Routes["/categories/{id}"]["get"]>(
+          res,
+          StatusCodes.OK,
+          assertValidForJsonStringify(category)
+        );
+      else
+        sendResponse<Routes["/categories/{id}"]["get"]>(
+          res,
+          StatusCodes.NOT_FOUND,
+          buildErrorResponse(ErrorCode.NotFound)
+        );
+    }),
     getCompaniesByCategory: wrapAsyncHandler(async (req, res) => {
       const id = assertDefined(req.idParam);
 
@@ -84,6 +117,32 @@ export function createCategoryControllers(
           buildErrorResponse(ErrorCode.InvalidQuery, options.error)
         );
     }),
-    updateCategory: crudControllers.updateItem
+    updateCategory: wrapAsyncHandler(async (req, res) => {
+      const id = assertDefined(req.idParam);
+
+      const category = CategoryUpdateValidationSchema.safeParse(req.body);
+
+      if (category.success) {
+        const updatedCategory = await service.updateCategory(id, category.data);
+
+        if (updatedCategory)
+          sendResponse<Routes["/categories/{id}"]["put"]>(
+            res,
+            StatusCodes.OK,
+            assertValidForJsonStringify(updatedCategory)
+          );
+        else
+          sendResponse<Routes["/categories/{id}"]["put"]>(
+            res,
+            StatusCodes.NOT_FOUND,
+            buildErrorResponse(ErrorCode.NotFound)
+          );
+      } else
+        sendResponse<Routes["/categories/{id}"]["put"]>(
+          res,
+          StatusCodes.BAD_REQUEST,
+          buildErrorResponse(ErrorCode.InvalidData, category.error)
+        );
+    })
   };
 }

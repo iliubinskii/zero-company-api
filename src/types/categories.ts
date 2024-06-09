@@ -5,7 +5,6 @@ import type {
   GetCategoriesOptions,
   MultipleDocsResponse
 } from "../schema";
-import type { CrudService } from "./crud";
 import type { RequestHandler } from "express";
 import type mongoose from "mongoose";
 
@@ -25,7 +24,6 @@ export interface CategoriesService {
    * @returns A promise that resolves when the category has been added.
    */
   readonly addCategory: (category: Category) => Promise<RawExistingCategory>;
-  readonly crudService: CrudService<Category, CategoryUpdate>;
   /**
    * Deletes a category from the database.
    * @param id - The ID of the category to delete.

@@ -1,11 +1,11 @@
 import type { paths } from "./routes";
 
-export type Routes = AddUndefinedToOptional<paths>;
+export type Routes = RouteTransform<paths>;
 
-export type AddUndefinedToOptional<T> = {
+export type RouteTransform<T> = {
   [K in keyof T]: undefined extends T[K]
-    ? AddUndefinedToOptional<T[K]> | undefined
-    : AddUndefinedToOptional<T[K]>;
+    ? RouteTransform<T[K]> | null | undefined
+    : RouteTransform<T[K]>;
 };
 
 export * from "./categories";

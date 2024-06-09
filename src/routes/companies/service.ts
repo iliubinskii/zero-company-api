@@ -1,33 +1,33 @@
-import type {
-  Company,
-  CompanyUpdate,
-  GetCompaniesOptions,
-  User
-} from "../../schema";
+import type { Company, GetCompaniesOptions, User } from "../../schema";
+import { getCompanyModel, getUserModel } from "../../schema-mongodb";
 import type { CompaniesService } from "../../types";
 import type { FilterQuery } from "mongoose";
 import { MAX_LIMIT } from "../../schema";
 import type { Writable } from "ts-toolbelt/out/Object/Writable";
-import { createCrudService } from "../../services";
-import { getCompanyModel } from "./model";
 import type mongoose from "mongoose";
 
 /**
  * Creates a MongoDB service for companies.
- * @param getUserModel - The function to get the user model.
  * @returns A MongoDB service for companies.
  */
-export function createCompaniesService(
-  getUserModel: GetUserModel
-): CompaniesService {
-  const crudService = createCrudService<Company, CompanyUpdate>(
-    getCompanyModel
-  );
-
+export function createCompaniesService(): CompaniesService {
   return {
-    addCompany: crudService.addItemGuaranteed,
-    crudService,
-    deleteCompany: crudService.deleteItem,
+    addCompany: async company => {
+      const CompanyModel = await getCompanyModel();
+
+      const model = new CompanyModel(company);
+
+      const addedItem = await model.save();
+
+      return addedItem;
+    },
+    deleteCompany: async id => {
+      const CompanyModel = await getCompanyModel();
+
+      const deletedCategory = await CompanyModel.findByIdAndDelete(id);
+
+      return deletedCategory ? 1 : 0;
+    },
     getCompanies: async (options = {}, parentRef) => {
       const {
         limit = MAX_LIMIT,
@@ -73,8 +73,6 @@ export function createCompaniesService(
           }
         }
 
-      // eslint-disable-next-line no-warning-comments -- Postponed
-      // TODO: Use a single aggregate query to get both the count and the documents
       const [companies, total] = await Promise.all([
         CompanyModel.find(filter)
           .skip(offset)
@@ -109,8 +107,24 @@ export function createCompaniesService(
         total
       };
     },
-    getCompany: crudService.getItem,
-    updateCompany: crudService.updateItem
+    getCompany: async id => {
+      const CompanyModel = await getCompanyModel();
+
+      const company = await CompanyModel.findById(id);
+
+      return company;
+    },
+    updateCompany: async (id, company) => {
+      const CompanyModel = await getCompanyModel();
+
+      const updatedCategory = await CompanyModel.findByIdAndUpdate(
+        id,
+        company,
+        { new: true }
+      );
+
+      return updatedCategory;
+    }
   };
 }
 

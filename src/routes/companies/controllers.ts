@@ -15,7 +15,6 @@ import {
 } from "../../utils";
 import type { Routes } from "../../schema";
 import { StatusCodes } from "http-status-codes";
-import { createCrudControllers } from "../../services";
 
 /**
  * Creates company controllers.
@@ -25,37 +24,42 @@ import { createCrudControllers } from "../../services";
 export function createCompanyControllers(
   service: CompaniesService
 ): CompanyControllers {
-  const { crudService } = service;
-
-  const crudControllers = createCrudControllers(
-    crudService,
-    {
-      safeParse: (item, _params, req) => {
-        const { email } = assertDefined(assertDefined(req).jwt);
-
-        const result = CompanyCreateValidationSchema.safeParse(item);
-
-        if (result.success)
-          return {
-            data: {
-              ...result.data,
-              createdAt: new Date(),
-              founders: [{ email }],
-              images: [],
-              status: CompanyStatus.draft
-            },
-            success: true
-          };
-
-        return result;
-      }
-    },
-    CompanyUpdateValidationSchema
-  );
-
   return {
-    addCompany: crudControllers.addItem,
-    deleteCompany: crudControllers.deleteItem,
+    addCompany: wrapAsyncHandler(async (req, res) => {
+      const company = CompanyCreateValidationSchema.safeParse(req.body);
+
+      const { email } = assertDefined(assertDefined(req).jwt);
+
+      if (company.success) {
+        const addedCompany = await service.addCompany({
+          ...company.data,
+          createdAt: new Date(),
+          founders: [{ email }],
+          images: [],
+          status: CompanyStatus.draft
+        });
+
+        sendResponse<Routes["/companies"]["post"]>(
+          res,
+          StatusCodes.CREATED,
+          assertValidForJsonStringify(addedCompany)
+        );
+      } else
+        sendResponse<Routes["/companies"]["post"]>(
+          res,
+          StatusCodes.BAD_REQUEST,
+          buildErrorResponse(ErrorCode.InvalidData, company.error)
+        );
+    }),
+    deleteCompany: wrapAsyncHandler(async (req, res) => {
+      const id = assertDefined(req.idParam);
+
+      const affectedRows = await service.deleteCompany(id);
+
+      sendResponse<Routes["/companies/{id}"]["delete"]>(res, StatusCodes.OK, {
+        affectedRows
+      });
+    }),
     getCompanies: wrapAsyncHandler(async (req, res) => {
       const options = GetCompaniesOptionsValidationSchema.safeParse(req.query);
 
@@ -74,7 +78,50 @@ export function createCompanyControllers(
           buildErrorResponse(ErrorCode.InvalidQuery, options.error)
         );
     }),
-    getCompany: crudControllers.getItem,
-    updateCompany: crudControllers.updateItem
+    getCompany: wrapAsyncHandler(async (req, res) => {
+      const id = assertDefined(req.idParam);
+
+      const company = await service.getCompany(id);
+
+      if (company)
+        sendResponse<Routes["/companies/{id}"]["get"]>(
+          res,
+          StatusCodes.OK,
+          assertValidForJsonStringify(company)
+        );
+      else
+        sendResponse<Routes["/companies/{id}"]["get"]>(
+          res,
+          StatusCodes.NOT_FOUND,
+          buildErrorResponse(ErrorCode.NotFound)
+        );
+    }),
+    updateCompany: wrapAsyncHandler(async (req, res) => {
+      const id = assertDefined(req.idParam);
+
+      const company = CompanyUpdateValidationSchema.safeParse(req.body);
+
+      if (company.success) {
+        const updatedCompany = await service.updateCompany(id, company.data);
+
+        if (updatedCompany)
+          sendResponse<Routes["/companies/{id}"]["put"]>(
+            res,
+            StatusCodes.OK,
+            assertValidForJsonStringify(updatedCompany)
+          );
+        else
+          sendResponse<Routes["/companies/{id}"]["put"]>(
+            res,
+            StatusCodes.NOT_FOUND,
+            buildErrorResponse(ErrorCode.NotFound)
+          );
+      } else
+        sendResponse<Routes["/companies/{id}"]["put"]>(
+          res,
+          StatusCodes.BAD_REQUEST,
+          buildErrorResponse(ErrorCode.InvalidData, company.error)
+        );
+    })
   };
 }

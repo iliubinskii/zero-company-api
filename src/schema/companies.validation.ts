@@ -8,8 +8,8 @@ import {
   CompanyStatus,
   IdValidationSchema,
   ImageValidationSchema,
+  founder,
   preprocessBoolean,
-  preprocessEmail,
   preprocessNumber
 } from "./common";
 import zod from "zod";
@@ -29,13 +29,6 @@ const createdAt = zod.date();
 const description = zod.string().min(1).optional();
 
 const foundedAt = zod.date().optional();
-
-const founder = zod.strictObject({
-  email: preprocessEmail(zod.string().email()),
-  firstName: zod.string().min(1).optional(),
-  lastName: zod.string().min(1).optional(),
-  share: preprocessNumber(zod.number().int().positive()).optional()
-});
 
 const founders = zod.array(founder);
 

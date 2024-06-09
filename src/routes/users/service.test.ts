@@ -2,7 +2,7 @@ import type { ExistingUser, UserUpdate } from "../../schema";
 import { assertDefined, assertNotNull } from "../../utils";
 import { createUsersService } from "./service";
 import { faker } from "@faker-js/faker";
-import { getUserModel } from "./model";
+import { getUserModel } from "../../schema-mongodb";
 
 describe("createUsersService", () => {
   const usersService = createUsersService();
