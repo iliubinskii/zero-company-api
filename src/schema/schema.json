@@ -216,6 +216,25 @@
         }
       }
     },
+    "/companies/{id}/found": {
+      "put": {
+        "summary": "Create founding agreement for a company",
+        "tags": [
+          "companies"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Company"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "409": {
+            "$ref": "#/components/responses/Conflict"
+          }
+        }
+      }
+    },
     "/companies/{id}/images": {
       "parameters": [
         {
@@ -399,7 +418,7 @@
             "$ref": "#/components/responses/InvalidData"
           },
           "409": {
-            "$ref": "#/components/responses/AlreadyExists"
+            "$ref": "#/components/responses/Conflict"
           }
         }
       },
@@ -470,7 +489,7 @@
             "$ref": "#/components/responses/InvalidData"
           },
           "409": {
-            "$ref": "#/components/responses/AlreadyExists"
+            "$ref": "#/components/responses/Conflict"
           }
         }
       }
@@ -631,16 +650,6 @@
       }
     },
     "responses": {
-      "AlreadyExists": {
-        "description": "Already exists",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/AlreadyExists"
-            }
-          }
-        }
-      },
       "AuthUser": {
         "description": "Authentication response",
         "content": {
@@ -697,6 +706,16 @@
           "application/json": {
             "schema": {
               "$ref": "#/components/schemas/CompanyList"
+            }
+          }
+        }
+      },
+      "Conflict": {
+        "description": "Already exists",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Conflict"
             }
           }
         }
@@ -823,24 +842,6 @@
       }
     },
     "schemas": {
-      "AlreadyExists": {
-        "type": "object",
-        "required": [
-          "error",
-          "errorMessage"
-        ],
-        "properties": {
-          "error": {
-            "type": "string",
-            "enum": [
-              "AlreadyExists"
-            ]
-          },
-          "errorMessage": {
-            "type": "string"
-          }
-        }
-      },
       "AuthUser": {
         "type": "object",
         "nullable": true,
@@ -970,6 +971,9 @@
           "foundedAt": {
             "type": "string"
           },
+          "foundingAgreement": {
+            "type": "string"
+          },
           "founders": {
             "type": "array",
             "items": {
@@ -998,8 +1002,7 @@
             "type": "string",
             "enum": [
               "draft",
-              "founded",
-              "signing"
+              "founded"
             ]
           },
           "targetValue": {
@@ -1037,6 +1040,25 @@
           },
           "total": {
             "type": "integer"
+          }
+        }
+      },
+      "Conflict": {
+        "type": "object",
+        "required": [
+          "error",
+          "errorMessage"
+        ],
+        "properties": {
+          "error": {
+            "type": "string",
+            "enum": [
+              "AlreadyExists",
+              "Conflict"
+            ]
+          },
+          "errorMessage": {
+            "type": "string"
           }
         }
       },

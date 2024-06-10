@@ -6,11 +6,13 @@ import type {
   MultipleDocsResponse
 } from "../schema";
 import type { RequestHandler } from "express";
+import type { StatusCodes } from "http-status-codes";
 import type mongoose from "mongoose";
 
 export interface CompanyControllers {
   readonly addCompany: RequestHandler;
   readonly deleteCompany: RequestHandler;
+  readonly generateFoundingAgreement: RequestHandler;
   readonly getCompanies: RequestHandler;
   readonly getCompany: RequestHandler;
   readonly updateCompany: RequestHandler;
@@ -34,6 +36,14 @@ export interface CompaniesService {
    * @returns A promise that resolves with the number of affected rows.
    */
   readonly deleteCompany: (id: string) => Promise<number>;
+  /**
+   * Generates a founding agreement for a company.
+   * @param id - The ID of the company to generate a founding agreement for.
+   * @returns A promise that resolves with the company, or `null` if the company was not found.
+   */
+  readonly generateFoundingAgreement: (
+    id: string
+  ) => Promise<RawExistingCompany | StatusCodes.CONFLICT | null>;
   /**
    * Gets all companies from the database.
    * @param options - The options to use when getting companies.
@@ -77,9 +87,10 @@ export type GetCompaniesParentRef =
     };
 
 export interface RawExistingCompany
-  extends Omit<ExistingCompany, "_id" | "categories"> {
+  extends Omit<ExistingCompany, "_id" | "categories" | "foundingAgreement"> {
   readonly _id: mongoose.Types.ObjectId;
   readonly categories: readonly mongoose.Types.ObjectId[];
+  readonly foundingAgreement?: mongoose.Types.ObjectId | null | undefined;
 }
 
 export type RawExistingCompanies = MultipleDocsResponse<RawExistingCompany>;

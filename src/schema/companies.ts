@@ -13,6 +13,7 @@ export interface Company {
   readonly description?: string | null | undefined;
   readonly foundedAt?: Date | null | undefined;
   readonly founders: readonly Founder[];
+  readonly foundingAgreement?: string | null | undefined;
   readonly images: readonly WebAccessibleImage[];
   readonly logo?: WebAccessibleImage | null | undefined;
   readonly name?: string | null | undefined;

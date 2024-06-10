@@ -32,6 +32,8 @@ const description = zod.string().min(1).nullable().optional();
 
 const foundedAt = zod.date().nullable().optional();
 
+const foundingAgreement = zod.string().min(1).nullable().optional();
+
 const founders = zod.array(founder);
 
 const images = zod.array(ImageValidationSchema);
@@ -46,11 +48,7 @@ const recommended = preprocessBoolean(zod.boolean()).nullable().optional();
 
 const removeImages = zod.array(zod.string().min(1));
 
-const status = zod.enum([
-  CompanyStatus.draft,
-  CompanyStatus.founded,
-  CompanyStatus.signing
-]);
+const status = zod.enum([CompanyStatus.draft, CompanyStatus.founded]);
 
 const targetValue = preprocessNumber(zod.number().int().positive())
   .nullable()
@@ -66,6 +64,7 @@ export const ExistingCompanyValidationSchema = zod.strictObject({
   description,
   foundedAt,
   founders,
+  foundingAgreement,
   images,
   logo,
   name,

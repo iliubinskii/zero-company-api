@@ -19,16 +19,6 @@
       }
     },
     "responses": {
-      "AlreadyExists": {
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/AlreadyExists"
-            }
-          }
-        },
-        "description": "Already exists"
-      },
       "AuthUser": {
         "content": {
           "application/json": {
@@ -88,6 +78,16 @@
           }
         },
         "description": "Company list"
+      },
+      "Conflict": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Conflict"
+            }
+          }
+        },
+        "description": "Already exists"
       },
       "Delete": {
         "content": {
@@ -211,19 +211,6 @@
       }
     },
     "schemas": {
-      "AlreadyExists": {
-        "properties": {
-          "error": {
-            "enum": ["AlreadyExists"],
-            "type": "string"
-          },
-          "errorMessage": {
-            "type": "string"
-          }
-        },
-        "required": ["error", "errorMessage"],
-        "type": "object"
-      },
       "AuthUser": {
         "nullable": true,
         "properties": {
@@ -331,6 +318,9 @@
             },
             "type": "array"
           },
+          "foundingAgreement": {
+            "type": "string"
+          },
           "images": {
             "items": {
               "$ref": "#/components/schemas/WebAccessibleImage"
@@ -350,7 +340,7 @@
             "type": "boolean"
           },
           "status": {
-            "enum": ["draft", "founded", "signing"],
+            "enum": ["draft", "founded"],
             "type": "string"
           },
           "targetValue": {
@@ -395,6 +385,19 @@
           }
         },
         "required": ["count", "docs", "total"],
+        "type": "object"
+      },
+      "Conflict": {
+        "properties": {
+          "error": {
+            "enum": ["AlreadyExists", "Conflict"],
+            "type": "string"
+          },
+          "errorMessage": {
+            "type": "string"
+          }
+        },
+        "required": ["error", "errorMessage"],
         "type": "object"
       },
       "Delete": {
@@ -962,6 +965,23 @@
         "tags": ["companies"]
       }
     },
+    "/companies/{id}/found": {
+      "put": {
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Company"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "409": {
+            "$ref": "#/components/responses/Conflict"
+          }
+        },
+        "summary": "Create founding agreement for a company",
+        "tags": ["companies"]
+      }
+    },
     "/companies/{id}/images": {
       "parameters": [
         {
@@ -1121,7 +1141,7 @@
             "$ref": "#/components/responses/InvalidData"
           },
           "409": {
-            "$ref": "#/components/responses/AlreadyExists"
+            "$ref": "#/components/responses/Conflict"
           }
         },
         "summary": "Create a new user",
@@ -1184,7 +1204,7 @@
             "$ref": "#/components/responses/InvalidData"
           },
           "409": {
-            "$ref": "#/components/responses/AlreadyExists"
+            "$ref": "#/components/responses/Conflict"
           }
         },
         "summary": "Create a new user",

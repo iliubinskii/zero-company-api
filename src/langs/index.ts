@@ -8,6 +8,7 @@ export const lang = {
   Auth0ReturnUrl: "Auth0 return URL",
   AuthenticationFailed: "Authentication failed",
   BadRequest: "Bad request",
+  Conflict: "Conflict",
   CookieDomain: "Cookie domain",
   CookieSecure: "Cookie secure",
   CorsOrigin: "CORS origin",

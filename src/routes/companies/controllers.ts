@@ -60,6 +60,31 @@ export function createCompanyControllers(
         affectedRows
       });
     }),
+    generateFoundingAgreement: wrapAsyncHandler(async (req, res) => {
+      const id = assertDefined(req.idParam);
+
+      const company = await service.generateFoundingAgreement(id);
+
+      if (company)
+        if (company === StatusCodes.CONFLICT)
+          sendResponse<Routes["/companies/{id}/found"]["put"]>(
+            res,
+            StatusCodes.CONFLICT,
+            buildErrorResponse(ErrorCode.AlreadyExists)
+          );
+        else
+          sendResponse<Routes["/companies/{id}/found"]["put"]>(
+            res,
+            StatusCodes.OK,
+            assertValidForJsonStringify(company)
+          );
+      else
+        sendResponse<Routes["/companies/{id}/found"]["put"]>(
+          res,
+          StatusCodes.NOT_FOUND,
+          buildErrorResponse(ErrorCode.NotFound)
+        );
+    }),
     getCompanies: wrapAsyncHandler(async (req, res) => {
       const options = GetCompaniesOptionsValidationSchema.safeParse(req.query);
 

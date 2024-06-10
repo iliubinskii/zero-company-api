@@ -2,8 +2,7 @@ import type { Readonly } from "ts-toolbelt/out/Object/Readonly";
 
 export const CompanyStatus = {
   draft: "draft",
-  founded: "founded",
-  signing: "signing"
+  founded: "founded"
 } as const;
 
 export const DocType = {
@@ -14,6 +13,7 @@ export const ErrorCode = {
   AlreadyExists: "AlreadyExists",
   AuthenticationFailed: "AuthenticationFailed",
   BadRequest: "BadRequest",
+  Conflict: "Conflict",
   InternalServerError: "InternalServerError",
   InvalidData: "InvalidData",
   InvalidIdParam: "InvalidIdParam",
