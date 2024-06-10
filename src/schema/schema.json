@@ -1,0 +1,1476 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Zero Company API",
+    "description": "An API for Zero Company application",
+    "version": "2024.6.7"
+  },
+  "servers": [
+    {
+      "url": "https://api.zero-company.app"
+    }
+  ],
+  "paths": {
+    "/": {
+      "get": {
+        "summary": "Get API status",
+        "tags": [
+          "root"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Home"
+          }
+        }
+      }
+    },
+    "/auth/me": {
+      "get": {
+        "summary": "Get authentication response",
+        "tags": [
+          "auth"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/AuthUser"
+          }
+        }
+      }
+    },
+    "/categories": {
+      "get": {
+        "summary": "Get all categories",
+        "tags": [
+          "categories"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/CategoryList"
+          },
+          "400": {
+            "$ref": "#/components/responses/InvalidQuery"
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new category",
+        "tags": [
+          "categories"
+        ],
+        "responses": {
+          "201": {
+            "$ref": "#/components/responses/Category"
+          },
+          "400": {
+            "$ref": "#/components/responses/InvalidData"
+          }
+        }
+      }
+    },
+    "/categories/{id}": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/Id"
+        }
+      ],
+      "delete": {
+        "summary": "Delete a category by ID",
+        "tags": [
+          "categories"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Delete"
+          }
+        }
+      },
+      "get": {
+        "summary": "Get a category by ID",
+        "tags": [
+          "categories"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Category"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update a category by ID",
+        "tags": [
+          "categories"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Category"
+          },
+          "400": {
+            "$ref": "#/components/responses/InvalidData"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/categories/{id}/companies": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/Id"
+        }
+      ],
+      "get": {
+        "summary": "Get all companies for a category",
+        "tags": [
+          "categories"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/CompanyList"
+          },
+          "400": {
+            "$ref": "#/components/responses/InvalidQuery"
+          }
+        }
+      }
+    },
+    "/companies": {
+      "get": {
+        "summary": "Get all companies",
+        "tags": [
+          "companies"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/CompanyList"
+          },
+          "400": {
+            "$ref": "#/components/responses/InvalidQuery"
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new company",
+        "tags": [
+          "companies"
+        ],
+        "responses": {
+          "201": {
+            "$ref": "#/components/responses/Company"
+          },
+          "400": {
+            "$ref": "#/components/responses/InvalidData"
+          }
+        }
+      }
+    },
+    "/companies/{id}": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/Id"
+        }
+      ],
+      "delete": {
+        "summary": "Delete a company by ID",
+        "tags": [
+          "companies"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Delete"
+          }
+        }
+      },
+      "get": {
+        "summary": "Get a company by ID",
+        "tags": [
+          "companies"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Company"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update a company by ID",
+        "tags": [
+          "companies"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Company"
+          },
+          "400": {
+            "$ref": "#/components/responses/InvalidData"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/companies/{id}/found": {
+      "put": {
+        "summary": "Create founding agreement for a company",
+        "tags": [
+          "companies"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Company"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "409": {
+            "$ref": "#/components/responses/Conflict"
+          }
+        }
+      }
+    },
+    "/companies/{id}/images": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/Id"
+        }
+      ],
+      "post": {
+        "summary": "Upload a new image for a company",
+        "tags": [
+          "companies"
+        ],
+        "responses": {
+          "201": {
+            "$ref": "#/components/responses/Company"
+          },
+          "400": {
+            "$ref": "#/components/responses/InvalidData"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/companies/{id}/images/{assetId}": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/Id"
+        },
+        {
+          "$ref": "#/components/parameters/AssetId"
+        }
+      ],
+      "delete": {
+        "summary": "Delete an image for a company",
+        "tags": [
+          "companies"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Company"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update an image for a company",
+        "tags": [
+          "companies"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Company"
+          },
+          "400": {
+            "$ref": "#/components/responses/InvalidData"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/documents": {
+      "get": {
+        "summary": "Get all documents",
+        "tags": [
+          "documents"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/DocumentList"
+          },
+          "400": {
+            "$ref": "#/components/responses/InvalidQuery"
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new document",
+        "tags": [
+          "documents"
+        ],
+        "responses": {
+          "201": {
+            "$ref": "#/components/responses/Document"
+          },
+          "400": {
+            "$ref": "#/components/responses/InvalidData"
+          }
+        }
+      }
+    },
+    "/documents/{id}": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/Id"
+        }
+      ],
+      "delete": {
+        "summary": "Delete a document by ID",
+        "tags": [
+          "documents"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Delete"
+          }
+        }
+      },
+      "get": {
+        "summary": "Get a document by ID",
+        "tags": [
+          "documents"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Document"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update a document by ID",
+        "tags": [
+          "documents"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Document"
+          },
+          "400": {
+            "$ref": "#/components/responses/InvalidData"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/me": {
+      "delete": {
+        "summary": "Delete a user by ID",
+        "tags": [
+          "users"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Delete"
+          }
+        }
+      },
+      "get": {
+        "summary": "Get a user by ID",
+        "tags": [
+          "users"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/User"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new user",
+        "tags": [
+          "users"
+        ],
+        "responses": {
+          "201": {
+            "$ref": "#/components/responses/User"
+          },
+          "400": {
+            "$ref": "#/components/responses/InvalidData"
+          },
+          "409": {
+            "$ref": "#/components/responses/Conflict"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update a user by ID",
+        "tags": [
+          "users"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/User"
+          },
+          "400": {
+            "$ref": "#/components/responses/InvalidData"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/me/companies": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/Id"
+        }
+      ],
+      "get": {
+        "summary": "Get all companies for a user",
+        "tags": [
+          "users"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/CompanyList"
+          },
+          "400": {
+            "$ref": "#/components/responses/InvalidQuery"
+          }
+        }
+      }
+    },
+    "/users": {
+      "get": {
+        "summary": "Get all users",
+        "tags": [
+          "users"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/UserList"
+          },
+          "400": {
+            "$ref": "#/components/responses/InvalidQuery"
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new user",
+        "tags": [
+          "users"
+        ],
+        "responses": {
+          "201": {
+            "$ref": "#/components/responses/User"
+          },
+          "400": {
+            "$ref": "#/components/responses/InvalidData"
+          },
+          "409": {
+            "$ref": "#/components/responses/Conflict"
+          }
+        }
+      }
+    },
+    "/users/{id}": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/Id"
+        }
+      ],
+      "delete": {
+        "summary": "Delete a user by ID",
+        "tags": [
+          "users"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Delete"
+          }
+        }
+      },
+      "get": {
+        "summary": "Get a user by ID",
+        "tags": [
+          "users"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/User"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update a user by ID",
+        "tags": [
+          "users"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/User"
+          },
+          "400": {
+            "$ref": "#/components/responses/InvalidData"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/users/{id}/companies": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/Id"
+        }
+      ],
+      "get": {
+        "summary": "Get all companies for a user",
+        "tags": [
+          "users"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/CompanyList"
+          },
+          "400": {
+            "$ref": "#/components/responses/InvalidQuery"
+          }
+        }
+      }
+    },
+    "/400": {
+      "get": {
+        "summary": "Bad request",
+        "tags": [
+          "common"
+        ],
+        "responses": {
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          }
+        }
+      }
+    },
+    "/401": {
+      "get": {
+        "summary": "Unauthorized",
+        "tags": [
+          "common"
+        ],
+        "responses": {
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },
+    "/404": {
+      "get": {
+        "summary": "Not found",
+        "tags": [
+          "common"
+        ],
+        "responses": {
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/405": {
+      "get": {
+        "summary": "Method not allowed",
+        "tags": [
+          "common"
+        ],
+        "responses": {
+          "405": {
+            "$ref": "#/components/responses/MethodNotAllowed"
+          }
+        }
+      }
+    },
+    "/500": {
+      "get": {
+        "summary": "Internal server error",
+        "tags": [
+          "common"
+        ],
+        "responses": {
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "parameters": {
+      "Id": {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "AssetId": {
+        "name": "assetId",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      }
+    },
+    "responses": {
+      "AuthUser": {
+        "description": "Authentication response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/AuthUser"
+            }
+          }
+        }
+      },
+      "BadRequest": {
+        "description": "Bad request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/BadRequest"
+            }
+          }
+        }
+      },
+      "Category": {
+        "description": "Category",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Category"
+            }
+          }
+        }
+      },
+      "CategoryList": {
+        "description": "Category list",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/CategoryList"
+            }
+          }
+        }
+      },
+      "Company": {
+        "description": "Company",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Company"
+            }
+          }
+        }
+      },
+      "CompanyList": {
+        "description": "Company list",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/CompanyList"
+            }
+          }
+        }
+      },
+      "Conflict": {
+        "description": "Already exists",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Conflict"
+            }
+          }
+        }
+      },
+      "Delete": {
+        "description": "Delete",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Delete"
+            }
+          }
+        }
+      },
+      "Document": {
+        "description": "Document",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Document"
+            }
+          }
+        }
+      },
+      "DocumentList": {
+        "description": "Document list",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/DocumentList"
+            }
+          }
+        }
+      },
+      "Home": {
+        "description": "Home",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Home"
+            }
+          }
+        }
+      },
+      "InternalServerError": {
+        "description": "Internal server error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/InternalServerError"
+            }
+          }
+        }
+      },
+      "InvalidData": {
+        "description": "Invalid data",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/InvalidData"
+            }
+          }
+        }
+      },
+      "InvalidQuery": {
+        "description": "Invalid query",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/InvalidQuery"
+            }
+          }
+        }
+      },
+      "MethodNotAllowed": {
+        "description": "Method not allowed",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/MethodNotAllowed"
+            }
+          }
+        }
+      },
+      "NotFound": {
+        "description": "Not found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/NotFound"
+            }
+          }
+        }
+      },
+      "Unauthorized": {
+        "description": "Bad request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Unauthorized"
+            }
+          }
+        }
+      },
+      "User": {
+        "description": "User",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/User"
+            }
+          }
+        }
+      },
+      "UserList": {
+        "description": "User list",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UserList"
+            }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "AuthUser": {
+        "type": "object",
+        "nullable": true,
+        "required": [
+          "admin",
+          "email"
+        ],
+        "properties": {
+          "admin": {
+            "type": "boolean"
+          },
+          "email": {
+            "type": "string"
+          },
+          "user": {
+            "$ref": "#/components/schemas/User"
+          }
+        }
+      },
+      "BadRequest": {
+        "type": "object",
+        "required": [
+          "error",
+          "errorMessage"
+        ],
+        "properties": {
+          "error": {
+            "type": "string",
+            "enum": [
+              "BadRequest",
+              "InvalidIdParam"
+            ]
+          },
+          "errorMessage": {
+            "type": "string"
+          }
+        }
+      },
+      "Category": {
+        "type": "object",
+        "required": [
+          "_id",
+          "description",
+          "name",
+          "tagline"
+        ],
+        "properties": {
+          "_id": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "pinned": {
+            "type": "boolean"
+          },
+          "tagline": {
+            "type": "string"
+          }
+        }
+      },
+      "CategoryList": {
+        "type": "object",
+        "required": [
+          "count",
+          "docs",
+          "total"
+        ],
+        "properties": {
+          "count": {
+            "type": "integer"
+          },
+          "docs": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Category"
+            }
+          },
+          "nextCursor": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "minItems": 2,
+            "maxItems": 2
+          },
+          "total": {
+            "type": "integer"
+          }
+        }
+      },
+      "Company": {
+        "type": "object",
+        "required": [
+          "_id",
+          "categories",
+          "country",
+          "createdAt",
+          "founders",
+          "images",
+          "status"
+        ],
+        "properties": {
+          "_id": {
+            "type": "string"
+          },
+          "categories": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "country": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 2
+          },
+          "createdAt": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "foundedAt": {
+            "type": "string"
+          },
+          "foundingAgreement": {
+            "type": "string"
+          },
+          "founders": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Founder"
+            }
+          },
+          "images": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/WebAccessibleImage"
+            }
+          },
+          "logo": {
+            "$ref": "#/components/schemas/WebAccessibleImage"
+          },
+          "name": {
+            "type": "string"
+          },
+          "privateCompany": {
+            "type": "boolean"
+          },
+          "recommended": {
+            "type": "boolean"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "draft",
+              "founded"
+            ]
+          },
+          "targetValue": {
+            "type": "number"
+          },
+          "website": {
+            "type": "string"
+          }
+        }
+      },
+      "CompanyList": {
+        "type": "object",
+        "required": [
+          "count",
+          "docs",
+          "total"
+        ],
+        "properties": {
+          "count": {
+            "type": "integer"
+          },
+          "docs": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Company"
+            }
+          },
+          "nextCursor": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "minItems": 2,
+            "maxItems": 2
+          },
+          "total": {
+            "type": "integer"
+          }
+        }
+      },
+      "Conflict": {
+        "type": "object",
+        "required": [
+          "error",
+          "errorMessage"
+        ],
+        "properties": {
+          "error": {
+            "type": "string",
+            "enum": [
+              "AlreadyExists",
+              "Conflict"
+            ]
+          },
+          "errorMessage": {
+            "type": "string"
+          }
+        }
+      },
+      "Delete": {
+        "type": "object",
+        "required": [
+          "affectedRows"
+        ],
+        "properties": {
+          "affectedRows": {
+            "type": "integer"
+          }
+        }
+      },
+      "DigitalDocument": {
+        "type": "object",
+        "required": [
+          "assetId",
+          "secureUrl",
+          "signatures",
+          "url"
+        ],
+        "properties": {
+          "assetId": {
+            "type": "string"
+          },
+          "secureUrl": {
+            "type": "string"
+          },
+          "signatures": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "url": {
+            "type": "string"
+          }
+        }
+      },
+      "Document": {
+        "type": "object",
+        "required": [
+          "_id",
+          "company",
+          "createdAt",
+          "signatories",
+          "type"
+        ],
+        "properties": {
+          "_id": {
+            "type": "string"
+          },
+          "company": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string"
+          },
+          "doc": {
+            "$ref": "#/components/schemas/DigitalDocument"
+          },
+          "metadata": {
+            "type": "string"
+          },
+          "signatories": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Signatory"
+            }
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "FoundingAgreement"
+            ]
+          }
+        }
+      },
+      "DocumentList": {
+        "type": "object",
+        "required": [
+          "count",
+          "docs",
+          "total"
+        ],
+        "properties": {
+          "count": {
+            "type": "integer"
+          },
+          "docs": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Document"
+            }
+          },
+          "nextCursor": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "minItems": 2,
+            "maxItems": 2
+          },
+          "total": {
+            "type": "integer"
+          }
+        }
+      },
+      "Founder": {
+        "type": "object",
+        "required": [
+          "email"
+        ],
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "share": {
+            "type": "number"
+          }
+        }
+      },
+      "Home": {
+        "type": "object",
+        "required": [
+          "schema",
+          "status"
+        ],
+        "properties": {
+          "schema": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "OK"
+            ]
+          }
+        }
+      },
+      "InternalServerError": {
+        "type": "object",
+        "required": [
+          "error",
+          "errorMessage"
+        ],
+        "properties": {
+          "error": {
+            "type": "string",
+            "enum": [
+              "InternalServerError"
+            ]
+          },
+          "errorMessage": {
+            "type": "string"
+          }
+        }
+      },
+      "InvalidData": {
+        "type": "object",
+        "required": [
+          "error",
+          "errorMessage",
+          "data"
+        ],
+        "properties": {
+          "error": {
+            "type": "string",
+            "enum": [
+              "InvalidData"
+            ]
+          },
+          "errorMessage": {
+            "type": "string"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "message",
+                "path"
+              ],
+              "properties": {
+                "message": {
+                  "type": "string"
+                },
+                "path": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "InvalidIdParam": {
+        "type": "object",
+        "required": [
+          "error",
+          "errorMessage"
+        ],
+        "properties": {
+          "error": {
+            "type": "string",
+            "enum": [
+              "InvalidIdParam"
+            ]
+          },
+          "errorMessage": {
+            "type": "string"
+          }
+        }
+      },
+      "InvalidQuery": {
+        "type": "object",
+        "required": [
+          "error",
+          "errorMessage",
+          "data"
+        ],
+        "properties": {
+          "error": {
+            "type": "string",
+            "enum": [
+              "InvalidQuery"
+            ]
+          },
+          "errorMessage": {
+            "type": "string"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "message",
+                "path"
+              ],
+              "properties": {
+                "message": {
+                  "type": "string"
+                },
+                "path": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "MethodNotAllowed": {
+        "type": "object",
+        "required": [
+          "error",
+          "errorMessage"
+        ],
+        "properties": {
+          "error": {
+            "type": "string",
+            "enum": [
+              "MethodNotAllowed"
+            ]
+          },
+          "errorMessage": {
+            "type": "string"
+          }
+        }
+      },
+      "NotFound": {
+        "type": "object",
+        "required": [
+          "error",
+          "errorMessage"
+        ],
+        "properties": {
+          "error": {
+            "type": "string",
+            "enum": [
+              "NotFound"
+            ]
+          },
+          "errorMessage": {
+            "type": "string"
+          }
+        }
+      },
+      "Signatory": {
+        "type": "object",
+        "required": [
+          "email"
+        ],
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          }
+        }
+      },
+      "Unauthorized": {
+        "type": "object",
+        "required": [
+          "error",
+          "errorMessage"
+        ],
+        "properties": {
+          "error": {
+            "type": "string",
+            "enum": [
+              "Unauthorized"
+            ]
+          },
+          "errorMessage": {
+            "type": "string"
+          }
+        }
+      },
+      "User": {
+        "type": "object",
+        "required": [
+          "_id",
+          "email",
+          "firstName",
+          "lastName"
+        ],
+        "properties": {
+          "_id": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          }
+        }
+      },
+      "UserList": {
+        "type": "object",
+        "required": [
+          "count",
+          "docs",
+          "total"
+        ],
+        "properties": {
+          "count": {
+            "type": "integer"
+          },
+          "docs": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/User"
+            }
+          },
+          "nextCursor": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "minItems": 2,
+            "maxItems": 2
+          },
+          "total": {
+            "type": "integer"
+          }
+        }
+      },
+      "WebAccessibleImage": {
+        "type": "object",
+        "required": [
+          "assetId",
+          "height",
+          "name",
+          "secureUrl",
+          "url",
+          "width"
+        ],
+        "properties": {
+          "assetId": {
+            "type": "string"
+          },
+          "height": {
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          },
+          "secureUrl": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          },
+          "width": {
+            "type": "number"
+          }
+        }
+      }
+    }
+  }
+}

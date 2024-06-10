@@ -1,11 +1,11 @@
 import type {
   ErrorCode,
   ErrorResponse,
-  ErrorResponseWithData
+  ErrorResponseWithData,
+  SchemaItem,
+  SchemaResponse
 } from "../schema";
 import type { NextFunction, Request, RequestHandler, Response } from "express";
-import type { Readonly } from "ts-toolbelt/out/Object/Readonly";
-import type { StatusCodes } from "http-status-codes";
 import { assertNumber } from "./assertions";
 import { lang } from "../langs";
 import type zod from "zod";
@@ -85,36 +85,12 @@ export function buildErrorResponse<E extends ErrorCode>(
  * @param status - The status code.
  * @param json - The JSON response.
  */
-export function sendResponse<
-  R extends {
-    responses: {
-      [K: PropertyKey]: { content: { "application/json": object } };
-    };
-  } = never
->(
+export function sendResponse<T extends SchemaItem = never>(
   res: Response,
-  status: keyof R["responses"],
-  json: Readonly<
-    R["responses"][keyof R["responses"]]["content"]["application/json"],
-    PropertyKey,
-    "deep"
-  >
+  status: keyof T["responses"],
+  json: SchemaResponse<T>
 ): void {
   res.status(assertNumber(status)).json(json);
-}
-
-/**
- * Sends a response.
- * @param res - The express response object.
- * @param status - The status code.
- * @param json - The JSON response.
- */
-export function sendResponseOld<T extends [StatusCodes, unknown]>(
-  res: Response,
-  status: T[0],
-  json: T[1]
-): void {
-  res.status(status).json(json);
 }
 
 /**

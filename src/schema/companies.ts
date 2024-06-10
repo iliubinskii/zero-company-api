@@ -1,42 +1,52 @@
-import type { Update, WebAccessibleImage } from "./common";
+import type {
+  CompanyStatus,
+  Founder,
+  MultipleDocsResponse,
+  Update,
+  WebAccessibleImage
+} from "./common";
 
 export interface Company {
   readonly categories: readonly string[];
-  readonly description: string;
-  readonly foundedAt: string;
+  readonly country: string;
+  readonly createdAt: Date;
+  readonly description?: string | null | undefined;
+  readonly foundedAt?: Date | null | undefined;
   readonly founders: readonly Founder[];
+  readonly foundingAgreement?: string | null | undefined;
   readonly images: readonly WebAccessibleImage[];
-  readonly logo: WebAccessibleImage;
-  readonly name: string;
-  readonly privateCompany?: boolean;
-  readonly recommended?: boolean;
-  readonly targetValue: number;
-  readonly website?: string;
+  readonly logo?: WebAccessibleImage | null | undefined;
+  readonly name?: string | null | undefined;
+  readonly privateCompany?: boolean | null | undefined;
+  readonly recommended?: boolean | null | undefined;
+  readonly status: CompanyStatus;
+  readonly targetValue?: number | null | undefined;
+  readonly website?: string | null | undefined;
 }
 
 export interface CompanyCreate
-  extends Omit<Company, "foundedAt" | "recommended"> {
-  readonly founders: readonly FounderCreate[];
-}
+  extends Pick<Company, "categories" | "country"> {}
 
 export interface CompanyUpdate
   extends Update<
-    Omit<
+    Pick<
       Company,
-      "categories" | "foundedAt" | "founders" | "recommended" | "targetValue"
+      | "categories"
+      | "description"
+      | "founders"
+      | "logo"
+      | "name"
+      | "privateCompany"
+      | "targetValue"
+      | "website"
     >
-  > {}
+  > {
+  readonly addImages?: readonly WebAccessibleImage[] | null | undefined;
+  readonly removeImages?: readonly string[] | null | undefined;
+}
 
 export interface ExistingCompany extends Company {
   readonly _id: string;
 }
 
-export interface Founder {
-  readonly confirmed?: boolean;
-  readonly email: string;
-  readonly firstName: string;
-  readonly lastName: string;
-  readonly share: number;
-}
-
-export interface FounderCreate extends Omit<Founder, "confirmed"> {}
+export type ExistingCompanies = MultipleDocsResponse<ExistingCompany>;

@@ -12,6 +12,14 @@ export interface paths {
       };
     };
   };
+  "/auth/me": {
+    /** Get authentication response */
+    get: {
+      responses: {
+        200: components["responses"]["AuthUser"];
+      };
+    };
+  };
   "/categories": {
     /** Get all categories */
     get: {
@@ -24,7 +32,7 @@ export interface paths {
     post: {
       responses: {
         201: components["responses"]["Category"];
-        400: components["responses"]["InvalidCategoryData"];
+        400: components["responses"]["InvalidData"];
       };
     };
   };
@@ -38,7 +46,7 @@ export interface paths {
       };
       responses: {
         200: components["responses"]["Category"];
-        404: components["responses"]["CategoryNotFound"];
+        404: components["responses"]["NotFound"];
       };
     };
     /** Update a category by ID */
@@ -50,8 +58,8 @@ export interface paths {
       };
       responses: {
         200: components["responses"]["Category"];
-        400: components["responses"]["InvalidCategoryData"];
-        404: components["responses"]["CategoryNotFound"];
+        400: components["responses"]["InvalidData"];
+        404: components["responses"]["NotFound"];
       };
     };
     /** Delete a category by ID */
@@ -102,7 +110,7 @@ export interface paths {
     post: {
       responses: {
         201: components["responses"]["Company"];
-        400: components["responses"]["InvalidCompanyData"];
+        400: components["responses"]["InvalidData"];
       };
     };
   };
@@ -116,7 +124,7 @@ export interface paths {
       };
       responses: {
         200: components["responses"]["Company"];
-        404: components["responses"]["CompanyNotFound"];
+        404: components["responses"]["NotFound"];
       };
     };
     /** Update a company by ID */
@@ -128,8 +136,8 @@ export interface paths {
       };
       responses: {
         200: components["responses"]["Company"];
-        400: components["responses"]["InvalidCompanyData"];
-        404: components["responses"]["CompanyNotFound"];
+        400: components["responses"]["InvalidData"];
+        404: components["responses"]["NotFound"];
       };
     };
     /** Delete a company by ID */
@@ -141,6 +149,180 @@ export interface paths {
       };
       responses: {
         200: components["responses"]["Delete"];
+      };
+    };
+    parameters: {
+      path: {
+        id: components["parameters"]["Id"];
+      };
+    };
+  };
+  "/companies/{id}/found": {
+    /** Create founding agreement for a company */
+    put: {
+      responses: {
+        200: components["responses"]["Company"];
+        404: components["responses"]["NotFound"];
+        409: components["responses"]["Conflict"];
+      };
+    };
+  };
+  "/companies/{id}/images": {
+    /** Upload a new image for a company */
+    post: {
+      parameters: {
+        path: {
+          id: components["parameters"]["Id"];
+        };
+      };
+      responses: {
+        201: components["responses"]["Company"];
+        400: components["responses"]["InvalidData"];
+        404: components["responses"]["NotFound"];
+      };
+    };
+    parameters: {
+      path: {
+        id: components["parameters"]["Id"];
+      };
+    };
+  };
+  "/companies/{id}/images/{assetId}": {
+    /** Update an image for a company */
+    put: {
+      parameters: {
+        path: {
+          id: components["parameters"]["Id"];
+          assetId: components["parameters"]["AssetId"];
+        };
+      };
+      responses: {
+        200: components["responses"]["Company"];
+        400: components["responses"]["InvalidData"];
+        404: components["responses"]["NotFound"];
+      };
+    };
+    /** Delete an image for a company */
+    delete: {
+      parameters: {
+        path: {
+          id: components["parameters"]["Id"];
+          assetId: components["parameters"]["AssetId"];
+        };
+      };
+      responses: {
+        200: components["responses"]["Company"];
+        404: components["responses"]["NotFound"];
+      };
+    };
+    parameters: {
+      path: {
+        id: components["parameters"]["Id"];
+        assetId: components["parameters"]["AssetId"];
+      };
+    };
+  };
+  "/documents": {
+    /** Get all documents */
+    get: {
+      responses: {
+        200: components["responses"]["DocumentList"];
+        400: components["responses"]["InvalidQuery"];
+      };
+    };
+    /** Create a new document */
+    post: {
+      responses: {
+        201: components["responses"]["Document"];
+        400: components["responses"]["InvalidData"];
+      };
+    };
+  };
+  "/documents/{id}": {
+    /** Get a document by ID */
+    get: {
+      parameters: {
+        path: {
+          id: components["parameters"]["Id"];
+        };
+      };
+      responses: {
+        200: components["responses"]["Document"];
+        404: components["responses"]["NotFound"];
+      };
+    };
+    /** Update a document by ID */
+    put: {
+      parameters: {
+        path: {
+          id: components["parameters"]["Id"];
+        };
+      };
+      responses: {
+        200: components["responses"]["Document"];
+        400: components["responses"]["InvalidData"];
+        404: components["responses"]["NotFound"];
+      };
+    };
+    /** Delete a document by ID */
+    delete: {
+      parameters: {
+        path: {
+          id: components["parameters"]["Id"];
+        };
+      };
+      responses: {
+        200: components["responses"]["Delete"];
+      };
+    };
+    parameters: {
+      path: {
+        id: components["parameters"]["Id"];
+      };
+    };
+  };
+  "/me": {
+    /** Get a user by ID */
+    get: {
+      responses: {
+        200: components["responses"]["User"];
+        404: components["responses"]["NotFound"];
+      };
+    };
+    /** Update a user by ID */
+    put: {
+      responses: {
+        200: components["responses"]["User"];
+        400: components["responses"]["InvalidData"];
+        404: components["responses"]["NotFound"];
+      };
+    };
+    /** Create a new user */
+    post: {
+      responses: {
+        201: components["responses"]["User"];
+        400: components["responses"]["InvalidData"];
+        409: components["responses"]["Conflict"];
+      };
+    };
+    /** Delete a user by ID */
+    delete: {
+      responses: {
+        200: components["responses"]["Delete"];
+      };
+    };
+  };
+  "/me/companies": {
+    /** Get all companies for a user */
+    get: {
+      parameters: {
+        path: {
+          id: components["parameters"]["Id"];
+        };
+      };
+      responses: {
+        200: components["responses"]["CompanyList"];
+        400: components["responses"]["InvalidQuery"];
       };
     };
     parameters: {
@@ -161,8 +343,8 @@ export interface paths {
     post: {
       responses: {
         201: components["responses"]["User"];
-        400: components["responses"]["InvalidUserData"];
-        409: components["responses"]["UserAlreadyExists"];
+        400: components["responses"]["InvalidData"];
+        409: components["responses"]["Conflict"];
       };
     };
   };
@@ -176,7 +358,7 @@ export interface paths {
       };
       responses: {
         200: components["responses"]["User"];
-        404: components["responses"]["UserNotFound"];
+        404: components["responses"]["NotFound"];
       };
     };
     /** Update a user by ID */
@@ -188,8 +370,8 @@ export interface paths {
       };
       responses: {
         200: components["responses"]["User"];
-        400: components["responses"]["InvalidUserData"];
-        404: components["responses"]["UserNotFound"];
+        400: components["responses"]["InvalidData"];
+        404: components["responses"]["NotFound"];
       };
     };
     /** Delete a user by ID */
@@ -236,11 +418,27 @@ export interface paths {
       };
     };
   };
+  "/401": {
+    /** Unauthorized */
+    get: {
+      responses: {
+        401: components["responses"]["Unauthorized"];
+      };
+    };
+  };
   "/404": {
     /** Not found */
     get: {
       responses: {
         404: components["responses"]["NotFound"];
+      };
+    };
+  };
+  "/405": {
+    /** Method not allowed */
+    get: {
+      responses: {
+        405: components["responses"]["MethodNotAllowed"];
       };
     };
   };
@@ -258,6 +456,11 @@ export type webhooks = Record<string, never>;
 
 export interface components {
   schemas: {
+    AuthUser: {
+      admin: boolean;
+      email: string;
+      user?: components["schemas"]["User"];
+    } | null;
     BadRequest: {
       /** @enum {string} */
       error: "BadRequest" | "InvalidIdParam";
@@ -276,23 +479,23 @@ export interface components {
       nextCursor?: string[];
       total: number;
     };
-    CategoryNotFound: {
-      /** @enum {string} */
-      error: "CategoryNotFound";
-      errorMessage: string;
-    };
     Company: {
       _id: string;
       categories: string[];
-      description: string;
-      foundedAt: string;
+      country: string;
+      createdAt: string;
+      description?: string;
+      foundedAt?: string;
+      foundingAgreement?: string;
       founders: components["schemas"]["Founder"][];
       images: components["schemas"]["WebAccessibleImage"][];
-      logo: components["schemas"]["WebAccessibleImage"];
-      name: string;
+      logo?: components["schemas"]["WebAccessibleImage"];
+      name?: string;
       privateCompany?: boolean;
       recommended?: boolean;
-      targetValue: number;
+      /** @enum {string} */
+      status: "draft" | "founded";
+      targetValue?: number;
       website?: string;
     };
     CompanyList: {
@@ -301,20 +504,41 @@ export interface components {
       nextCursor?: string[];
       total: number;
     };
-    CompanyNotFound: {
+    Conflict: {
       /** @enum {string} */
-      error: "CompanyNotFound";
+      error: "AlreadyExists" | "Conflict";
       errorMessage: string;
     };
     Delete: {
       affectedRows: number;
     };
+    DigitalDocument: {
+      assetId: string;
+      secureUrl: string;
+      signatures: string[];
+      url: string;
+    };
+    Document: {
+      _id: string;
+      company: string;
+      createdAt: string;
+      doc?: components["schemas"]["DigitalDocument"];
+      metadata?: string;
+      signatories: components["schemas"]["Signatory"][];
+      /** @enum {string} */
+      type: "FoundingAgreement";
+    };
+    DocumentList: {
+      count: number;
+      docs: components["schemas"]["Document"][];
+      nextCursor?: string[];
+      total: number;
+    };
     Founder: {
-      confirmed?: boolean;
       email: string;
-      firstName: string;
-      lastName: string;
-      share: number;
+      firstName?: string;
+      lastName?: string;
+      share?: number;
     };
     Home: {
       schema: string;
@@ -326,18 +550,9 @@ export interface components {
       error: "InternalServerError";
       errorMessage: string;
     };
-    InvalidCategoryData: {
+    InvalidData: {
       /** @enum {string} */
-      error: "InvalidCategoryData";
-      errorMessage: string;
-      data: {
-        message: string;
-        path: string;
-      }[];
-    };
-    InvalidCompanyData: {
-      /** @enum {string} */
-      error: "InvalidCompanyData";
+      error: "InvalidData";
       errorMessage: string;
       data: {
         message: string;
@@ -358,18 +573,24 @@ export interface components {
         path: string;
       }[];
     };
-    InvalidUserData: {
+    MethodNotAllowed: {
       /** @enum {string} */
-      error: "InvalidUserData";
+      error: "MethodNotAllowed";
       errorMessage: string;
-      data: {
-        message: string;
-        path: string;
-      }[];
     };
     NotFound: {
       /** @enum {string} */
       error: "NotFound";
+      errorMessage: string;
+    };
+    Signatory: {
+      email: string;
+      firstName?: string;
+      lastName?: string;
+    };
+    Unauthorized: {
+      /** @enum {string} */
+      error: "Unauthorized";
       errorMessage: string;
     };
     User: {
@@ -378,31 +599,28 @@ export interface components {
       firstName: string;
       lastName: string;
     };
-    UserAlreadyExists: {
-      /** @enum {string} */
-      error: "UserAlreadyExists";
-      errorMessage: string;
-    };
     UserList: {
       count: number;
       docs: components["schemas"]["User"][];
       nextCursor?: string[];
       total: number;
     };
-    UserNotFound: {
-      /** @enum {string} */
-      error: "UserNotFound";
-      errorMessage: string;
-    };
     WebAccessibleImage: {
       assetId: string;
       height: number;
+      name: string;
       secureUrl: string;
       url: string;
       width: number;
     };
   };
   responses: {
+    /** @description Authentication response */
+    AuthUser: {
+      content: {
+        "application/json": components["schemas"]["AuthUser"];
+      };
+    };
     /** @description Bad request */
     BadRequest: {
       content: {
@@ -421,12 +639,6 @@ export interface components {
         "application/json": components["schemas"]["CategoryList"];
       };
     };
-    /** @description Category not found */
-    CategoryNotFound: {
-      content: {
-        "application/json": components["schemas"]["CategoryNotFound"];
-      };
-    };
     /** @description Company */
     Company: {
       content: {
@@ -439,16 +651,28 @@ export interface components {
         "application/json": components["schemas"]["CompanyList"];
       };
     };
-    /** @description Company not found */
-    CompanyNotFound: {
+    /** @description Already exists */
+    Conflict: {
       content: {
-        "application/json": components["schemas"]["CompanyNotFound"];
+        "application/json": components["schemas"]["Conflict"];
       };
     };
     /** @description Delete */
     Delete: {
       content: {
         "application/json": components["schemas"]["Delete"];
+      };
+    };
+    /** @description Document */
+    Document: {
+      content: {
+        "application/json": components["schemas"]["Document"];
+      };
+    };
+    /** @description Document list */
+    DocumentList: {
+      content: {
+        "application/json": components["schemas"]["DocumentList"];
       };
     };
     /** @description Home */
@@ -463,28 +687,22 @@ export interface components {
         "application/json": components["schemas"]["InternalServerError"];
       };
     };
+    /** @description Invalid data */
+    InvalidData: {
+      content: {
+        "application/json": components["schemas"]["InvalidData"];
+      };
+    };
     /** @description Invalid query */
     InvalidQuery: {
       content: {
         "application/json": components["schemas"]["InvalidQuery"];
       };
     };
-    /** @description Invalid user data */
-    InvalidUserData: {
+    /** @description Method not allowed */
+    MethodNotAllowed: {
       content: {
-        "application/json": components["schemas"]["InvalidUserData"];
-      };
-    };
-    /** @description Invalid category data */
-    InvalidCategoryData: {
-      content: {
-        "application/json": components["schemas"]["InvalidCategoryData"];
-      };
-    };
-    /** @description Invalid company data */
-    InvalidCompanyData: {
-      content: {
-        "application/json": components["schemas"]["InvalidCompanyData"];
+        "application/json": components["schemas"]["MethodNotAllowed"];
       };
     };
     /** @description Not found */
@@ -493,16 +711,16 @@ export interface components {
         "application/json": components["schemas"]["NotFound"];
       };
     };
+    /** @description Bad request */
+    Unauthorized: {
+      content: {
+        "application/json": components["schemas"]["Unauthorized"];
+      };
+    };
     /** @description User */
     User: {
       content: {
         "application/json": components["schemas"]["User"];
-      };
-    };
-    /** @description User already exists */
-    UserAlreadyExists: {
-      content: {
-        "application/json": components["schemas"]["UserAlreadyExists"];
       };
     };
     /** @description User list */
@@ -511,15 +729,10 @@ export interface components {
         "application/json": components["schemas"]["UserList"];
       };
     };
-    /** @description User not found */
-    UserNotFound: {
-      content: {
-        "application/json": components["schemas"]["UserNotFound"];
-      };
-    };
   };
   parameters: {
     Id: string;
+    AssetId: string;
   };
   requestBodies: never;
   headers: never;

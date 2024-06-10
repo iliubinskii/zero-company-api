@@ -38,6 +38,20 @@ const config = {
     sourceType: "module"
   },
   rules: {
+    "node/no-unsupported-features/es-builtins": [
+      "error",
+      {
+        ignores: [],
+        version: ">=20.0.0"
+      }
+    ],
+    "node/no-unsupported-features/node-builtins": [
+      "warn",
+      {
+        ignores: [],
+        version: ">=20.0.0"
+      }
+    ],
     "spellcheck/spell-checker": [
       "warn",
       {
@@ -49,6 +63,8 @@ const config = {
           // @sort
           [
             "autofix",
+            "bool",
+            "builtins",
             "camelcase",
             "cjs",
             "cloudinary",
@@ -57,8 +73,10 @@ const config = {
             "cors",
             "defs",
             "destructure",
+            "docu",
             "ecma",
             "enum",
+            "envalid",
             "escompat",
             "eslintrc",
             "etag",
@@ -68,6 +86,7 @@ const config = {
             "globals",
             "gmail",
             "ico",
+            "jpg",
             "jsdoc",
             "jsx",
             "lang",
@@ -93,6 +112,7 @@ const config = {
             "readonly",
             "reconnectfailed",
             "redeclare",
+            "redis",
             "req",
             "resave",
             "schemas",
@@ -106,12 +126,14 @@ const config = {
             "tsconfig",
             "tsx",
             "ttl",
+            "txt",
             "ucfirst",
             "unlink",
             "uploader",
             "uri",
             "urls",
             "uuidv4",
+            "validators",
             "ver",
             "vercel",
             "webhooks",

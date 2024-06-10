@@ -1,19 +1,17 @@
 import {
-  AUTH0_CALLBACK_URL,
-  AUTH0_DOMAIN,
-  AUTH0_RETURN_URL,
-  COOKIE_DOMAIN,
   COOKIE_SECURE,
   CORS_ORIGIN,
-  ENV,
-  LOG_LEVEL,
-  MONGODB_DATABASE_NAME,
-  PORT,
-  SESSION_SECRET
+  SESSION_SECRET,
+  SESSION_STORE_PROVIDER
 } from "./config";
-import { ErrorCode, schemaVersion } from "./schema";
 import type { NextFunction, Request, Response } from "express";
-import { appendJwt, logRequest, logResponse, requestId } from "./middleware";
+import {
+  appendJwt,
+  logRequest,
+  logResponse,
+  parseNestedQuery,
+  requestId
+} from "./middleware";
 import { buildErrorResponse, sendResponse } from "./utils";
 import {
   createAuthRouter,
@@ -23,15 +21,20 @@ import {
   createCompaniesRouter,
   createCompaniesService,
   createCompanyControllers,
+  createCompanyImageControllers,
+  createCompanyImagesService,
+  createDocumentControllers,
+  createDocumentsRouter,
+  createDocumentsService,
   createMeRouter,
   createUserControllers,
   createUsersRouter,
   createUsersService,
-  getUserModel,
-  maintenanceRouter,
   testRouter
 } from "./routes";
-import { initAuth0Passport, initMongodb } from "./providers";
+import { getSessionStore, logger } from "./services";
+import { initAuth0Passport, initMongodb, initRedis } from "./providers";
+import { ErrorCode } from "./schema";
 import type { Routes } from "./schema";
 import { StatusCodes } from "http-status-codes";
 import cookieParser from "cookie-parser";
@@ -39,7 +42,6 @@ import cors from "cors";
 import express, { json } from "express";
 import globToRegExp from "glob-to-regexp";
 import { lang } from "./langs";
-import { logger } from "./services";
 import passport from "passport";
 import session from "express-session";
 
@@ -47,25 +49,19 @@ import session from "express-session";
  * Create the Express app
  * @returns App
  */
-export function createApp(): express.Express {
-  logger.info(`${lang.ZeroApiServer} ${schemaVersion}`);
-  logger.info(`${lang.Environment}: ${ENV}`);
-  logger.info(`${lang.Port}: ${PORT}`);
-  logger.info(`${lang.Auth0CallbackUrl}: ${AUTH0_CALLBACK_URL}`);
-  logger.info(`${lang.Auth0Domain}: ${AUTH0_DOMAIN}`);
-  logger.info(`${lang.Auth0ReturnUrl}: ${AUTH0_RETURN_URL}`);
-  logger.info(`${lang.CookieDomain}: ${COOKIE_DOMAIN}`);
-  logger.info(`${lang.CookieSecure}: ${COOKIE_SECURE}`);
-  logger.info(`${lang.CorsOrigin}: ${CORS_ORIGIN}`);
-  logger.info(`${lang.LogLevel}: ${LOG_LEVEL}`);
-  logger.info(`${lang.MongodbDatabaseName}: ${MONGODB_DATABASE_NAME}`);
-
-  initMongodb();
+export async function createApp(): Promise<express.Express> {
   initAuth0Passport();
+  initMongodb();
+
+  if (SESSION_STORE_PROVIDER === "redis") await initRedis();
 
   const categoriesService = createCategoriesService();
 
-  const companiesService = createCompaniesService(getUserModel);
+  const companiesService = createCompaniesService();
+
+  const companyImagesService = createCompanyImagesService();
+
+  const documentsService = createDocumentsService();
 
   const usersService = createUsersService();
 
@@ -75,6 +71,11 @@ export function createApp(): express.Express {
   );
 
   const companyControllers = createCompanyControllers(companiesService);
+
+  const companyImageControllers =
+    createCompanyImageControllers(companyImagesService);
+
+  const documentControllers = createDocumentControllers(documentsService);
 
   const userControllers = createUserControllers(usersService, companiesService);
 
@@ -94,20 +95,21 @@ export function createApp(): express.Express {
   app.use(express.static("public"));
 
   app.use(cookieParser());
+  app.use(json());
+  app.use(parseNestedQuery);
+
   app.use(
     session({
       cookie: { secure: COOKIE_SECURE },
       resave: false,
       saveUninitialized: false,
-      secret: SESSION_SECRET
+      secret: SESSION_SECRET,
+      store: getSessionStore()
     })
   );
   app.use(passport.initialize());
   app.use(passport.session());
-
   app.use(appendJwt);
-
-  app.use(json());
 
   app.get("/", (_req, res) => {
     sendResponse<Routes["/"]["get"]>(res, StatusCodes.OK, {
@@ -120,39 +122,18 @@ export function createApp(): express.Express {
 
   app.use("/categories", createCategoriesRouter(categoryControllers));
 
-  app.use("/companies", createCompaniesRouter(companyControllers));
+  app.use(
+    "/companies",
+    createCompaniesRouter(companyControllers, companyImageControllers)
+  );
 
-  app.use("/maintenance", maintenanceRouter);
+  app.use("/documents", createDocumentsRouter(documentControllers));
 
   app.use("/me", createMeRouter(userControllers));
 
   app.use("/test", testRouter);
 
   app.use("/users", createUsersRouter(userControllers));
-
-  app.use("/400", (_req, res) => {
-    sendResponse<Routes["/400"]["get"]>(
-      res,
-      StatusCodes.BAD_REQUEST,
-      buildErrorResponse(ErrorCode.BadRequest)
-    );
-  });
-
-  app.use("/404", (_req, res) => {
-    sendResponse<Routes["/404"]["get"]>(
-      res,
-      StatusCodes.NOT_FOUND,
-      buildErrorResponse(ErrorCode.NotFound)
-    );
-  });
-
-  app.use("/500", (_req, res) => {
-    sendResponse<Routes["/500"]["get"]>(
-      res,
-      StatusCodes.INTERNAL_SERVER_ERROR,
-      buildErrorResponse(ErrorCode.InternalServerError)
-    );
-  });
 
   app.all("*", (_req, res) => {
     sendResponse<Routes["/404"]["get"]>(

@@ -1,4 +1,22 @@
+import { omit } from "lodash";
 import zod from "zod";
+
+export const DigitalDocumentValidationSchema = zod.strictObject({
+  assetId: zod.string(),
+  secureUrl: zod.string().url(),
+  signatures: zod.array(zod.string()),
+  url: zod.string().url()
+});
+
+export const founder = zod
+  .strictObject({
+    _id: zod.any().optional(),
+    email: preprocessEmail(zod.string().email()),
+    firstName: zod.string().min(1).nullable().optional(),
+    lastName: zod.string().min(1).nullable().optional(),
+    share: preprocessNumber(zod.number().int().positive()).nullable().optional()
+  })
+  .transform(obj => omit(obj, ["_id"]));
 
 export const IdValidationSchema = zod
   .string()
@@ -7,12 +25,17 @@ export const IdValidationSchema = zod
 export const ImageValidationSchema = zod.strictObject({
   assetId: zod.string().min(1),
   height: preprocessNumber(zod.number().int().positive()),
+  name: zod.string().min(1),
   secureUrl: zod.string().min(1),
   url: zod.string().min(1),
   width: preprocessNumber(zod.number().int().positive())
 });
 
-export const UserEmailValidationSchema = preprocessEmail(zod.string().email());
+export const SignatoryValidationSchema = zod.strictObject({
+  email: zod.string().email(),
+  firstName: zod.string().nullable().optional(),
+  lastName: zod.string().nullable().optional()
+});
 
 /**
  * Preprocesses a schema to convert string values to booleans.

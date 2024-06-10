@@ -4,7 +4,6 @@ import type {
   ExistingCategory
 } from "./categories";
 import { IdValidationSchema, preprocessBoolean } from "./common";
-import type { ValidationResult } from "./common";
 import zod from "zod";
 
 const _id = IdValidationSchema;
@@ -17,15 +16,13 @@ const pinned = preprocessBoolean(zod.boolean());
 
 const tagline = zod.string().min(1);
 
-const fields = {
+export const ExistingCategoryValidationSchema = zod.strictObject({
   _id,
   description,
   name,
   pinned,
   tagline
-};
-
-export const ExistingCategoryValidationSchema = zod.strictObject(fields);
+});
 
 export const CategoryCreateValidationSchema =
   ExistingCategoryValidationSchema.omit({ _id: true });
@@ -38,21 +35,21 @@ export const CategoryUpdateValidationSchema = zod.strictObject({
 });
 
 // Type check the existing category validation schema
-((): ValidationResult<ExistingCategory> | undefined => {
+((): ExistingCategory | undefined => {
   const result = ExistingCategoryValidationSchema.safeParse(undefined);
 
   return result.success ? result.data : undefined;
 })();
 
 // Type check the category create validation schema
-((): ValidationResult<CategoryCreate> | undefined => {
+((): CategoryCreate | undefined => {
   const result = CategoryCreateValidationSchema.safeParse(undefined);
 
   return result.success ? result.data : undefined;
 })();
 
 // Type check the category update validation schema
-((): ValidationResult<CategoryUpdate> | undefined => {
+((): CategoryUpdate | undefined => {
   const result = CategoryUpdateValidationSchema.safeParse(undefined);
 
   return result.success ? result.data : undefined;

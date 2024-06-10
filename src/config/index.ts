@@ -1,93 +1,78 @@
 /* eslint-disable no-process-env -- Ok */
 
-import { preprocessBoolean, preprocessEmail } from "../schema";
-import { assertDefined } from "../utils";
+import { bool, cleanEnv, makeValidator, num, str } from "envalid";
 import { config } from "dotenv";
-import zod from "zod";
-
-const BooleanValidationSchema = preprocessBoolean(zod.boolean());
-
-const EmailValidationSchema = preprocessEmail(zod.string().email());
-
-const StringValidationSchema = preprocessBoolean(zod.string().min(1));
 
 config();
 
-export const ENV = StringValidationSchema.parse(process.env["ENV"]);
-
-export const PORT = StringValidationSchema.parse(process.env["PORT"]);
-
-export const ADMIN_EMAIL = assertDefined(process.env["ADMIN_EMAIL"])
-  .split(",")
-  .filter(email => email.length)
-  .map(email => EmailValidationSchema.parse(email));
-
-export const AUTH0_CALLBACK_URL = StringValidationSchema.parse(
-  process.env["AUTH0_CALLBACK_URL"]
+const emailArray = makeValidator(input =>
+  input
+    .split(",")
+    .filter(email => email.length)
+    .map(email => email.trim().toLowerCase())
 );
 
-export const AUTH0_CLIENT_ID = StringValidationSchema.parse(
-  process.env["AUTH0_CLIENT_ID"]
-);
+const sessionStoreProviderValidator = makeValidator<
+  "memory" | "mongodb" | "redis"
+>(input => {
+  if (input === "memory" || input === "mongodb" || input === "redis")
+    return input;
 
-export const AUTH0_CLIENT_SECRET = StringValidationSchema.parse(
-  process.env["AUTH0_CLIENT_SECRET"]
-);
+  throw new Error(`Invalid value for session store provider: ${input}`);
+});
 
-export const AUTH0_DOMAIN = StringValidationSchema.parse(
-  process.env["AUTH0_DOMAIN"]
-);
+const env = cleanEnv(process.env, {
+  ADMIN_EMAIL: emailArray(),
+  AUTH0_CALLBACK_URL: str(),
+  AUTH0_CLIENT_ID: str(),
+  AUTH0_CLIENT_SECRET: str(),
+  AUTH0_DOMAIN: str(),
+  AUTH0_RETURN_URL: str(),
+  CLOUDINARY_API_KEY: str(),
+  CLOUDINARY_API_SECRET: str(),
+  CLOUDINARY_BASE_FOLDER: str(),
+  CLOUDINARY_CLOUD_NAME: str(),
+  COOKIE_DOMAIN: str(),
+  COOKIE_SECURE: bool({ default: true }),
+  CORS_ORIGIN: str(),
+  ENV: str(),
+  JWT_SECRET: str(),
+  LOG_LEVEL: str({ default: "info" }),
+  MONGODB_DATABASE_NAME: str(),
+  MONGODB_URI: str(),
+  MULTER_DESTINATION_PATH: str(),
+  PORT: num({ default: 3000 }),
+  REDIS_PREFIX: str(),
+  REDIS_URL: str(),
+  SESSION_SECRET: str(),
+  SESSION_STORE_PROVIDER: sessionStoreProviderValidator({ default: "memory" }),
+  TEST_MONGODB_PORT: num({ default: 27_017 })
+});
 
-export const AUTH0_RETURN_URL = StringValidationSchema.parse(
-  process.env["AUTH0_RETURN_URL"]
-);
-
-export const CLOUDINARY_API_KEY = StringValidationSchema.parse(
-  process.env["CLOUDINARY_API_KEY"]
-);
-
-export const CLOUDINARY_BASE_FOLDER = StringValidationSchema.parse(
-  process.env["CLOUDINARY_BASE_FOLDER"]
-);
-
-export const CLOUDINARY_API_SECRET = StringValidationSchema.parse(
-  process.env["CLOUDINARY_API_SECRET"]
-);
-
-export const CLOUDINARY_CLOUD_NAME = StringValidationSchema.parse(
-  process.env["CLOUDINARY_CLOUD_NAME"]
-);
-
-export const COOKIE_DOMAIN = StringValidationSchema.parse(
-  process.env["COOKIE_DOMAIN"]
-);
-
-export const COOKIE_SECURE = BooleanValidationSchema.parse(
-  process.env["COOKIE_SECURE"]
-);
-
-export const CORS_ORIGIN = StringValidationSchema.parse(
-  process.env["CORS_ORIGIN"]
-);
-
-export const JWT_SECRET = StringValidationSchema.parse(
-  process.env["JWT_SECRET"]
-);
-
-export const LOG_LEVEL = StringValidationSchema.parse(process.env["LOG_LEVEL"]);
-
-export const MONGODB_DATABASE_NAME = StringValidationSchema.parse(
-  process.env["MONGODB_DATABASE_NAME"]
-);
-
-export const MONGODB_URI = StringValidationSchema.parse(
-  process.env["MONGODB_URI"]
-);
-
-export const MULTER_DESTINATION_PATH = StringValidationSchema.parse(
-  process.env["MULTER_DESTINATION_PATH"]
-);
-
-export const SESSION_SECRET = StringValidationSchema.parse(
-  process.env["SESSION_SECRET"]
-);
+export const {
+  ADMIN_EMAIL,
+  AUTH0_CALLBACK_URL,
+  AUTH0_CLIENT_ID,
+  AUTH0_CLIENT_SECRET,
+  AUTH0_DOMAIN,
+  AUTH0_RETURN_URL,
+  CLOUDINARY_API_KEY,
+  CLOUDINARY_API_SECRET,
+  CLOUDINARY_BASE_FOLDER,
+  CLOUDINARY_CLOUD_NAME,
+  COOKIE_DOMAIN,
+  COOKIE_SECURE,
+  CORS_ORIGIN,
+  ENV,
+  JWT_SECRET,
+  LOG_LEVEL,
+  MONGODB_DATABASE_NAME,
+  MONGODB_URI,
+  MULTER_DESTINATION_PATH,
+  PORT,
+  REDIS_PREFIX,
+  REDIS_URL,
+  SESSION_SECRET,
+  SESSION_STORE_PROVIDER,
+  TEST_MONGODB_PORT
+} = env;

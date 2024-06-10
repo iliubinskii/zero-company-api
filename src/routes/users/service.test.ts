@@ -1,10 +1,8 @@
-/* eslint-disable sonarjs/no-duplicate-string -- Ok */
-
 import type { ExistingUser, UserUpdate } from "../../schema";
-import { assertDefined } from "../../utils";
+import { assertDefined, assertNotNull } from "../../utils";
 import { createUsersService } from "./service";
 import { faker } from "@faker-js/faker";
-import { getUserModel } from "./model";
+import { getUserModel } from "../../schema-mongodb";
 
 describe("createUsersService", () => {
   const usersService = createUsersService();
@@ -24,21 +22,26 @@ describe("createUsersService", () => {
     };
   };
 
+  const toObject = (obj: unknown): unknown =>
+    // eslint-disable-next-line unicorn/prefer-structured-clone -- Ok
+    JSON.parse(JSON.stringify(obj));
+
   describe("addUser", () => {
     const data = getData();
 
     it("should add a user", async () => {
       const user = await usersService.addUser(data);
 
-      const { _id } = assertDefined(user);
-
-      expect(user).toStrictEqual({ ...data, _id });
+      expect(toObject(user)).toStrictEqual({
+        ...data,
+        _id: assertNotNull(user)._id.toString()
+      });
     });
 
     it("should return undefined for duplicate email", async () => {
       const user = await usersService.addUser(data);
 
-      expect(user).toBeUndefined();
+      expect(user).toBeNull();
     });
   });
 
@@ -77,7 +80,7 @@ describe("createUsersService", () => {
       beforeAll(async () => {
         const user = await usersService.addUser(data);
 
-        id = assertDefined(user)._id;
+        id = assertNotNull(user)._id.toString();
       });
 
       it("should delete a user", async () => {
@@ -114,9 +117,10 @@ describe("createUsersService", () => {
           type: "email"
         });
 
-        const { _id } = assertDefined(user);
-
-        expect(user).toEqual({ ...data, _id });
+        expect(toObject(user)).toEqual({
+          ...data,
+          _id: assertNotNull(user)._id.toString()
+        });
       });
 
       it("should return undefined for missing user", async () => {
@@ -125,7 +129,7 @@ describe("createUsersService", () => {
           type: "email"
         });
 
-        expect(user).toBeUndefined();
+        expect(user).toBeNull();
       });
     });
 
@@ -137,7 +141,7 @@ describe("createUsersService", () => {
       beforeAll(async () => {
         const user = await usersService.addUser(data);
 
-        id = assertDefined(user)._id;
+        id = assertNotNull(user)._id.toString();
       });
 
       it("should get a user", async () => {
@@ -146,9 +150,10 @@ describe("createUsersService", () => {
           type: "id"
         });
 
-        const { _id } = assertDefined(user);
-
-        expect(user).toEqual({ ...data, _id });
+        expect(toObject(user)).toEqual({
+          ...data,
+          _id: assertNotNull(user)._id.toString()
+        });
       });
 
       it("should return undefined for missing user", async () => {
@@ -157,7 +162,7 @@ describe("createUsersService", () => {
           type: "id"
         });
 
-        expect(user).toBeUndefined();
+        expect(user).toBeNull();
       });
     });
   });
@@ -245,9 +250,11 @@ describe("createUsersService", () => {
           update
         );
 
-        const { _id } = assertDefined(user);
-
-        expect(user).toEqual({ ...data, ...update, _id });
+        expect(toObject(user)).toEqual({
+          ...data,
+          ...update,
+          _id: assertNotNull(user)._id.toString()
+        });
       });
 
       it("should return undefined for missing user", async () => {
@@ -262,7 +269,7 @@ describe("createUsersService", () => {
           update
         );
 
-        expect(user).toBeUndefined();
+        expect(user).toBeNull();
       });
     });
 
@@ -274,7 +281,7 @@ describe("createUsersService", () => {
       beforeAll(async () => {
         const user = await usersService.addUser(data);
 
-        id = assertDefined(user)._id;
+        id = assertNotNull(user)._id.toString();
       });
 
       it("should update a user", async () => {
@@ -288,9 +295,11 @@ describe("createUsersService", () => {
           update
         );
 
-        const { _id } = assertDefined(user);
-
-        expect(user).toEqual({ ...data, ...update, _id });
+        expect(toObject(user)).toEqual({
+          ...data,
+          ...update,
+          _id: assertNotNull(user)._id.toString()
+        });
       });
 
       it("should return undefined for missing user", async () => {
@@ -305,7 +314,7 @@ describe("createUsersService", () => {
           update
         );
 
-        expect(user).toBeUndefined();
+        expect(user).toBeNull();
       });
     });
   });

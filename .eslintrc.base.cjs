@@ -71,11 +71,13 @@ const config = {
         allowedNames: []
       }
     ],
+    "@typescript-eslint/no-dynamic-delete": "off",
     "@typescript-eslint/no-shadow": "warn",
     "@typescript-eslint/restrict-template-expressions": [
       "warn",
       { allowNumber: true }
     ],
+    "@typescript-eslint/switch-exhaustiveness-check": "warn",
     "arrow-body-style": [
       "error",
       "as-needed",
@@ -107,7 +109,7 @@ const config = {
     "jsdoc/require-returns-type": "off",
     "n/no-missing-import": "off",
     "no-duplicate-imports": "off",
-    "no-magic-numbers": ["error", { ignore: [0, 1, -1] }],
+    "no-magic-numbers": ["error", { ignore: [-1, 0, 0.5, 1, 2, 100] }],
     "no-redeclare": "off",
     "no-shadow": "off",
     "no-type-assertion/no-type-assertion": "warn",
@@ -128,9 +130,11 @@ const config = {
         trailingComma: "none"
       }
     ],
+    "promise/always-return": "off",
     "quote-props": ["warn", "consistent-as-needed"],
     "quotes": ["error", "double"],
     "security/detect-object-injection": "off",
+    "sonarjs/no-duplicate-string": "off",
     "sonarjs/prefer-immediate-return": "off",
     "sort/destructuring-properties": [
       "warn",
@@ -162,6 +166,7 @@ const config = {
     "unicorn/no-unnecessary-polyfills": "off",
     "unicorn/no-useless-undefined": "off",
     "unicorn/prefer-logical-operator-over-ternary": "off",
+    "unicorn/prefer-regexp-test": "off",
     "unicorn/prefer-top-level-await": "off",
     "unicorn/prevent-abbreviations": "off",
     "unused-imports/no-unused-imports": "warn"

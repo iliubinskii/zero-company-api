@@ -1,38 +1,98 @@
-import type { Company, GetCompaniesOptions, User } from "../../schema";
-import { buildMongodbQuery, filterUndefinedProperties } from "../../utils";
+import type {
+  Company,
+  Document,
+  GetCompaniesOptions,
+  User
+} from "../../schema";
+import { DocType, MAX_LIMIT } from "../../schema";
+import {
+  getCompanyModel,
+  getDocumentModel,
+  getUserModel
+} from "../../schema-mongodb";
 import type { CompaniesService } from "../../types";
 import type { FilterQuery } from "mongoose";
-import { MAX_LIMIT } from "../../schema";
+import { StatusCodes } from "http-status-codes";
 import type { Writable } from "ts-toolbelt/out/Object/Writable";
-import { getCompanyModel } from "./model";
+import { getMongodbConnection } from "../../providers";
 import type mongoose from "mongoose";
 
 /**
  * Creates a MongoDB service for companies.
- * @param getUserModel - The function to get the user model.
  * @returns A MongoDB service for companies.
  */
-export function createCompaniesService(
-  getUserModel: GetUserModel
-): CompaniesService {
+export function createCompaniesService(): CompaniesService {
   return {
     addCompany: async company => {
       const CompanyModel = await getCompanyModel();
 
       const model = new CompanyModel(company);
 
-      const addedCompany = await model.save();
+      const addedItem = await model.save();
 
-      const { _id, ...rest } = addedCompany.toObject();
-
-      return { _id: _id.toString(), ...rest };
+      return addedItem;
     },
     deleteCompany: async id => {
       const CompanyModel = await getCompanyModel();
 
-      const deletedCompany = await CompanyModel.findByIdAndDelete(id);
+      const deletedCategory = await CompanyModel.findByIdAndDelete(id);
 
-      return deletedCompany ? 1 : 0;
+      return deletedCategory ? 1 : 0;
+    },
+    generateFoundingAgreement: async id => {
+      const connection = await getMongodbConnection();
+
+      const CompanyModel = await getCompanyModel();
+
+      const DocumentModel = await getDocumentModel();
+
+      const session = await connection.startSession();
+
+      session.startTransaction();
+
+      try {
+        const company = await CompanyModel.findById(id).session(session);
+
+        if (!company) {
+          await session.abortTransaction();
+          await session.endSession();
+
+          return null;
+        }
+
+        if (company.foundingAgreement) {
+          await session.abortTransaction();
+          await session.endSession();
+
+          return StatusCodes.CONFLICT;
+        }
+
+        const doc: Document = {
+          company: company._id.toString(),
+          createdAt: new Date(),
+          signatories: company.founders.map(
+            ({ email, firstName, lastName }) => {
+              return { email, firstName, lastName };
+            }
+          ),
+          type: DocType.FoundingAgreement
+        };
+
+        const document = new DocumentModel(doc);
+
+        company.foundingAgreement = document._id;
+
+        const updatedCompany = await company.save({ session });
+
+        await session.commitTransaction();
+        await session.endSession();
+
+        return updatedCompany;
+      } catch (err) {
+        await session.abortTransaction();
+        await session.endSession();
+        throw err;
+      }
     },
     getCompanies: async (options = {}, parentRef) => {
       const {
@@ -44,9 +104,9 @@ export function createCompaniesService(
 
       const filter: Writable<FilterQuery<Company>> = buildFilter(options);
 
-      const sortOrderNumMap = { asc: 1, desc: -1 } as const;
+      const mongodbSortOrderMap = { asc: 1, desc: -1 } as const;
 
-      const sortOrderNum = sortOrderNumMap[sortOrder];
+      const mongodbSortOrder = mongodbSortOrderMap[sortOrder];
 
       const CompanyModel = await getCompanyModel();
 
@@ -85,8 +145,8 @@ export function createCompaniesService(
           .limit(limit)
           .sort(
             Object.fromEntries([
-              [sortBy, sortOrderNum],
-              ["_id", sortOrderNum]
+              [sortBy, mongodbSortOrder],
+              ["_id", mongodbSortOrder]
             ])
           ),
         CompanyModel.countDocuments(filter)
@@ -94,49 +154,53 @@ export function createCompaniesService(
 
       const lastCompany = companies.at(-1);
 
-      return filterUndefinedProperties({
-        count: companies.length,
-        docs: companies.map(company => {
-          const { _id, ...rest } = company.toObject();
+      const nextCursor = ((): [string, string] | undefined => {
+        if (companies.length === limit && lastCompany) {
+          const cursor0 = lastCompany[sortBy];
 
-          return { _id: _id.toString(), ...rest };
-        }),
-        nextCursor:
-          companies.length === limit && lastCompany
-            ? [lastCompany[sortBy], lastCompany._id.toString()]
-            : undefined,
+          const cursor1 = lastCompany._id.toString();
+
+          if (cursor0) return [cursor0.toString(), cursor1];
+        }
+
+        return undefined;
+      })();
+
+      return {
+        count: companies.length,
+        docs: companies,
+        nextCursor,
         total
-      });
+      };
     },
     getCompany: async id => {
       const CompanyModel = await getCompanyModel();
 
       const company = await CompanyModel.findById(id);
 
-      if (company) {
-        const { _id, ...rest } = company.toObject();
-
-        return { _id: _id.toString(), ...rest };
-      }
-
-      return undefined;
+      return company;
     },
     updateCompany: async (id, company) => {
       const CompanyModel = await getCompanyModel();
 
-      const updatedCompany = await CompanyModel.findByIdAndUpdate(
-        id,
-        buildMongodbQuery(company),
-        { new: true }
-      );
+      const { addImages, removeImages, ...rest } = company;
 
-      if (updatedCompany) {
-        const { _id, ...rest } = updatedCompany.toObject();
+      const update: Record<string, unknown> = {};
 
-        return { _id: _id.toString(), ...rest };
-      }
+      if (Object.keys(rest).length > 0) update["$set"] = rest;
 
-      return undefined;
+      if (addImages && addImages.length > 0)
+        update["$push"] = { images: { $each: addImages } };
+
+      if (removeImages && removeImages.length > 0)
+        update["$pull"] = { images: { assetId: { $in: removeImages } } };
+
+      const updatedCategory = await CompanyModel.findByIdAndUpdate(id, update, {
+        new: true,
+        runValidators: true
+      });
+
+      return updatedCategory;
     }
   };
 }
@@ -153,6 +217,7 @@ export interface GetUserModel {
  * @param options.onlyRecommended - Whether to get only recommended companies.
  * @param options.sortBy - The field to sort companies by.
  * @param options.sortOrder - The order to sort companies by.
+ * @param options.status - The status of the companies.
  * @returns The filter to get companies.
  */
 function buildFilter({
@@ -160,7 +225,8 @@ function buildFilter({
   includePrivateCompanies = false,
   onlyRecommended = false,
   sortBy = "name",
-  sortOrder = "asc"
+  sortOrder = "asc",
+  status
 }: GetCompaniesOptions = {}): FilterQuery<Company> {
   const filter: Writable<FilterQuery<Company>> = {};
 
@@ -182,6 +248,8 @@ function buildFilter({
   } else filter["privateCompany"] = { $ne: true };
 
   if (onlyRecommended) filter["recommended"] = true;
+
+  if (status) filter["status"] = status;
 
   return filter;
 }

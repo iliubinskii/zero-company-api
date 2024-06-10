@@ -6,6 +6,7 @@ import type {
   UserUpdate
 } from "../schema";
 import type { RequestHandler } from "express";
+import type mongoose from "mongoose";
 
 export interface UserControllers {
   readonly addUser: RequestHandler;
@@ -37,7 +38,7 @@ export interface UsersService {
    * @param user - The user to add.
    * @returns A promise that resolves when the user has been added.
    */
-  readonly addUser: (user: User) => Promise<ExistingUser | undefined>;
+  readonly addUser: (user: User) => Promise<RawExistingUser | null>;
   /**
    * Deletes a user from the database.
    * @param ref - The reference of the user to delete.
@@ -49,15 +50,13 @@ export interface UsersService {
    * @param ref - The reference of the user to get.
    * @returns A promise that resolves with the user, or `undefined` if the user was not found.
    */
-  readonly getUser: (ref: UserRef) => Promise<ExistingUser | undefined>;
+  readonly getUser: (ref: UserRef) => Promise<RawExistingUser | null>;
   /**
    * Gets all users from the database.
    * @param options - The options to use when getting users.
    * @returns A promise that resolves with all users in the database.
    */
-  readonly getUsers: (
-    options?: GetUsersOptions
-  ) => Promise<MultipleDocsResponse<ExistingUser>>;
+  readonly getUsers: (options?: GetUsersOptions) => Promise<RawExistingUsers>;
   /**
    * Updates a user in the database.
    * @param ref - The reference of the user to update.
@@ -67,5 +66,11 @@ export interface UsersService {
   readonly updateUser: (
     ref: UserRef,
     user: UserUpdate
-  ) => Promise<ExistingUser | undefined>;
+  ) => Promise<RawExistingUser | null>;
 }
+
+export interface RawExistingUser extends Omit<ExistingUser, "_id"> {
+  readonly _id: mongoose.Types.ObjectId;
+}
+
+export type RawExistingUsers = MultipleDocsResponse<RawExistingUser>;

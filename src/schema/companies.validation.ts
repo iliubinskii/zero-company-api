@@ -1,105 +1,114 @@
-import type {
-  CompanyCreate,
-  CompanyUpdate,
-  ExistingCompany
+import { COUNTRY_CODE_SIZE, MAX_CATEGORIES } from "./consts";
+import {
+  type CompanyCreate,
+  type CompanyUpdate,
+  type ExistingCompany
 } from "./companies";
 import {
+  CompanyStatus,
   IdValidationSchema,
   ImageValidationSchema,
+  founder,
   preprocessBoolean,
-  preprocessEmail,
   preprocessNumber
 } from "./common";
-import { MAX_CATEGORIES } from "./consts";
-import type { ValidationResult } from "./common";
 import zod from "zod";
 
 const _id = IdValidationSchema;
 
-const categories = zod.array(IdValidationSchema).nonempty().max(MAX_CATEGORIES);
+const addImages = zod.array(ImageValidationSchema);
 
-const description = zod.string().min(1);
+const categories = zod
+  .array(IdValidationSchema)
+  .nonempty()
+  .min(1)
+  .max(MAX_CATEGORIES);
 
-const foundedAt = zod.string().min(1);
+const country = zod.string().length(COUNTRY_CODE_SIZE);
 
-const founder = zod.strictObject({
-  confirmed: preprocessBoolean(zod.boolean()).optional(),
-  email: preprocessEmail(zod.string().email()),
-  firstName: zod.string().min(1),
-  lastName: zod.string().min(1),
-  share: preprocessNumber(zod.number().int().positive())
-});
+const createdAt = zod.date();
 
-const founderCreate = founder.omit({ confirmed: true });
+const description = zod.string().min(1).nullable().optional();
 
-const founders = zod.array(founder).nonempty();
+const foundedAt = zod.date().nullable().optional();
 
-const foundersCreate = zod.array(founderCreate).nonempty();
+const foundingAgreement = zod.string().min(1).nullable().optional();
 
-const images = zod.array(ImageValidationSchema).nonempty();
+const founders = zod.array(founder);
 
-const logo = ImageValidationSchema;
+const images = zod.array(ImageValidationSchema);
 
-const name = zod.string().min(1);
+const logo = ImageValidationSchema.nullable().optional();
 
-const privateCompany = preprocessBoolean(zod.boolean()).optional();
+const name = zod.string().min(1).nullable().optional();
 
-const recommended = preprocessBoolean(zod.boolean()).optional();
+const privateCompany = preprocessBoolean(zod.boolean()).nullable().optional();
 
-const targetValue = preprocessNumber(zod.number().int().positive());
+const recommended = preprocessBoolean(zod.boolean()).nullable().optional();
 
-const website = zod.string().url().optional();
+const removeImages = zod.array(zod.string().min(1));
 
-const fields = {
+const status = zod.enum([CompanyStatus.draft, CompanyStatus.founded]);
+
+const targetValue = preprocessNumber(zod.number().int().positive())
+  .nullable()
+  .optional();
+
+const website = zod.string().url().nullable().optional();
+
+export const ExistingCompanyValidationSchema = zod.strictObject({
   _id,
   categories,
+  country,
+  createdAt,
   description,
   foundedAt,
   founders,
+  foundingAgreement,
   images,
   logo,
   name,
   privateCompany,
   recommended,
+  status,
   targetValue,
   website
-};
+});
 
-export const ExistingCompanyValidationSchema = zod.strictObject(fields);
-
-export const CompanyCreateValidationSchema =
-  ExistingCompanyValidationSchema.omit({
-    _id: true,
-    foundedAt: true,
-    founders: true,
-    recommended: true
-  }).merge(zod.object({ founders: foundersCreate }));
+export const CompanyCreateValidationSchema = zod.strictObject({
+  categories,
+  country
+});
 
 export const CompanyUpdateValidationSchema = zod.strictObject({
+  addImages: addImages.optional(),
+  categories: categories.optional(),
   description: description.optional(),
-  images: images.optional(),
+  founders: founders.optional(),
   logo: logo.optional(),
   name: name.optional(),
-  privateCompany: privateCompany.nullable().optional(),
-  website: website.nullable().optional()
+  privateCompany: privateCompany.optional(),
+  removeImages: removeImages.optional(),
+  targetValue: targetValue.optional(),
+  website: website.optional()
 });
 
 // Type check the existing company validation schema
-((): ValidationResult<ExistingCompany> | undefined => {
+((): ExistingCompany | undefined => {
   const result = ExistingCompanyValidationSchema.safeParse(undefined);
 
   return result.success ? result.data : undefined;
 })();
 
 // Type check the company create validation schema
-((): ValidationResult<CompanyCreate> | undefined => {
+((): CompanyCreate | undefined => {
   const result = CompanyCreateValidationSchema.safeParse(undefined);
 
   return result.success ? result.data : undefined;
 })();
 
 // Type check the company update validation schema
-((): ValidationResult<CompanyUpdate> | undefined => {
+((): CompanyUpdate | undefined => {
   const result = CompanyUpdateValidationSchema.safeParse(undefined);
 
   return result.success ? result.data : undefined;

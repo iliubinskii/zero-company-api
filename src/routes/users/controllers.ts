@@ -13,8 +13,8 @@ import {
 } from "../../schema";
 import {
   assertDefined,
+  assertValidForJsonStringify,
   buildErrorResponse,
-  filterUndefinedProperties,
   sendResponse,
   wrapAsyncHandler
 } from "../../utils";
@@ -47,19 +47,19 @@ export function createUserControllers(
           sendResponse<Routes["/users"]["post"]>(
             res,
             StatusCodes.CREATED,
-            addedUser
+            assertValidForJsonStringify(addedUser)
           );
         else
           sendResponse<Routes["/users"]["post"]>(
             res,
             StatusCodes.CONFLICT,
-            buildErrorResponse(ErrorCode.UserAlreadyExists)
+            buildErrorResponse(ErrorCode.AlreadyExists)
           );
       } else
         sendResponse<Routes["/users"]["post"]>(
           res,
           StatusCodes.BAD_REQUEST,
-          buildErrorResponse(ErrorCode.InvalidUserData, user.error)
+          buildErrorResponse(ErrorCode.InvalidData, user.error)
         );
     }),
     deleteUser: wrapAsyncHandler(async (req, res) => {
@@ -96,14 +96,14 @@ export function createUserControllers(
         })();
 
         const companies = await companiesService.getCompanies(
-          filterUndefinedProperties(options.data),
+          options.data,
           parentRef
         );
 
         sendResponse<Routes["/users/{id}/companies"]["get"]>(
           res,
           StatusCodes.OK,
-          companies
+          assertValidForJsonStringify(companies)
         );
       } else
         sendResponse<Routes["/users/{id}/companies"]["get"]>(
@@ -118,23 +118,29 @@ export function createUserControllers(
       const user = await service.getUser(ref);
 
       if (user)
-        sendResponse<Routes["/users/{id}"]["get"]>(res, StatusCodes.OK, user);
+        sendResponse<Routes["/users/{id}"]["get"]>(
+          res,
+          StatusCodes.OK,
+          assertValidForJsonStringify(user)
+        );
       else
         sendResponse<Routes["/users/{id}"]["get"]>(
           res,
           StatusCodes.NOT_FOUND,
-          buildErrorResponse(ErrorCode.UserNotFound)
+          buildErrorResponse(ErrorCode.NotFound)
         );
     }),
     getUsers: wrapAsyncHandler(async (req, res) => {
       const options = GetUsersOptionsValidationSchema.safeParse(req.query);
 
       if (options.success) {
-        const users = await service.getUsers(
-          filterUndefinedProperties(options.data)
-        );
+        const users = await service.getUsers(options.data);
 
-        sendResponse<Routes["/users"]["get"]>(res, StatusCodes.OK, users);
+        sendResponse<Routes["/users"]["get"]>(
+          res,
+          StatusCodes.OK,
+          assertValidForJsonStringify(users)
+        );
       } else
         sendResponse<Routes["/users"]["get"]>(
           res,
@@ -148,28 +154,25 @@ export function createUserControllers(
       const user = UserUpdateValidationSchema.safeParse(req.body);
 
       if (user.success) {
-        const updatedUser = await service.updateUser(
-          ref,
-          filterUndefinedProperties(user.data)
-        );
+        const updatedUser = await service.updateUser(ref, user.data);
 
         if (updatedUser)
           sendResponse<Routes["/users/{id}"]["put"]>(
             res,
             StatusCodes.OK,
-            updatedUser
+            assertValidForJsonStringify(updatedUser)
           );
         else
           sendResponse<Routes["/users/{id}"]["put"]>(
             res,
             StatusCodes.NOT_FOUND,
-            buildErrorResponse(ErrorCode.UserNotFound)
+            buildErrorResponse(ErrorCode.NotFound)
           );
       } else
         sendResponse<Routes["/users/{id}"]["put"]>(
           res,
           StatusCodes.BAD_REQUEST,
-          buildErrorResponse(ErrorCode.InvalidUserData, user.error)
+          buildErrorResponse(ErrorCode.InvalidData, user.error)
         );
     })
   };

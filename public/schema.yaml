@@ -4,7 +4,7 @@ openapi: 3.0.0
 info:
   title: Zero Company API
   description: An API for Zero Company application
-  version: 2024.5.11-1
+  version: 2024.6.7
 
 # Servers
 servers:
@@ -21,6 +21,16 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/Home"
+
+  # Auth path
+  /auth/me:
+    get:
+      summary: Get authentication response
+      tags:
+        - auth
+      responses:
+        "200":
+          $ref: "#/components/responses/AuthUser"
 
   # Categories path
   /categories:
@@ -41,7 +51,7 @@ paths:
         "201":
           $ref: "#/components/responses/Category"
         "400":
-          $ref: "#/components/responses/InvalidCategoryData"
+          $ref: "#/components/responses/InvalidData"
 
   # Category path
   /categories/{id}:
@@ -62,7 +72,7 @@ paths:
         "200":
           $ref: "#/components/responses/Category"
         "404":
-          $ref: "#/components/responses/CategoryNotFound"
+          $ref: "#/components/responses/NotFound"
     put:
       summary: Update a category by ID
       tags:
@@ -71,9 +81,9 @@ paths:
         "200":
           $ref: "#/components/responses/Category"
         "400":
-          $ref: "#/components/responses/InvalidCategoryData"
+          $ref: "#/components/responses/InvalidData"
         "404":
-          $ref: "#/components/responses/CategoryNotFound"
+          $ref: "#/components/responses/NotFound"
 
   # Category companies path
   /categories/{id}/companies:
@@ -88,7 +98,6 @@ paths:
           $ref: "#/components/responses/CompanyList"
         "400":
           $ref: "#/components/responses/InvalidQuery"
-
 
   # Companies path
   /companies:
@@ -109,7 +118,7 @@ paths:
         "201":
           $ref: "#/components/responses/Company"
         "400":
-          $ref: "#/components/responses/InvalidCompanyData"
+          $ref: "#/components/responses/InvalidData"
 
   # Company path
   /companies/{id}:
@@ -130,7 +139,7 @@ paths:
         "200":
           $ref: "#/components/responses/Company"
         "404":
-          $ref: "#/components/responses/CompanyNotFound"
+          $ref: "#/components/responses/NotFound"
     put:
       summary: Update a company by ID
       tags:
@@ -139,9 +148,172 @@ paths:
         "200":
           $ref: "#/components/responses/Company"
         "400":
-          $ref: "#/components/responses/InvalidCompanyData"
+          $ref: "#/components/responses/InvalidData"
         "404":
-          $ref: "#/components/responses/CompanyNotFound"
+          $ref: "#/components/responses/NotFound"
+
+  # Found company path
+  /companies/{id}/found:
+    put:
+      summary: Create founding agreement for a company
+      tags:
+        - companies
+      responses:
+        "200":
+          $ref: "#/components/responses/Company"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "409":
+          $ref: "#/components/responses/Conflict"
+
+  # Company images path
+  /companies/{id}/images:
+    parameters:
+      - $ref: '#/components/parameters/Id'
+    post:
+      summary: Upload a new image for a company
+      tags:
+        - companies
+      responses:
+        "201":
+          $ref: "#/components/responses/Company"
+        "400":
+          $ref: "#/components/responses/InvalidData"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  /companies/{id}/images/{assetId}:
+    parameters:
+      - $ref: '#/components/parameters/Id'
+      - $ref: '#/components/parameters/AssetId'
+    delete:
+      summary: Delete an image for a company
+      tags:
+        - companies
+      responses:
+        "200":
+          $ref: "#/components/responses/Company"
+        "404":
+          $ref: "#/components/responses/NotFound"
+    put:
+      summary: Update an image for a company
+      tags:
+        - companies
+      responses:
+        "200":
+          $ref: "#/components/responses/Company"
+        "400":
+          $ref: "#/components/responses/InvalidData"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  # Documents path
+  /documents:
+    get:
+      summary: Get all documents
+      tags:
+        - documents
+      responses:
+        "200":
+          $ref: "#/components/responses/DocumentList"
+        "400":
+          $ref: "#/components/responses/InvalidQuery"
+    post:
+      summary: Create a new document
+      tags:
+        - documents
+      responses:
+        "201":
+          $ref: "#/components/responses/Document"
+        "400":
+          $ref: "#/components/responses/InvalidData"
+
+  # Document path
+  /documents/{id}:
+    parameters:
+      - $ref: '#/components/parameters/Id'
+    delete:
+      summary: Delete a document by ID
+      tags:
+        - documents
+      responses:
+        "200":
+          $ref: "#/components/responses/Delete"
+    get:
+      summary: Get a document by ID
+      tags:
+        - documents
+      responses:
+        "200":
+          $ref: "#/components/responses/Document"
+        "404":
+          $ref: "#/components/responses/NotFound"
+    put:
+      summary: Update a document by ID
+      tags:
+        - documents
+      responses:
+        "200":
+          $ref: "#/components/responses/Document"
+        "400":
+          $ref: "#/components/responses/InvalidData"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  # Me path
+  /me:
+    delete:
+      summary: Delete a user by ID
+      tags:
+        - users
+      responses:
+        "200":
+          $ref: "#/components/responses/Delete"
+    get:
+      summary: Get a user by ID
+      tags:
+        - users
+      responses:
+        "200":
+          $ref: "#/components/responses/User"
+        "404":
+          $ref: "#/components/responses/NotFound"
+    post:
+      summary: Create a new user
+      tags:
+        - users
+      responses:
+        "201":
+          $ref: "#/components/responses/User"
+        "400":
+          $ref: "#/components/responses/InvalidData"
+        "409":
+          $ref: "#/components/responses/Conflict"
+    put:
+      summary: Update a user by ID
+      tags:
+        - users
+      responses:
+        "200":
+          $ref: "#/components/responses/User"
+        "400":
+          $ref: "#/components/responses/InvalidData"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  # Me companies path
+  /me/companies:
+    parameters:
+      - $ref: '#/components/parameters/Id'
+    get:
+      summary: Get all companies for a user
+      tags:
+        - users
+      responses:
+        "200":
+          $ref: "#/components/responses/CompanyList"
+        "400":
+          $ref: "#/components/responses/InvalidQuery"
 
   # Users path
   /users:
@@ -162,9 +334,9 @@ paths:
         "201":
           $ref: "#/components/responses/User"
         "400":
-          $ref: "#/components/responses/InvalidUserData"
+          $ref: "#/components/responses/InvalidData"
         "409":
-          $ref: "#/components/responses/UserAlreadyExists"
+          $ref: "#/components/responses/Conflict"
 
   # User path
   /users/{id}:
@@ -185,7 +357,7 @@ paths:
         "200":
           $ref: "#/components/responses/User"
         "404":
-          $ref: "#/components/responses/UserNotFound"
+          $ref: "#/components/responses/NotFound"
     put:
       summary: Update a user by ID
       tags:
@@ -194,9 +366,9 @@ paths:
         "200":
           $ref: "#/components/responses/User"
         "400":
-          $ref: "#/components/responses/InvalidUserData"
+          $ref: "#/components/responses/InvalidData"
         "404":
-          $ref: "#/components/responses/UserNotFound"
+          $ref: "#/components/responses/NotFound"
 
   # User companies path
   /users/{id}/companies:
@@ -222,6 +394,16 @@ paths:
         "400":
           $ref: "#/components/responses/BadRequest"
 
+  # Unauthorized response
+  /401:
+    get:
+      summary: Unauthorized
+      tags:
+        - common
+      responses:
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+
   # NotFound response
   /404:
     get:
@@ -231,6 +413,16 @@ paths:
       responses:
         "404":
           $ref: "#/components/responses/NotFound"
+
+  # MethodNotAllowed response
+  /405:
+    get:
+      summary: Method not allowed
+      tags:
+        - common
+      responses:
+        "405":
+          $ref: "#/components/responses/MethodNotAllowed"
 
   # InternalServerError response
   /500:
@@ -255,9 +447,23 @@ components:
       required: true
       schema:
         type: string
+    AssetId:
+      name: assetId
+      in: path
+      required: true
+      schema:
+        type: string
 
   # Responses
   responses:
+
+    # Authentication response
+    AuthUser:
+      description: Authentication response
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/AuthUser"
 
     # BadRequest response
     BadRequest:
@@ -283,14 +489,6 @@ components:
           schema:
             $ref: "#/components/schemas/CategoryList"
 
-    # CategoryNotFound response
-    CategoryNotFound:
-      description: Category not found
-      content:
-        application/json:
-          schema:
-            $ref: "#/components/schemas/CategoryNotFound"
-
     # Company response
     Company:
       description: Company
@@ -307,13 +505,13 @@ components:
           schema:
             $ref: "#/components/schemas/CompanyList"
 
-    # CompanyNotFound response
-    CompanyNotFound:
-      description: Company not found
+    # Conflict response
+    Conflict:
+      description: Already exists
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/CompanyNotFound"
+            $ref: "#/components/schemas/Conflict"
 
     # Delete response
     Delete:
@@ -322,6 +520,22 @@ components:
         application/json:
           schema:
             $ref: "#/components/schemas/Delete"
+
+    # Document response
+    Document:
+      description: Document
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Document"
+
+    # DocumentList response
+    DocumentList:
+      description: Document list
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/DocumentList"
 
     # Home response
     Home:
@@ -339,6 +553,14 @@ components:
           schema:
             $ref: "#/components/schemas/InternalServerError"
 
+    # InvalidData response
+    InvalidData:
+      description: Invalid data
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/InvalidData"
+
     # InvalidQuery response
     InvalidQuery:
       description: Invalid query
@@ -347,29 +569,13 @@ components:
           schema:
             $ref: "#/components/schemas/InvalidQuery"
 
-    # InvalidUserData response
-    InvalidUserData:
-      description: Invalid user data
+    # MethodNotAllowed response
+    MethodNotAllowed:
+      description: Method not allowed
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/InvalidUserData"
-
-    # InvalidCategoryData response
-    InvalidCategoryData:
-      description: Invalid category data
-      content:
-        application/json:
-          schema:
-            $ref: "#/components/schemas/InvalidCategoryData"
-
-    # InvalidCompanyData response
-    InvalidCompanyData:
-      description: Invalid company data
-      content:
-        application/json:
-          schema:
-            $ref: "#/components/schemas/InvalidCompanyData"
+            $ref: "#/components/schemas/MethodNotAllowed"
 
     # NotFound response
     NotFound:
@@ -379,6 +585,14 @@ components:
           schema:
             $ref: "#/components/schemas/NotFound"
 
+    # Unauthorized response
+    Unauthorized:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Unauthorized"
+
     # User response
     User:
       description: User
@@ -386,14 +600,6 @@ components:
         application/json:
           schema:
             $ref: "#/components/schemas/User"
-
-    # UserAlreadyExists response
-    UserAlreadyExists:
-      description: User already exists
-      content:
-        application/json:
-          schema:
-            $ref: "#/components/schemas/UserAlreadyExists"
 
     # UserList response
     UserList:
@@ -403,16 +609,23 @@ components:
           schema:
             $ref: "#/components/schemas/UserList"
 
-    # UserNotFound response
-    UserNotFound:
-      description: User not found
-      content:
-        application/json:
-          schema:
-            $ref: "#/components/schemas/UserNotFound"
-
   # Schemas
   schemas:
+
+    # AuthUser schema
+    AuthUser:
+      type: object
+      nullable: true
+      required:
+        - admin
+        - email
+      properties:
+        admin:
+          type: boolean
+        email:
+          type: string
+        user:
+          $ref: "#/components/schemas/User"
 
     # BadRequest schema
     BadRequest:
@@ -467,22 +680,10 @@ components:
           type: array
           items:
             type: string
+          minItems: 2
+          maxItems: 2
         total:
           type: integer
-
-    # CategoryNotFound schema
-    CategoryNotFound:
-      type: object
-      required:
-        - error
-        - errorMessage
-      properties:
-        error:
-          type: string
-          enum:
-            - CategoryNotFound
-        errorMessage:
-          type: string
 
     # Company schema
     Company:
@@ -490,13 +691,11 @@ components:
       required:
         - _id
         - categories
-        - description
-        - foundedAt
+        - country
+        - createdAt
         - founders
         - images
-        - logo
-        - name
-        - targetValue
+        - status
       properties:
         _id:
           type: string
@@ -504,9 +703,17 @@ components:
           type: array
           items:
             type: string
+        country:
+          type: string
+          minLength: 2
+          maxLength: 2
+        createdAt:
+          type: string
         description:
           type: string
         foundedAt:
+          type: string
+        foundingAgreement:
           type: string
         founders:
           type: array
@@ -524,6 +731,11 @@ components:
           type: boolean
         recommended:
           type: boolean
+        status:
+          type: string
+          enum:
+            - draft
+            - founded
         targetValue:
           type: number
         website:
@@ -547,11 +759,13 @@ components:
           type: array
           items:
             type: string
+          minItems: 2
+          maxItems: 2
         total:
           type: integer
 
-    # CompanyNotFound schema
-    CompanyNotFound:
+    # Conflict schema
+    Conflict:
       type: object
       required:
         - error
@@ -560,7 +774,8 @@ components:
         error:
           type: string
           enum:
-            - CompanyNotFound
+            - AlreadyExists
+            - Conflict
         errorMessage:
           type: string
 
@@ -573,17 +788,84 @@ components:
         affectedRows:
           type: integer
 
+    # DigitalDocument schema
+    DigitalDocument:
+      type: object
+      required:
+        - assetId
+        - secureUrl
+        - signatures
+        - url
+      properties:
+        assetId:
+          type: string
+        secureUrl:
+          type: string
+        signatures:
+          type: array
+          items:
+            type: string
+        url:
+          type: string
+
+    # Document schema
+    Document:
+      type: object
+      required:
+        - _id
+        - company
+        - createdAt
+        - signatories
+        - type
+      properties:
+        _id:
+          type: string
+        company:
+          type: string
+        createdAt:
+          type: string
+        doc:
+          $ref: '#/components/schemas/DigitalDocument'
+        metadata:
+          type: string
+        signatories:
+          type: array
+          items:
+            $ref: '#/components/schemas/Signatory'
+        type:
+          type: string
+          enum:
+            - FoundingAgreement
+
+    # DocumentList schema
+    DocumentList:
+      type: object
+      required:
+        - count
+        - docs
+        - total
+      properties:
+        count:
+          type: integer
+        docs:
+          type: array
+          items:
+            $ref: "#/components/schemas/Document"
+        nextCursor:
+          type: array
+          items:
+            type: string
+          minItems: 2
+          maxItems: 2
+        total:
+          type: integer
+
     # Founder schema
     Founder:
       type: object
       required:
         - email
-        - firstName
-        - lastName
-        - share
       properties:
-        confirmed:
-          type: boolean
         email:
           type: string
         firstName:
@@ -621,8 +903,8 @@ components:
         errorMessage:
           type: string
 
-    # InvalidCategoryData schema
-    InvalidCategoryData:
+    # InvalidData schema
+    InvalidData:
       type: object
       required:
         - error
@@ -632,34 +914,7 @@ components:
         error:
           type: string
           enum:
-            - InvalidCategoryData
-        errorMessage:
-          type: string
-        data:
-          type: array
-          items:
-            type: object
-            required:
-              - message
-              - path
-            properties:
-              message:
-                type: string
-              path:
-                type: string
-
-    # InvalidCompanyData schema
-    InvalidCompanyData:
-      type: object
-      required:
-        - error
-        - errorMessage
-        - data
-      properties:
-        error:
-          type: string
-          enum:
-            - InvalidCompanyData
+            - InvalidData
         errorMessage:
           type: string
         data:
@@ -716,32 +971,19 @@ components:
               path:
                 type: string
 
-    # InvalidUserData schema
-    InvalidUserData:
+    # MethodNotAllowed schema
+    MethodNotAllowed:
       type: object
       required:
         - error
         - errorMessage
-        - data
       properties:
         error:
           type: string
           enum:
-            - InvalidUserData
+            - MethodNotAllowed
         errorMessage:
           type: string
-        data:
-          type: array
-          items:
-            type: object
-            required:
-              - message
-              - path
-            properties:
-              message:
-                type: string
-              path:
-                type: string
 
     # NotFound schema
     NotFound:
@@ -754,6 +996,33 @@ components:
           type: string
           enum:
             - NotFound
+        errorMessage:
+          type: string
+
+    # Signatory schema
+    Signatory:
+      type: object
+      required:
+        - email
+      properties:
+        email:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+
+    # Unauthorized schema
+    Unauthorized:
+      type: object
+      required:
+        - error
+        - errorMessage
+      properties:
+        error:
+          type: string
+          enum:
+            - Unauthorized
         errorMessage:
           type: string
 
@@ -775,20 +1044,6 @@ components:
         lastName:
           type: string
 
-    # UserAlreadyExists schema
-    UserAlreadyExists:
-      type: object
-      required:
-        - error
-        - errorMessage
-      properties:
-        error:
-          type: string
-          enum:
-            - UserAlreadyExists
-        errorMessage:
-          type: string
-
     # UserList schema
     UserList:
       type: object
@@ -807,22 +1062,10 @@ components:
           type: array
           items:
             type: string
+          minItems: 2
+          maxItems: 2
         total:
           type: integer
-
-    # UserNotFound schema
-    UserNotFound:
-      type: object
-      required:
-        - error
-        - errorMessage
-      properties:
-        error:
-          type: string
-          enum:
-            - UserNotFound
-        errorMessage:
-          type: string
 
     # WebAccessibleImage schema
     WebAccessibleImage:
@@ -830,6 +1073,7 @@ components:
       required:
         - assetId
         - height
+        - name
         - secureUrl
         - url
         - width
@@ -838,6 +1082,8 @@ components:
           type: string
         height:
           type: number
+        name:
+          type: string
         secureUrl:
           type: string
         url:

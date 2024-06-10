@@ -3,8 +3,7 @@ import type { Category } from "../../schema";
 import type { FilterQuery } from "mongoose";
 import { MAX_LIMIT } from "../../schema";
 import type { Writable } from "ts-toolbelt/out/Object/Writable";
-import { buildMongodbQuery } from "../../utils";
-import { getCategoryModel } from "./model";
+import { getCategoryModel } from "../../schema-mongodb";
 
 /**
  * Creates a MongoDB service for categories.
@@ -17,11 +16,9 @@ export function createCategoriesService(): CategoriesService {
 
       const model = new CategoryModel(category);
 
-      const addedCategory = await model.save();
+      const addedItem = await model.save();
 
-      const { _id, ...rest } = addedCategory.toObject();
-
-      return { _id: _id.toString(), ...rest };
+      return addedItem;
     },
     deleteCategory: async id => {
       const CategoryModel = await getCategoryModel();
@@ -48,43 +45,27 @@ export function createCategoriesService(): CategoriesService {
 
       return {
         count: categories.length,
-        docs: categories.map(category => {
-          const { _id, ...rest } = category.toObject();
-
-          return { _id: _id.toString(), ...rest };
-        }),
+        docs: categories,
         total
       };
     },
     getCategory: async id => {
-      const CategoryModel = await getCategoryModel();
+      const CompanyModel = await getCategoryModel();
 
-      const category = await CategoryModel.findById(id);
+      const category = await CompanyModel.findById(id);
 
-      if (category) {
-        const { _id, ...rest } = category.toObject();
-
-        return { _id: _id.toString(), ...rest };
-      }
-
-      return undefined;
+      return category;
     },
     updateCategory: async (id, category) => {
       const CategoryModel = await getCategoryModel();
 
       const updatedCategory = await CategoryModel.findByIdAndUpdate(
         id,
-        buildMongodbQuery(category),
+        category,
         { new: true }
       );
 
-      if (updatedCategory) {
-        const { _id, ...rest } = updatedCategory.toObject();
-
-        return { _id: _id.toString(), ...rest };
-      }
-
-      return undefined;
+      return updatedCategory;
     }
   };
 }

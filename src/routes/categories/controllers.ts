@@ -12,8 +12,8 @@ import {
 } from "../../schema";
 import {
   assertDefined,
+  assertValidForJsonStringify,
   buildErrorResponse,
-  filterUndefinedProperties,
   sendResponse,
   wrapAsyncHandler
 } from "../../utils";
@@ -35,20 +35,18 @@ export function createCategoryControllers(
       const category = CategoryCreateValidationSchema.safeParse(req.body);
 
       if (category.success) {
-        const addedCategory = await service.addCategory(
-          filterUndefinedProperties(category.data)
-        );
+        const addedCategory = await service.addCategory(category.data);
 
         sendResponse<Routes["/categories"]["post"]>(
           res,
           StatusCodes.CREATED,
-          addedCategory
+          assertValidForJsonStringify(addedCategory)
         );
       } else
         sendResponse<Routes["/categories"]["post"]>(
           res,
           StatusCodes.BAD_REQUEST,
-          buildErrorResponse(ErrorCode.InvalidCategoryData, category.error)
+          buildErrorResponse(ErrorCode.InvalidData, category.error)
         );
     }),
     deleteCategory: wrapAsyncHandler(async (req, res) => {
@@ -64,14 +62,12 @@ export function createCategoryControllers(
       const options = GetCategoriesOptionsValidationSchema.safeParse(req.query);
 
       if (options.success) {
-        const categories = await service.getCategories(
-          filterUndefinedProperties(options.data)
-        );
+        const categories = await service.getCategories(options.data);
 
         sendResponse<Routes["/categories"]["get"]>(
           res,
           StatusCodes.OK,
-          categories
+          assertValidForJsonStringify(categories)
         );
       } else
         sendResponse<Routes["/categories"]["get"]>(
@@ -89,13 +85,13 @@ export function createCategoryControllers(
         sendResponse<Routes["/categories/{id}"]["get"]>(
           res,
           StatusCodes.OK,
-          category
+          assertValidForJsonStringify(category)
         );
       else
         sendResponse<Routes["/categories/{id}"]["get"]>(
           res,
           StatusCodes.NOT_FOUND,
-          buildErrorResponse(ErrorCode.CategoryNotFound)
+          buildErrorResponse(ErrorCode.NotFound)
         );
     }),
     getCompaniesByCategory: wrapAsyncHandler(async (req, res) => {
@@ -104,18 +100,15 @@ export function createCategoryControllers(
       const options = GetCompaniesOptionsValidationSchema.safeParse(req.query);
 
       if (options.success) {
-        const companies = await companiesService.getCompanies(
-          filterUndefinedProperties(options.data),
-          {
-            category: id,
-            type: "category"
-          }
-        );
+        const companies = await companiesService.getCompanies(options.data, {
+          category: id,
+          type: "category"
+        });
 
         sendResponse<Routes["/categories/{id}/companies"]["get"]>(
           res,
           StatusCodes.OK,
-          companies
+          assertValidForJsonStringify(companies)
         );
       } else
         sendResponse<Routes["/categories/{id}/companies"]["get"]>(
@@ -130,28 +123,25 @@ export function createCategoryControllers(
       const category = CategoryUpdateValidationSchema.safeParse(req.body);
 
       if (category.success) {
-        const updatedCategory = await service.updateCategory(
-          id,
-          filterUndefinedProperties(category.data)
-        );
+        const updatedCategory = await service.updateCategory(id, category.data);
 
         if (updatedCategory)
           sendResponse<Routes["/categories/{id}"]["put"]>(
             res,
             StatusCodes.OK,
-            updatedCategory
+            assertValidForJsonStringify(updatedCategory)
           );
         else
           sendResponse<Routes["/categories/{id}"]["put"]>(
             res,
             StatusCodes.NOT_FOUND,
-            buildErrorResponse(ErrorCode.CategoryNotFound)
+            buildErrorResponse(ErrorCode.NotFound)
           );
       } else
         sendResponse<Routes["/categories/{id}"]["put"]>(
           res,
           StatusCodes.BAD_REQUEST,
-          buildErrorResponse(ErrorCode.InvalidCategoryData, category.error)
+          buildErrorResponse(ErrorCode.InvalidData, category.error)
         );
     })
   };

@@ -70,7 +70,9 @@
       "dist": true,
       "package-lock.json": true
     },
+    "sortJSON.excludedPaths": ["assets"],
     "stylelint.validate": ["css", "less", "postcss", "scss"],
+    "tailwindCSS.experimental.classRegex": [["`([^`]*)`"]],
     "typescript.suggestionActions.enabled": false,
     "typescript.tsdk": "node_modules\\typescript\\lib",
     "typescript.updateImportsOnFileMove.enabled": "always",
