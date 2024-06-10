@@ -27,6 +27,9 @@ export const CompanySchema = new mongoose.Schema(
       required: true,
       type: [founder]
     },
+    foundingAgreement: {
+      type: mongoose.Schema.Types.ObjectId
+    },
     images: {
       required: true,
       type: [image]

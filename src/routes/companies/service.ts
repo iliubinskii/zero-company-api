@@ -1,9 +1,20 @@
-import type { Company, GetCompaniesOptions, User } from "../../schema";
-import { getCompanyModel, getUserModel } from "../../schema-mongodb";
+import type {
+  Company,
+  Document,
+  GetCompaniesOptions,
+  User
+} from "../../schema";
+import { DocType, MAX_LIMIT } from "../../schema";
+import {
+  getCompanyModel,
+  getDocumentModel,
+  getUserModel
+} from "../../schema-mongodb";
 import type { CompaniesService } from "../../types";
 import type { FilterQuery } from "mongoose";
-import { MAX_LIMIT } from "../../schema";
+import { StatusCodes } from "http-status-codes";
 import type { Writable } from "ts-toolbelt/out/Object/Writable";
+import { getMongodbConnection } from "../../providers";
 import type mongoose from "mongoose";
 
 /**
@@ -27,6 +38,61 @@ export function createCompaniesService(): CompaniesService {
       const deletedCategory = await CompanyModel.findByIdAndDelete(id);
 
       return deletedCategory ? 1 : 0;
+    },
+    generateFoundingAgreement: async id => {
+      const connection = await getMongodbConnection();
+
+      const CompanyModel = await getCompanyModel();
+
+      const DocumentModel = await getDocumentModel();
+
+      const session = await connection.startSession();
+
+      session.startTransaction();
+
+      try {
+        const company = await CompanyModel.findById(id).session(session);
+
+        if (!company) {
+          await session.abortTransaction();
+          await session.endSession();
+
+          return null;
+        }
+
+        if (company.foundingAgreement) {
+          await session.abortTransaction();
+          await session.endSession();
+
+          return StatusCodes.CONFLICT;
+        }
+
+        const doc: Document = {
+          company: company._id.toString(),
+          createdAt: new Date(),
+          signatories: company.founders.map(
+            ({ email, firstName, lastName }) => {
+              return { email, firstName, lastName };
+            }
+          ),
+          type: DocType.FoundingAgreement
+        };
+
+        const document = new DocumentModel(doc);
+
+        company.foundingAgreement = document._id;
+
+        const updatedCompany = await company.save({ session });
+
+        await session.commitTransaction();
+        await session.endSession();
+
+        return updatedCompany;
+      } catch (err) {
+        await session.abortTransaction();
+        await session.endSession();
+        throw err;
+      }
     },
     getCompanies: async (options = {}, parentRef) => {
       const {
@@ -117,11 +183,22 @@ export function createCompaniesService(): CompaniesService {
     updateCompany: async (id, company) => {
       const CompanyModel = await getCompanyModel();
 
-      const updatedCategory = await CompanyModel.findByIdAndUpdate(
-        id,
-        company,
-        { new: true }
-      );
+      const { addImages, removeImages, ...rest } = company;
+
+      const update: Record<string, unknown> = {};
+
+      if (Object.keys(rest).length > 0) update["$set"] = rest;
+
+      if (addImages && addImages.length > 0)
+        update["$push"] = { images: { $each: addImages } };
+
+      if (removeImages && removeImages.length > 0)
+        update["$pull"] = { images: { assetId: { $in: removeImages } } };
+
+      const updatedCategory = await CompanyModel.findByIdAndUpdate(id, update, {
+        new: true,
+        runValidators: true
+      });
 
       return updatedCategory;
     }

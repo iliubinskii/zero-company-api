@@ -27,15 +27,8 @@ describe("createUserControllers", () => {
 
   const mockCompaniesService = {
     addCompany: jest.fn(),
-    crudService: {
-      addItem: jest.fn(),
-      addItemGuaranteed: jest.fn(),
-      deleteItem: jest.fn(),
-      getAllItems: jest.fn(),
-      getItem: jest.fn(),
-      updateItem: jest.fn()
-    },
     deleteCompany: jest.fn(),
+    generateFoundingAgreement: jest.fn(),
     getCompanies: jest.fn(),
     getCompany: jest.fn(),
     updateCompany: jest.fn()

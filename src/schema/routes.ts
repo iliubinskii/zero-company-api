@@ -157,6 +157,16 @@ export interface paths {
       };
     };
   };
+  "/companies/{id}/found": {
+    /** Create founding agreement for a company */
+    put: {
+      responses: {
+        200: components["responses"]["Company"];
+        404: components["responses"]["NotFound"];
+        409: components["responses"]["Conflict"];
+      };
+    };
+  };
   "/companies/{id}/images": {
     /** Upload a new image for a company */
     post: {
@@ -292,7 +302,7 @@ export interface paths {
       responses: {
         201: components["responses"]["User"];
         400: components["responses"]["InvalidData"];
-        409: components["responses"]["AlreadyExists"];
+        409: components["responses"]["Conflict"];
       };
     };
     /** Delete a user by ID */
@@ -334,7 +344,7 @@ export interface paths {
       responses: {
         201: components["responses"]["User"];
         400: components["responses"]["InvalidData"];
-        409: components["responses"]["AlreadyExists"];
+        409: components["responses"]["Conflict"];
       };
     };
   };
@@ -446,11 +456,6 @@ export type webhooks = Record<string, never>;
 
 export interface components {
   schemas: {
-    AlreadyExists: {
-      /** @enum {string} */
-      error: "AlreadyExists";
-      errorMessage: string;
-    };
     AuthUser: {
       admin: boolean;
       email: string;
@@ -481,6 +486,7 @@ export interface components {
       createdAt: string;
       description?: string;
       foundedAt?: string;
+      foundingAgreement?: string;
       founders: components["schemas"]["Founder"][];
       images: components["schemas"]["WebAccessibleImage"][];
       logo?: components["schemas"]["WebAccessibleImage"];
@@ -488,7 +494,7 @@ export interface components {
       privateCompany?: boolean;
       recommended?: boolean;
       /** @enum {string} */
-      status: "draft" | "founded" | "signing";
+      status: "draft" | "founded";
       targetValue?: number;
       website?: string;
     };
@@ -497,6 +503,11 @@ export interface components {
       docs: components["schemas"]["Company"][];
       nextCursor?: string[];
       total: number;
+    };
+    Conflict: {
+      /** @enum {string} */
+      error: "AlreadyExists" | "Conflict";
+      errorMessage: string;
     };
     Delete: {
       affectedRows: number;
@@ -597,18 +608,13 @@ export interface components {
     WebAccessibleImage: {
       assetId: string;
       height: number;
+      name: string;
       secureUrl: string;
       url: string;
       width: number;
     };
   };
   responses: {
-    /** @description Already exists */
-    AlreadyExists: {
-      content: {
-        "application/json": components["schemas"]["AlreadyExists"];
-      };
-    };
     /** @description Authentication response */
     AuthUser: {
       content: {
@@ -643,6 +649,12 @@ export interface components {
     CompanyList: {
       content: {
         "application/json": components["schemas"]["CompanyList"];
+      };
+    };
+    /** @description Already exists */
+    Conflict: {
+      content: {
+        "application/json": components["schemas"]["Conflict"];
       };
     };
     /** @description Delete */

@@ -152,6 +152,19 @@ paths:
         "404":
           $ref: "#/components/responses/NotFound"
 
+  # Found company path
+  /companies/{id}/found:
+    put:
+      summary: Create founding agreement for a company
+      tags:
+        - companies
+      responses:
+        "200":
+          $ref: "#/components/responses/Company"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "409":
+          $ref: "#/components/responses/Conflict"
 
   # Company images path
   /companies/{id}/images:
@@ -275,7 +288,7 @@ paths:
         "400":
           $ref: "#/components/responses/InvalidData"
         "409":
-          $ref: "#/components/responses/AlreadyExists"
+          $ref: "#/components/responses/Conflict"
     put:
       summary: Update a user by ID
       tags:
@@ -323,7 +336,7 @@ paths:
         "400":
           $ref: "#/components/responses/InvalidData"
         "409":
-          $ref: "#/components/responses/AlreadyExists"
+          $ref: "#/components/responses/Conflict"
 
   # User path
   /users/{id}:
@@ -444,14 +457,6 @@ components:
   # Responses
   responses:
 
-    # AlreadyExists response
-    AlreadyExists:
-      description: Already exists
-      content:
-        application/json:
-          schema:
-            $ref: "#/components/schemas/AlreadyExists"
-
     # Authentication response
     AuthUser:
       description: Authentication response
@@ -499,6 +504,14 @@ components:
         application/json:
           schema:
             $ref: "#/components/schemas/CompanyList"
+
+    # Conflict response
+    Conflict:
+      description: Already exists
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Conflict"
 
     # Delete response
     Delete:
@@ -598,20 +611,6 @@ components:
 
   # Schemas
   schemas:
-
-    # AlreadyExists schema
-    AlreadyExists:
-      type: object
-      required:
-        - error
-        - errorMessage
-      properties:
-        error:
-          type: string
-          enum:
-            - AlreadyExists
-        errorMessage:
-          type: string
 
     # AuthUser schema
     AuthUser:
@@ -714,6 +713,8 @@ components:
           type: string
         foundedAt:
           type: string
+        foundingAgreement:
+          type: string
         founders:
           type: array
           items:
@@ -735,7 +736,6 @@ components:
           enum:
             - draft
             - founded
-            - signing
         targetValue:
           type: number
         website:
@@ -763,6 +763,21 @@ components:
           maxItems: 2
         total:
           type: integer
+
+    # Conflict schema
+    Conflict:
+      type: object
+      required:
+        - error
+        - errorMessage
+      properties:
+        error:
+          type: string
+          enum:
+            - AlreadyExists
+            - Conflict
+        errorMessage:
+          type: string
 
     # Delete schema
     Delete:
@@ -1058,6 +1073,7 @@ components:
       required:
         - assetId
         - height
+        - name
         - secureUrl
         - url
         - width
@@ -1066,6 +1082,8 @@ components:
           type: string
         height:
           type: number
+        name:
+          type: string
         secureUrl:
           type: string
         url:

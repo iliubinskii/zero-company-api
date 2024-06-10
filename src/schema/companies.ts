@@ -13,6 +13,7 @@ export interface Company {
   readonly description?: string | null | undefined;
   readonly foundedAt?: Date | null | undefined;
   readonly founders: readonly Founder[];
+  readonly foundingAgreement?: string | null | undefined;
   readonly images: readonly WebAccessibleImage[];
   readonly logo?: WebAccessibleImage | null | undefined;
   readonly name?: string | null | undefined;
@@ -33,14 +34,16 @@ export interface CompanyUpdate
       | "categories"
       | "description"
       | "founders"
-      | "images"
       | "logo"
       | "name"
       | "privateCompany"
       | "targetValue"
       | "website"
     >
-  > {}
+  > {
+  readonly addImages?: readonly WebAccessibleImage[] | null | undefined;
+  readonly removeImages?: readonly string[] | null | undefined;
+}
 
 export interface ExistingCompany extends Company {
   readonly _id: string;

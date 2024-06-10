@@ -17,30 +17,28 @@ export function webAccessibleStorage(fields: Fields): RequestHandler {
       } else {
         const uploads = await Promise.all(
           Object.entries(req.files).map(async ([fieldName, files]) => {
-            const responses = await Promise.all(
+            const results = await Promise.all(
               files.map(async file => {
                 const response = await uploadImage(file.path, fieldName);
 
                 // eslint-disable-next-line security/detect-non-literal-fs-filename -- Ok
                 await fs.unlink(file.path);
 
-                return response;
+                return { file, response };
               })
             );
 
             return {
               fieldName,
-              responses: responses.map(
+              responses: results.map(
                 ({
-                  asset_id,
-                  height,
-                  secure_url,
-                  url,
-                  width
+                  file: { originalname },
+                  response: { asset_id, height, secure_url, url, width }
                 }): WebAccessibleImage => {
                   return {
                     assetId: String(asset_id),
                     height,
+                    name: originalname,
                     secureUrl: secure_url,
                     url,
                     width

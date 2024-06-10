@@ -25,6 +25,7 @@ export const IdValidationSchema = zod
 export const ImageValidationSchema = zod.strictObject({
   assetId: zod.string().min(1),
   height: preprocessNumber(zod.number().int().positive()),
+  name: zod.string().min(1),
   secureUrl: zod.string().min(1),
   url: zod.string().min(1),
   width: preprocessNumber(zod.number().int().positive())

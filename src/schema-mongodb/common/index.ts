@@ -44,6 +44,10 @@ export const image = {
     required: true,
     type: mongoose.Schema.Types.Number
   },
+  name: {
+    required: true,
+    type: mongoose.Schema.Types.String
+  },
   secureUrl: {
     required: true,
     type: mongoose.Schema.Types.String
