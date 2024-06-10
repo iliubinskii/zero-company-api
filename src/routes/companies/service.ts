@@ -117,11 +117,22 @@ export function createCompaniesService(): CompaniesService {
     updateCompany: async (id, company) => {
       const CompanyModel = await getCompanyModel();
 
-      const updatedCategory = await CompanyModel.findByIdAndUpdate(
-        id,
-        company,
-        { new: true }
-      );
+      const { addImages, removeImages, ...rest } = company;
+
+      const update: Record<string, unknown> = {};
+
+      if (Object.keys(rest).length > 0) update["$set"] = rest;
+
+      if (addImages && addImages.length > 0)
+        update["$push"] = { images: { $each: addImages } };
+
+      if (removeImages && removeImages.length > 0)
+        update["$pull"] = { images: { assetId: { $in: removeImages } } };
+
+      const updatedCategory = await CompanyModel.findByIdAndUpdate(id, update, {
+        new: true,
+        runValidators: true
+      });
 
       return updatedCategory;
     }

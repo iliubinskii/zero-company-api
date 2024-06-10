@@ -16,6 +16,8 @@ import zod from "zod";
 
 const _id = IdValidationSchema;
 
+const addImages = zod.array(ImageValidationSchema);
+
 const categories = zod
   .array(IdValidationSchema)
   .nonempty()
@@ -41,6 +43,8 @@ const name = zod.string().min(1).nullable().optional();
 const privateCompany = preprocessBoolean(zod.boolean()).nullable().optional();
 
 const recommended = preprocessBoolean(zod.boolean()).nullable().optional();
+
+const removeImages = zod.array(zod.string().min(1));
 
 const status = zod.enum([
   CompanyStatus.draft,
@@ -78,15 +82,16 @@ export const CompanyCreateValidationSchema = zod.strictObject({
 });
 
 export const CompanyUpdateValidationSchema = zod.strictObject({
+  addImages: addImages.optional(),
   categories: categories.optional(),
   description: description.optional(),
   founders: founders.optional(),
-  images: images.optional(),
   logo: logo.optional(),
   name: name.optional(),
-  privateCompany: privateCompany.nullable().optional(),
-  targetValue: targetValue.nullable().optional(),
-  website: website.nullable().optional()
+  privateCompany: privateCompany.optional(),
+  removeImages: removeImages.optional(),
+  targetValue: targetValue.optional(),
+  website: website.optional()
 });
 
 // Type check the existing company validation schema
