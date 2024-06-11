@@ -18,11 +18,7 @@ const _id = IdValidationSchema;
 
 const addImages = zod.array(ImageValidationSchema);
 
-const categories = zod
-  .array(IdValidationSchema)
-  .nonempty()
-  .min(1)
-  .max(MAX_CATEGORIES);
+const categories = zod.array(IdValidationSchema).nonempty().max(MAX_CATEGORIES);
 
 const country = zod.string().length(COUNTRY_CODE_SIZE);
 
