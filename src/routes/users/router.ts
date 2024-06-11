@@ -43,6 +43,13 @@ export function createUsersRouter(controllers: UserControllers): Router {
       requireIdParam,
       userRefFromIdParam,
       controllers.getCompaniesByUser
+    )
+    .get(
+      "/:id/favorite-companies",
+      requireJwtAdmin,
+      requireIdParam,
+      userRefFromIdParam,
+      controllers.getFavoriteCompaniesByUser
     );
 
   return router;

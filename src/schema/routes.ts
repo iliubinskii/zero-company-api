@@ -331,6 +331,25 @@ export interface paths {
       };
     };
   };
+  "/me/favorite-companies": {
+    /** Get all favorite companies for a user */
+    get: {
+      parameters: {
+        path: {
+          id: components["parameters"]["Id"];
+        };
+      };
+      responses: {
+        200: components["responses"]["CompanyList"];
+        400: components["responses"]["InvalidQuery"];
+      };
+    };
+    parameters: {
+      path: {
+        id: components["parameters"]["Id"];
+      };
+    };
+  };
   "/users": {
     /** Get all users */
     get: {
@@ -393,6 +412,25 @@ export interface paths {
   };
   "/users/{id}/companies": {
     /** Get all companies for a user */
+    get: {
+      parameters: {
+        path: {
+          id: components["parameters"]["Id"];
+        };
+      };
+      responses: {
+        200: components["responses"]["CompanyList"];
+        400: components["responses"]["InvalidQuery"];
+      };
+    };
+    parameters: {
+      path: {
+        id: components["parameters"]["Id"];
+      };
+    };
+  };
+  "/users/{id}/favorite-companies": {
+    /** Get all favorite companies for a user */
     get: {
       parameters: {
         path: {
