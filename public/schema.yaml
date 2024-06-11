@@ -315,6 +315,20 @@ paths:
         "400":
           $ref: "#/components/responses/InvalidQuery"
 
+  # Me favorite companies path
+  /me/favorite-companies:
+    parameters:
+      - $ref: '#/components/parameters/Id'
+    get:
+      summary: Get all favorite companies for a user
+      tags:
+        - users
+      responses:
+        "200":
+          $ref: "#/components/responses/CompanyList"
+        "400":
+          $ref: "#/components/responses/InvalidQuery"
+
   # Users path
   /users:
     get:
@@ -376,6 +390,20 @@ paths:
       - $ref: '#/components/parameters/Id'
     get:
       summary: Get all companies for a user
+      tags:
+        - users
+      responses:
+        "200":
+          $ref: "#/components/responses/CompanyList"
+        "400":
+          $ref: "#/components/responses/InvalidQuery"
+
+  # User favorite companies path
+  /users/{id}/favorite-companies:
+    parameters:
+      - $ref: '#/components/parameters/Id'
+    get:
+      summary: Get all favorite companies for a user
       tags:
         - users
       responses:
@@ -624,8 +652,6 @@ components:
           type: boolean
         email:
           type: string
-        user:
-          $ref: "#/components/schemas/User"
 
     # BadRequest schema
     BadRequest:
@@ -1032,13 +1058,16 @@ components:
       required:
         - _id
         - email
-        - firstName
-        - lastName
+        - favoriteCompanies
       properties:
         _id:
           type: string
         email:
           type: string
+        favoriteCompanies:
+          type: array
+          items:
+            type: string
         firstName:
           type: string
         lastName:

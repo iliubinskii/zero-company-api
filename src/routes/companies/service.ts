@@ -35,9 +35,9 @@ export function createCompaniesService(): CompaniesService {
     deleteCompany: async id => {
       const CompanyModel = await getCompanyModel();
 
-      const deletedCategory = await CompanyModel.findByIdAndDelete(id);
+      const deletedCompany = await CompanyModel.findByIdAndDelete(id);
 
-      return deletedCategory ? 1 : 0;
+      return deletedCompany ? 1 : 0;
     },
     generateFoundingAgreement: async id => {
       const connection = await getMongodbConnection();
@@ -112,6 +112,40 @@ export function createCompaniesService(): CompaniesService {
 
       if (parentRef)
         switch (parentRef.type) {
+          case "bookmarkUserEmail": {
+            const UserModel = await getUserModel();
+
+            const user = await UserModel.findOne({
+              email: parentRef.bookmarkUserEmail
+            });
+
+            if (user) filter["_id"] = { $in: user.favoriteCompanies };
+            else
+              return {
+                count: 0,
+                docs: [],
+                total: 0
+              };
+
+            break;
+          }
+
+          case "bookmarkUserId": {
+            const UserModel = await getUserModel();
+
+            const user = await UserModel.findById(parentRef.bookmarkUserId);
+
+            if (user) filter["_id"] = { $in: user.favoriteCompanies };
+            else
+              return {
+                count: 0,
+                docs: [],
+                total: 0
+              };
+
+            break;
+          }
+
           case "category": {
             filter["categories"] = { $in: parentRef.category };
 
@@ -195,12 +229,12 @@ export function createCompaniesService(): CompaniesService {
       if (removeImages && removeImages.length > 0)
         update["$pull"] = { images: { assetId: { $in: removeImages } } };
 
-      const updatedCategory = await CompanyModel.findByIdAndUpdate(id, update, {
+      const updatedCompany = await CompanyModel.findByIdAndUpdate(id, update, {
         new: true,
         runValidators: true
       });
 
-      return updatedCategory;
+      return updatedCompany;
     }
   };
 }

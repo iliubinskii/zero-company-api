@@ -57,3 +57,12 @@ export function assertValidForJsonStringify<T>(value: T): JsonTransform<T> {
   // eslint-disable-next-line no-type-assertion/no-type-assertion -- Ok
   return value as JsonTransform<T>;
 }
+
+/**
+ * Requires a value to be of a certain type.
+ * @param value - The value to require.
+ * @returns The value.
+ */
+export function requireType<T>(value: T): T {
+  return value;
+}

@@ -62,7 +62,7 @@ export function createCategoriesService(): CategoriesService {
       const updatedCategory = await CategoryModel.findByIdAndUpdate(
         id,
         category,
-        { new: true }
+        { new: true, runValidators: true }
       );
 
       return updatedCategory;

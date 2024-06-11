@@ -48,6 +48,12 @@ export function createCompaniesRouter(
       controllers.updateCompany
     )
     .delete("/:id", requireJwtAdmin, requireIdParam, controllers.deleteCompany)
+    .put(
+      "/:id/found",
+      requireJwt,
+      requireIdParam,
+      controllers.generateFoundingAgreement
+    )
     .use(
       "/:id/images",
       requireJwtAdmin,

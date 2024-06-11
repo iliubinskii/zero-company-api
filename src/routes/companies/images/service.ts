@@ -26,7 +26,7 @@ export function createCompanyImagesService(): CompanyImagesService {
       const company = await CompanyModel.findByIdAndUpdate(
         id,
         { $pull: { images: { assetId } } },
-        { new: true }
+        { new: true, runValidators: true }
       );
 
       return company;

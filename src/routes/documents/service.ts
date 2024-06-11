@@ -88,7 +88,7 @@ export function createDocumentsService(): DocumentsService {
       const updatedCategory = await DocumentModel.findByIdAndUpdate(
         id,
         document,
-        { new: true }
+        { new: true, runValidators: true }
       );
 
       return updatedCategory;

@@ -40,7 +40,8 @@ export function createUserControllers(
       if (user.success) {
         const addedUser = await service.addUser({
           ...user.data,
-          email: jwt.email
+          email: jwt.email,
+          favoriteCompanies: []
         });
 
         if (addedUser)
@@ -107,6 +108,47 @@ export function createUserControllers(
         );
       } else
         sendResponse<Routes["/users/{id}/companies"]["get"]>(
+          res,
+          StatusCodes.BAD_REQUEST,
+          buildErrorResponse(ErrorCode.InvalidQuery, options.error)
+        );
+    }),
+    getFavoriteCompaniesByUser: wrapAsyncHandler(async (req, res) => {
+      const ref = assertDefined(req.userRef);
+
+      const options = GetCompaniesOptionsValidationSchema.safeParse(req.query);
+
+      if (options.success) {
+        const parentRef: GetCompaniesParentRef = (() => {
+          switch (ref.type) {
+            case "id": {
+              return {
+                bookmarkUserId: ref.id,
+                type: "bookmarkUserId"
+              };
+            }
+
+            case "email": {
+              return {
+                bookmarkUserEmail: ref.email,
+                type: "bookmarkUserEmail"
+              };
+            }
+          }
+        })();
+
+        const companies = await companiesService.getCompanies(
+          options.data,
+          parentRef
+        );
+
+        sendResponse<Routes["/users/{id}/favorite-companies"]["get"]>(
+          res,
+          StatusCodes.OK,
+          assertValidForJsonStringify(companies)
+        );
+      } else
+        sendResponse<Routes["/users/{id}/favorite-companies"]["get"]>(
           res,
           StatusCodes.BAD_REQUEST,
           buildErrorResponse(ErrorCode.InvalidQuery, options.error)

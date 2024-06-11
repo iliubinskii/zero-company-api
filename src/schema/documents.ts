@@ -15,7 +15,8 @@ export interface Document {
   readonly type: DocType;
 }
 
-export interface DocumentCreate extends Document {}
+export interface DocumentCreate
+  extends Pick<Document, "company" | "metadata" | "signatories" | "type"> {}
 
 export interface DocumentUpdate extends Update<Pick<Document, "doc">> {}
 

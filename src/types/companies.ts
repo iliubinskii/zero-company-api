@@ -74,6 +74,14 @@ export interface CompaniesService {
 
 export type GetCompaniesParentRef =
   | {
+      readonly bookmarkUserEmail: string;
+      readonly type: "bookmarkUserEmail";
+    }
+  | {
+      readonly bookmarkUserId: string;
+      readonly type: "bookmarkUserId";
+    }
+  | {
       readonly category: string;
       readonly type: "category";
     }

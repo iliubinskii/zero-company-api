@@ -85,6 +85,7 @@ const config = {
     ],
     "callback-return": "off",
     "camelcase": "off",
+    "complexity": "off",
     "consistent-return": "off",
     "curly": ["warn", "multi"],
     "default-case": "off",

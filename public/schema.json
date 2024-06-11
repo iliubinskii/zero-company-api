@@ -219,9 +219,6 @@
           },
           "email": {
             "type": "string"
-          },
-          "user": {
-            "$ref": "#/components/schemas/User"
           }
         },
         "required": ["admin", "email"],
@@ -662,6 +659,12 @@
           "email": {
             "type": "string"
           },
+          "favoriteCompanies": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
           "firstName": {
             "type": "string"
           },
@@ -669,7 +672,7 @@
             "type": "string"
           }
         },
-        "required": ["_id", "email", "firstName", "lastName"],
+        "required": ["_id", "email", "favoriteCompanies"],
         "type": "object"
       },
       "UserList": {
@@ -1182,6 +1185,25 @@
         }
       ]
     },
+    "/me/favorite-companies": {
+      "get": {
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/CompanyList"
+          },
+          "400": {
+            "$ref": "#/components/responses/InvalidQuery"
+          }
+        },
+        "summary": "Get all favorite companies for a user",
+        "tags": ["users"]
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/Id"
+        }
+      ]
+    },
     "/users": {
       "get": {
         "responses": {
@@ -1265,6 +1287,25 @@
           }
         },
         "summary": "Get all companies for a user",
+        "tags": ["users"]
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/Id"
+        }
+      ]
+    },
+    "/users/{id}/favorite-companies": {
+      "get": {
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/CompanyList"
+          },
+          "400": {
+            "$ref": "#/components/responses/InvalidQuery"
+          }
+        },
+        "summary": "Get all favorite companies for a user",
         "tags": ["users"]
       },
       "parameters": [

@@ -12,6 +12,7 @@ export interface UserControllers {
   readonly addUser: RequestHandler;
   readonly deleteUser: RequestHandler;
   readonly getCompaniesByUser: RequestHandler;
+  readonly getFavoriteCompaniesByUser: RequestHandler;
   readonly getUser: RequestHandler;
   readonly getUsers: RequestHandler;
   readonly updateUser: RequestHandler;
@@ -69,8 +70,10 @@ export interface UsersService {
   ) => Promise<RawExistingUser | null>;
 }
 
-export interface RawExistingUser extends Omit<ExistingUser, "_id"> {
+export interface RawExistingUser
+  extends Omit<ExistingUser, "_id" | "favoriteCompanies"> {
   readonly _id: mongoose.Types.ObjectId;
+  readonly favoriteCompanies: readonly mongoose.Types.ObjectId[];
 }
 
 export type RawExistingUsers = MultipleDocsResponse<RawExistingUser>;

@@ -23,6 +23,12 @@ export function createMeRouter(controllers: UserControllers): Router {
       requireJwt,
       userRefFromJwt,
       controllers.getCompaniesByUser
+    )
+    .get(
+      "/favorite-companies",
+      requireJwt,
+      userRefFromJwt,
+      controllers.getFavoriteCompaniesByUser
     );
 
   return router;
