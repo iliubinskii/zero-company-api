@@ -30,10 +30,15 @@ export interface Jwt {
 
 export interface User {
   readonly email: string;
+  readonly favoriteCompanies: readonly string[];
   readonly firstName: string;
   readonly lastName: string;
 }
 
-export interface UserCreate extends Omit<User, "email"> {}
+export interface UserCreate extends Pick<User, "firstName" | "lastName"> {}
 
-export interface UserUpdate extends Update<Omit<User, "email">> {}
+export interface UserUpdate
+  extends Update<Pick<User, "firstName" | "lastName">> {
+  readonly addFavoriteCompanies?: readonly string[] | null | undefined;
+  readonly removeFavoriteCompanies?: readonly string[] | null | undefined;
+}

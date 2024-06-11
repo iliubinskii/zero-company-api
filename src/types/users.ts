@@ -69,8 +69,10 @@ export interface UsersService {
   ) => Promise<RawExistingUser | null>;
 }
 
-export interface RawExistingUser extends Omit<ExistingUser, "_id"> {
+export interface RawExistingUser
+  extends Omit<ExistingUser, "_id" | "favoriteCompanies"> {
   readonly _id: mongoose.Types.ObjectId;
+  readonly favoriteCompanies: readonly mongoose.Types.ObjectId[];
 }
 
 export type RawExistingUsers = MultipleDocsResponse<RawExistingUser>;

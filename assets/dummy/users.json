@@ -2,90 +2,105 @@
   {
     "_id": { "$oid": "50801f77bcf86cd799439011" },
     "email": "emilia.hansen@example.com",
+    "favoriteCompanies": [],
     "firstName": "Emilia",
     "lastName": "Hansen"
   },
   {
     "_id": { "$oid": "50801f77bcf86cd799439012" },
     "email": "lucas.perez@example.com",
+    "favoriteCompanies": [],
     "firstName": "Lucas",
     "lastName": "Perez"
   },
   {
     "_id": { "$oid": "50801f77bcf86cd799439013" },
     "email": "sophia.brown@example.com",
+    "favoriteCompanies": [],
     "firstName": "Sophia",
     "lastName": "Brown"
   },
   {
     "_id": { "$oid": "50801f77bcf86cd799439014" },
     "email": "ethan.johnson@example.com",
+    "favoriteCompanies": [],
     "firstName": "Ethan",
     "lastName": "Johnson"
   },
   {
     "_id": { "$oid": "50801f77bcf86cd799439015" },
     "email": "mia.wang@example.com",
+    "favoriteCompanies": [],
     "firstName": "Mia",
     "lastName": "Wang"
   },
   {
     "_id": { "$oid": "50801f77bcf86cd799439016" },
     "email": "oliver.smith@example.com",
+    "favoriteCompanies": [],
     "firstName": "Oliver",
     "lastName": "Smith"
   },
   {
     "_id": { "$oid": "50801f77bcf86cd799439017" },
     "email": "ava.taylor@example.com",
+    "favoriteCompanies": [],
     "firstName": "Ava",
     "lastName": "Taylor"
   },
   {
     "_id": { "$oid": "50801f77bcf86cd799439018" },
     "email": "mason.lee@example.com",
+    "favoriteCompanies": [],
     "firstName": "Mason",
     "lastName": "Lee"
   },
   {
     "_id": { "$oid": "50801f77bcf86cd799439019" },
     "email": "isabella.martinez@example.com",
+    "favoriteCompanies": [],
     "firstName": "Isabella",
     "lastName": "Martinez"
   },
   {
     "_id": { "$oid": "50801f77bcf86cd79943901a" },
     "email": "liam.davis@example.com",
+    "favoriteCompanies": [],
     "firstName": "Liam",
     "lastName": "Davis"
   },
   {
     "_id": { "$oid": "50801f77bcf86cd79943901b" },
     "email": "charlotte.clark@example.com",
+    "favoriteCompanies": [],
     "firstName": "Charlotte",
     "lastName": "Clark"
   },
   {
     "_id": { "$oid": "50801f77bcf86cd79943901c" },
     "email": "james.jones@example.com",
+    "favoriteCompanies": [],
     "firstName": "James",
     "lastName": "Jones"
   },
   {
     "_id": { "$oid": "50801f77bcf86cd79943901d" },
     "email": "amelia.garcia@example.com",
+    "favoriteCompanies": [],
     "firstName": "Amelia",
     "lastName": "Garcia"
   },
   {
     "_id": { "$oid": "50801f77bcf86cd79943901e" },
     "email": "benjamin.miller@example.com",
+    "favoriteCompanies": [],
     "firstName": "Benjamin",
     "lastName": "Miller"
   },
   {
     "_id": { "$oid": "50801f77bcf86cd79943901f" },
     "email": "harper.martin@example.com",
+    "favoriteCompanies": [],
     "firstName": "Harper",
     "lastName": "Martin"
   }

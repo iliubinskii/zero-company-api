@@ -596,6 +596,7 @@ export interface components {
     User: {
       _id: string;
       email: string;
+      favoriteCompanies: string[];
       firstName: string;
       lastName: string;
     };

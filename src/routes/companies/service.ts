@@ -35,9 +35,9 @@ export function createCompaniesService(): CompaniesService {
     deleteCompany: async id => {
       const CompanyModel = await getCompanyModel();
 
-      const deletedCategory = await CompanyModel.findByIdAndDelete(id);
+      const deletedCompany = await CompanyModel.findByIdAndDelete(id);
 
-      return deletedCategory ? 1 : 0;
+      return deletedCompany ? 1 : 0;
     },
     generateFoundingAgreement: async id => {
       const connection = await getMongodbConnection();
@@ -195,12 +195,12 @@ export function createCompaniesService(): CompaniesService {
       if (removeImages && removeImages.length > 0)
         update["$pull"] = { images: { assetId: { $in: removeImages } } };
 
-      const updatedCategory = await CompanyModel.findByIdAndUpdate(id, update, {
+      const updatedCompany = await CompanyModel.findByIdAndUpdate(id, update, {
         new: true,
         runValidators: true
       });
 
-      return updatedCategory;
+      return updatedCompany;
     }
   };
 }

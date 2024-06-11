@@ -81,17 +81,35 @@ export function createUsersService(): UsersService {
     updateUser: async (ref, user) => {
       const UserModel = await getUserModel();
 
+      const { addFavoriteCompanies, removeFavoriteCompanies, ...rest } = user;
+
+      const update: Record<string, unknown> = {};
+
+      if (Object.keys(rest).length > 0) update["$set"] = rest;
+
+      if (addFavoriteCompanies && addFavoriteCompanies.length > 0)
+        update["$push"] = {
+          favoriteCompanies: { $each: addFavoriteCompanies }
+        };
+
+      if (removeFavoriteCompanies && removeFavoriteCompanies.length > 0)
+        update["$pull"] = {
+          favoriteCompanies: { $in: removeFavoriteCompanies }
+        };
+
       const updatedUser = await (() => {
         switch (ref.type) {
           case "id": {
-            return UserModel.findByIdAndUpdate(ref.id, user, {
-              new: true
+            return UserModel.findByIdAndUpdate(ref.id, update, {
+              new: true,
+              runValidators: true
             });
           }
 
           case "email": {
-            return UserModel.findOneAndUpdate({ email: ref.email }, user, {
-              new: true
+            return UserModel.findOneAndUpdate({ email: ref.email }, update, {
+              new: true,
+              runValidators: true
             });
           }
         }

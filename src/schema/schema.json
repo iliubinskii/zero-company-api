@@ -1392,6 +1392,7 @@
         "required": [
           "_id",
           "email",
+          "favoriteCompanies",
           "firstName",
           "lastName"
         ],
@@ -1401,6 +1402,12 @@
           },
           "email": {
             "type": "string"
+          },
+          "favoriteCompanies": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           },
           "firstName": {
             "type": "string"

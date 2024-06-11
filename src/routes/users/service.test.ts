@@ -10,6 +10,7 @@ describe("createUsersService", () => {
   const getData = (): Omit<ExistingUser, "_id"> => {
     return {
       email: faker.internet.email(),
+      favoriteCompanies: [],
       firstName: faker.person.firstName(),
       lastName: faker.person.lastName()
     };
@@ -173,6 +174,7 @@ describe("createUsersService", () => {
       .map(email => {
         return {
           email,
+          favoriteCompanies: [],
           firstName: faker.person.firstName(),
           lastName: faker.person.lastName()
         };

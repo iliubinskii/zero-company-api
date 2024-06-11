@@ -15,17 +15,24 @@ import zod from "zod";
 
 const _id = IdValidationSchema;
 
+const addFavoriteCompanies = zod.array(zod.string().min(1));
+
 const admin = preprocessBoolean(zod.boolean());
 
 const email = preprocessEmail(zod.string().email());
+
+const favoriteCompanies = zod.array(zod.string().min(1));
 
 const firstName = zod.string().min(1);
 
 const lastName = zod.string().min(1);
 
+const removeFavoriteCompanies = zod.array(zod.string().min(1));
+
 export const ExistingUserValidationSchema = zod.strictObject({
   _id,
   email,
+  favoriteCompanies,
   firstName,
   lastName
 });
@@ -54,8 +61,10 @@ export const UserCreateValidationSchema = ExistingUserValidationSchema.omit({
 });
 
 export const UserUpdateValidationSchema = zod.strictObject({
+  addFavoriteCompanies: addFavoriteCompanies.optional(),
   firstName: firstName.optional(),
-  lastName: lastName.optional()
+  lastName: lastName.optional(),
+  removeFavoriteCompanies: removeFavoriteCompanies.optional()
 });
 
 // Type check the existing user validation schema

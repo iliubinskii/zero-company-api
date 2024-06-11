@@ -1032,6 +1032,7 @@ components:
       required:
         - _id
         - email
+        - favoriteCompanies
         - firstName
         - lastName
       properties:
@@ -1039,6 +1040,10 @@ components:
           type: string
         email:
           type: string
+        favoriteCompanies:
+          type: array
+          items:
+            type: string
         firstName:
           type: string
         lastName:
