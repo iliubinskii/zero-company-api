@@ -624,8 +624,6 @@ components:
           type: boolean
         email:
           type: string
-        user:
-          $ref: "#/components/schemas/User"
 
     # BadRequest schema
     BadRequest:
@@ -1033,8 +1031,6 @@ components:
         - _id
         - email
         - favoriteCompanies
-        - firstName
-        - lastName
       properties:
         _id:
           type: string

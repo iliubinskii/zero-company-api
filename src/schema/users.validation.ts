@@ -1,6 +1,5 @@
 import type {
   AuthUser,
-  AuthUserEssential,
   ExistingUser,
   Jwt,
   UserCreate,
@@ -23,11 +22,16 @@ const email = preprocessEmail(zod.string().email());
 
 const favoriteCompanies = zod.array(zod.string().min(1));
 
-const firstName = zod.string().min(1);
+const firstName = zod.string().min(1).nullable().optional();
 
-const lastName = zod.string().min(1);
+const lastName = zod.string().min(1).nullable().optional();
 
 const removeFavoriteCompanies = zod.array(zod.string().min(1));
+
+export const AuthUserValidationSchema = zod.strictObject({ admin, email });
+
+// Do not use strictObject: JWT may contain additional fields
+export const JwtValidationSchema = zod.object({ email });
 
 export const ExistingUserValidationSchema = zod.strictObject({
   _id,
@@ -37,27 +41,9 @@ export const ExistingUserValidationSchema = zod.strictObject({
   lastName
 });
 
-export const AuthUserValidationSchema = zod.strictObject({
-  admin,
-  email,
-  user: ExistingUserValidationSchema.optional()
-});
-
-export const AuthUserEssentialValidationSchema = zod.strictObject({
-  admin,
-  email,
-  user: ExistingUserValidationSchema.pick({
-    firstName: true,
-    lastName: true
-  }).optional()
-});
-
-// Do not use strictObject: JWT may contain additional fields
-export const JwtValidationSchema = zod.object({ email });
-
-export const UserCreateValidationSchema = ExistingUserValidationSchema.omit({
-  _id: true,
-  email: true
+export const UserCreateValidationSchema = zod.strictObject({
+  firstName,
+  lastName
 });
 
 export const UserUpdateValidationSchema = zod.strictObject({
@@ -74,16 +60,9 @@ export const UserUpdateValidationSchema = zod.strictObject({
   return result.success ? result.data : undefined;
 })();
 
-// Type check the jwt user validation schema
+// Type check auth user validation schema
 ((): AuthUser | undefined => {
   const result = AuthUserValidationSchema.safeParse(undefined);
-
-  return result.success ? result.data : undefined;
-})();
-
-// Type check the jwt user validation schema
-((): AuthUserEssential | undefined => {
-  const result = AuthUserEssentialValidationSchema.safeParse(undefined);
 
   return result.success ? result.data : undefined;
 })();
@@ -91,6 +70,13 @@ export const UserUpdateValidationSchema = zod.strictObject({
 // Type check the jwt validation schema
 ((): Jwt | undefined => {
   const result = JwtValidationSchema.safeParse(undefined);
+
+  return result.success ? result.data : undefined;
+})();
+
+// Type check existing user validation schema
+((): ExistingUser | undefined => {
+  const result = ExistingUserValidationSchema.safeParse(undefined);
 
   return result.success ? result.data : undefined;
 })();

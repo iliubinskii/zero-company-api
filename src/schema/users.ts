@@ -3,19 +3,6 @@ import type { MultipleDocsResponse, Update } from "./common";
 export interface AuthUser {
   readonly admin: boolean;
   readonly email: string;
-  readonly user?: ExistingUser | undefined;
-}
-
-// Being sent in a query string, keep short
-export interface AuthUserEssential {
-  readonly admin: boolean;
-  readonly email: string;
-  readonly user?:
-    | {
-        readonly firstName: string;
-        readonly lastName: string;
-      }
-    | undefined;
 }
 
 export interface ExistingUser extends User {
@@ -31,8 +18,8 @@ export interface Jwt {
 export interface User {
   readonly email: string;
   readonly favoriteCompanies: readonly string[];
-  readonly firstName: string;
-  readonly lastName: string;
+  readonly firstName?: string | null | undefined;
+  readonly lastName?: string | null | undefined;
 }
 
 export interface UserCreate extends Pick<User, "firstName" | "lastName"> {}

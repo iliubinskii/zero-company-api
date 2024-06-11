@@ -459,7 +459,6 @@ export interface components {
     AuthUser: {
       admin: boolean;
       email: string;
-      user?: components["schemas"]["User"];
     } | null;
     BadRequest: {
       /** @enum {string} */
@@ -597,8 +596,8 @@ export interface components {
       _id: string;
       email: string;
       favoriteCompanies: string[];
-      firstName: string;
-      lastName: string;
+      firstName?: string;
+      lastName?: string;
     };
     UserList: {
       count: number;

@@ -219,9 +219,6 @@
           },
           "email": {
             "type": "string"
-          },
-          "user": {
-            "$ref": "#/components/schemas/User"
           }
         },
         "required": ["admin", "email"],
@@ -675,13 +672,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "_id",
-          "email",
-          "favoriteCompanies",
-          "firstName",
-          "lastName"
-        ],
+        "required": ["_id", "email", "favoriteCompanies"],
         "type": "object"
       },
       "UserList": {

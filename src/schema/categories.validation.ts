@@ -24,8 +24,12 @@ export const ExistingCategoryValidationSchema = zod.strictObject({
   tagline
 });
 
-export const CategoryCreateValidationSchema =
-  ExistingCategoryValidationSchema.omit({ _id: true });
+export const CategoryCreateValidationSchema = zod.strictObject({
+  description,
+  name,
+  pinned,
+  tagline
+});
 
 export const CategoryUpdateValidationSchema = zod.strictObject({
   description: description.optional(),

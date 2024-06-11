@@ -28,7 +28,10 @@ export function createDocumentControllers(
       const document = DocumentCreateValidationSchema.safeParse(req.body);
 
       if (document.success) {
-        const addedDocument = await service.addDocument(document.data);
+        const addedDocument = await service.addDocument({
+          ...document.data,
+          createdAt: new Date()
+        });
 
         sendResponse<Routes["/documents"]["post"]>(
           res,

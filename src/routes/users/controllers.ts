@@ -40,7 +40,8 @@ export function createUserControllers(
       if (user.success) {
         const addedUser = await service.addUser({
           ...user.data,
-          email: jwt.email
+          email: jwt.email,
+          favoriteCompanies: []
         });
 
         if (addedUser)

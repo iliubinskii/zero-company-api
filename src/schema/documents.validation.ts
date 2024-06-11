@@ -35,8 +35,12 @@ export const ExistingDocumentValidationSchema = zod.strictObject({
   type
 });
 
-export const DocumentCreateValidationSchema =
-  ExistingDocumentValidationSchema.omit({ _id: true });
+export const DocumentCreateValidationSchema = zod.strictObject({
+  company,
+  metadata,
+  signatories,
+  type
+});
 
 export const DocumentUpdateValidationSchema = zod.strictObject({
   doc: doc.optional()

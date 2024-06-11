@@ -12,11 +12,9 @@ export const UserSchema = new mongoose.Schema(
       type: [mongoose.Schema.Types.ObjectId]
     },
     firstName: {
-      required: true,
       type: mongoose.Schema.Types.String
     },
     lastName: {
-      required: true,
       type: mongoose.Schema.Types.String
     }
   },
