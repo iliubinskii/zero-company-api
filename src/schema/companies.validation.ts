@@ -52,7 +52,7 @@ const targetValue = preprocessNumber(zod.number().int().positive())
 
 const website = zod.string().url().nullable().optional();
 
-export const ExistingCompanyValidationSchema = zod.strictObject({
+export const ExistingCompanyValidationSchema = zod.object({
   _id,
   categories,
   country,
@@ -71,12 +71,12 @@ export const ExistingCompanyValidationSchema = zod.strictObject({
   website
 });
 
-export const CompanyCreateValidationSchema = zod.strictObject({
+export const CompanyCreateValidationSchema = zod.object({
   categories,
   country
 });
 
-export const CompanyUpdateValidationSchema = zod.strictObject({
+export const CompanyUpdateValidationSchema = zod.object({
   addImages: addImages.optional(),
   categories: categories.optional(),
   description: description.optional(),

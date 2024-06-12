@@ -45,13 +45,13 @@ const status = zod
   .enum([CompanyStatus.draft, CompanyStatus.founded])
   .optional();
 
-export const GetCategoriesOptionsValidationSchema = zod.strictObject({
+export const GetCategoriesOptionsValidationSchema = zod.object({
   limit,
   offset,
   onlyPinned
 });
 
-export const GetCompaniesOptionsValidationSchema = zod.strictObject({
+export const GetCompaniesOptionsValidationSchema = zod.object({
   cursor,
   includePrivateCompanies,
   limit,
@@ -62,12 +62,12 @@ export const GetCompaniesOptionsValidationSchema = zod.strictObject({
   status
 });
 
-export const GetDocumentsOptionsValidationSchema = zod.strictObject({
+export const GetDocumentsOptionsValidationSchema = zod.object({
   limit,
   offset
 });
 
-export const GetUsersOptionsValidationSchema = zod.strictObject({
+export const GetUsersOptionsValidationSchema = zod.object({
   limit,
   offset
 });

@@ -188,10 +188,9 @@ export function createAuthRouter(usersService: UsersService): Router {
   return router;
 }
 
-// Do not use strictObject: auth0 may return additional fields
 const Auth0UserValidationSchema = zod.object({
   emails: zod
-    .array(zod.strictObject({ value: preprocessEmail(zod.string().email()) }))
+    .array(zod.object({ value: preprocessEmail(zod.string().email()) }))
     .nonempty()
     .max(1)
 });

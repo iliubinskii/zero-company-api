@@ -1,10 +1,10 @@
 import { ImageValidationSchema } from "./common";
 import zod from "zod";
 
-export const CompanyImageCreateValidationSchema = zod.strictObject({
+export const CompanyImageCreateValidationSchema = zod.object({
   image: ImageValidationSchema
 });
 
-export const CompanyImageUpdateValidationSchema = zod.strictObject({
+export const CompanyImageUpdateValidationSchema = zod.object({
   image: ImageValidationSchema
 });

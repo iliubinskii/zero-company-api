@@ -28,12 +28,11 @@ const lastName = zod.string().min(1).nullable().optional();
 
 const removeFavoriteCompanies = zod.array(zod.string().min(1));
 
-export const AuthUserValidationSchema = zod.strictObject({ admin, email });
+export const AuthUserValidationSchema = zod.object({ admin, email });
 
-// Do not use strictObject: JWT may contain additional fields
 export const JwtValidationSchema = zod.object({ email });
 
-export const ExistingUserValidationSchema = zod.strictObject({
+export const ExistingUserValidationSchema = zod.object({
   _id,
   email,
   favoriteCompanies,
@@ -41,12 +40,12 @@ export const ExistingUserValidationSchema = zod.strictObject({
   lastName
 });
 
-export const UserCreateValidationSchema = zod.strictObject({
+export const UserCreateValidationSchema = zod.object({
   firstName,
   lastName
 });
 
-export const UserUpdateValidationSchema = zod.strictObject({
+export const UserUpdateValidationSchema = zod.object({
   addFavoriteCompanies: addFavoriteCompanies.optional(),
   firstName: firstName.optional(),
   lastName: lastName.optional(),
