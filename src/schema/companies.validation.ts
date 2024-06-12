@@ -10,6 +10,7 @@ import {
   ImageValidationSchema,
   founder,
   preprocessBoolean,
+  preprocessDate,
   preprocessNumber
 } from "./common";
 import zod from "zod";
@@ -22,11 +23,11 @@ const categories = zod.array(IdValidationSchema).nonempty().max(MAX_CATEGORIES);
 
 const country = zod.string().length(COUNTRY_CODE_SIZE);
 
-const createdAt = zod.date();
+const createdAt = preprocessDate(zod.date());
 
 const description = zod.string().min(1).nullable().optional();
 
-const foundedAt = zod.date().nullable().optional();
+const foundedAt = preprocessDate(zod.date()).nullable().optional();
 
 const foundingAgreement = zod.string().min(1).nullable().optional();
 

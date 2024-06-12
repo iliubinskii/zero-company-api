@@ -2,7 +2,8 @@ import {
   DigitalDocumentValidationSchema,
   DocType,
   IdValidationSchema,
-  SignatoryValidationSchema
+  SignatoryValidationSchema,
+  preprocessDate
 } from "./common";
 import type {
   DocumentCreate,
@@ -15,7 +16,7 @@ const _id = IdValidationSchema;
 
 const company = zod.string().min(1);
 
-const createdAt = zod.date();
+const createdAt = preprocessDate(zod.date());
 
 const doc = DigitalDocumentValidationSchema.nullable().optional();
 

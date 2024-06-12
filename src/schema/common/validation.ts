@@ -66,6 +66,20 @@ export function preprocessBoolean<T extends zod.ZodTypeAny>(
 }
 
 /**
+ * Preprocesses a schema to convert string values to dates.
+ * @param schema - The schema to preprocess.
+ * @returns The preprocessed schema.
+ */
+export function preprocessDate<T extends zod.ZodTypeAny>(
+  schema: T
+): zod.ZodEffects<T> {
+  return zod.preprocess(
+    value => (typeof value === "string" ? new Date(value) : value),
+    schema
+  );
+}
+
+/**
  * Preprocesses a schema to unify emails (lowercase).
  * @param schema - The schema to preprocess.
  * @returns The preprocessed schema.
