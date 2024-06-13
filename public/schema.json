@@ -963,10 +963,10 @@
       }
     },
     "/companies/{id}/found": {
-      "put": {
+      "post": {
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Company"
+            "$ref": "#/components/responses/Document"
           },
           "404": {
             "$ref": "#/components/responses/NotFound"

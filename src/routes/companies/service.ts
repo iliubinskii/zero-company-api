@@ -6,6 +6,7 @@ import type {
   User
 } from "../../schema";
 import { DocType, MAX_LIMIT } from "../../schema";
+import { createDigitalDocument, getMongodbConnection } from "../../providers";
 import {
   getCompanyModel,
   getDocumentModel,
@@ -13,9 +14,9 @@ import {
 } from "../../schema-mongodb";
 import type { CompaniesService } from "../../types";
 import type { FilterQuery } from "mongoose";
+import { FoundingAgreement } from "../../templates";
 import { StatusCodes } from "http-status-codes";
 import type { Writable } from "ts-toolbelt/out/Object/Writable";
-import { getMongodbConnection } from "../../providers";
 import { lang } from "../../langs";
 import type mongoose from "mongoose";
 
@@ -30,9 +31,9 @@ export function createCompaniesService(): CompaniesService {
 
       const model = new CompanyModel(company);
 
-      const addedItem = await model.save();
+      const addedCompany = await model.save();
 
-      return addedItem;
+      return addedCompany;
     },
     deleteCompany: async id => {
       const CompanyModel = await getCompanyModel();
@@ -69,9 +70,26 @@ export function createCompaniesService(): CompaniesService {
           return StatusCodes.CONFLICT;
         }
 
-        const doc: Document = {
+        const signatories = company.founders.map(
+          ({ email, name }, index): Signatory => {
+            return {
+              email,
+              name,
+              role: `${lang.Founder} ${index + 1}`
+            };
+          }
+        );
+
+        const digitalDocument = await createDigitalDocument(
+          lang.FoundingAgreement,
+          FoundingAgreement,
+          signatories
+        );
+
+        const document: Document = {
           company: company._id.toString(),
           createdAt: new Date(),
+          doc: digitalDocument,
           signatories: company.founders.map(
             ({ email, name }, index): Signatory => {
               return {
@@ -84,16 +102,16 @@ export function createCompaniesService(): CompaniesService {
           type: DocType.FoundingAgreement
         };
 
-        const document = new DocumentModel(doc);
+        const addedDocument = new DocumentModel(document);
 
-        company.foundingAgreement = document._id;
+        company.foundingAgreement = addedDocument._id;
 
-        const updatedCompany = await company.save({ session });
+        await company.save({ session });
 
         await session.commitTransaction();
         await session.endSession();
 
-        return updatedCompany;
+        return addedDocument;
       } catch (err) {
         await session.abortTransaction();
         await session.endSession();

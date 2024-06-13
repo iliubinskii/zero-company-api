@@ -46,7 +46,7 @@ export function createCompaniesRouter(
       controllers.updateCompany
     )
     .delete("/:id", requireJwtAdmin, requireIdParam, controllers.deleteCompany)
-    .put(
+    .post(
       "/:id/found",
       requireJwt,
       requireIdParam,

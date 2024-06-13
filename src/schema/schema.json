@@ -217,14 +217,14 @@
       }
     },
     "/companies/{id}/found": {
-      "put": {
+      "post": {
         "summary": "Create founding agreement for a company",
         "tags": [
           "companies"
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Company"
+            "$ref": "#/components/responses/Document"
           },
           "404": {
             "$ref": "#/components/responses/NotFound"

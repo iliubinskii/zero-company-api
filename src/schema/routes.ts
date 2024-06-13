@@ -159,9 +159,9 @@ export interface paths {
   };
   "/companies/{id}/found": {
     /** Create founding agreement for a company */
-    put: {
+    post: {
       responses: {
-        200: components["responses"]["Company"];
+        200: components["responses"]["Document"];
         404: components["responses"]["NotFound"];
         409: components["responses"]["Conflict"];
       };
