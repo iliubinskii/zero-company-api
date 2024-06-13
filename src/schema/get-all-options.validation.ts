@@ -34,12 +34,13 @@ const sortBy = {
       zod.literal("foundedAt"),
       zod.literal("name")
     ])
-    .optional()
+    .optional(),
+  documents: zod.literal("createdAt").optional()
 } as const;
 
-const sortOrder = {
-  companies: zod.union([zod.literal("asc"), zod.literal("desc")]).optional()
-} as const;
+const sortOrder = zod
+  .union([zod.literal("asc"), zod.literal("desc")])
+  .optional();
 
 const status = zod
   .enum([CompanyStatus.draft, CompanyStatus.founded])
@@ -58,13 +59,15 @@ export const GetCompaniesOptionsValidationSchema = zod.object({
   offset,
   onlyRecommended,
   sortBy: sortBy.companies,
-  sortOrder: sortOrder.companies,
+  sortOrder,
   status
 });
 
 export const GetDocumentsOptionsValidationSchema = zod.object({
   limit,
-  offset
+  offset,
+  sortBy: sortBy.documents,
+  sortOrder
 });
 
 export const GetUsersOptionsValidationSchema = zod.object({

@@ -37,10 +37,17 @@ export function createUsersRouter(controllers: UserControllers): Router {
     )
     .get(
       "/:id/companies",
-      requireJwt,
+      requireJwtAdmin,
       requireIdParam,
       userRefFromIdParam,
       controllers.getCompaniesByUser
+    )
+    .get(
+      "/:id/documents",
+      requireJwtAdmin,
+      requireIdParam,
+      userRefFromIdParam,
+      controllers.getDocumentsByUser
     )
     .get(
       "/:id/favorite-companies",

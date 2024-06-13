@@ -441,11 +441,6 @@
       }
     },
     "/me/companies": {
-      "parameters": [
-        {
-          "$ref": "#/components/parameters/Id"
-        }
-      ],
       "get": {
         "summary": "Get all companies for a user",
         "tags": [
@@ -461,12 +456,23 @@
         }
       }
     },
-    "/me/favorite-companies": {
-      "parameters": [
-        {
-          "$ref": "#/components/parameters/Id"
+    "/me/documents": {
+      "get": {
+        "summary": "Get all documents for a user",
+        "tags": [
+          "users"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/DocumentList"
+          },
+          "400": {
+            "$ref": "#/components/responses/InvalidQuery"
+          }
         }
-      ],
+      }
+    },
+    "/me/favorite-companies": {
       "get": {
         "summary": "Get all favorite companies for a user",
         "tags": [
@@ -578,6 +584,22 @@
         "responses": {
           "200": {
             "$ref": "#/components/responses/CompanyList"
+          },
+          "400": {
+            "$ref": "#/components/responses/InvalidQuery"
+          }
+        }
+      }
+    },
+    "/users/{id}/documents": {
+      "get": {
+        "summary": "Get all documents for a user",
+        "tags": [
+          "users"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/DocumentList"
           },
           "400": {
             "$ref": "#/components/responses/InvalidQuery"
@@ -1140,6 +1162,7 @@
           "_id",
           "company",
           "createdAt",
+          "doc",
           "signatories",
           "type"
         ],

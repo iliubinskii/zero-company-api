@@ -62,12 +62,12 @@ export type GetDocumentsParentRef =
       readonly type: "company";
     }
   | {
-      readonly founderEmail: string;
-      readonly type: "founderEmail";
+      readonly signatoryEmail: string;
+      readonly type: "signatoryEmail";
     }
   | {
-      readonly founderId: string;
-      readonly type: "founderId";
+      readonly signatoryId: string;
+      readonly type: "signatoryId";
     };
 
 export interface RawExistingDocument extends Omit<ExistingDocument, "_id"> {

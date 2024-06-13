@@ -102,7 +102,9 @@ export function createCompaniesService(): CompaniesService {
           type: DocType.FoundingAgreement
         };
 
-        const addedDocument = new DocumentModel(document);
+        const model = new DocumentModel(document);
+
+        const addedDocument = await model.save({ session });
 
         company.foundingAgreement = addedDocument._id;
 
@@ -144,12 +146,7 @@ export function createCompaniesService(): CompaniesService {
             });
 
             if (user) filter["_id"] = { $in: user.favoriteCompanies };
-            else
-              return {
-                count: 0,
-                docs: [],
-                total: 0
-              };
+            else return { count: 0, docs: [], total: 0 };
 
             break;
           }
@@ -160,12 +157,7 @@ export function createCompaniesService(): CompaniesService {
             const user = await UserModel.findById(parentRef.bookmarkUserId);
 
             if (user) filter["_id"] = { $in: user.favoriteCompanies };
-            else
-              return {
-                count: 0,
-                docs: [],
-                total: 0
-              };
+            else return { count: 0, docs: [], total: 0 };
 
             break;
           }
@@ -188,12 +180,7 @@ export function createCompaniesService(): CompaniesService {
             const user = await UserModel.findById(parentRef.founderId);
 
             if (user) filter["founders.email"] = user.email;
-            else
-              return {
-                count: 0,
-                docs: [],
-                total: 0
-              };
+            else return { count: 0, docs: [], total: 0 };
           }
         }
 

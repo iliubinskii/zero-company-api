@@ -14,6 +14,7 @@ export const DocumentSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.Date
     },
     doc: {
+      required: true,
       type: digitalDocument
     },
     metadata: {

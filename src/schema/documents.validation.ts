@@ -18,7 +18,7 @@ const company = zod.string().min(1);
 
 const createdAt = preprocessDate(zod.date());
 
-const doc = DigitalDocumentValidationSchema.nullable().optional();
+const doc = DigitalDocumentValidationSchema;
 
 const metadata = zod.string().min(1).nullable().optional();
 
@@ -38,14 +38,13 @@ export const ExistingDocumentValidationSchema = zod.object({
 
 export const DocumentCreateValidationSchema = zod.object({
   company,
+  doc,
   metadata,
   signatories,
   type
 });
 
-export const DocumentUpdateValidationSchema = zod.object({
-  doc: doc.optional()
-});
+export const DocumentUpdateValidationSchema = zod.object({});
 
 // Type check the existing document validation schema
 ((): ExistingDocument | undefined => {

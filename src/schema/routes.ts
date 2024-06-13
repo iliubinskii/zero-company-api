@@ -315,38 +315,27 @@ export interface paths {
   "/me/companies": {
     /** Get all companies for a user */
     get: {
-      parameters: {
-        path: {
-          id: components["parameters"]["Id"];
-        };
-      };
       responses: {
         200: components["responses"]["CompanyList"];
         400: components["responses"]["InvalidQuery"];
       };
     };
-    parameters: {
-      path: {
-        id: components["parameters"]["Id"];
+  };
+  "/me/documents": {
+    /** Get all documents for a user */
+    get: {
+      responses: {
+        200: components["responses"]["DocumentList"];
+        400: components["responses"]["InvalidQuery"];
       };
     };
   };
   "/me/favorite-companies": {
     /** Get all favorite companies for a user */
     get: {
-      parameters: {
-        path: {
-          id: components["parameters"]["Id"];
-        };
-      };
       responses: {
         200: components["responses"]["CompanyList"];
         400: components["responses"]["InvalidQuery"];
-      };
-    };
-    parameters: {
-      path: {
-        id: components["parameters"]["Id"];
       };
     };
   };
@@ -426,6 +415,15 @@ export interface paths {
     parameters: {
       path: {
         id: components["parameters"]["Id"];
+      };
+    };
+  };
+  "/users/{id}/documents": {
+    /** Get all documents for a user */
+    get: {
+      responses: {
+        200: components["responses"]["DocumentList"];
+        400: components["responses"]["InvalidQuery"];
       };
     };
   };
@@ -558,7 +556,7 @@ export interface components {
       _id: string;
       company: string;
       createdAt: string;
-      doc?: components["schemas"]["DigitalDocument"];
+      doc: components["schemas"]["DigitalDocument"];
       metadata?: string;
       signatories: components["schemas"]["Signatory"][];
       /** @enum {string} */
