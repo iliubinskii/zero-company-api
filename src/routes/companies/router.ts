@@ -23,9 +23,7 @@ export function createCompaniesRouter(
 ): Router {
   const { parseFormData, webAccessibleStorage } = companiesMiddleware;
 
-  const router = Router();
-
-  router
+  return Router()
     .get("/", controllers.getCompanies)
     .post(
       "/",
@@ -60,6 +58,4 @@ export function createCompaniesRouter(
       requireIdParam,
       createCompanyImagesRouter(imageControllers)
     );
-
-  return router;
 }

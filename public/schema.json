@@ -408,10 +408,7 @@
       },
       "DigitalDocument": {
         "properties": {
-          "assetId": {
-            "type": "string"
-          },
-          "secureUrl": {
+          "embedSrc": {
             "type": "string"
           },
           "signatures": {
@@ -420,11 +417,11 @@
             },
             "type": "array"
           },
-          "url": {
-            "type": "string"
+          "submissionId": {
+            "type": "number"
           }
         },
-        "required": ["assetId", "secureUrl", "signatures", "url"],
+        "required": ["embedSrc", "signatures", "submissionId"],
         "type": "object"
       },
       "Document": {
@@ -489,10 +486,7 @@
           "email": {
             "type": "string"
           },
-          "firstName": {
-            "type": "string"
-          },
-          "lastName": {
+          "name": {
             "type": "string"
           },
           "share": {
@@ -628,14 +622,14 @@
           "email": {
             "type": "string"
           },
-          "firstName": {
+          "name": {
             "type": "string"
           },
-          "lastName": {
+          "role": {
             "type": "string"
           }
         },
-        "required": ["email"],
+        "required": ["email", "role"],
         "type": "object"
       },
       "Unauthorized": {

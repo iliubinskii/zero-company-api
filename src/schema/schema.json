@@ -1115,16 +1115,12 @@
       "DigitalDocument": {
         "type": "object",
         "required": [
-          "assetId",
-          "secureUrl",
+          "embedSrc",
           "signatures",
-          "url"
+          "submissionId"
         ],
         "properties": {
-          "assetId": {
-            "type": "string"
-          },
-          "secureUrl": {
+          "embedSrc": {
             "type": "string"
           },
           "signatures": {
@@ -1133,8 +1129,8 @@
               "type": "string"
             }
           },
-          "url": {
-            "type": "string"
+          "submissionId": {
+            "type": "number"
           }
         }
       },
@@ -1216,10 +1212,7 @@
           "email": {
             "type": "string"
           },
-          "firstName": {
-            "type": "string"
-          },
-          "lastName": {
+          "name": {
             "type": "string"
           },
           "share": {
@@ -1394,16 +1387,17 @@
       "Signatory": {
         "type": "object",
         "required": [
-          "email"
+          "email",
+          "role"
         ],
         "properties": {
           "email": {
             "type": "string"
           },
-          "firstName": {
+          "name": {
             "type": "string"
           },
-          "lastName": {
+          "role": {
             "type": "string"
           }
         }

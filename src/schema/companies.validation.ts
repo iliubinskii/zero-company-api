@@ -6,9 +6,9 @@ import {
 } from "./companies";
 import {
   CompanyStatus,
+  FounderValidationSchema,
   IdValidationSchema,
   ImageValidationSchema,
-  founder,
   preprocessBoolean,
   preprocessDate,
   preprocessNumber
@@ -31,7 +31,7 @@ const foundedAt = preprocessDate(zod.date()).nullable().optional();
 
 const foundingAgreement = zod.string().min(1).nullable().optional();
 
-const founders = zod.array(founder);
+const founders = zod.array(FounderValidationSchema);
 
 const images = zod.array(ImageValidationSchema);
 

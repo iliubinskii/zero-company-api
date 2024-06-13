@@ -1,4 +1,4 @@
-import { founder, image } from "./common";
+import { founder, webAccessibleImage } from "./common";
 import { CompanyStatus } from "../schema";
 import { getMongodbConnection } from "../providers";
 import mongoose from "mongoose";
@@ -32,10 +32,10 @@ export const CompanySchema = new mongoose.Schema(
     },
     images: {
       required: true,
-      type: [image]
+      type: [webAccessibleImage]
     },
     logo: {
-      type: image
+      type: webAccessibleImage
     },
     name: {
       type: mongoose.Schema.Types.String

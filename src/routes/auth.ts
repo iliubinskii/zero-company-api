@@ -29,9 +29,7 @@ import zod from "zod";
  * @returns Router
  */
 export function createAuthRouter(usersService: UsersService): Router {
-  const router = Router();
-
-  router
+  return Router()
     .get(
       "/callback",
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument -- Postponed
@@ -184,8 +182,6 @@ export function createAuthRouter(usersService: UsersService): Router {
         } else res.json(null);
       })
     );
-
-  return router;
 }
 
 const Auth0UserValidationSchema = zod.object({

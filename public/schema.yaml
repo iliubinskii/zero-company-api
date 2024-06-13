@@ -818,21 +818,18 @@ components:
     DigitalDocument:
       type: object
       required:
-        - assetId
-        - secureUrl
+        - embedSrc
         - signatures
-        - url
+        - submissionId
       properties:
-        assetId:
-          type: string
-        secureUrl:
+        embedSrc:
           type: string
         signatures:
           type: array
           items:
             type: string
-        url:
-          type: string
+        submissionId:
+          type: number
 
     # Document schema
     Document:
@@ -894,9 +891,7 @@ components:
       properties:
         email:
           type: string
-        firstName:
-          type: string
-        lastName:
+        name:
           type: string
         share:
           type: number
@@ -1030,12 +1025,13 @@ components:
       type: object
       required:
         - email
+        - role
       properties:
         email:
           type: string
-        firstName:
+        name:
           type: string
-        lastName:
+        role:
           type: string
 
     # Unauthorized schema

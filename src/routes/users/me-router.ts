@@ -11,9 +11,7 @@ import { usersMiddleware } from "./middleware";
 export function createMeRouter(controllers: UserControllers): Router {
   const { userRefFromJwt } = usersMiddleware;
 
-  const router = Router();
-
-  router
+  return Router()
     .get("/", requireJwt, userRefFromJwt, controllers.getUser)
     .post("/", requireJwt, userRefFromJwt, controllers.addUser)
     .put("/", requireJwt, userRefFromJwt, controllers.updateUser)
@@ -30,6 +28,4 @@ export function createMeRouter(controllers: UserControllers): Router {
       userRefFromJwt,
       controllers.getFavoriteCompaniesByUser
     );
-
-  return router;
 }

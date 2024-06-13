@@ -12,9 +12,7 @@ export function createCompanyImagesRouter(
 ): Router {
   const { parseFormData, webAccessibleStorage } = companyImagesMiddleware;
 
-  const router = Router();
-
-  router
+  return Router()
     .post("/", parseFormData, webAccessibleStorage, controllers.addImage)
     .put(
       "/:assetId",
@@ -23,6 +21,4 @@ export function createCompanyImagesRouter(
       controllers.updateImage
     )
     .delete("/:assetId", controllers.deleteImage);
-
-  return router;
 }

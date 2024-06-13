@@ -2,6 +2,7 @@ import type {
   Company,
   Document,
   GetCompaniesOptions,
+  Signatory,
   User
 } from "../../schema";
 import { DocType, MAX_LIMIT } from "../../schema";
@@ -15,6 +16,7 @@ import type { FilterQuery } from "mongoose";
 import { StatusCodes } from "http-status-codes";
 import type { Writable } from "ts-toolbelt/out/Object/Writable";
 import { getMongodbConnection } from "../../providers";
+import { lang } from "../../langs";
 import type mongoose from "mongoose";
 
 /**
@@ -71,8 +73,12 @@ export function createCompaniesService(): CompaniesService {
           company: company._id.toString(),
           createdAt: new Date(),
           signatories: company.founders.map(
-            ({ email, firstName, lastName }) => {
-              return { email, firstName, lastName };
+            ({ email, name }, index): Signatory => {
+              return {
+                email,
+                name,
+                role: `${lang.Founder} ${index + 1}`
+              };
             }
           ),
           type: DocType.FoundingAgreement

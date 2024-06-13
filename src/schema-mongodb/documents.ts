@@ -1,4 +1,4 @@
-import { doc, signatory } from "./common";
+import { digitalDocument, signatory } from "./common";
 import { DocType } from "../schema";
 import { getMongodbConnection } from "../providers";
 import mongoose from "mongoose";
@@ -14,7 +14,7 @@ export const DocumentSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.Date
     },
     doc: {
-      type: doc
+      type: digitalDocument
     },
     metadata: {
       type: mongoose.Schema.Types.String

@@ -1,7 +1,7 @@
 /* eslint-disable no-magic-numbers -- Ok */
 /* eslint-disable no-sync -- Ok */
 
-import type { Category, Company, User } from "../src";
+import type { Category, Company, Founder, User } from "../src";
 import { CompanyStatus } from "../src";
 import { dummy } from "../assets";
 import { faker } from "@faker-js/faker";
@@ -27,11 +27,13 @@ const companies = Array.from(
       foundedAt: makeDate(faker.date.past()),
       founders: faker.helpers
         .uniqueArray(dummy.users, faker.number.int({ max: 3, min: 1 }))
-        .map(({ email, firstName, lastName }) => {
+        .map(({ email, firstName, lastName }): Founder => {
           return {
             email,
-            firstName,
-            lastName,
+            name:
+              typeof firstName === "string" && typeof lastName === "string"
+                ? `${firstName} ${lastName}`
+                : undefined,
             share:
               faker.number.float({ fractionDigits: 2, max: 0.1, min: 0.01 }) *
               targetValue *

@@ -550,10 +550,9 @@ export interface components {
       affectedRows: number;
     };
     DigitalDocument: {
-      assetId: string;
-      secureUrl: string;
+      embedSrc: string;
       signatures: string[];
-      url: string;
+      submissionId: number;
     };
     Document: {
       _id: string;
@@ -573,8 +572,7 @@ export interface components {
     };
     Founder: {
       email: string;
-      firstName?: string;
-      lastName?: string;
+      name?: string;
       share?: number;
     };
     Home: {
@@ -622,8 +620,8 @@ export interface components {
     };
     Signatory: {
       email: string;
-      firstName?: string;
-      lastName?: string;
+      name?: string;
+      role: string;
     };
     Unauthorized: {
       /** @enum {string} */

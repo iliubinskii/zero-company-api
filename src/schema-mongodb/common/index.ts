@@ -1,11 +1,7 @@
 import mongoose from "mongoose";
 
-export const doc = {
-  assetId: {
-    required: true,
-    type: mongoose.Schema.Types.String
-  },
-  secureUrl: {
+export const digitalDocument = {
+  embedSrc: {
     required: true,
     type: mongoose.Schema.Types.String
   },
@@ -13,9 +9,9 @@ export const doc = {
     required: true,
     type: [mongoose.Schema.Types.String]
   },
-  url: {
+  submissionId: {
     required: true,
-    type: mongoose.Schema.Types.String
+    type: mongoose.Schema.Types.Number
   }
 } as const;
 
@@ -24,10 +20,7 @@ export const founder = {
     required: true,
     type: mongoose.Schema.Types.String
   },
-  firstName: {
-    type: mongoose.Schema.Types.String
-  },
-  lastName: {
+  name: {
     type: mongoose.Schema.Types.String
   },
   share: {
@@ -35,7 +28,21 @@ export const founder = {
   }
 } as const;
 
-export const image = {
+export const signatory = {
+  email: {
+    required: true,
+    type: mongoose.Schema.Types.String
+  },
+  name: {
+    type: mongoose.Schema.Types.String
+  },
+  role: {
+    required: true,
+    type: mongoose.Schema.Types.String
+  }
+} as const;
+
+export const webAccessibleImage = {
   assetId: {
     required: true,
     type: mongoose.Schema.Types.String
@@ -59,18 +66,5 @@ export const image = {
   width: {
     required: true,
     type: mongoose.Schema.Types.Number
-  }
-} as const;
-
-export const signatory = {
-  email: {
-    required: true,
-    type: mongoose.Schema.Types.String
-  },
-  firstName: {
-    type: mongoose.Schema.Types.String
-  },
-  lastName: {
-    type: mongoose.Schema.Types.String
   }
 } as const;

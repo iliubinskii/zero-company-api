@@ -11,9 +11,7 @@ import { usersMiddleware } from "./middleware";
 export function createUsersRouter(controllers: UserControllers): Router {
   const { userRefFromIdParam } = usersMiddleware;
 
-  const router = Router();
-
-  router
+  return Router()
     .get("/", requireJwt, controllers.getUsers)
     .post("/", requireJwt, controllers.addUser)
     .get(
@@ -51,6 +49,4 @@ export function createUsersRouter(controllers: UserControllers): Router {
       userRefFromIdParam,
       controllers.getFavoriteCompaniesByUser
     );
-
-  return router;
 }
