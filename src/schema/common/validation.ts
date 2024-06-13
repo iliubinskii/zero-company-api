@@ -3,13 +3,13 @@ import zod from "zod";
 export const DigitalDocumentValidationSchema = zod.object({
   embedSrc: zod.string().url(),
   signatures: zod.array(zod.string().min(1)),
-  submissionId: preprocessNumber(zod.number())
+  submissionId: preprocessInt(zod.number().int())
 });
 
 export const FounderValidationSchema = zod.object({
   email: preprocessEmail(zod.string().email()),
   name: zod.string().min(1).nullable().optional(),
-  share: preprocessNumber(zod.number().int().positive()).nullable().optional()
+  share: preprocessInt(zod.number().int().positive()).nullable().optional()
 });
 
 export const IdValidationSchema = zod
@@ -18,11 +18,11 @@ export const IdValidationSchema = zod
 
 export const ImageValidationSchema = zod.object({
   assetId: zod.string().min(1),
-  height: preprocessNumber(zod.number().int().positive()),
+  height: preprocessInt(zod.number().int().positive()),
   name: zod.string().min(1),
   secureUrl: zod.string().min(1),
   url: zod.string().min(1),
-  width: preprocessNumber(zod.number().int().positive())
+  width: preprocessInt(zod.number().int().positive())
 });
 
 export const SignatoryValidationSchema = zod.object({
@@ -92,11 +92,22 @@ export function preprocessEmail<T extends zod.ZodTypeAny>(
  * @param schema - The schema to preprocess.
  * @returns The preprocessed schema.
  */
-export function preprocessNumber<T extends zod.ZodTypeAny>(
+export function preprocessInt<T extends zod.ZodTypeAny>(
   schema: T
 ): zod.ZodEffects<T> {
-  return zod.preprocess(
-    value => (typeof value === "string" ? Number(value) : value),
-    schema
-  );
+  return zod.preprocess(value => {
+    switch (typeof value) {
+      case "number": {
+        return Math.round(value);
+      }
+
+      case "string": {
+        return Math.round(Number(value));
+      }
+
+      default: {
+        return value;
+      }
+    }
+  }, schema);
 }

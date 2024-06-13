@@ -11,7 +11,7 @@ import {
   ImageValidationSchema,
   preprocessBoolean,
   preprocessDate,
-  preprocessNumber
+  preprocessInt
 } from "./common";
 import zod from "zod";
 
@@ -47,7 +47,7 @@ const removeImages = zod.array(zod.string().min(1));
 
 const status = zod.enum([CompanyStatus.draft, CompanyStatus.founded]);
 
-const targetValue = preprocessNumber(zod.number().int().positive())
+const targetValue = preprocessInt(zod.number().int().positive())
   .nullable()
   .optional();
 
