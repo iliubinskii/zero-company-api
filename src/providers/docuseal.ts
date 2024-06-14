@@ -5,8 +5,6 @@ import {
 } from "../config";
 import type { DigitalDocument, Signatory } from "../schema";
 import { DOCUSEAL_ENDPOINT } from "../consts";
-import type { FC } from "react";
-import { renderToString } from "react-dom/server";
 import zod from "zod";
 
 /**
@@ -33,21 +31,6 @@ export async function createDigitalDocument(
   const digitalDocument = await createSubmission(templateId, signatories);
 
   return digitalDocument;
-}
-
-/**
- * Parse the template with the metadata
- * @param template - The template to parse
- * @param signatories - The signatories to use
- * @param metadata - The metadata to use
- * @returns The parsed template
- */
-export function parseTemplate(
-  template: Template,
-  signatories: readonly Signatory[],
-  metadata?: string | null
-): string {
-  return renderToString(template({ metadata, signatories }));
 }
 
 /**
@@ -97,7 +80,7 @@ async function createTemplate(
   signatories: readonly Signatory[],
   metadata?: string | null
 ): Promise<number> {
-  const html = parseTemplate(template, signatories, metadata);
+  const html = template(signatories, metadata);
 
   const response = await fetch(DOCUSEAL_ENDPOINT.TEMPLATES_HTML, {
     body: JSON.stringify({ folder_name: DOCUSEAL_FOLDER_NAME, html, name }),
@@ -115,10 +98,10 @@ async function createTemplate(
   return id;
 }
 
-export type Template = FC<{
-  metadata?: string | null | undefined;
-  signatories: readonly Signatory[];
-}>;
+export type Template = (
+  signatories: readonly Signatory[],
+  metadata?: string | null
+) => string;
 
 const SubmissionValidationSchema = zod
   .array(
