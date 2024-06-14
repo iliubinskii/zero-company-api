@@ -109,14 +109,15 @@ export function createDocumentsService(): DocumentsService {
       if (document) {
         const digitalDocument = await getDigitalDocument(document.doc);
 
-        await document
-          .updateOne(
-            { ...update, doc: digitalDocument },
-            { new: true, runValidators: true }
-          )
-          .populate("company");
+        const updatedDocument = await DocumentModel.findByIdAndUpdate(
+          id,
+          { ...update, doc: digitalDocument },
+          { new: true, runValidators: true }
+        ).populate("company");
 
-        return dangerouslyAssumePopulatedDocument(document);
+        return updatedDocument
+          ? dangerouslyAssumePopulatedDocument(updatedDocument)
+          : null;
       }
 
       return null;
