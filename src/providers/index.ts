@@ -1,6 +1,6 @@
 export { initAuth0Passport } from "./auth0";
 export { uploadImage } from "./cloudinary";
-export { createDigitalDocument, parseTemplate } from "./docuseal";
+export { createDigitalDocument } from "./docuseal";
 export type { Template } from "./docuseal";
 export {
   getMongodbConnection,

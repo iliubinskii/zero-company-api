@@ -1,8 +1,8 @@
-import { createDigitalDocument, parseTemplate } from "../providers";
 import { delay, wrapAsyncHandler } from "../utils";
 import { FoundingAgreement } from "../templates";
 import { Router } from "express";
 import { TEST_DELAY_MS } from "../consts";
+import { createDigitalDocument } from "../providers";
 import { faker } from "@faker-js/faker";
 import { lang } from "../langs";
 
@@ -11,7 +11,7 @@ export const testRouter = Router()
     "/founding-agreement",
     Router()
       .get("/parse-template", (_req, res) => {
-        const doc = parseTemplate(FoundingAgreement, [
+        const doc = FoundingAgreement([
           { email: faker.internet.email(), role: `${lang.Founder} 1` },
           { email: faker.internet.email(), role: `${lang.Founder} 2` },
           { email: faker.internet.email(), role: `${lang.Founder} 3` }
