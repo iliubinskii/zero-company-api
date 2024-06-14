@@ -77,7 +77,11 @@ export async function createApp(): Promise<express.Express> {
 
   const documentControllers = createDocumentControllers(documentsService);
 
-  const userControllers = createUserControllers(usersService, companiesService);
+  const userControllers = createUserControllers(
+    usersService,
+    companiesService,
+    documentsService
+  );
 
   const app = express();
 

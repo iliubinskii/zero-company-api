@@ -217,14 +217,14 @@
       }
     },
     "/companies/{id}/found": {
-      "put": {
+      "post": {
         "summary": "Create founding agreement for a company",
         "tags": [
           "companies"
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Company"
+            "$ref": "#/components/responses/Document"
           },
           "404": {
             "$ref": "#/components/responses/NotFound"
@@ -308,7 +308,7 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/DocumentList"
+            "$ref": "#/components/responses/PopulatedDocumentList"
           },
           "400": {
             "$ref": "#/components/responses/InvalidQuery"
@@ -441,11 +441,6 @@
       }
     },
     "/me/companies": {
-      "parameters": [
-        {
-          "$ref": "#/components/parameters/Id"
-        }
-      ],
       "get": {
         "summary": "Get all companies for a user",
         "tags": [
@@ -461,12 +456,23 @@
         }
       }
     },
-    "/me/favorite-companies": {
-      "parameters": [
-        {
-          "$ref": "#/components/parameters/Id"
+    "/me/documents": {
+      "get": {
+        "summary": "Get all documents for a user",
+        "tags": [
+          "users"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/PopulatedDocumentList"
+          },
+          "400": {
+            "$ref": "#/components/responses/InvalidQuery"
+          }
         }
-      ],
+      }
+    },
+    "/me/favorite-companies": {
       "get": {
         "summary": "Get all favorite companies for a user",
         "tags": [
@@ -578,6 +584,22 @@
         "responses": {
           "200": {
             "$ref": "#/components/responses/CompanyList"
+          },
+          "400": {
+            "$ref": "#/components/responses/InvalidQuery"
+          }
+        }
+      }
+    },
+    "/users/{id}/documents": {
+      "get": {
+        "summary": "Get all documents for a user",
+        "tags": [
+          "users"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/PopulatedDocumentList"
           },
           "400": {
             "$ref": "#/components/responses/InvalidQuery"
@@ -852,6 +874,26 @@
           }
         }
       },
+      "PopulatedDocument": {
+        "description": "Document",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/PopulatedDocument"
+            }
+          }
+        }
+      },
+      "PopulatedDocumentList": {
+        "description": "Document list",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/PopulatedDocumentList"
+            }
+          }
+        }
+      },
       "Unauthorized": {
         "description": "Bad request",
         "content": {
@@ -1115,16 +1157,12 @@
       "DigitalDocument": {
         "type": "object",
         "required": [
-          "assetId",
-          "secureUrl",
+          "embedSrc",
           "signatures",
-          "url"
+          "submissionId"
         ],
         "properties": {
-          "assetId": {
-            "type": "string"
-          },
-          "secureUrl": {
+          "embedSrc": {
             "type": "string"
           },
           "signatures": {
@@ -1133,8 +1171,8 @@
               "type": "string"
             }
           },
-          "url": {
-            "type": "string"
+          "submissionId": {
+            "type": "number"
           }
         }
       },
@@ -1144,6 +1182,7 @@
           "_id",
           "company",
           "createdAt",
+          "doc",
           "signatories",
           "type"
         ],
@@ -1216,10 +1255,7 @@
           "email": {
             "type": "string"
           },
-          "firstName": {
-            "type": "string"
-          },
-          "lastName": {
+          "name": {
             "type": "string"
           },
           "share": {
@@ -1391,19 +1427,90 @@
           }
         }
       },
+      "PopulatedDocument": {
+        "type": "object",
+        "required": [
+          "_id",
+          "company",
+          "createdAt",
+          "doc",
+          "signatories",
+          "type"
+        ],
+        "properties": {
+          "_id": {
+            "type": "string"
+          },
+          "company": {
+            "$ref": "#/components/schemas/Company"
+          },
+          "createdAt": {
+            "type": "string"
+          },
+          "doc": {
+            "$ref": "#/components/schemas/DigitalDocument"
+          },
+          "metadata": {
+            "type": "string"
+          },
+          "signatories": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Signatory"
+            }
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "FoundingAgreement"
+            ]
+          }
+        }
+      },
+      "PopulatedDocumentList": {
+        "type": "object",
+        "required": [
+          "count",
+          "docs",
+          "total"
+        ],
+        "properties": {
+          "count": {
+            "type": "integer"
+          },
+          "docs": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PopulatedDocument"
+            }
+          },
+          "nextCursor": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "minItems": 2,
+            "maxItems": 2
+          },
+          "total": {
+            "type": "integer"
+          }
+        }
+      },
       "Signatory": {
         "type": "object",
         "required": [
-          "email"
+          "email",
+          "role"
         ],
         "properties": {
           "email": {
             "type": "string"
           },
-          "firstName": {
+          "name": {
             "type": "string"
           },
-          "lastName": {
+          "role": {
             "type": "string"
           }
         }

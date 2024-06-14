@@ -1,12 +1,15 @@
 import type {
   CompaniesService,
+  DocumentsService,
   GetCompaniesParentRef,
+  GetDocumentsParentRef,
   UserControllers,
   UsersService
 } from "../../types";
 import {
   ErrorCode,
   GetCompaniesOptionsValidationSchema,
+  GetDocumentsOptionsValidationSchema,
   GetUsersOptionsValidationSchema,
   UserCreateValidationSchema,
   UserUpdateValidationSchema
@@ -25,11 +28,13 @@ import { StatusCodes } from "http-status-codes";
  * Creates user controllers.
  * @param service - The users service.
  * @param companiesService - The companies service.
+ * @param documentsService - The documents service.
  * @returns The user controllers.
  */
 export function createUserControllers(
   service: UsersService,
-  companiesService: CompaniesService
+  companiesService: CompaniesService,
+  documentsService: DocumentsService
 ): UserControllers {
   return {
     addUser: wrapAsyncHandler(async (req, res) => {
@@ -80,17 +85,17 @@ export function createUserControllers(
       if (options.success) {
         const parentRef: GetCompaniesParentRef = (() => {
           switch (ref.type) {
-            case "id": {
-              return {
-                founderId: ref.id,
-                type: "founderId"
-              };
-            }
-
             case "email": {
               return {
                 founderEmail: ref.email,
                 type: "founderEmail"
+              };
+            }
+
+            case "id": {
+              return {
+                founderId: ref.id,
+                type: "founderId"
               };
             }
           }
@@ -113,6 +118,47 @@ export function createUserControllers(
           buildErrorResponse(ErrorCode.InvalidQuery, options.error)
         );
     }),
+    getDocumentsByUser: wrapAsyncHandler(async (req, res) => {
+      const ref = assertDefined(req.userRef);
+
+      const options = GetDocumentsOptionsValidationSchema.safeParse(req.query);
+
+      if (options.success) {
+        const parentRef: GetDocumentsParentRef = (() => {
+          switch (ref.type) {
+            case "email": {
+              return {
+                signatoryEmail: ref.email,
+                type: "signatoryEmail"
+              };
+            }
+
+            case "id": {
+              return {
+                signatoryId: ref.id,
+                type: "signatoryId"
+              };
+            }
+          }
+        })();
+
+        const documents = await documentsService.getDocuments(
+          options.data,
+          parentRef
+        );
+
+        sendResponse<Routes["/users/{id}/documents"]["get"]>(
+          res,
+          StatusCodes.OK,
+          assertValidForJsonStringify(documents)
+        );
+      } else
+        sendResponse<Routes["/users/{id}/documents"]["get"]>(
+          res,
+          StatusCodes.BAD_REQUEST,
+          buildErrorResponse(ErrorCode.InvalidQuery, options.error)
+        );
+    }),
     getFavoriteCompaniesByUser: wrapAsyncHandler(async (req, res) => {
       const ref = assertDefined(req.userRef);
 
@@ -121,17 +167,17 @@ export function createUserControllers(
       if (options.success) {
         const parentRef: GetCompaniesParentRef = (() => {
           switch (ref.type) {
-            case "id": {
-              return {
-                bookmarkUserId: ref.id,
-                type: "bookmarkUserId"
-              };
-            }
-
             case "email": {
               return {
                 bookmarkUserEmail: ref.email,
                 type: "bookmarkUserEmail"
+              };
+            }
+
+            case "id": {
+              return {
+                bookmarkUserId: ref.id,
+                type: "bookmarkUserId"
               };
             }
           }

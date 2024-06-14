@@ -20,6 +20,8 @@ export interface GetCompaniesOptions {
 export interface GetDocumentsOptions {
   readonly limit?: number | undefined;
   readonly offset?: number | undefined;
+  readonly sortBy?: "createdAt" | undefined;
+  readonly sortOrder?: "asc" | "desc" | undefined;
 }
 
 export interface GetUsersOptions {

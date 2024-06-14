@@ -2,9 +2,11 @@ import type {
   Company,
   Document,
   GetCompaniesOptions,
+  Signatory,
   User
 } from "../../schema";
 import { DocType, MAX_LIMIT } from "../../schema";
+import { createDigitalDocument, getMongodbConnection } from "../../providers";
 import {
   getCompanyModel,
   getDocumentModel,
@@ -12,9 +14,10 @@ import {
 } from "../../schema-mongodb";
 import type { CompaniesService } from "../../types";
 import type { FilterQuery } from "mongoose";
+import { FoundingAgreement } from "../../templates";
 import { StatusCodes } from "http-status-codes";
 import type { Writable } from "ts-toolbelt/out/Object/Writable";
-import { getMongodbConnection } from "../../providers";
+import { lang } from "../../langs";
 import type mongoose from "mongoose";
 
 /**
@@ -28,9 +31,9 @@ export function createCompaniesService(): CompaniesService {
 
       const model = new CompanyModel(company);
 
-      const addedItem = await model.save();
+      const addedCompany = await model.save();
 
-      return addedItem;
+      return addedCompany;
     },
     deleteCompany: async id => {
       const CompanyModel = await getCompanyModel();
@@ -67,27 +70,50 @@ export function createCompaniesService(): CompaniesService {
           return StatusCodes.CONFLICT;
         }
 
-        const doc: Document = {
+        const signatories = company.founders.map(
+          ({ email, name }, index): Signatory => {
+            return {
+              email,
+              name,
+              role: `${lang.Founder} ${index + 1}`
+            };
+          }
+        );
+
+        const digitalDocument = await createDigitalDocument(
+          lang.FoundingAgreement,
+          FoundingAgreement,
+          signatories
+        );
+
+        const document: Document = {
           company: company._id.toString(),
           createdAt: new Date(),
+          doc: digitalDocument,
           signatories: company.founders.map(
-            ({ email, firstName, lastName }) => {
-              return { email, firstName, lastName };
+            ({ email, name }, index): Signatory => {
+              return {
+                email,
+                name,
+                role: `${lang.Founder} ${index + 1}`
+              };
             }
           ),
           type: DocType.FoundingAgreement
         };
 
-        const document = new DocumentModel(doc);
+        const model = new DocumentModel(document);
 
-        company.foundingAgreement = document._id;
+        const addedDocument = await model.save({ session });
 
-        const updatedCompany = await company.save({ session });
+        company.foundingAgreement = addedDocument._id;
+
+        await company.save({ session });
 
         await session.commitTransaction();
         await session.endSession();
 
-        return updatedCompany;
+        return addedDocument;
       } catch (err) {
         await session.abortTransaction();
         await session.endSession();
@@ -120,12 +146,7 @@ export function createCompaniesService(): CompaniesService {
             });
 
             if (user) filter["_id"] = { $in: user.favoriteCompanies };
-            else
-              return {
-                count: 0,
-                docs: [],
-                total: 0
-              };
+            else return { count: 0, docs: [], total: 0 };
 
             break;
           }
@@ -136,12 +157,7 @@ export function createCompaniesService(): CompaniesService {
             const user = await UserModel.findById(parentRef.bookmarkUserId);
 
             if (user) filter["_id"] = { $in: user.favoriteCompanies };
-            else
-              return {
-                count: 0,
-                docs: [],
-                total: 0
-              };
+            else return { count: 0, docs: [], total: 0 };
 
             break;
           }
@@ -164,12 +180,7 @@ export function createCompaniesService(): CompaniesService {
             const user = await UserModel.findById(parentRef.founderId);
 
             if (user) filter["founders.email"] = user.email;
-            else
-              return {
-                count: 0,
-                docs: [],
-                total: 0
-              };
+            else return { count: 0, docs: [], total: 0 };
           }
         }
 

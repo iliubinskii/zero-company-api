@@ -30,9 +30,7 @@
   "scripts": {
     "build": "tsc",
     "build-dummy-data": "tsx utils/dummy-data.ts && npm run format",
-    "contributors": "npm run contributors-json && npm run contributors-md",
-    "contributors-json": "python -m gitfame --bytype --excl \"\\.(ico|json|svg)$\" --format json ./src >../zero-company-app/src/contributors/api.json",
-    "contributors-md": "python -m gitfame --bytype --excl \"\\.(ico|json|svg)$\" ./src >./CONTRIBUTORS.md",
+    "contributors": "python -m gitfame --bytype --excl \"\\.(ico|json|svg)$\" ./src >./CONTRIBUTORS.md",
     "deploy-preview": "vercel",
     "deploy-prod": "vercel --prod",
     "dev": "nodemon",
@@ -61,6 +59,7 @@
     "*.{js,jsx,ts,tsx}": "eslint --max-warnings=0"
   },
   "dependencies": {
+    "@faker-js/faker": "^8.4.1",
     "@types/cookie-parser": "^1.4.7",
     "@types/cors": "^2.8.17",
     "@types/express": "^4.17.21",
@@ -71,6 +70,8 @@
     "@types/multer": "^1.4.11",
     "@types/passport": "^1.0.16",
     "@types/passport-auth0": "^1.0.9",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
     "@types/uuid": "^9.0.8",
     "cloudinary": "^2.2.0",
     "connect-mongo": "^5.1.0",
@@ -92,6 +93,8 @@
     "multer": "^1.4.5-lts.1",
     "passport": "^0.7.0",
     "passport-auth0": "^1.4.4",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "redis": "^4.6.14",
     "ts-toolbelt": "^9.6.0",
     "uuid": "^9.0.1",
@@ -99,7 +102,6 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
-    "@faker-js/faker": "^8.4.1",
     "@next/eslint-plugin-next": "^14.2.3",
     "@types/eslint": "^8.56.10",
     "@types/jest": "^29.5.12",
@@ -149,8 +151,7 @@
     "openapi-typescript": "^6.7.6",
     "prettier": "^3.2.5",
     "prettier-plugin-sort-json": "^4.0.0",
-    "react": "^18.3.1",
-    "stylelint": "^16.6.1",
+    "stylelint": "^16.5.0",
     "stylelint-config-property-sort-order-smacss": "^10.0.0",
     "stylelint-config-standard": "^36.0.0",
     "stylelint-config-standard-scss": "^13.1.0",

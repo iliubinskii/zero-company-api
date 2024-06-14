@@ -16,7 +16,7 @@ const pinned = preprocessBoolean(zod.boolean());
 
 const tagline = zod.string().min(1);
 
-export const ExistingCategoryValidationSchema = zod.strictObject({
+export const ExistingCategoryValidationSchema = zod.object({
   _id,
   description,
   name,
@@ -24,14 +24,14 @@ export const ExistingCategoryValidationSchema = zod.strictObject({
   tagline
 });
 
-export const CategoryCreateValidationSchema = zod.strictObject({
+export const CategoryCreateValidationSchema = zod.object({
   description,
   name,
   pinned,
   tagline
 });
 
-export const CategoryUpdateValidationSchema = zod.strictObject({
+export const CategoryUpdateValidationSchema = zod.object({
   description: description.optional(),
   name: name.optional(),
   pinned: pinned.optional(),

@@ -1,6 +1,22 @@
 /// <reference types="jest-extended" />
 
+import type { CSSProperties, DetailedHTMLProps, HTMLAttributes } from "react";
 import type { Jwt } from "./schema";
+
+export type IntrinsicElement = DetailedHTMLProps<
+  HTMLAttributes<HTMLElement>,
+  HTMLElement
+> & { name: string; role: string; style?: CSSProperties };
+
+declare global {
+  namespace JSX {
+    interface IntrinsicElements {
+      "date-field": IntrinsicElement;
+      "signature-field": IntrinsicElement;
+      "text-field": IntrinsicElement;
+    }
+  }
+}
 
 declare module "express-serve-static-core" {
   interface Request {

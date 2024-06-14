@@ -23,9 +23,7 @@ export function createCompaniesRouter(
 ): Router {
   const { parseFormData, webAccessibleStorage } = companiesMiddleware;
 
-  const router = Router();
-
-  router
+  return Router()
     .get("/", controllers.getCompanies)
     .post(
       "/",
@@ -48,7 +46,7 @@ export function createCompaniesRouter(
       controllers.updateCompany
     )
     .delete("/:id", requireJwtAdmin, requireIdParam, controllers.deleteCompany)
-    .put(
+    .post(
       "/:id/found",
       requireJwt,
       requireIdParam,
@@ -60,6 +58,4 @@ export function createCompaniesRouter(
       requireIdParam,
       createCompanyImagesRouter(imageControllers)
     );
-
-  return router;
 }

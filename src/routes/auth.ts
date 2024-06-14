@@ -29,9 +29,7 @@ import zod from "zod";
  * @returns Router
  */
 export function createAuthRouter(usersService: UsersService): Router {
-  const router = Router();
-
-  router
+  return Router()
     .get(
       "/callback",
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument -- Postponed
@@ -184,14 +182,11 @@ export function createAuthRouter(usersService: UsersService): Router {
         } else res.json(null);
       })
     );
-
-  return router;
 }
 
-// Do not use strictObject: auth0 may return additional fields
 const Auth0UserValidationSchema = zod.object({
   emails: zod
-    .array(zod.strictObject({ value: preprocessEmail(zod.string().email()) }))
+    .array(zod.object({ value: preprocessEmail(zod.string().email()) }))
     .nonempty()
     .max(1)
 });

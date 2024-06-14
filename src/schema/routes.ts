@@ -159,9 +159,9 @@ export interface paths {
   };
   "/companies/{id}/found": {
     /** Create founding agreement for a company */
-    put: {
+    post: {
       responses: {
-        200: components["responses"]["Company"];
+        200: components["responses"]["Document"];
         404: components["responses"]["NotFound"];
         409: components["responses"]["Conflict"];
       };
@@ -226,7 +226,7 @@ export interface paths {
     /** Get all documents */
     get: {
       responses: {
-        200: components["responses"]["DocumentList"];
+        200: components["responses"]["PopulatedDocumentList"];
         400: components["responses"]["InvalidQuery"];
       };
     };
@@ -315,38 +315,27 @@ export interface paths {
   "/me/companies": {
     /** Get all companies for a user */
     get: {
-      parameters: {
-        path: {
-          id: components["parameters"]["Id"];
-        };
-      };
       responses: {
         200: components["responses"]["CompanyList"];
         400: components["responses"]["InvalidQuery"];
       };
     };
-    parameters: {
-      path: {
-        id: components["parameters"]["Id"];
+  };
+  "/me/documents": {
+    /** Get all documents for a user */
+    get: {
+      responses: {
+        200: components["responses"]["PopulatedDocumentList"];
+        400: components["responses"]["InvalidQuery"];
       };
     };
   };
   "/me/favorite-companies": {
     /** Get all favorite companies for a user */
     get: {
-      parameters: {
-        path: {
-          id: components["parameters"]["Id"];
-        };
-      };
       responses: {
         200: components["responses"]["CompanyList"];
         400: components["responses"]["InvalidQuery"];
-      };
-    };
-    parameters: {
-      path: {
-        id: components["parameters"]["Id"];
       };
     };
   };
@@ -426,6 +415,15 @@ export interface paths {
     parameters: {
       path: {
         id: components["parameters"]["Id"];
+      };
+    };
+  };
+  "/users/{id}/documents": {
+    /** Get all documents for a user */
+    get: {
+      responses: {
+        200: components["responses"]["PopulatedDocumentList"];
+        400: components["responses"]["InvalidQuery"];
       };
     };
   };
@@ -550,16 +548,15 @@ export interface components {
       affectedRows: number;
     };
     DigitalDocument: {
-      assetId: string;
-      secureUrl: string;
+      embedSrc: string;
       signatures: string[];
-      url: string;
+      submissionId: number;
     };
     Document: {
       _id: string;
       company: string;
       createdAt: string;
-      doc?: components["schemas"]["DigitalDocument"];
+      doc: components["schemas"]["DigitalDocument"];
       metadata?: string;
       signatories: components["schemas"]["Signatory"][];
       /** @enum {string} */
@@ -573,8 +570,7 @@ export interface components {
     };
     Founder: {
       email: string;
-      firstName?: string;
-      lastName?: string;
+      name?: string;
       share?: number;
     };
     Home: {
@@ -620,10 +616,26 @@ export interface components {
       error: "NotFound";
       errorMessage: string;
     };
+    PopulatedDocument: {
+      _id: string;
+      company: components["schemas"]["Company"];
+      createdAt: string;
+      doc: components["schemas"]["DigitalDocument"];
+      metadata?: string;
+      signatories: components["schemas"]["Signatory"][];
+      /** @enum {string} */
+      type: "FoundingAgreement";
+    };
+    PopulatedDocumentList: {
+      count: number;
+      docs: components["schemas"]["PopulatedDocument"][];
+      nextCursor?: string[];
+      total: number;
+    };
     Signatory: {
       email: string;
-      firstName?: string;
-      lastName?: string;
+      name?: string;
+      role: string;
     };
     Unauthorized: {
       /** @enum {string} */
@@ -747,6 +759,18 @@ export interface components {
     NotFound: {
       content: {
         "application/json": components["schemas"]["NotFound"];
+      };
+    };
+    /** @description Document */
+    PopulatedDocument: {
+      content: {
+        "application/json": components["schemas"]["PopulatedDocument"];
+      };
+    };
+    /** @description Document list */
+    PopulatedDocumentList: {
+      content: {
+        "application/json": components["schemas"]["PopulatedDocumentList"];
       };
     };
     /** @description Bad request */

@@ -5,8 +5,33 @@ import type {
   GetDocumentsOptions,
   MultipleDocsResponse
 } from "../schema";
+import type { RawExistingCompany } from "./companies";
 import type { RequestHandler } from "express";
 import type mongoose from "mongoose";
+
+/**
+ * Casts a raw existing document to a raw populated document.
+ * @param value - The raw existing document to cast.
+ * @returns The raw populated document.
+ */
+export function dangerouslyAssumePopulatedDocument(
+  value: RawExistingDocument
+): RawPopulatedDocument {
+  // eslint-disable-next-line no-type-assertion/no-type-assertion -- Ok
+  return value as unknown as RawPopulatedDocument;
+}
+
+/**
+ * Casts raw existing documents to raw populated documents.
+ * @param value - The raw existing documents to cast.
+ * @returns The raw populated documents.
+ */
+export function dangerouslyAssumePopulatedDocuments(
+  value: RawExistingDocuments
+): RawPopulatedDocuments {
+  // eslint-disable-next-line no-type-assertion/no-type-assertion -- Ok
+  return value as unknown as RawPopulatedDocuments;
+}
 
 export interface DocumentControllers {
   readonly addDocument: RequestHandler;
@@ -43,7 +68,7 @@ export interface DocumentsService {
   readonly getDocuments: (
     options?: GetDocumentsOptions,
     parentRef?: GetDocumentsParentRef
-  ) => Promise<RawExistingDocuments>;
+  ) => Promise<RawPopulatedDocuments>;
   /**
    * Updates a document in the database.
    * @param id - The ID of the document to update.
@@ -62,16 +87,26 @@ export type GetDocumentsParentRef =
       readonly type: "company";
     }
   | {
-      readonly founderEmail: string;
-      readonly type: "founderEmail";
+      readonly signatoryEmail: string;
+      readonly type: "signatoryEmail";
     }
   | {
-      readonly founderId: string;
-      readonly type: "founderId";
+      readonly signatoryId: string;
+      readonly type: "signatoryId";
     };
 
-export interface RawExistingDocument extends Omit<ExistingDocument, "_id"> {
+export interface RawExistingDocument
+  extends Omit<ExistingDocument, "_id" | "company"> {
   readonly _id: mongoose.Types.ObjectId;
+  readonly company: mongoose.Types.ObjectId;
 }
 
 export type RawExistingDocuments = MultipleDocsResponse<RawExistingDocument>;
+
+export interface RawPopulatedDocument
+  extends Omit<ExistingDocument, "_id" | "company"> {
+  readonly _id: mongoose.Types.ObjectId;
+  readonly company: RawExistingCompany;
+}
+
+export type RawPopulatedDocuments = MultipleDocsResponse<RawPopulatedDocument>;

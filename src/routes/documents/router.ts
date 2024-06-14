@@ -10,9 +10,7 @@ import { Router } from "express";
 export function createDocumentsRouter(
   controllers: DocumentControllers
 ): Router {
-  const router = Router();
-
-  router
+  return Router()
     .get("/", requireJwtAdmin, controllers.getDocuments)
     .post("/", requireJwtAdmin, controllers.addDocument)
     .get("/:id", requireJwtAdmin, requireIdParam, controllers.getDocument)
@@ -23,6 +21,4 @@ export function createDocumentsRouter(
       requireIdParam,
       controllers.deleteDocument
     );
-
-  return router;
 }

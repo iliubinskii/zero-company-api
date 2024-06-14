@@ -6,11 +6,12 @@ import {
 } from "./companies";
 import {
   CompanyStatus,
+  FounderValidationSchema,
   IdValidationSchema,
   ImageValidationSchema,
-  founder,
   preprocessBoolean,
-  preprocessNumber
+  preprocessDate,
+  preprocessInt
 } from "./common";
 import zod from "zod";
 
@@ -22,15 +23,15 @@ const categories = zod.array(IdValidationSchema).nonempty().max(MAX_CATEGORIES);
 
 const country = zod.string().length(COUNTRY_CODE_SIZE);
 
-const createdAt = zod.date();
+const createdAt = preprocessDate(zod.date());
 
 const description = zod.string().min(1).nullable().optional();
 
-const foundedAt = zod.date().nullable().optional();
+const foundedAt = preprocessDate(zod.date()).nullable().optional();
 
 const foundingAgreement = zod.string().min(1).nullable().optional();
 
-const founders = zod.array(founder);
+const founders = zod.array(FounderValidationSchema);
 
 const images = zod.array(ImageValidationSchema);
 
@@ -46,13 +47,13 @@ const removeImages = zod.array(zod.string().min(1));
 
 const status = zod.enum([CompanyStatus.draft, CompanyStatus.founded]);
 
-const targetValue = preprocessNumber(zod.number().int().positive())
+const targetValue = preprocessInt(zod.number().int().positive())
   .nullable()
   .optional();
 
 const website = zod.string().url().nullable().optional();
 
-export const ExistingCompanyValidationSchema = zod.strictObject({
+export const ExistingCompanyValidationSchema = zod.object({
   _id,
   categories,
   country,
@@ -71,12 +72,12 @@ export const ExistingCompanyValidationSchema = zod.strictObject({
   website
 });
 
-export const CompanyCreateValidationSchema = zod.strictObject({
+export const CompanyCreateValidationSchema = zod.object({
   categories,
   country
 });
 
-export const CompanyUpdateValidationSchema = zod.strictObject({
+export const CompanyUpdateValidationSchema = zod.object({
   addImages: addImages.optional(),
   categories: categories.optional(),
   description: description.optional(),

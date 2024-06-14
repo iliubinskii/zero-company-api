@@ -12,6 +12,7 @@ export interface UserControllers {
   readonly addUser: RequestHandler;
   readonly deleteUser: RequestHandler;
   readonly getCompaniesByUser: RequestHandler;
+  readonly getDocumentsByUser: RequestHandler;
   readonly getFavoriteCompaniesByUser: RequestHandler;
   readonly getUser: RequestHandler;
   readonly getUsers: RequestHandler;

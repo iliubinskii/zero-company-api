@@ -20,6 +20,8 @@ export * from "./documents";
 export * from "./documents.validation";
 export * from "./get-all-options";
 export * from "./get-all-options.validation";
+export * from "./populated";
+export * from "./populated.validation";
 export { default as schema } from "./schema.json";
 export * from "./users";
 export * from "./users.validation";

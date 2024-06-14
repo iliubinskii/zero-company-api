@@ -67,19 +67,19 @@ export function createCompanyControllers(
 
       if (company)
         if (company === StatusCodes.CONFLICT)
-          sendResponse<Routes["/companies/{id}/found"]["put"]>(
+          sendResponse<Routes["/companies/{id}/found"]["post"]>(
             res,
             StatusCodes.CONFLICT,
             buildErrorResponse(ErrorCode.AlreadyExists)
           );
         else
-          sendResponse<Routes["/companies/{id}/found"]["put"]>(
+          sendResponse<Routes["/companies/{id}/found"]["post"]>(
             res,
             StatusCodes.OK,
             assertValidForJsonStringify(company)
           );
       else
-        sendResponse<Routes["/companies/{id}/found"]["put"]>(
+        sendResponse<Routes["/companies/{id}/found"]["post"]>(
           res,
           StatusCodes.NOT_FOUND,
           buildErrorResponse(ErrorCode.NotFound)
