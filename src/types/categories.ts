@@ -41,14 +41,14 @@ export interface CategoriesService {
   /**
    * Gets a category from the database.
    * @param id - The ID of the category to get.
-   * @returns A promise that resolves with the category, or `undefined` if the category was not found.
+   * @returns A promise that resolves with the category, or `null` if the category was not found.
    */
   readonly getCategory: (id: string) => Promise<RawExistingCategory | null>;
   /**
    * Updates a category in the database.
    * @param id - The ID of the category to update.
    * @param category - The category data to update.
-   * @returns A promise that resolves with the updated category, or `undefined` if the category was not found.
+   * @returns A promise that resolves with the updated category, or `null` if the category was not found.
    */
   readonly updateCategory: (
     id: string,

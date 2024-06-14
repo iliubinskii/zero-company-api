@@ -57,7 +57,11 @@ export function createUsersService(): UsersService {
           }
 
           case "email": {
-            return UserModel.findOne({ email: ref.email });
+            return UserModel.findOneAndUpdate(
+              { email: ref.email },
+              {},
+              { new: true, upsert: true }
+            );
           }
         }
       })();

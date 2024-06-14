@@ -57,7 +57,7 @@ export interface DocumentsService {
   /**
    * Gets a document from the database.
    * @param id - The ID of the document to get.
-   * @returns A promise that resolves with the document, or `undefined` if the document was not found.
+   * @returns A promise that resolves with the document, or `null` if the document was not found.
    */
   readonly getDocument: (id: string) => Promise<RawExistingDocument | null>;
   /**
@@ -73,7 +73,7 @@ export interface DocumentsService {
    * Updates a document in the database.
    * @param id - The ID of the document to update.
    * @param document - The document data to update.
-   * @returns A promise that resolves with the updated document, or `undefined` if the document was not found.
+   * @returns A promise that resolves with the updated document, or `null` if the document was not found.
    */
   readonly updateDocument: (
     id: string,

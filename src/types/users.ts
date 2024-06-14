@@ -50,7 +50,7 @@ export interface UsersService {
   /**
    * Gets a user from the database.
    * @param ref - The reference of the user to get.
-   * @returns A promise that resolves with the user, or `undefined` if the user was not found.
+   * @returns A promise that resolves with the user, or `null` if the user was not found.
    */
   readonly getUser: (ref: UserRef) => Promise<RawExistingUser | null>;
   /**
@@ -63,7 +63,7 @@ export interface UsersService {
    * Updates a user in the database.
    * @param ref - The reference of the user to update.
    * @param user - The user data to update.
-   * @returns A promise that resolves with the updated user, or `undefined` if the user was not found.
+   * @returns A promise that resolves with the updated user, or `null` if the user was not found.
    */
   readonly updateUser: (
     ref: UserRef,

@@ -58,14 +58,14 @@ export interface CompaniesService {
   /**
    * Gets a company from the database.
    * @param id - The ID of the company to get.
-   * @returns A promise that resolves with the company, or `undefined` if the company was not found.
+   * @returns A promise that resolves with the company, or `null` if the company was not found.
    */
   readonly getCompany: (id: string) => Promise<RawExistingCompany | null>;
   /**
    * Updates a company in the database.
    * @param id - The ID of the company to update.
    * @param company - The company data to update.
-   * @returns A promise that resolves with the updated company, or `undefined` if the company was not found.
+   * @returns A promise that resolves with the updated company, or `null` if the company was not found.
    */
   readonly updateCompany: (
     id: string,

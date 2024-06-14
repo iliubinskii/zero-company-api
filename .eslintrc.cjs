@@ -141,6 +141,7 @@ const config = {
             "ucfirst",
             "unlink",
             "uploader",
+            "upsert",
             "uri",
             "urls",
             "utf8",
