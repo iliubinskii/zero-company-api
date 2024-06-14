@@ -179,6 +179,26 @@
         },
         "description": "Not found"
       },
+      "PopulatedDocument": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/PopulatedDocument"
+            }
+          }
+        },
+        "description": "Document"
+      },
+      "PopulatedDocumentList": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/PopulatedDocumentList"
+            }
+          }
+        },
+        "description": "Document list"
+      },
       "Unauthorized": {
         "content": {
           "application/json": {
@@ -624,6 +644,70 @@
         "required": ["error", "errorMessage"],
         "type": "object"
       },
+      "PopulatedDocument": {
+        "properties": {
+          "_id": {
+            "type": "string"
+          },
+          "company": {
+            "$ref": "#/components/schemas/Company"
+          },
+          "createdAt": {
+            "type": "string"
+          },
+          "doc": {
+            "$ref": "#/components/schemas/DigitalDocument"
+          },
+          "metadata": {
+            "type": "string"
+          },
+          "signatories": {
+            "items": {
+              "$ref": "#/components/schemas/Signatory"
+            },
+            "type": "array"
+          },
+          "type": {
+            "enum": ["FoundingAgreement"],
+            "type": "string"
+          }
+        },
+        "required": [
+          "_id",
+          "company",
+          "createdAt",
+          "doc",
+          "signatories",
+          "type"
+        ],
+        "type": "object"
+      },
+      "PopulatedDocumentList": {
+        "properties": {
+          "count": {
+            "type": "integer"
+          },
+          "docs": {
+            "items": {
+              "$ref": "#/components/schemas/PopulatedDocument"
+            },
+            "type": "array"
+          },
+          "nextCursor": {
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 2,
+            "minItems": 2,
+            "type": "array"
+          },
+          "total": {
+            "type": "integer"
+          }
+        },
+        "required": ["count", "docs", "total"],
+        "type": "object"
+      },
       "Signatory": {
         "properties": {
           "email": {
@@ -1049,7 +1133,7 @@
       "get": {
         "responses": {
           "200": {
-            "$ref": "#/components/responses/DocumentList"
+            "$ref": "#/components/responses/PopulatedDocumentList"
           },
           "400": {
             "$ref": "#/components/responses/InvalidQuery"
@@ -1185,7 +1269,7 @@
       "get": {
         "responses": {
           "200": {
-            "$ref": "#/components/responses/DocumentList"
+            "$ref": "#/components/responses/PopulatedDocumentList"
           },
           "400": {
             "$ref": "#/components/responses/InvalidQuery"
@@ -1304,7 +1388,7 @@
       "get": {
         "responses": {
           "200": {
-            "$ref": "#/components/responses/DocumentList"
+            "$ref": "#/components/responses/PopulatedDocumentList"
           },
           "400": {
             "$ref": "#/components/responses/InvalidQuery"

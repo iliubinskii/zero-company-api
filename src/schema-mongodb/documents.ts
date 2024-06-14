@@ -6,8 +6,9 @@ import mongoose from "mongoose";
 export const DocumentSchema = new mongoose.Schema(
   {
     company: {
+      ref: "Company",
       required: true,
-      type: mongoose.Schema.Types.String
+      type: mongoose.Schema.Types.ObjectId
     },
     createdAt: {
       required: true,

@@ -226,7 +226,7 @@ export interface paths {
     /** Get all documents */
     get: {
       responses: {
-        200: components["responses"]["DocumentList"];
+        200: components["responses"]["PopulatedDocumentList"];
         400: components["responses"]["InvalidQuery"];
       };
     };
@@ -325,7 +325,7 @@ export interface paths {
     /** Get all documents for a user */
     get: {
       responses: {
-        200: components["responses"]["DocumentList"];
+        200: components["responses"]["PopulatedDocumentList"];
         400: components["responses"]["InvalidQuery"];
       };
     };
@@ -422,7 +422,7 @@ export interface paths {
     /** Get all documents for a user */
     get: {
       responses: {
-        200: components["responses"]["DocumentList"];
+        200: components["responses"]["PopulatedDocumentList"];
         400: components["responses"]["InvalidQuery"];
       };
     };
@@ -616,6 +616,22 @@ export interface components {
       error: "NotFound";
       errorMessage: string;
     };
+    PopulatedDocument: {
+      _id: string;
+      company: components["schemas"]["Company"];
+      createdAt: string;
+      doc: components["schemas"]["DigitalDocument"];
+      metadata?: string;
+      signatories: components["schemas"]["Signatory"][];
+      /** @enum {string} */
+      type: "FoundingAgreement";
+    };
+    PopulatedDocumentList: {
+      count: number;
+      docs: components["schemas"]["PopulatedDocument"][];
+      nextCursor?: string[];
+      total: number;
+    };
     Signatory: {
       email: string;
       name?: string;
@@ -743,6 +759,18 @@ export interface components {
     NotFound: {
       content: {
         "application/json": components["schemas"]["NotFound"];
+      };
+    };
+    /** @description Document */
+    PopulatedDocument: {
+      content: {
+        "application/json": components["schemas"]["PopulatedDocument"];
+      };
+    };
+    /** @description Document list */
+    PopulatedDocumentList: {
+      content: {
+        "application/json": components["schemas"]["PopulatedDocumentList"];
       };
     };
     /** @description Bad request */

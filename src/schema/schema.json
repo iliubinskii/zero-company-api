@@ -308,7 +308,7 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/DocumentList"
+            "$ref": "#/components/responses/PopulatedDocumentList"
           },
           "400": {
             "$ref": "#/components/responses/InvalidQuery"
@@ -464,7 +464,7 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/DocumentList"
+            "$ref": "#/components/responses/PopulatedDocumentList"
           },
           "400": {
             "$ref": "#/components/responses/InvalidQuery"
@@ -599,7 +599,7 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/DocumentList"
+            "$ref": "#/components/responses/PopulatedDocumentList"
           },
           "400": {
             "$ref": "#/components/responses/InvalidQuery"
@@ -870,6 +870,26 @@
           "application/json": {
             "schema": {
               "$ref": "#/components/schemas/NotFound"
+            }
+          }
+        }
+      },
+      "PopulatedDocument": {
+        "description": "Document",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/PopulatedDocument"
+            }
+          }
+        }
+      },
+      "PopulatedDocumentList": {
+        "description": "Document list",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/PopulatedDocumentList"
             }
           }
         }
@@ -1404,6 +1424,76 @@
           },
           "errorMessage": {
             "type": "string"
+          }
+        }
+      },
+      "PopulatedDocument": {
+        "type": "object",
+        "required": [
+          "_id",
+          "company",
+          "createdAt",
+          "doc",
+          "signatories",
+          "type"
+        ],
+        "properties": {
+          "_id": {
+            "type": "string"
+          },
+          "company": {
+            "$ref": "#/components/schemas/Company"
+          },
+          "createdAt": {
+            "type": "string"
+          },
+          "doc": {
+            "$ref": "#/components/schemas/DigitalDocument"
+          },
+          "metadata": {
+            "type": "string"
+          },
+          "signatories": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Signatory"
+            }
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "FoundingAgreement"
+            ]
+          }
+        }
+      },
+      "PopulatedDocumentList": {
+        "type": "object",
+        "required": [
+          "count",
+          "docs",
+          "total"
+        ],
+        "properties": {
+          "count": {
+            "type": "integer"
+          },
+          "docs": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PopulatedDocument"
+            }
+          },
+          "nextCursor": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "minItems": 2,
+            "maxItems": 2
+          },
+          "total": {
+            "type": "integer"
           }
         }
       },

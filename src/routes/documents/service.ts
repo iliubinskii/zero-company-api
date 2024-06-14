@@ -1,6 +1,9 @@
 import type { Document, User } from "../../schema";
+import {
+  type DocumentsService,
+  dangerouslyAssumePopulatedDocuments
+} from "../../types";
 import { getDocumentModel, getUserModel } from "../../schema-mongodb";
-import type { DocumentsService } from "../../types";
 import type { FilterQuery } from "mongoose";
 import { MAX_LIMIT } from "../../schema";
 import type { Writable } from "ts-toolbelt/out/Object/Writable";
@@ -84,15 +87,16 @@ export function createDocumentsService(): DocumentsService {
               [sortBy, mongodbSortOrder],
               ["_id", mongodbSortOrder]
             ])
-          ),
+          )
+          .populate("company"),
         DocumentModel.countDocuments(filter)
       ]);
 
-      return {
+      return dangerouslyAssumePopulatedDocuments({
         count: documents.length,
         docs: documents,
         total
-      };
+      });
     },
     updateDocument: async (id, document) => {
       const DocumentModel = await getDocumentModel();
