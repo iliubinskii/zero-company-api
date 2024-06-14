@@ -160,7 +160,7 @@ paths:
         - companies
       responses:
         "200":
-          $ref: "#/components/responses/Document"
+          $ref: "#/components/responses/PopulatedDocument"
         "404":
           $ref: "#/components/responses/NotFound"
         "409":
@@ -224,7 +224,7 @@ paths:
         - documents
       responses:
         "201":
-          $ref: "#/components/responses/Document"
+          $ref: "#/components/responses/PopulatedDocument"
         "400":
           $ref: "#/components/responses/InvalidData"
 
@@ -245,7 +245,7 @@ paths:
         - documents
       responses:
         "200":
-          $ref: "#/components/responses/Document"
+          $ref: "#/components/responses/PopulatedDocument"
         "404":
           $ref: "#/components/responses/NotFound"
     put:
@@ -254,7 +254,7 @@ paths:
         - documents
       responses:
         "200":
-          $ref: "#/components/responses/Document"
+          $ref: "#/components/responses/PopulatedDocument"
         "400":
           $ref: "#/components/responses/InvalidData"
         "404":

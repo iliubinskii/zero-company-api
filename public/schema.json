@@ -1068,7 +1068,7 @@
       "post": {
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Document"
+            "$ref": "#/components/responses/PopulatedDocument"
           },
           "404": {
             "$ref": "#/components/responses/NotFound"
@@ -1156,7 +1156,7 @@
       "post": {
         "responses": {
           "201": {
-            "$ref": "#/components/responses/Document"
+            "$ref": "#/components/responses/PopulatedDocument"
           },
           "400": {
             "$ref": "#/components/responses/InvalidData"
@@ -1179,7 +1179,7 @@
       "get": {
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Document"
+            "$ref": "#/components/responses/PopulatedDocument"
           },
           "404": {
             "$ref": "#/components/responses/NotFound"
@@ -1196,7 +1196,7 @@
       "put": {
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Document"
+            "$ref": "#/components/responses/PopulatedDocument"
           },
           "400": {
             "$ref": "#/components/responses/InvalidData"

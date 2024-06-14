@@ -161,7 +161,7 @@ export interface paths {
     /** Create founding agreement for a company */
     post: {
       responses: {
-        200: components["responses"]["Document"];
+        200: components["responses"]["PopulatedDocument"];
         404: components["responses"]["NotFound"];
         409: components["responses"]["Conflict"];
       };
@@ -233,7 +233,7 @@ export interface paths {
     /** Create a new document */
     post: {
       responses: {
-        201: components["responses"]["Document"];
+        201: components["responses"]["PopulatedDocument"];
         400: components["responses"]["InvalidData"];
       };
     };
@@ -247,7 +247,7 @@ export interface paths {
         };
       };
       responses: {
-        200: components["responses"]["Document"];
+        200: components["responses"]["PopulatedDocument"];
         404: components["responses"]["NotFound"];
       };
     };
@@ -259,7 +259,7 @@ export interface paths {
         };
       };
       responses: {
-        200: components["responses"]["Document"];
+        200: components["responses"]["PopulatedDocument"];
         400: components["responses"]["InvalidData"];
         404: components["responses"]["NotFound"];
       };

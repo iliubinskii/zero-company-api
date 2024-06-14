@@ -1,6 +1,7 @@
 import type { Document, User } from "../../schema";
 import {
   type DocumentsService,
+  dangerouslyAssumePopulatedDocument,
   dangerouslyAssumePopulatedDocuments
 } from "../../types";
 import { getDocumentModel, getUserModel } from "../../schema-mongodb";
@@ -16,28 +17,29 @@ import type mongoose from "mongoose";
  */
 export function createDocumentsService(): DocumentsService {
   return {
-    addDocument: async document => {
+    addDocument: async data => {
       const DocumentModel = await getDocumentModel();
 
-      const model = new DocumentModel(document);
+      const document = new DocumentModel(data);
 
-      const addedDocument = await model.save();
+      await document.save();
+      await document.populate("company");
 
-      return addedDocument;
+      return dangerouslyAssumePopulatedDocument(document);
     },
     deleteDocument: async id => {
       const DocumentModel = await getDocumentModel();
 
-      const deletedCategory = await DocumentModel.findByIdAndDelete(id);
+      const document = await DocumentModel.findByIdAndDelete(id);
 
-      return deletedCategory ? 1 : 0;
+      return document ? 1 : 0;
     },
     getDocument: async id => {
       const DocumentModel = await getDocumentModel();
 
-      const document = await DocumentModel.findById(id);
+      const document = await DocumentModel.findById(id).populate("company");
 
-      return document;
+      return document ? dangerouslyAssumePopulatedDocument(document) : null;
     },
     getDocuments: async (options = {}, parentRef) => {
       const {
@@ -107,10 +109,17 @@ export function createDocumentsService(): DocumentsService {
       if (document) {
         const digitalDocument = await getDigitalDocument(document.doc);
 
-        await document.updateOne({ ...update, doc: digitalDocument });
+        await document
+          .updateOne(
+            { ...update, doc: digitalDocument },
+            { new: true, runValidators: true }
+          )
+          .populate("company");
+
+        return dangerouslyAssumePopulatedDocument(document);
       }
 
-      return document;
+      return null;
     }
   };
 }

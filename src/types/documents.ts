@@ -47,7 +47,7 @@ export interface DocumentsService {
    * @param document - The document to add.
    * @returns A promise that resolves when the document has been added.
    */
-  readonly addDocument: (document: Document) => Promise<RawExistingDocument>;
+  readonly addDocument: (document: Document) => Promise<RawPopulatedDocument>;
   /**
    * Deletes a document from the database.
    * @param id - The ID of the document to delete.
@@ -59,7 +59,7 @@ export interface DocumentsService {
    * @param id - The ID of the document to get.
    * @returns A promise that resolves with the document, or `null` if the document was not found.
    */
-  readonly getDocument: (id: string) => Promise<RawExistingDocument | null>;
+  readonly getDocument: (id: string) => Promise<RawPopulatedDocument | null>;
   /**
    * Gets all documents from the database.
    * @param options - The options to use when getting documents.
@@ -78,7 +78,7 @@ export interface DocumentsService {
   readonly updateDocument: (
     id: string,
     document: DocumentUpdate
-  ) => Promise<RawExistingDocument | null>;
+  ) => Promise<RawPopulatedDocument | null>;
 }
 
 export type GetDocumentsParentRef =

@@ -1,3 +1,7 @@
+import {
+  type CompaniesService,
+  dangerouslyAssumePopulatedDocument
+} from "../../types";
 import type {
   Company,
   Document,
@@ -12,7 +16,6 @@ import {
   getDocumentModel,
   getUserModel
 } from "../../schema-mongodb";
-import type { CompaniesService } from "../../types";
 import type { FilterQuery } from "mongoose";
 import { FoundingAgreement } from "../../templates";
 import { StatusCodes } from "http-status-codes";
@@ -86,7 +89,7 @@ export function createCompaniesService(): CompaniesService {
           signatories
         );
 
-        const document: Document = {
+        const data: Document = {
           company: company._id.toString(),
           createdAt: new Date(),
           doc: digitalDocument,
@@ -102,18 +105,19 @@ export function createCompaniesService(): CompaniesService {
           type: DocType.FoundingAgreement
         };
 
-        const model = new DocumentModel(document);
+        const document = new DocumentModel(data);
 
-        const addedDocument = await model.save({ session });
+        await document.save({ session });
+        await document.populate("company");
 
-        company.foundingAgreement = addedDocument._id;
+        company.foundingAgreement = document._id;
 
         await company.save({ session });
 
         await session.commitTransaction();
         await session.endSession();
 
-        return addedDocument;
+        return dangerouslyAssumePopulatedDocument(document);
       } catch (err) {
         await session.abortTransaction();
         await session.endSession();
