@@ -672,14 +672,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "_id",
-          "company",
-          "createdAt",
-          "doc",
-          "signatories",
-          "type"
-        ],
+        "required": ["_id", "createdAt", "doc", "signatories", "type"],
         "type": "object"
       },
       "PopulatedDocumentList": {

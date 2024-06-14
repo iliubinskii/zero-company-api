@@ -5,5 +5,5 @@ export const PopulatedDocumentValidationSchema =
   ExistingDocumentValidationSchema.omit({
     company: true
   }).extend({
-    company: ExistingCompanyValidationSchema
+    company: ExistingCompanyValidationSchema.nullable().optional()
   });

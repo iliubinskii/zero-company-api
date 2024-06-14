@@ -1431,7 +1431,6 @@
         "type": "object",
         "required": [
           "_id",
-          "company",
           "createdAt",
           "doc",
           "signatories",

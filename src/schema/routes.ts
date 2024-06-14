@@ -618,7 +618,7 @@ export interface components {
     };
     PopulatedDocument: {
       _id: string;
-      company: components["schemas"]["Company"];
+      company?: components["schemas"]["Company"];
       createdAt: string;
       doc: components["schemas"]["DigitalDocument"];
       metadata?: string;
