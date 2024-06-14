@@ -1,7 +1,7 @@
 import { MAX_LIMIT } from "../../schema";
 import { MONGODB_ERROR } from "../../consts";
 import type { UsersService } from "../../types";
-import { getUserModel } from "../../schema-mongodb";
+import { getModels } from "../../schema-mongodb";
 
 /**
  * Creates a MongoDB service for users.
@@ -11,7 +11,7 @@ export function createUsersService(): UsersService {
   return {
     addUser: async user => {
       try {
-        const UserModel = await getUserModel();
+        const { UserModel } = await getModels();
 
         const model = new UserModel(user);
 
@@ -31,7 +31,7 @@ export function createUsersService(): UsersService {
       }
     },
     deleteUser: async ref => {
-      const UserModel = await getUserModel();
+      const { UserModel } = await getModels();
 
       const deletedUser = await (() => {
         switch (ref.type) {
@@ -48,7 +48,7 @@ export function createUsersService(): UsersService {
       return deletedUser ? 1 : 0;
     },
     getUser: async ref => {
-      const UserModel = await getUserModel();
+      const { UserModel } = await getModels();
 
       const user = await (() => {
         switch (ref.type) {
@@ -69,7 +69,7 @@ export function createUsersService(): UsersService {
       return user;
     },
     getUsers: async ({ limit = MAX_LIMIT, offset = 0 } = {}) => {
-      const UserModel = await getUserModel();
+      const { UserModel } = await getModels();
 
       const [users, total] = await Promise.all([
         UserModel.find().skip(offset).limit(limit),
@@ -83,7 +83,7 @@ export function createUsersService(): UsersService {
       };
     },
     updateUser: async (ref, user) => {
-      const UserModel = await getUserModel();
+      const { UserModel } = await getModels();
 
       const { addFavoriteCompanies, removeFavoriteCompanies, ...rest } = user;
 

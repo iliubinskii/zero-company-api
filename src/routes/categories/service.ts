@@ -3,7 +3,7 @@ import type { Category } from "../../schema";
 import type { FilterQuery } from "mongoose";
 import { MAX_LIMIT } from "../../schema";
 import type { Writable } from "ts-toolbelt/out/Object/Writable";
-import { getCategoryModel } from "../../schema-mongodb";
+import { getModels } from "../../schema-mongodb";
 
 /**
  * Creates a MongoDB service for categories.
@@ -12,7 +12,7 @@ import { getCategoryModel } from "../../schema-mongodb";
 export function createCategoriesService(): CategoriesService {
   return {
     addCategory: async category => {
-      const CategoryModel = await getCategoryModel();
+      const { CategoryModel } = await getModels();
 
       const model = new CategoryModel(category);
 
@@ -21,7 +21,7 @@ export function createCategoriesService(): CategoriesService {
       return addedCategory;
     },
     deleteCategory: async id => {
-      const CategoryModel = await getCategoryModel();
+      const { CategoryModel } = await getModels();
 
       const deletedCategory = await CategoryModel.findByIdAndDelete(id);
 
@@ -36,7 +36,7 @@ export function createCategoriesService(): CategoriesService {
 
       if (onlyPinned) filter["pinned"] = true;
 
-      const CategoryModel = await getCategoryModel();
+      const { CategoryModel } = await getModels();
 
       const [categories, total] = await Promise.all([
         CategoryModel.find(filter).skip(offset).limit(limit),
@@ -50,14 +50,14 @@ export function createCategoriesService(): CategoriesService {
       };
     },
     getCategory: async id => {
-      const CompanyModel = await getCategoryModel();
+      const { CategoryModel } = await getModels();
 
-      const category = await CompanyModel.findById(id);
+      const category = await CategoryModel.findById(id);
 
       return category;
     },
     updateCategory: async (id, category) => {
-      const CategoryModel = await getCategoryModel();
+      const { CategoryModel } = await getModels();
 
       const updatedCategory = await CategoryModel.findByIdAndUpdate(
         id,

@@ -4,11 +4,11 @@ import {
   dangerouslyAssumePopulatedDocument,
   dangerouslyAssumePopulatedDocuments
 } from "../../types";
-import { getDocumentModel, getUserModel } from "../../schema-mongodb";
 import type { FilterQuery } from "mongoose";
 import { MAX_LIMIT } from "../../schema";
 import type { Writable } from "ts-toolbelt/out/Object/Writable";
 import { getDigitalDocument } from "../../providers";
+import { getModels } from "../../schema-mongodb";
 import type mongoose from "mongoose";
 
 /**
@@ -18,7 +18,7 @@ import type mongoose from "mongoose";
 export function createDocumentsService(): DocumentsService {
   return {
     addDocument: async data => {
-      const DocumentModel = await getDocumentModel();
+      const { DocumentModel } = await getModels();
 
       const document = new DocumentModel(data);
 
@@ -28,14 +28,14 @@ export function createDocumentsService(): DocumentsService {
       return dangerouslyAssumePopulatedDocument(document);
     },
     deleteDocument: async id => {
-      const DocumentModel = await getDocumentModel();
+      const { DocumentModel } = await getModels();
 
       const document = await DocumentModel.findByIdAndDelete(id);
 
       return document ? 1 : 0;
     },
     getDocument: async id => {
-      const DocumentModel = await getDocumentModel();
+      const { DocumentModel } = await getModels();
 
       const document = await DocumentModel.findById(id).populate("company");
 
@@ -55,7 +55,7 @@ export function createDocumentsService(): DocumentsService {
 
       const mongodbSortOrder = mongodbSortOrderMap[sortOrder];
 
-      const DocumentModel = await getDocumentModel();
+      const { DocumentModel } = await getModels();
 
       if (parentRef)
         switch (parentRef.type) {
@@ -72,7 +72,7 @@ export function createDocumentsService(): DocumentsService {
           }
 
           case "signatoryId": {
-            const UserModel = await getUserModel();
+            const { UserModel } = await getModels();
 
             const user = await UserModel.findById(parentRef.signatoryId);
 
@@ -102,7 +102,7 @@ export function createDocumentsService(): DocumentsService {
       });
     },
     updateDocument: async (id, update) => {
-      const DocumentModel = await getDocumentModel();
+      const { DocumentModel } = await getModels();
 
       const document = await DocumentModel.findById(id);
 

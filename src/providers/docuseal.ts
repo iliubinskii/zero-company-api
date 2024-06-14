@@ -98,7 +98,7 @@ export async function getDigitalDocument(
     ...doc,
     signatures: doc.signatures.map(signature => {
       const submitter = submission.submitters.find(
-        ({ email }) => email.toLowerCase() === signature.email.toLowerCase()
+        ({ email }) => email === signature.email
       );
 
       return {

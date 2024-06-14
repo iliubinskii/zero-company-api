@@ -11,15 +11,11 @@ import type {
 } from "../../schema";
 import { DocType, MAX_LIMIT } from "../../schema";
 import { createDigitalDocument, getMongodbConnection } from "../../providers";
-import {
-  getCompanyModel,
-  getDocumentModel,
-  getUserModel
-} from "../../schema-mongodb";
 import type { FilterQuery } from "mongoose";
 import { FoundingAgreement } from "../../templates";
 import { StatusCodes } from "http-status-codes";
 import type { Writable } from "ts-toolbelt/out/Object/Writable";
+import { getModels } from "../../schema-mongodb";
 import { lang } from "../../langs";
 import type mongoose from "mongoose";
 
@@ -30,7 +26,7 @@ import type mongoose from "mongoose";
 export function createCompaniesService(): CompaniesService {
   return {
     addCompany: async company => {
-      const CompanyModel = await getCompanyModel();
+      const { CompanyModel } = await getModels();
 
       const model = new CompanyModel(company);
 
@@ -39,18 +35,16 @@ export function createCompaniesService(): CompaniesService {
       return addedCompany;
     },
     deleteCompany: async id => {
-      const CompanyModel = await getCompanyModel();
+      const { CompanyModel } = await getModels();
 
       const deletedCompany = await CompanyModel.findByIdAndDelete(id);
 
       return deletedCompany ? 1 : 0;
     },
     generateFoundingAgreement: async id => {
+      const { CompanyModel, DocumentModel } = await getModels();
+
       const connection = await getMongodbConnection();
-
-      const CompanyModel = await getCompanyModel();
-
-      const DocumentModel = await getDocumentModel();
 
       const session = await connection.startSession();
 
@@ -138,12 +132,12 @@ export function createCompaniesService(): CompaniesService {
 
       const mongodbSortOrder = mongodbSortOrderMap[sortOrder];
 
-      const CompanyModel = await getCompanyModel();
+      const { CompanyModel } = await getModels();
 
       if (parentRef)
         switch (parentRef.type) {
           case "bookmarkUserEmail": {
-            const UserModel = await getUserModel();
+            const { UserModel } = await getModels();
 
             const user = await UserModel.findOne({
               email: parentRef.bookmarkUserEmail
@@ -156,7 +150,7 @@ export function createCompaniesService(): CompaniesService {
           }
 
           case "bookmarkUserId": {
-            const UserModel = await getUserModel();
+            const { UserModel } = await getModels();
 
             const user = await UserModel.findById(parentRef.bookmarkUserId);
 
@@ -179,7 +173,7 @@ export function createCompaniesService(): CompaniesService {
           }
 
           case "founderId": {
-            const UserModel = await getUserModel();
+            const { UserModel } = await getModels();
 
             const user = await UserModel.findById(parentRef.founderId);
 
@@ -223,14 +217,14 @@ export function createCompaniesService(): CompaniesService {
       };
     },
     getCompany: async id => {
-      const CompanyModel = await getCompanyModel();
+      const { CompanyModel } = await getModels();
 
       const company = await CompanyModel.findById(id);
 
       return company;
     },
     updateCompany: async (id, company) => {
-      const CompanyModel = await getCompanyModel();
+      const { CompanyModel } = await getModels();
 
       const { addImages, removeImages, ...rest } = company;
 

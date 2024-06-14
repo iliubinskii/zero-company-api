@@ -1,4 +1,3 @@
-import { getMongodbConnection } from "../providers";
 import mongoose from "mongoose";
 
 export const CategorySchema = new mongoose.Schema(
@@ -24,13 +23,12 @@ export const CategorySchema = new mongoose.Schema(
 
 /**
  * Creates a category model.
+ * @param connection - The mongoose connection.
  * @returns A category model.
  */
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type -- Ok
-export async function getCategoryModel() {
-  const connection = await getMongodbConnection();
-
+export function getCategoryModel(connection: typeof mongoose) {
   return connection.model("Category", CategorySchema);
 }
 
-export type CategoryModel = Awaited<ReturnType<typeof getCategoryModel>>;
+export type CategoryModel = ReturnType<typeof getCategoryModel>;

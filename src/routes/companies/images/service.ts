@@ -1,6 +1,6 @@
 import type { Company } from "../../../schema";
 import type { CompanyImagesService } from "../../../types";
-import { getCompanyModel } from "../../../schema-mongodb";
+import { getModels } from "../../../schema-mongodb";
 import type mongoose from "mongoose";
 
 /**
@@ -10,7 +10,7 @@ import type mongoose from "mongoose";
 export function createCompanyImagesService(): CompanyImagesService {
   return {
     addImage: async (id, image) => {
-      const CompanyModel = await getCompanyModel();
+      const { CompanyModel } = await getModels();
 
       const company = await CompanyModel.findByIdAndUpdate(
         id,
@@ -21,7 +21,7 @@ export function createCompanyImagesService(): CompanyImagesService {
       return company;
     },
     deleteImage: async (id, assetId) => {
-      const CompanyModel = await getCompanyModel();
+      const { CompanyModel } = await getModels();
 
       const company = await CompanyModel.findByIdAndUpdate(
         id,
@@ -32,7 +32,7 @@ export function createCompanyImagesService(): CompanyImagesService {
       return company;
     },
     updateImage: async (id, assetId, image) => {
-      const CompanyModel = await getCompanyModel();
+      const { CompanyModel } = await getModels();
 
       const company = await CompanyModel.findOneAndUpdate(
         { "_id": id, "images.assetId": assetId },
