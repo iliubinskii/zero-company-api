@@ -815,7 +815,7 @@
   "info": {
     "description": "An API for Zero Company application",
     "title": "Zero Company API",
-    "version": "2024.6.7"
+    "version": "2024.6.14"
   },
   "openapi": "3.0.0",
   "paths": {
