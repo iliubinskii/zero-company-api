@@ -1157,18 +1157,14 @@
       "DigitalDocument": {
         "type": "object",
         "required": [
-          "embedSrc",
           "signatures",
           "submissionId"
         ],
         "properties": {
-          "embedSrc": {
-            "type": "string"
-          },
           "signatures": {
             "type": "array",
             "items": {
-              "type": "string"
+              "$ref": "#/components/schemas/Signature"
             }
           },
           "submissionId": {
@@ -1510,6 +1506,32 @@
             "type": "string"
           },
           "role": {
+            "type": "string"
+          }
+        }
+      },
+      "Signature": {
+        "type": "object",
+        "required": [
+          "email",
+          "embedSrc",
+          "role",
+          "status"
+        ],
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "embedSrc": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string"
+          },
+          "status": {
             "type": "string"
           }
         }

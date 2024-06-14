@@ -31,8 +31,7 @@ export interface DeleteResponse {
 }
 
 export interface DigitalDocument {
-  readonly embedSrc: string;
-  readonly signatures: readonly string[];
+  readonly signatures: readonly Signature[];
   readonly submissionId: number;
 }
 
@@ -91,6 +90,14 @@ export interface Signatory {
   readonly email: string;
   readonly name?: string | null | undefined;
   readonly role: string;
+}
+
+export interface Signature {
+  readonly email: string;
+  readonly embedSrc: string;
+  readonly name?: string | null | undefined;
+  readonly role: string;
+  readonly status: string;
 }
 
 export type Update<T> = {

@@ -548,8 +548,7 @@ export interface components {
       affectedRows: number;
     };
     DigitalDocument: {
-      embedSrc: string;
-      signatures: string[];
+      signatures: components["schemas"]["Signature"][];
       submissionId: number;
     };
     Document: {
@@ -636,6 +635,13 @@ export interface components {
       email: string;
       name?: string;
       role: string;
+    };
+    Signature: {
+      email: string;
+      embedSrc: string;
+      name?: string;
+      role: string;
+      status: string;
     };
     Unauthorized: {
       /** @enum {string} */

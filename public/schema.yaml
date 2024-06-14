@@ -854,16 +854,13 @@ components:
     DigitalDocument:
       type: object
       required:
-        - embedSrc
         - signatures
         - submissionId
       properties:
-        embedSrc:
-          type: string
         signatures:
           type: array
           items:
-            type: string
+            $ref: '#/components/schemas/Signature'
         submissionId:
           type: number
 
@@ -1108,6 +1105,7 @@ components:
           maxItems: 2
         total:
           type: integer
+
     # Signatory schema
     Signatory:
       type: object
@@ -1120,6 +1118,26 @@ components:
         name:
           type: string
         role:
+          type: string
+
+    # Signature schema
+    Signature:
+      type: object
+      required:
+        - email
+        - embedSrc
+        - role
+        - status
+      properties:
+        email:
+          type: string
+        embedSrc:
+          type: string
+        name:
+          type: string
+        role:
+          type: string
+        status:
           type: string
 
     # Unauthorized schema

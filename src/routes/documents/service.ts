@@ -7,6 +7,7 @@ import { getDocumentModel, getUserModel } from "../../schema-mongodb";
 import type { FilterQuery } from "mongoose";
 import { MAX_LIMIT } from "../../schema";
 import type { Writable } from "ts-toolbelt/out/Object/Writable";
+import { getDigitalDocument } from "../../providers";
 import type mongoose from "mongoose";
 
 /**
@@ -98,16 +99,18 @@ export function createDocumentsService(): DocumentsService {
         total
       });
     },
-    updateDocument: async (id, document) => {
+    updateDocument: async (id, update) => {
       const DocumentModel = await getDocumentModel();
 
-      const updatedCategory = await DocumentModel.findByIdAndUpdate(
-        id,
-        document,
-        { new: true, runValidators: true }
-      );
+      const document = await DocumentModel.findById(id);
 
-      return updatedCategory;
+      if (document) {
+        const digitalDocument = await getDigitalDocument(document.doc);
+
+        await document.updateOne({ ...update, doc: digitalDocument });
+      }
+
+      return document;
     }
   };
 }

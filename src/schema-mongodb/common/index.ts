@@ -1,20 +1,5 @@
 import mongoose from "mongoose";
 
-export const digitalDocument = {
-  embedSrc: {
-    required: true,
-    type: mongoose.Schema.Types.String
-  },
-  signatures: {
-    required: true,
-    type: [mongoose.Schema.Types.String]
-  },
-  submissionId: {
-    required: true,
-    type: mongoose.Schema.Types.Number
-  }
-} as const;
-
 export const founder = {
   email: {
     required: true,
@@ -42,6 +27,28 @@ export const signatory = {
   }
 } as const;
 
+export const signature = {
+  email: {
+    required: true,
+    type: mongoose.Schema.Types.String
+  },
+  embedSrc: {
+    required: true,
+    type: mongoose.Schema.Types.String
+  },
+  name: {
+    type: mongoose.Schema.Types.String
+  },
+  role: {
+    required: true,
+    type: mongoose.Schema.Types.String
+  },
+  status: {
+    required: true,
+    type: mongoose.Schema.Types.String
+  }
+} as const;
+
 export const webAccessibleImage = {
   assetId: {
     required: true,
@@ -64,6 +71,17 @@ export const webAccessibleImage = {
     type: mongoose.Schema.Types.String
   },
   width: {
+    required: true,
+    type: mongoose.Schema.Types.Number
+  }
+} as const;
+
+export const digitalDocument = {
+  signatures: {
+    required: true,
+    type: [signature]
+  },
+  submissionId: {
     required: true,
     type: mongoose.Schema.Types.Number
   }

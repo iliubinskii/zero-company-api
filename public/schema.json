@@ -428,12 +428,9 @@
       },
       "DigitalDocument": {
         "properties": {
-          "embedSrc": {
-            "type": "string"
-          },
           "signatures": {
             "items": {
-              "type": "string"
+              "$ref": "#/components/schemas/Signature"
             },
             "type": "array"
           },
@@ -441,7 +438,7 @@
             "type": "number"
           }
         },
-        "required": ["embedSrc", "signatures", "submissionId"],
+        "required": ["signatures", "submissionId"],
         "type": "object"
       },
       "Document": {
@@ -714,6 +711,27 @@
           }
         },
         "required": ["email", "role"],
+        "type": "object"
+      },
+      "Signature": {
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "embedSrc": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          }
+        },
+        "required": ["email", "embedSrc", "role", "status"],
         "type": "object"
       },
       "Unauthorized": {

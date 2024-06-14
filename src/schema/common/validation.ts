@@ -1,20 +1,14 @@
 import zod from "zod";
 
-export const DigitalDocumentValidationSchema = zod.object({
-  embedSrc: zod.string().url(),
-  signatures: zod.array(zod.string().min(1)),
-  submissionId: preprocessInt(zod.number().int())
-});
+export const IdValidationSchema = zod
+  .string()
+  .refine(value => /^[\da-f]{24}$/u.test(value));
 
 export const FounderValidationSchema = zod.object({
   email: preprocessEmail(zod.string().email()),
   name: zod.string().min(1).nullable().optional(),
   share: preprocessInt(zod.number().int().positive()).nullable().optional()
 });
-
-export const IdValidationSchema = zod
-  .string()
-  .refine(value => /^[\da-f]{24}$/u.test(value));
 
 export const ImageValidationSchema = zod.object({
   assetId: zod.string().min(1),
@@ -29,6 +23,19 @@ export const SignatoryValidationSchema = zod.object({
   email: zod.string().email(),
   name: zod.string().min(1).nullable().optional(),
   role: zod.string().min(1)
+});
+
+export const SignatureValidationSchema = zod.object({
+  email: preprocessEmail(zod.string().email()),
+  embedSrc: zod.string().url(),
+  name: zod.string().min(1).nullable().optional(),
+  role: zod.string().min(1),
+  status: zod.string().min(1)
+});
+
+export const DigitalDocumentValidationSchema = zod.object({
+  signatures: zod.array(SignatureValidationSchema).nonempty(),
+  submissionId: preprocessInt(zod.number().int().positive())
 });
 
 /**

@@ -3,7 +3,12 @@ import {
   DOCUSEAL_FOLDER_NAME,
   DOCUSEAL_SEND_EMAIL
 } from "../config";
-import type { DigitalDocument, Signatory } from "../schema";
+import {
+  type DigitalDocument,
+  type Signatory,
+  preprocessEmail,
+  preprocessInt
+} from "../schema";
 import { DOCUSEAL_ENDPOINT } from "../consts";
 import zod from "zod";
 
@@ -28,27 +33,16 @@ export async function createDigitalDocument(
     metadata
   );
 
-  const digitalDocument = await createSubmission(templateId, signatories);
-
-  return digitalDocument;
-}
-
-/**
- * Create a submission
- * @param templateId - The template ID
- * @param signatories - The signatories
- * @returns The submission
- */
-async function createSubmission(
-  templateId: number,
-  signatories: readonly Signatory[]
-): Promise<DigitalDocument> {
   const response = await fetch(DOCUSEAL_ENDPOINT.SUBMISSIONS, {
     body: JSON.stringify({
       order: "random",
       send_email: DOCUSEAL_SEND_EMAIL,
-      submitters: signatories.map(({ email, name, role }) => {
-        return { email, name, role };
+      submitters: signatories.map(submitters => {
+        return {
+          email: submitters.email,
+          name: submitters.name,
+          role: submitters.role
+        };
       }),
       template_id: templateId
     }),
@@ -61,9 +55,58 @@ async function createSubmission(
 
   const json: unknown = await response.json();
 
-  const [{ embed_src, id }] = SubmissionValidationSchema.parse(json);
+  const submitters = SubmittersValidationSchema.parse(json);
 
-  return { embedSrc: embed_src, signatures: [], submissionId: id };
+  return {
+    signatures: submitters.map(signature => {
+      return {
+        email: signature.email,
+        embedSrc: signature.embed_src,
+        name: signature.name,
+        role: signature.role,
+        status: signature.status
+      };
+    }),
+    submissionId: submitters[0].submission_id
+  };
+}
+
+/**
+ * Get a digital document
+ * @param doc - The digital document
+ * @returns The updated digital document
+ */
+export async function getDigitalDocument(
+  doc: DigitalDocument
+): Promise<DigitalDocument> {
+  const response = await fetch(
+    `${DOCUSEAL_ENDPOINT.SUBMISSIONS}/${doc.submissionId}`,
+    {
+      headers: {
+        "Content-Type": "application/json",
+        "X-Auth-Token": DOCUSEAL_API_KEY
+      },
+      method: "GET"
+    }
+  );
+
+  const json: unknown = await response.json();
+
+  const submission = SubmissionValidationSchema.parse(json);
+
+  return {
+    ...doc,
+    signatures: doc.signatures.map(signature => {
+      const submitter = submission.submitters.find(
+        ({ email }) => email.toLowerCase() === signature.email.toLowerCase()
+      );
+
+      return {
+        ...signature,
+        status: submitter ? submitter.status : signature.status
+      };
+    })
+  };
 }
 
 /**
@@ -103,15 +146,31 @@ export type Template = (
   metadata?: string | null
 ) => string;
 
-const SubmissionValidationSchema = zod
+const SubmissionValidationSchema = zod.object({
+  submitters: zod
+    .array(
+      zod.object({
+        email: preprocessEmail(zod.string().email()),
+        status: zod.string().min(1)
+      })
+    )
+    .nonempty()
+});
+
+const SubmittersValidationSchema = zod
   .array(
     zod.object({
+      email: preprocessEmail(zod.string().email()),
       embed_src: zod.string().min(1),
-      id: zod.number()
+      id: preprocessInt(zod.number().int().positive()),
+      name: zod.string().min(1).nullable().optional(),
+      role: zod.string().min(1),
+      status: zod.string().min(1),
+      submission_id: preprocessInt(zod.number().int().positive())
     })
   )
   .nonempty();
 
 const TemplateValidationSchema = zod.object({
-  id: zod.number()
+  id: preprocessInt(zod.number().int().positive())
 });
