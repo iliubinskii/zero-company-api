@@ -2,7 +2,7 @@ import type { ExistingUser, UserUpdate } from "../../schema";
 import { assertDefined, assertNotNull } from "../../utils";
 import { createUsersService } from "./service";
 import { faker } from "@faker-js/faker";
-import { getUserModel } from "../../schema-mongodb";
+import { getModels } from "../../schema-mongodb";
 
 describe("createUsersService", () => {
   const usersService = createUsersService();
@@ -10,6 +10,7 @@ describe("createUsersService", () => {
   const getData = (): Omit<ExistingUser, "_id"> => {
     return {
       email: faker.internet.email(),
+      favoriteCompanies: [],
       firstName: faker.person.firstName(),
       lastName: faker.person.lastName()
     };
@@ -173,13 +174,14 @@ describe("createUsersService", () => {
       .map(email => {
         return {
           email,
+          favoriteCompanies: [],
           firstName: faker.person.firstName(),
           lastName: faker.person.lastName()
         };
       });
 
     beforeAll(async () => {
-      const UserModel = await getUserModel();
+      const { UserModel } = await getModels();
 
       await UserModel.deleteMany({});
 

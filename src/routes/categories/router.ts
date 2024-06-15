@@ -10,15 +10,11 @@ import { Router } from "express";
 export function createCategoriesRouter(
   controllers: CategoryControllers
 ): Router {
-  const router = Router();
-
-  router
+  return Router()
     .get("/", controllers.getCategories)
     .post("/", requireJwtAdmin, controllers.addCategory)
     .get("/:id", requireIdParam, controllers.getCategory)
     .put("/:id", requireJwtAdmin, requireIdParam, controllers.updateCategory)
     .delete("/:id", requireJwtAdmin, requireIdParam, controllers.deleteCategory)
     .get("/:id/companies", requireIdParam, controllers.getCompaniesByCategory);
-
-  return router;
 }

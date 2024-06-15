@@ -1,6 +1,5 @@
-import { founder, image } from "./common";
+import { founder, webAccessibleImage } from "./common";
 import { CompanyStatus } from "../schema";
-import { getMongodbConnection } from "../providers";
 import mongoose from "mongoose";
 
 export const CompanySchema = new mongoose.Schema(
@@ -32,10 +31,10 @@ export const CompanySchema = new mongoose.Schema(
     },
     images: {
       required: true,
-      type: [image]
+      type: [webAccessibleImage]
     },
     logo: {
-      type: image
+      type: webAccessibleImage
     },
     name: {
       type: mongoose.Schema.Types.String
@@ -63,13 +62,12 @@ export const CompanySchema = new mongoose.Schema(
 
 /**
  * Creates a company model.
+ * @param connection - The mongoose connection.
  * @returns A company model.
  */
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type -- Ok
-export async function getCompanyModel() {
-  const connection = await getMongodbConnection();
-
+export function getCompanyModel(connection: typeof mongoose) {
   return connection.model("Company", CompanySchema);
 }
 
-export type CompanyModel = Awaited<ReturnType<typeof getCompanyModel>>;
+export type CompanyModel = ReturnType<typeof getCompanyModel>;

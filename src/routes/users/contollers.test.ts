@@ -34,9 +34,18 @@ describe("createUserControllers", () => {
     updateCompany: jest.fn()
   };
 
+  const mockDocumentsService = {
+    addDocument: jest.fn(),
+    deleteDocument: jest.fn(),
+    getDocument: jest.fn(),
+    getDocuments: jest.fn(),
+    updateDocument: jest.fn()
+  };
+
   const controllers = createUserControllers(
     mockUsersService,
-    mockCompaniesService
+    mockCompaniesService,
+    mockDocumentsService
   );
 
   const app = express();

@@ -1,20 +1,21 @@
-import { doc, signatory } from "./common";
+import { digitalDocument, signatory } from "./common";
 import { DocType } from "../schema";
-import { getMongodbConnection } from "../providers";
 import mongoose from "mongoose";
 
 export const DocumentSchema = new mongoose.Schema(
   {
     company: {
+      ref: "Company",
       required: true,
-      type: mongoose.Schema.Types.String
+      type: mongoose.Schema.Types.ObjectId
     },
     createdAt: {
       required: true,
       type: mongoose.Schema.Types.Date
     },
     doc: {
-      type: doc
+      required: true,
+      type: digitalDocument
     },
     metadata: {
       type: mongoose.Schema.Types.String
@@ -34,13 +35,12 @@ export const DocumentSchema = new mongoose.Schema(
 
 /**
  * Creates a document model.
+ * @param connection - The mongoose connection.
  * @returns A document model.
  */
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type -- Ok
-export async function getDocumentModel() {
-  const connection = await getMongodbConnection();
-
+export function getDocumentModel(connection: typeof mongoose) {
   return connection.model("Document", DocumentSchema);
 }
 
-export type DocumentModel = Awaited<ReturnType<typeof getDocumentModel>>;
+export type DocumentModel = ReturnType<typeof getDocumentModel>;

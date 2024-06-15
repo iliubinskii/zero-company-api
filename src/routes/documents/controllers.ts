@@ -25,21 +25,24 @@ export function createDocumentControllers(
 ): DocumentControllers {
   return {
     addDocument: wrapAsyncHandler(async (req, res) => {
-      const document = DocumentCreateValidationSchema.safeParse(req.body);
+      const parsed = DocumentCreateValidationSchema.safeParse(req.body);
 
-      if (document.success) {
-        const addedDocument = await service.addDocument(document.data);
+      if (parsed.success) {
+        const document = await service.addDocument({
+          ...parsed.data,
+          createdAt: new Date()
+        });
 
         sendResponse<Routes["/documents"]["post"]>(
           res,
           StatusCodes.CREATED,
-          assertValidForJsonStringify(addedDocument)
+          assertValidForJsonStringify(document)
         );
       } else
         sendResponse<Routes["/documents"]["post"]>(
           res,
           StatusCodes.BAD_REQUEST,
-          buildErrorResponse(ErrorCode.InvalidData, document.error)
+          buildErrorResponse(ErrorCode.InvalidData, parsed.error)
         );
     }),
     deleteDocument: wrapAsyncHandler(async (req, res) => {
@@ -90,16 +93,16 @@ export function createDocumentControllers(
     updateDocument: wrapAsyncHandler(async (req, res) => {
       const id = assertDefined(req.idParam);
 
-      const document = DocumentUpdateValidationSchema.safeParse(req.body);
+      const parsed = DocumentUpdateValidationSchema.safeParse(req.body);
 
-      if (document.success) {
-        const updatedDocument = await service.updateDocument(id, document.data);
+      if (parsed.success) {
+        const document = await service.updateDocument(id, parsed.data);
 
-        if (updatedDocument)
+        if (document)
           sendResponse<Routes["/documents/{id}"]["put"]>(
             res,
             StatusCodes.OK,
-            assertValidForJsonStringify(updatedDocument)
+            assertValidForJsonStringify(document)
           );
         else
           sendResponse<Routes["/documents/{id}"]["put"]>(
@@ -111,7 +114,7 @@ export function createDocumentControllers(
         sendResponse<Routes["/documents/{id}"]["put"]>(
           res,
           StatusCodes.BAD_REQUEST,
-          buildErrorResponse(ErrorCode.InvalidData, document.error)
+          buildErrorResponse(ErrorCode.InvalidData, parsed.error)
         );
     })
   };

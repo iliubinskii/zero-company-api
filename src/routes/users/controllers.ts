@@ -1,12 +1,15 @@
 import type {
   CompaniesService,
+  DocumentsService,
   GetCompaniesParentRef,
+  GetDocumentsParentRef,
   UserControllers,
   UsersService
 } from "../../types";
 import {
   ErrorCode,
   GetCompaniesOptionsValidationSchema,
+  GetDocumentsOptionsValidationSchema,
   GetUsersOptionsValidationSchema,
   UserCreateValidationSchema,
   UserUpdateValidationSchema
@@ -25,29 +28,32 @@ import { StatusCodes } from "http-status-codes";
  * Creates user controllers.
  * @param service - The users service.
  * @param companiesService - The companies service.
+ * @param documentsService - The documents service.
  * @returns The user controllers.
  */
 export function createUserControllers(
   service: UsersService,
-  companiesService: CompaniesService
+  companiesService: CompaniesService,
+  documentsService: DocumentsService
 ): UserControllers {
   return {
     addUser: wrapAsyncHandler(async (req, res) => {
       const jwt = assertDefined(req.jwt);
 
-      const user = UserCreateValidationSchema.safeParse(req.body);
+      const parsed = UserCreateValidationSchema.safeParse(req.body);
 
-      if (user.success) {
-        const addedUser = await service.addUser({
-          ...user.data,
-          email: jwt.email
+      if (parsed.success) {
+        const user = await service.addUser({
+          ...parsed.data,
+          email: jwt.email,
+          favoriteCompanies: []
         });
 
-        if (addedUser)
+        if (user)
           sendResponse<Routes["/users"]["post"]>(
             res,
             StatusCodes.CREATED,
-            assertValidForJsonStringify(addedUser)
+            assertValidForJsonStringify(user)
           );
         else
           sendResponse<Routes["/users"]["post"]>(
@@ -59,7 +65,7 @@ export function createUserControllers(
         sendResponse<Routes["/users"]["post"]>(
           res,
           StatusCodes.BAD_REQUEST,
-          buildErrorResponse(ErrorCode.InvalidData, user.error)
+          buildErrorResponse(ErrorCode.InvalidData, parsed.error)
         );
     }),
     deleteUser: wrapAsyncHandler(async (req, res) => {
@@ -79,17 +85,17 @@ export function createUserControllers(
       if (options.success) {
         const parentRef: GetCompaniesParentRef = (() => {
           switch (ref.type) {
-            case "id": {
-              return {
-                founderId: ref.id,
-                type: "founderId"
-              };
-            }
-
             case "email": {
               return {
                 founderEmail: ref.email,
                 type: "founderEmail"
+              };
+            }
+
+            case "id": {
+              return {
+                founderId: ref.id,
+                type: "founderId"
               };
             }
           }
@@ -107,6 +113,88 @@ export function createUserControllers(
         );
       } else
         sendResponse<Routes["/users/{id}/companies"]["get"]>(
+          res,
+          StatusCodes.BAD_REQUEST,
+          buildErrorResponse(ErrorCode.InvalidQuery, options.error)
+        );
+    }),
+    getDocumentsByUser: wrapAsyncHandler(async (req, res) => {
+      const ref = assertDefined(req.userRef);
+
+      const options = GetDocumentsOptionsValidationSchema.safeParse(req.query);
+
+      if (options.success) {
+        const parentRef: GetDocumentsParentRef = (() => {
+          switch (ref.type) {
+            case "email": {
+              return {
+                signatoryEmail: ref.email,
+                type: "signatoryEmail"
+              };
+            }
+
+            case "id": {
+              return {
+                signatoryId: ref.id,
+                type: "signatoryId"
+              };
+            }
+          }
+        })();
+
+        const documents = await documentsService.getDocuments(
+          options.data,
+          parentRef
+        );
+
+        sendResponse<Routes["/users/{id}/documents"]["get"]>(
+          res,
+          StatusCodes.OK,
+          assertValidForJsonStringify(documents)
+        );
+      } else
+        sendResponse<Routes["/users/{id}/documents"]["get"]>(
+          res,
+          StatusCodes.BAD_REQUEST,
+          buildErrorResponse(ErrorCode.InvalidQuery, options.error)
+        );
+    }),
+    getFavoriteCompaniesByUser: wrapAsyncHandler(async (req, res) => {
+      const ref = assertDefined(req.userRef);
+
+      const options = GetCompaniesOptionsValidationSchema.safeParse(req.query);
+
+      if (options.success) {
+        const parentRef: GetCompaniesParentRef = (() => {
+          switch (ref.type) {
+            case "email": {
+              return {
+                bookmarkUserEmail: ref.email,
+                type: "bookmarkUserEmail"
+              };
+            }
+
+            case "id": {
+              return {
+                bookmarkUserId: ref.id,
+                type: "bookmarkUserId"
+              };
+            }
+          }
+        })();
+
+        const companies = await companiesService.getCompanies(
+          options.data,
+          parentRef
+        );
+
+        sendResponse<Routes["/users/{id}/favorite-companies"]["get"]>(
+          res,
+          StatusCodes.OK,
+          assertValidForJsonStringify(companies)
+        );
+      } else
+        sendResponse<Routes["/users/{id}/favorite-companies"]["get"]>(
           res,
           StatusCodes.BAD_REQUEST,
           buildErrorResponse(ErrorCode.InvalidQuery, options.error)
@@ -151,16 +239,16 @@ export function createUserControllers(
     updateUser: wrapAsyncHandler(async (req, res) => {
       const ref = assertDefined(req.userRef);
 
-      const user = UserUpdateValidationSchema.safeParse(req.body);
+      const parsed = UserUpdateValidationSchema.safeParse(req.body);
 
-      if (user.success) {
-        const updatedUser = await service.updateUser(ref, user.data);
+      if (parsed.success) {
+        const user = await service.updateUser(ref, parsed.data);
 
-        if (updatedUser)
+        if (user)
           sendResponse<Routes["/users/{id}"]["put"]>(
             res,
             StatusCodes.OK,
-            assertValidForJsonStringify(updatedUser)
+            assertValidForJsonStringify(user)
           );
         else
           sendResponse<Routes["/users/{id}"]["put"]>(
@@ -172,7 +260,7 @@ export function createUserControllers(
         sendResponse<Routes["/users/{id}"]["put"]>(
           res,
           StatusCodes.BAD_REQUEST,
-          buildErrorResponse(ErrorCode.InvalidData, user.error)
+          buildErrorResponse(ErrorCode.InvalidData, parsed.error)
         );
     })
   };

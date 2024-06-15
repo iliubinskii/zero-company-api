@@ -1,40 +1,59 @@
-import { omit } from "lodash";
+import { MAX_LIMIT } from "./consts";
 import zod from "zod";
-
-export const DigitalDocumentValidationSchema = zod.strictObject({
-  assetId: zod.string(),
-  secureUrl: zod.string().url(),
-  signatures: zod.array(zod.string()),
-  url: zod.string().url()
-});
-
-export const founder = zod
-  .strictObject({
-    _id: zod.any().optional(),
-    email: preprocessEmail(zod.string().email()),
-    firstName: zod.string().min(1).nullable().optional(),
-    lastName: zod.string().min(1).nullable().optional(),
-    share: preprocessNumber(zod.number().int().positive()).nullable().optional()
-  })
-  .transform(obj => omit(obj, ["_id"]));
 
 export const IdValidationSchema = zod
   .string()
   .refine(value => /^[\da-f]{24}$/u.test(value));
 
-export const ImageValidationSchema = zod.strictObject({
+export const FounderValidationSchema = zod.object({
+  email: preprocessEmail(zod.string().email()),
+  name: zod.string().min(1).nullable().optional(),
+  share: preprocessInt(zod.number().int().positive()).nullable().optional()
+});
+
+export const ImageValidationSchema = zod.object({
   assetId: zod.string().min(1),
-  height: preprocessNumber(zod.number().int().positive()),
+  height: preprocessInt(zod.number().int().positive()),
   name: zod.string().min(1),
   secureUrl: zod.string().min(1),
   url: zod.string().min(1),
-  width: preprocessNumber(zod.number().int().positive())
+  width: preprocessInt(zod.number().int().positive())
 });
 
-export const SignatoryValidationSchema = zod.strictObject({
+export const LimitValidationSchema = preprocessInt(
+  zod.number().int().positive().max(MAX_LIMIT)
+).optional();
+
+export const OffsetValidationSchema = preprocessInt(
+  zod.number().int().nonnegative()
+).optional();
+
+export const SignatoryValidationSchema = zod.object({
   email: zod.string().email(),
-  firstName: zod.string().nullable().optional(),
-  lastName: zod.string().nullable().optional()
+  name: zod.string().min(1).nullable().optional(),
+  role: zod.string().min(1)
+});
+
+export const SignatureValidationSchema = zod.object({
+  email: preprocessEmail(zod.string().email()),
+  embedSrc: zod.string().url(),
+  name: zod.string().min(1).nullable().optional(),
+  role: zod.string().min(1),
+  status: zod.string().min(1)
+});
+
+export const SortOrderValidationSchema = zod
+  .union([zod.literal("asc"), zod.literal("desc")])
+  .optional();
+
+export const CursorValidationSchema = zod
+  .tuple([zod.string().min(1), IdValidationSchema])
+  .optional();
+
+export const DigitalDocumentValidationSchema = zod.object({
+  signatures: zod.array(SignatureValidationSchema).nonempty(),
+  status: zod.string().min(1).nullable().optional(),
+  submissionId: preprocessInt(zod.number().int().positive())
 });
 
 /**
@@ -66,6 +85,20 @@ export function preprocessBoolean<T extends zod.ZodTypeAny>(
 }
 
 /**
+ * Preprocesses a schema to convert string values to dates.
+ * @param schema - The schema to preprocess.
+ * @returns The preprocessed schema.
+ */
+export function preprocessDate<T extends zod.ZodTypeAny>(
+  schema: T
+): zod.ZodEffects<T> {
+  return zod.preprocess(
+    value => (typeof value === "string" ? new Date(value) : value),
+    schema
+  );
+}
+
+/**
  * Preprocesses a schema to unify emails (lowercase).
  * @param schema - The schema to preprocess.
  * @returns The preprocessed schema.
@@ -84,11 +117,22 @@ export function preprocessEmail<T extends zod.ZodTypeAny>(
  * @param schema - The schema to preprocess.
  * @returns The preprocessed schema.
  */
-export function preprocessNumber<T extends zod.ZodTypeAny>(
+export function preprocessInt<T extends zod.ZodTypeAny>(
   schema: T
 ): zod.ZodEffects<T> {
-  return zod.preprocess(
-    value => (typeof value === "string" ? Number(value) : value),
-    schema
-  );
+  return zod.preprocess(value => {
+    switch (typeof value) {
+      case "number": {
+        return Math.round(value);
+      }
+
+      case "string": {
+        return Math.round(Number(value));
+      }
+
+      default: {
+        return value;
+      }
+    }
+  }, schema);
 }

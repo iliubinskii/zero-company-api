@@ -179,6 +179,26 @@
         },
         "description": "Not found"
       },
+      "PopulatedDocument": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/PopulatedDocument"
+            }
+          }
+        },
+        "description": "Document"
+      },
+      "PopulatedDocumentList": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/PopulatedDocumentList"
+            }
+          }
+        },
+        "description": "Document list"
+      },
       "Unauthorized": {
         "content": {
           "application/json": {
@@ -219,9 +239,6 @@
           },
           "email": {
             "type": "string"
-          },
-          "user": {
-            "$ref": "#/components/schemas/User"
           }
         },
         "required": ["admin", "email"],
@@ -411,23 +428,20 @@
       },
       "DigitalDocument": {
         "properties": {
-          "assetId": {
-            "type": "string"
-          },
-          "secureUrl": {
-            "type": "string"
-          },
           "signatures": {
             "items": {
-              "type": "string"
+              "$ref": "#/components/schemas/Signature"
             },
             "type": "array"
           },
-          "url": {
+          "status": {
             "type": "string"
+          },
+          "submissionId": {
+            "type": "number"
           }
         },
-        "required": ["assetId", "secureUrl", "signatures", "url"],
+        "required": ["signatures", "submissionId"],
         "type": "object"
       },
       "Document": {
@@ -458,7 +472,14 @@
             "type": "string"
           }
         },
-        "required": ["_id", "company", "createdAt", "signatories", "type"],
+        "required": [
+          "_id",
+          "company",
+          "createdAt",
+          "doc",
+          "signatories",
+          "type"
+        ],
         "type": "object"
       },
       "DocumentList": {
@@ -492,10 +513,7 @@
           "email": {
             "type": "string"
           },
-          "firstName": {
-            "type": "string"
-          },
-          "lastName": {
+          "name": {
             "type": "string"
           },
           "share": {
@@ -626,19 +644,97 @@
         "required": ["error", "errorMessage"],
         "type": "object"
       },
+      "PopulatedDocument": {
+        "properties": {
+          "_id": {
+            "type": "string"
+          },
+          "company": {
+            "$ref": "#/components/schemas/Company"
+          },
+          "createdAt": {
+            "type": "string"
+          },
+          "doc": {
+            "$ref": "#/components/schemas/DigitalDocument"
+          },
+          "metadata": {
+            "type": "string"
+          },
+          "signatories": {
+            "items": {
+              "$ref": "#/components/schemas/Signatory"
+            },
+            "type": "array"
+          },
+          "type": {
+            "enum": ["FoundingAgreement"],
+            "type": "string"
+          }
+        },
+        "required": ["_id", "createdAt", "doc", "signatories", "type"],
+        "type": "object"
+      },
+      "PopulatedDocumentList": {
+        "properties": {
+          "count": {
+            "type": "integer"
+          },
+          "docs": {
+            "items": {
+              "$ref": "#/components/schemas/PopulatedDocument"
+            },
+            "type": "array"
+          },
+          "nextCursor": {
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 2,
+            "minItems": 2,
+            "type": "array"
+          },
+          "total": {
+            "type": "integer"
+          }
+        },
+        "required": ["count", "docs", "total"],
+        "type": "object"
+      },
       "Signatory": {
         "properties": {
           "email": {
             "type": "string"
           },
-          "firstName": {
+          "name": {
             "type": "string"
           },
-          "lastName": {
+          "role": {
             "type": "string"
           }
         },
-        "required": ["email"],
+        "required": ["email", "role"],
+        "type": "object"
+      },
+      "Signature": {
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "embedSrc": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          }
+        },
+        "required": ["email", "embedSrc", "role", "status"],
         "type": "object"
       },
       "Unauthorized": {
@@ -662,6 +758,12 @@
           "email": {
             "type": "string"
           },
+          "favoriteCompanies": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
           "firstName": {
             "type": "string"
           },
@@ -669,7 +771,7 @@
             "type": "string"
           }
         },
-        "required": ["_id", "email", "firstName", "lastName"],
+        "required": ["_id", "email", "favoriteCompanies"],
         "type": "object"
       },
       "UserList": {
@@ -727,7 +829,7 @@
   "info": {
     "description": "An API for Zero Company application",
     "title": "Zero Company API",
-    "version": "2024.6.7"
+    "version": "2024.6.15"
   },
   "openapi": "3.0.0",
   "paths": {
@@ -966,10 +1068,10 @@
       }
     },
     "/companies/{id}/found": {
-      "put": {
+      "post": {
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Company"
+            "$ref": "#/components/responses/PopulatedDocument"
           },
           "404": {
             "$ref": "#/components/responses/NotFound"
@@ -1045,7 +1147,7 @@
       "get": {
         "responses": {
           "200": {
-            "$ref": "#/components/responses/DocumentList"
+            "$ref": "#/components/responses/PopulatedDocumentList"
           },
           "400": {
             "$ref": "#/components/responses/InvalidQuery"
@@ -1057,7 +1159,7 @@
       "post": {
         "responses": {
           "201": {
-            "$ref": "#/components/responses/Document"
+            "$ref": "#/components/responses/PopulatedDocument"
           },
           "400": {
             "$ref": "#/components/responses/InvalidData"
@@ -1080,7 +1182,7 @@
       "get": {
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Document"
+            "$ref": "#/components/responses/PopulatedDocument"
           },
           "404": {
             "$ref": "#/components/responses/NotFound"
@@ -1097,7 +1199,7 @@
       "put": {
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Document"
+            "$ref": "#/components/responses/PopulatedDocument"
           },
           "400": {
             "$ref": "#/components/responses/InvalidData"
@@ -1175,12 +1277,35 @@
         },
         "summary": "Get all companies for a user",
         "tags": ["users"]
-      },
-      "parameters": [
-        {
-          "$ref": "#/components/parameters/Id"
-        }
-      ]
+      }
+    },
+    "/me/documents": {
+      "get": {
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/PopulatedDocumentList"
+          },
+          "400": {
+            "$ref": "#/components/responses/InvalidQuery"
+          }
+        },
+        "summary": "Get all documents for a user",
+        "tags": ["users"]
+      }
+    },
+    "/me/favorite-companies": {
+      "get": {
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/CompanyList"
+          },
+          "400": {
+            "$ref": "#/components/responses/InvalidQuery"
+          }
+        },
+        "summary": "Get all favorite companies for a user",
+        "tags": ["users"]
+      }
     },
     "/users": {
       "get": {
@@ -1265,6 +1390,39 @@
           }
         },
         "summary": "Get all companies for a user",
+        "tags": ["users"]
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/Id"
+        }
+      ]
+    },
+    "/users/{id}/documents": {
+      "get": {
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/PopulatedDocumentList"
+          },
+          "400": {
+            "$ref": "#/components/responses/InvalidQuery"
+          }
+        },
+        "summary": "Get all documents for a user",
+        "tags": ["users"]
+      }
+    },
+    "/users/{id}/favorite-companies": {
+      "get": {
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/CompanyList"
+          },
+          "400": {
+            "$ref": "#/components/responses/InvalidQuery"
+          }
+        },
+        "summary": "Get all favorite companies for a user",
         "tags": ["users"]
       },
       "parameters": [

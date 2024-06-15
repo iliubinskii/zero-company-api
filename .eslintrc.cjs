@@ -38,6 +38,14 @@ const config = {
     sourceType: "module"
   },
   rules: {
+    "import/no-internal-modules": [
+      "warn",
+      {
+        allow:
+          // @sort
+          ["react-dom/server"]
+      }
+    ],
     "node/no-unsupported-features/es-builtins": [
       "error",
       {
@@ -74,6 +82,7 @@ const config = {
             "defs",
             "destructure",
             "docu",
+            "docuseal",
             "ecma",
             "enum",
             "envalid",
@@ -106,6 +115,7 @@ const config = {
             "openid",
             "originalname",
             "parens",
+            "pdf",
             "pem",
             "picsum",
             "printf",
@@ -122,6 +132,7 @@ const config = {
             "str",
             "stylelint",
             "stylelintrc",
+            "submitters",
             "tagline",
             "tsconfig",
             "tsx",
@@ -130,8 +141,10 @@ const config = {
             "ucfirst",
             "unlink",
             "uploader",
+            "upsert",
             "uri",
             "urls",
+            "utf8",
             "uuidv4",
             "validators",
             "ver",

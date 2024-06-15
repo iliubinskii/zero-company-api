@@ -32,7 +32,7 @@ import {
   createUsersService,
   testRouter
 } from "./routes";
-import { getSessionStore, logger } from "./services";
+import { createSessionStore, logger } from "./services";
 import { initAuth0Passport, initMongodb, initRedis } from "./providers";
 import { ErrorCode } from "./schema";
 import type { Routes } from "./schema";
@@ -77,7 +77,11 @@ export async function createApp(): Promise<express.Express> {
 
   const documentControllers = createDocumentControllers(documentsService);
 
-  const userControllers = createUserControllers(usersService, companiesService);
+  const userControllers = createUserControllers(
+    usersService,
+    companiesService,
+    documentsService
+  );
 
   const app = express();
 
@@ -104,7 +108,7 @@ export async function createApp(): Promise<express.Express> {
       resave: false,
       saveUninitialized: false,
       secret: SESSION_SECRET,
-      store: getSessionStore()
+      store: createSessionStore()
     })
   );
   app.use(passport.initialize());

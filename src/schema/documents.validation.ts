@@ -2,7 +2,8 @@ import {
   DigitalDocumentValidationSchema,
   DocType,
   IdValidationSchema,
-  SignatoryValidationSchema
+  SignatoryValidationSchema,
+  preprocessDate
 } from "./common";
 import type {
   DocumentCreate,
@@ -11,36 +12,26 @@ import type {
 } from "./documents";
 import zod from "zod";
 
-const _id = IdValidationSchema;
-
-const company = zod.string().min(1);
-
-const createdAt = zod.date();
-
-const doc = DigitalDocumentValidationSchema.nullable().optional();
-
-const metadata = zod.string().min(1).nullable().optional();
-
-const signatories = zod.array(SignatoryValidationSchema).nonempty();
-
-const type = zod.enum([DocType.FoundingAgreement]);
-
-export const ExistingDocumentValidationSchema = zod.strictObject({
-  _id,
-  company,
-  createdAt,
-  doc,
-  metadata,
-  signatories,
-  type
+export const ExistingDocumentValidationSchema = zod.object({
+  _id: IdValidationSchema,
+  company: zod.string().min(1),
+  createdAt: preprocessDate(zod.date()),
+  doc: DigitalDocumentValidationSchema,
+  metadata: zod.string().min(1).nullable().optional(),
+  signatories: zod.array(SignatoryValidationSchema).nonempty(),
+  type: zod.enum([DocType.FoundingAgreement])
 });
 
 export const DocumentCreateValidationSchema =
-  ExistingDocumentValidationSchema.omit({ _id: true });
+  ExistingDocumentValidationSchema.pick({
+    company: true,
+    doc: true,
+    metadata: true,
+    signatories: true,
+    type: true
+  });
 
-export const DocumentUpdateValidationSchema = zod.strictObject({
-  doc: doc.optional()
-});
+export const DocumentUpdateValidationSchema = zod.object({});
 
 // Type check the existing document validation schema
 ((): ExistingDocument | undefined => {

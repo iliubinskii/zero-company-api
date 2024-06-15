@@ -12,13 +12,12 @@ import {
   AUTH_COOKIE_NAME,
   JWT_EXPIRES_IN
 } from "../consts";
-import type { AuthUserEssential, Jwt } from "../schema";
+import type { AuthUser, Jwt } from "../schema";
 import { ErrorCode, JwtValidationSchema, preprocessEmail } from "../schema";
-import { buildQuery, wrapAsyncHandler } from "../utils";
+import { buildQuery, requireType, wrapAsyncHandler } from "../utils";
 import { Router } from "express";
 import { URL } from "node:url";
 import type { UsersService } from "../types";
-import type { Writable } from "ts-toolbelt/out/Object/Writable";
 import jwt from "jsonwebtoken";
 import { lang } from "../langs";
 import { logger } from "../services";
@@ -30,9 +29,7 @@ import zod from "zod";
  * @returns Router
  */
 export function createAuthRouter(usersService: UsersService): Router {
-  const router = Router();
-
-  router
+  return Router()
     .get(
       "/callback",
       // eslint-disable-next-line @typescript-eslint/no-unsafe-argument -- Postponed
@@ -46,32 +43,7 @@ export function createAuthRouter(usersService: UsersService): Router {
         if (req.isAuthenticated()) {
           const auth0User = Auth0UserValidationSchema.parse(req.user);
 
-          const payload: Jwt = { email: auth0User.emails[0].value };
-
-          const token = jwt.sign(payload, JWT_SECRET, {
-            expiresIn: JWT_EXPIRES_IN
-          });
-
-          const userQueryParam: Writable<AuthUserEssential> = {
-            admin: ADMIN_EMAIL.includes(payload.email),
-            email: payload.email
-          };
-
-          const user = await usersService.getUser({
-            email: payload.email,
-            type: "email"
-          });
-
-          if (user)
-            userQueryParam.user = {
-              firstName: user.firstName,
-              lastName: user.lastName
-            };
-
-          const queryStr = buildQuery({
-            action: "login",
-            user: JSON.stringify(userQueryParam)
-          });
+          const email = auth0User.emails[0].value;
 
           const successReturnUrl =
             typeof req.session.successReturnUrl === "string"
@@ -80,6 +52,22 @@ export function createAuthRouter(usersService: UsersService): Router {
                   AUTH0_RETURN_URL
                 ).toString()
               : AUTH0_RETURN_URL;
+
+          const queryStr = buildQuery({
+            action: "login",
+            user: JSON.stringify(
+              requireType<AuthUser>({
+                admin: ADMIN_EMAIL.includes(email),
+                email
+              })
+            )
+          });
+
+          const token = jwt.sign(requireType<Jwt>({ email }), JWT_SECRET, {
+            expiresIn: JWT_EXPIRES_IN
+          });
+
+          await usersService.addUser({ email, favoriteCompanies: [] });
 
           await new Promise<void>((resolve, reject) => {
             req.logout((err: unknown) => {
@@ -194,14 +182,11 @@ export function createAuthRouter(usersService: UsersService): Router {
         } else res.json(null);
       })
     );
-
-  return router;
 }
 
-// Do not use strictObject: auth0 may return additional fields
 const Auth0UserValidationSchema = zod.object({
   emails: zod
-    .array(zod.strictObject({ value: preprocessEmail(zod.string().email()) }))
+    .array(zod.object({ value: preprocessEmail(zod.string().email()) }))
     .nonempty()
     .max(1)
 });

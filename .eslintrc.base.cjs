@@ -41,15 +41,18 @@ const config = {
       }
     }
   ],
-  plugins: [
-    "es",
-    "no-type-assertion",
-    "only-warn",
-    "sort-annotation",
-    "sort-imports-requires",
-    "spellcheck",
-    "unused-imports"
-  ],
+  plugins:
+    // @sorted
+    [
+      "es",
+      "no-type-assertion",
+      "no-useless-assign",
+      "only-warn",
+      "sort-annotation",
+      "sort-imports-requires",
+      "spellcheck",
+      "unused-imports"
+    ],
   rules: {
     "@typescript-eslint/consistent-type-imports": [
       "warn",
@@ -73,6 +76,7 @@ const config = {
     ],
     "@typescript-eslint/no-dynamic-delete": "off",
     "@typescript-eslint/no-shadow": "warn",
+    "@typescript-eslint/promise-function-async": "warn",
     "@typescript-eslint/restrict-template-expressions": [
       "warn",
       { allowNumber: true }
@@ -85,6 +89,7 @@ const config = {
     ],
     "callback-return": "off",
     "camelcase": "off",
+    "complexity": "off",
     "consistent-return": "off",
     "curly": ["warn", "multi"],
     "default-case": "off",
@@ -118,6 +123,7 @@ const config = {
     "no-unreachable": "off",
     "no-unused-vars": "off",
     "no-use-before-define": "off",
+    "no-useless-assign/no-useless-assign": "warn",
     "node/no-missing-import": "off",
     "node/no-unsupported-features/es-syntax": "off",
     "prefer-destructuring": "off",

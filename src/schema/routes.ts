@@ -159,9 +159,9 @@ export interface paths {
   };
   "/companies/{id}/found": {
     /** Create founding agreement for a company */
-    put: {
+    post: {
       responses: {
-        200: components["responses"]["Company"];
+        200: components["responses"]["PopulatedDocument"];
         404: components["responses"]["NotFound"];
         409: components["responses"]["Conflict"];
       };
@@ -226,14 +226,14 @@ export interface paths {
     /** Get all documents */
     get: {
       responses: {
-        200: components["responses"]["DocumentList"];
+        200: components["responses"]["PopulatedDocumentList"];
         400: components["responses"]["InvalidQuery"];
       };
     };
     /** Create a new document */
     post: {
       responses: {
-        201: components["responses"]["Document"];
+        201: components["responses"]["PopulatedDocument"];
         400: components["responses"]["InvalidData"];
       };
     };
@@ -247,7 +247,7 @@ export interface paths {
         };
       };
       responses: {
-        200: components["responses"]["Document"];
+        200: components["responses"]["PopulatedDocument"];
         404: components["responses"]["NotFound"];
       };
     };
@@ -259,7 +259,7 @@ export interface paths {
         };
       };
       responses: {
-        200: components["responses"]["Document"];
+        200: components["responses"]["PopulatedDocument"];
         400: components["responses"]["InvalidData"];
         404: components["responses"]["NotFound"];
       };
@@ -315,19 +315,27 @@ export interface paths {
   "/me/companies": {
     /** Get all companies for a user */
     get: {
-      parameters: {
-        path: {
-          id: components["parameters"]["Id"];
-        };
-      };
       responses: {
         200: components["responses"]["CompanyList"];
         400: components["responses"]["InvalidQuery"];
       };
     };
-    parameters: {
-      path: {
-        id: components["parameters"]["Id"];
+  };
+  "/me/documents": {
+    /** Get all documents for a user */
+    get: {
+      responses: {
+        200: components["responses"]["PopulatedDocumentList"];
+        400: components["responses"]["InvalidQuery"];
+      };
+    };
+  };
+  "/me/favorite-companies": {
+    /** Get all favorite companies for a user */
+    get: {
+      responses: {
+        200: components["responses"]["CompanyList"];
+        400: components["responses"]["InvalidQuery"];
       };
     };
   };
@@ -410,6 +418,34 @@ export interface paths {
       };
     };
   };
+  "/users/{id}/documents": {
+    /** Get all documents for a user */
+    get: {
+      responses: {
+        200: components["responses"]["PopulatedDocumentList"];
+        400: components["responses"]["InvalidQuery"];
+      };
+    };
+  };
+  "/users/{id}/favorite-companies": {
+    /** Get all favorite companies for a user */
+    get: {
+      parameters: {
+        path: {
+          id: components["parameters"]["Id"];
+        };
+      };
+      responses: {
+        200: components["responses"]["CompanyList"];
+        400: components["responses"]["InvalidQuery"];
+      };
+    };
+    parameters: {
+      path: {
+        id: components["parameters"]["Id"];
+      };
+    };
+  };
   "/400": {
     /** Bad request */
     get: {
@@ -459,7 +495,6 @@ export interface components {
     AuthUser: {
       admin: boolean;
       email: string;
-      user?: components["schemas"]["User"];
     } | null;
     BadRequest: {
       /** @enum {string} */
@@ -513,16 +548,15 @@ export interface components {
       affectedRows: number;
     };
     DigitalDocument: {
-      assetId: string;
-      secureUrl: string;
-      signatures: string[];
-      url: string;
+      signatures: components["schemas"]["Signature"][];
+      status?: string;
+      submissionId: number;
     };
     Document: {
       _id: string;
       company: string;
       createdAt: string;
-      doc?: components["schemas"]["DigitalDocument"];
+      doc: components["schemas"]["DigitalDocument"];
       metadata?: string;
       signatories: components["schemas"]["Signatory"][];
       /** @enum {string} */
@@ -536,8 +570,7 @@ export interface components {
     };
     Founder: {
       email: string;
-      firstName?: string;
-      lastName?: string;
+      name?: string;
       share?: number;
     };
     Home: {
@@ -583,10 +616,33 @@ export interface components {
       error: "NotFound";
       errorMessage: string;
     };
+    PopulatedDocument: {
+      _id: string;
+      company?: components["schemas"]["Company"];
+      createdAt: string;
+      doc: components["schemas"]["DigitalDocument"];
+      metadata?: string;
+      signatories: components["schemas"]["Signatory"][];
+      /** @enum {string} */
+      type: "FoundingAgreement";
+    };
+    PopulatedDocumentList: {
+      count: number;
+      docs: components["schemas"]["PopulatedDocument"][];
+      nextCursor?: string[];
+      total: number;
+    };
     Signatory: {
       email: string;
-      firstName?: string;
-      lastName?: string;
+      name?: string;
+      role: string;
+    };
+    Signature: {
+      email: string;
+      embedSrc: string;
+      name?: string;
+      role: string;
+      status: string;
     };
     Unauthorized: {
       /** @enum {string} */
@@ -596,8 +652,9 @@ export interface components {
     User: {
       _id: string;
       email: string;
-      firstName: string;
-      lastName: string;
+      favoriteCompanies: string[];
+      firstName?: string;
+      lastName?: string;
     };
     UserList: {
       count: number;
@@ -709,6 +766,18 @@ export interface components {
     NotFound: {
       content: {
         "application/json": components["schemas"]["NotFound"];
+      };
+    };
+    /** @description Document */
+    PopulatedDocument: {
+      content: {
+        "application/json": components["schemas"]["PopulatedDocument"];
+      };
+    };
+    /** @description Document list */
+    PopulatedDocumentList: {
+      content: {
+        "application/json": components["schemas"]["PopulatedDocumentList"];
       };
     };
     /** @description Bad request */

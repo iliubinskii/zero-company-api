@@ -31,10 +31,9 @@ export interface DeleteResponse {
 }
 
 export interface DigitalDocument {
-  readonly assetId: string;
-  readonly secureUrl: string;
-  readonly signatures: readonly string[];
-  readonly url: string;
+  readonly signatures: readonly Signature[];
+  readonly status?: string | null | undefined;
+  readonly submissionId: number;
 }
 
 export type DocType = (typeof DocType)[keyof typeof DocType];
@@ -59,8 +58,7 @@ export interface FieldError {
 
 export interface Founder {
   readonly email: string;
-  readonly firstName?: string | null | undefined;
-  readonly lastName?: string | null | undefined;
+  readonly name?: string | null | undefined;
   readonly share?: number | null | undefined;
 }
 
@@ -91,8 +89,16 @@ export type SchemaResponse<T extends SchemaItem = never> = Readonly<
 
 export interface Signatory {
   readonly email: string;
-  readonly firstName?: string | null | undefined;
-  readonly lastName?: string | null | undefined;
+  readonly name?: string | null | undefined;
+  readonly role: string;
+}
+
+export interface Signature {
+  readonly email: string;
+  readonly embedSrc: string;
+  readonly name?: string | null | undefined;
+  readonly role: string;
+  readonly status: string;
 }
 
 export type Update<T> = {

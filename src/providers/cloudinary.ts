@@ -19,12 +19,10 @@ export async function uploadImage(
   file: string,
   remoteFolder: string
 ): Promise<UploadApiResponse> {
-  const result = await cloudinary.uploader.upload(file, {
+  return cloudinary.uploader.upload(file, {
     api_key: CLOUDINARY_API_KEY,
     api_secret: CLOUDINARY_API_SECRET,
     cloud_name: CLOUDINARY_CLOUD_NAME,
     folder: `${CLOUDINARY_BASE_FOLDER}/${remoteFolder}`
   });
-
-  return result;
 }

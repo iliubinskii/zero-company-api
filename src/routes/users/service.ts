@@ -1,7 +1,7 @@
 import { MAX_LIMIT } from "../../schema";
 import { MONGODB_ERROR } from "../../consts";
 import type { UsersService } from "../../types";
-import { getUserModel } from "../../schema-mongodb";
+import { getModels } from "../../schema-mongodb";
 
 /**
  * Creates a MongoDB service for users.
@@ -9,15 +9,13 @@ import { getUserModel } from "../../schema-mongodb";
  */
 export function createUsersService(): UsersService {
   return {
-    addUser: async user => {
+    addUser: async data => {
       try {
-        const UserModel = await getUserModel();
+        const { UserModel } = await getModels();
 
-        const model = new UserModel(user);
+        const user = new UserModel(data);
 
-        const addedUser = await model.save();
-
-        return addedUser;
+        return await user.save();
       } catch (err) {
         if (
           typeof err === "object" &&
@@ -31,9 +29,9 @@ export function createUsersService(): UsersService {
       }
     },
     deleteUser: async ref => {
-      const UserModel = await getUserModel();
+      const { UserModel } = await getModels();
 
-      const deletedUser = await (() => {
+      const user = await (() => {
         switch (ref.type) {
           case "id": {
             return UserModel.findByIdAndDelete(ref.id);
@@ -45,27 +43,29 @@ export function createUsersService(): UsersService {
         }
       })();
 
-      return deletedUser ? 1 : 0;
+      return user ? 1 : 0;
     },
     getUser: async ref => {
-      const UserModel = await getUserModel();
+      const { UserModel } = await getModels();
 
-      const user = await (() => {
+      return (() => {
         switch (ref.type) {
           case "id": {
             return UserModel.findById(ref.id);
           }
 
           case "email": {
-            return UserModel.findOne({ email: ref.email });
+            return UserModel.findOneAndUpdate(
+              { email: ref.email },
+              {},
+              { new: true, upsert: true }
+            );
           }
         }
       })();
-
-      return user;
     },
     getUsers: async ({ limit = MAX_LIMIT, offset = 0 } = {}) => {
-      const UserModel = await getUserModel();
+      const { UserModel } = await getModels();
 
       const [users, total] = await Promise.all([
         UserModel.find().skip(offset).limit(limit),
@@ -79,25 +79,41 @@ export function createUsersService(): UsersService {
       };
     },
     updateUser: async (ref, user) => {
-      const UserModel = await getUserModel();
+      const { UserModel } = await getModels();
 
-      const updatedUser = await (() => {
+      const { addFavoriteCompanies, removeFavoriteCompanies, ...rest } = user;
+
+      const update: Record<string, unknown> = {};
+
+      if (Object.keys(rest).length > 0) update["$set"] = rest;
+
+      if (addFavoriteCompanies && addFavoriteCompanies.length > 0)
+        update["$push"] = {
+          favoriteCompanies: { $each: addFavoriteCompanies }
+        };
+
+      if (removeFavoriteCompanies && removeFavoriteCompanies.length > 0)
+        update["$pull"] = {
+          favoriteCompanies: { $in: removeFavoriteCompanies }
+        };
+
+      return (() => {
         switch (ref.type) {
           case "id": {
-            return UserModel.findByIdAndUpdate(ref.id, user, {
-              new: true
+            return UserModel.findByIdAndUpdate(ref.id, update, {
+              new: true,
+              runValidators: true
             });
           }
 
           case "email": {
-            return UserModel.findOneAndUpdate({ email: ref.email }, user, {
-              new: true
+            return UserModel.findOneAndUpdate({ email: ref.email }, update, {
+              new: true,
+              runValidators: true
             });
           }
         }
       })();
-
-      return updatedUser;
     }
   };
 }

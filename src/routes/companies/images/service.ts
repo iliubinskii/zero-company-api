@@ -1,7 +1,5 @@
-import type { Company } from "../../../schema";
 import type { CompanyImagesService } from "../../../types";
-import { getCompanyModel } from "../../../schema-mongodb";
-import type mongoose from "mongoose";
+import { getModels } from "../../../schema-mongodb";
 
 /**
  * Creates a MongoDB service for company images.
@@ -10,41 +8,31 @@ import type mongoose from "mongoose";
 export function createCompanyImagesService(): CompanyImagesService {
   return {
     addImage: async (id, image) => {
-      const CompanyModel = await getCompanyModel();
+      const { CompanyModel } = await getModels();
 
-      const company = await CompanyModel.findByIdAndUpdate(
+      return CompanyModel.findByIdAndUpdate(
         id,
         { $push: { images: image } },
         { new: true, runValidators: true }
       );
-
-      return company;
     },
     deleteImage: async (id, assetId) => {
-      const CompanyModel = await getCompanyModel();
+      const { CompanyModel } = await getModels();
 
-      const company = await CompanyModel.findByIdAndUpdate(
+      return CompanyModel.findByIdAndUpdate(
         id,
         { $pull: { images: { assetId } } },
-        { new: true }
+        { new: true, runValidators: true }
       );
-
-      return company;
     },
     updateImage: async (id, assetId, image) => {
-      const CompanyModel = await getCompanyModel();
+      const { CompanyModel } = await getModels();
 
-      const company = await CompanyModel.findOneAndUpdate(
+      return CompanyModel.findOneAndUpdate(
         { "_id": id, "images.assetId": assetId },
         { $set: { "images.$": image } },
         { new: true, runValidators: true }
       );
-
-      return company;
     }
   };
-}
-
-export interface GetCompanyModel {
-  (): Promise<mongoose.Model<Company>>;
 }

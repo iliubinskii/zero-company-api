@@ -4,7 +4,7 @@ openapi: 3.0.0
 info:
   title: Zero Company API
   description: An API for Zero Company application
-  version: 2024.6.7
+  version: 2024.6.15
 
 # Servers
 servers:
@@ -154,13 +154,13 @@ paths:
 
   # Found company path
   /companies/{id}/found:
-    put:
+    post:
       summary: Create founding agreement for a company
       tags:
         - companies
       responses:
         "200":
-          $ref: "#/components/responses/Company"
+          $ref: "#/components/responses/PopulatedDocument"
         "404":
           $ref: "#/components/responses/NotFound"
         "409":
@@ -215,7 +215,7 @@ paths:
         - documents
       responses:
         "200":
-          $ref: "#/components/responses/DocumentList"
+          $ref: "#/components/responses/PopulatedDocumentList"
         "400":
           $ref: "#/components/responses/InvalidQuery"
     post:
@@ -224,7 +224,7 @@ paths:
         - documents
       responses:
         "201":
-          $ref: "#/components/responses/Document"
+          $ref: "#/components/responses/PopulatedDocument"
         "400":
           $ref: "#/components/responses/InvalidData"
 
@@ -245,7 +245,7 @@ paths:
         - documents
       responses:
         "200":
-          $ref: "#/components/responses/Document"
+          $ref: "#/components/responses/PopulatedDocument"
         "404":
           $ref: "#/components/responses/NotFound"
     put:
@@ -254,7 +254,7 @@ paths:
         - documents
       responses:
         "200":
-          $ref: "#/components/responses/Document"
+          $ref: "#/components/responses/PopulatedDocument"
         "400":
           $ref: "#/components/responses/InvalidData"
         "404":
@@ -301,12 +301,34 @@ paths:
         "404":
           $ref: "#/components/responses/NotFound"
 
-  # Me companies path
+  # My companies path
   /me/companies:
-    parameters:
-      - $ref: '#/components/parameters/Id'
     get:
       summary: Get all companies for a user
+      tags:
+        - users
+      responses:
+        "200":
+          $ref: "#/components/responses/CompanyList"
+        "400":
+          $ref: "#/components/responses/InvalidQuery"
+
+  # My documents path
+  /me/documents:
+    get:
+      summary: Get all documents for a user
+      tags:
+        - users
+      responses:
+        "200":
+          $ref: "#/components/responses/PopulatedDocumentList"
+        "400":
+          $ref: "#/components/responses/InvalidQuery"
+
+  # My favorite companies path
+  /me/favorite-companies:
+    get:
+      summary: Get all favorite companies for a user
       tags:
         - users
       responses:
@@ -376,6 +398,32 @@ paths:
       - $ref: '#/components/parameters/Id'
     get:
       summary: Get all companies for a user
+      tags:
+        - users
+      responses:
+        "200":
+          $ref: "#/components/responses/CompanyList"
+        "400":
+          $ref: "#/components/responses/InvalidQuery"
+
+  # User documents path
+  /users/{id}/documents:
+    get:
+      summary: Get all documents for a user
+      tags:
+        - users
+      responses:
+        "200":
+          $ref: "#/components/responses/PopulatedDocumentList"
+        "400":
+          $ref: "#/components/responses/InvalidQuery"
+
+  # User favorite companies path
+  /users/{id}/favorite-companies:
+    parameters:
+      - $ref: '#/components/parameters/Id'
+    get:
+      summary: Get all favorite companies for a user
       tags:
         - users
       responses:
@@ -585,6 +633,22 @@ components:
           schema:
             $ref: "#/components/schemas/NotFound"
 
+    # PopulatedDocument response
+    PopulatedDocument:
+      description: Document
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/PopulatedDocument"
+
+    # PopulatedDocumentList response
+    PopulatedDocumentList:
+      description: Document list
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/PopulatedDocumentList"
+
     # Unauthorized response
     Unauthorized:
       description: Bad request
@@ -624,8 +688,6 @@ components:
           type: boolean
         email:
           type: string
-        user:
-          $ref: "#/components/schemas/User"
 
     # BadRequest schema
     BadRequest:
@@ -792,21 +854,17 @@ components:
     DigitalDocument:
       type: object
       required:
-        - assetId
-        - secureUrl
         - signatures
-        - url
+        - submissionId
       properties:
-        assetId:
-          type: string
-        secureUrl:
-          type: string
         signatures:
           type: array
           items:
-            type: string
-        url:
+            $ref: '#/components/schemas/Signature'
+        status:
           type: string
+        submissionId:
+          type: number
 
     # Document schema
     Document:
@@ -815,6 +873,7 @@ components:
         - _id
         - company
         - createdAt
+        - doc
         - signatories
         - type
       properties:
@@ -868,9 +927,7 @@ components:
       properties:
         email:
           type: string
-        firstName:
-          type: string
-        lastName:
+        name:
           type: string
         share:
           type: number
@@ -999,17 +1056,90 @@ components:
         errorMessage:
           type: string
 
+    # PopulatedDocument schema
+    PopulatedDocument:
+      type: object
+      required:
+        - _id
+        - createdAt
+        - doc
+        - signatories
+        - type
+      properties:
+        _id:
+          type: string
+        company:
+          $ref: '#/components/schemas/Company'
+        createdAt:
+          type: string
+        doc:
+          $ref: '#/components/schemas/DigitalDocument'
+        metadata:
+          type: string
+        signatories:
+          type: array
+          items:
+            $ref: '#/components/schemas/Signatory'
+        type:
+          type: string
+          enum:
+            - FoundingAgreement
+
+    # PopulatedDocumentList schema
+    PopulatedDocumentList:
+      type: object
+      required:
+        - count
+        - docs
+        - total
+      properties:
+        count:
+          type: integer
+        docs:
+          type: array
+          items:
+            $ref: "#/components/schemas/PopulatedDocument"
+        nextCursor:
+          type: array
+          items:
+            type: string
+          minItems: 2
+          maxItems: 2
+        total:
+          type: integer
+
     # Signatory schema
     Signatory:
       type: object
       required:
         - email
+        - role
       properties:
         email:
           type: string
-        firstName:
+        name:
           type: string
-        lastName:
+        role:
+          type: string
+
+    # Signature schema
+    Signature:
+      type: object
+      required:
+        - email
+        - embedSrc
+        - role
+        - status
+      properties:
+        email:
+          type: string
+        embedSrc:
+          type: string
+        name:
+          type: string
+        role:
+          type: string
+        status:
           type: string
 
     # Unauthorized schema
@@ -1032,13 +1162,16 @@ components:
       required:
         - _id
         - email
-        - firstName
-        - lastName
+        - favoriteCompanies
       properties:
         _id:
           type: string
         email:
           type: string
+        favoriteCompanies:
+          type: array
+          items:
+            type: string
         firstName:
           type: string
         lastName:

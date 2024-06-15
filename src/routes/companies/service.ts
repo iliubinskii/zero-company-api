@@ -1,20 +1,22 @@
+import {
+  type CompaniesService,
+  dangerouslyAssumePopulatedDocument
+} from "../../types";
 import type {
   Company,
   Document,
   GetCompaniesOptions,
+  Signatory,
   User
 } from "../../schema";
 import { DocType, MAX_LIMIT } from "../../schema";
-import {
-  getCompanyModel,
-  getDocumentModel,
-  getUserModel
-} from "../../schema-mongodb";
-import type { CompaniesService } from "../../types";
+import { createDigitalDocument, getMongodbConnection } from "../../providers";
 import type { FilterQuery } from "mongoose";
+import { FoundingAgreement } from "../../templates";
 import { StatusCodes } from "http-status-codes";
 import type { Writable } from "ts-toolbelt/out/Object/Writable";
-import { getMongodbConnection } from "../../providers";
+import { getModels } from "../../schema-mongodb";
+import { lang } from "../../langs";
 import type mongoose from "mongoose";
 
 /**
@@ -23,28 +25,24 @@ import type mongoose from "mongoose";
  */
 export function createCompaniesService(): CompaniesService {
   return {
-    addCompany: async company => {
-      const CompanyModel = await getCompanyModel();
+    addCompany: async data => {
+      const { CompanyModel } = await getModels();
 
-      const model = new CompanyModel(company);
+      const company = new CompanyModel(data);
 
-      const addedItem = await model.save();
-
-      return addedItem;
+      return company.save();
     },
     deleteCompany: async id => {
-      const CompanyModel = await getCompanyModel();
+      const { CompanyModel } = await getModels();
 
-      const deletedCategory = await CompanyModel.findByIdAndDelete(id);
+      const company = await CompanyModel.findByIdAndDelete(id);
 
-      return deletedCategory ? 1 : 0;
+      return company ? 1 : 0;
     },
     generateFoundingAgreement: async id => {
+      const { CompanyModel, DocumentModel } = await getModels();
+
       const connection = await getMongodbConnection();
-
-      const CompanyModel = await getCompanyModel();
-
-      const DocumentModel = await getDocumentModel();
 
       const session = await connection.startSession();
 
@@ -53,45 +51,69 @@ export function createCompaniesService(): CompaniesService {
       try {
         const company = await CompanyModel.findById(id).session(session);
 
-        if (!company) {
-          await session.abortTransaction();
-          await session.endSession();
+        if (company) {
+          if (company.foundingAgreement) {
+            await session.commitTransaction();
+            await session.endSession();
 
-          return null;
-        }
+            return StatusCodes.CONFLICT;
+          }
 
-        if (company.foundingAgreement) {
-          await session.abortTransaction();
-          await session.endSession();
-
-          return StatusCodes.CONFLICT;
-        }
-
-        const doc: Document = {
-          company: company._id.toString(),
-          createdAt: new Date(),
-          signatories: company.founders.map(
-            ({ email, firstName, lastName }) => {
-              return { email, firstName, lastName };
+          const signatories = company.founders.map(
+            ({ email, name }, index): Signatory => {
+              return {
+                email,
+                name,
+                role: `${lang.Founder} ${index + 1}`
+              };
             }
-          ),
-          type: DocType.FoundingAgreement
-        };
+          );
 
-        const document = new DocumentModel(doc);
+          const digitalDocument = await createDigitalDocument(
+            lang.FoundingAgreement,
+            FoundingAgreement,
+            signatories
+          );
 
-        company.foundingAgreement = document._id;
+          const data: Document = {
+            company: company._id.toString(),
+            createdAt: new Date(),
+            doc: digitalDocument,
+            signatories: company.founders.map(
+              ({ email, name }, index): Signatory => {
+                return {
+                  email,
+                  name,
+                  role: `${lang.Founder} ${index + 1}`
+                };
+              }
+            ),
+            type: DocType.FoundingAgreement
+          };
 
-        const updatedCompany = await company.save({ session });
+          const document = new DocumentModel(data);
+
+          await document.save({ session });
+          await document.populate("company");
+
+          company.foundingAgreement = document._id;
+
+          await company.save({ session });
+
+          await session.commitTransaction();
+
+          return dangerouslyAssumePopulatedDocument(document);
+        }
 
         await session.commitTransaction();
-        await session.endSession();
 
-        return updatedCompany;
+        return null;
       } catch (err) {
         await session.abortTransaction();
-        await session.endSession();
+
         throw err;
+      } finally {
+        await session.endSession();
       }
     },
     getCompanies: async (options = {}, parentRef) => {
@@ -108,10 +130,34 @@ export function createCompaniesService(): CompaniesService {
 
       const mongodbSortOrder = mongodbSortOrderMap[sortOrder];
 
-      const CompanyModel = await getCompanyModel();
+      const { CompanyModel } = await getModels();
 
       if (parentRef)
         switch (parentRef.type) {
+          case "bookmarkUserEmail": {
+            const { UserModel } = await getModels();
+
+            const user = await UserModel.findOne({
+              email: parentRef.bookmarkUserEmail
+            });
+
+            if (user) filter["_id"] = { $in: user.favoriteCompanies };
+            else return { count: 0, docs: [], total: 0 };
+
+            break;
+          }
+
+          case "bookmarkUserId": {
+            const { UserModel } = await getModels();
+
+            const user = await UserModel.findById(parentRef.bookmarkUserId);
+
+            if (user) filter["_id"] = { $in: user.favoriteCompanies };
+            else return { count: 0, docs: [], total: 0 };
+
+            break;
+          }
+
           case "category": {
             filter["categories"] = { $in: parentRef.category };
 
@@ -125,17 +171,12 @@ export function createCompaniesService(): CompaniesService {
           }
 
           case "founderId": {
-            const UserModel = await getUserModel();
+            const { UserModel } = await getModels();
 
             const user = await UserModel.findById(parentRef.founderId);
 
             if (user) filter["founders.email"] = user.email;
-            else
-              return {
-                count: 0,
-                docs: [],
-                total: 0
-              };
+            else return { count: 0, docs: [], total: 0 };
           }
         }
 
@@ -174,14 +215,12 @@ export function createCompaniesService(): CompaniesService {
       };
     },
     getCompany: async id => {
-      const CompanyModel = await getCompanyModel();
+      const { CompanyModel } = await getModels();
 
-      const company = await CompanyModel.findById(id);
-
-      return company;
+      return CompanyModel.findById(id);
     },
     updateCompany: async (id, company) => {
-      const CompanyModel = await getCompanyModel();
+      const { CompanyModel } = await getModels();
 
       const { addImages, removeImages, ...rest } = company;
 
@@ -195,12 +234,10 @@ export function createCompaniesService(): CompaniesService {
       if (removeImages && removeImages.length > 0)
         update["$pull"] = { images: { assetId: { $in: removeImages } } };
 
-      const updatedCategory = await CompanyModel.findByIdAndUpdate(id, update, {
+      return CompanyModel.findByIdAndUpdate(id, update, {
         new: true,
         runValidators: true
       });
-
-      return updatedCategory;
     }
   };
 }
