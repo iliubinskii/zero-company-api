@@ -1,20 +1,15 @@
+import { MAX_LIMIT } from "./consts";
 import zod from "zod";
 
-export const DigitalDocumentValidationSchema = zod.object({
-  embedSrc: zod.string().url(),
-  signatures: zod.array(zod.string().min(1)),
-  submissionId: preprocessInt(zod.number().int())
-});
+export const IdValidationSchema = zod
+  .string()
+  .refine(value => /^[\da-f]{24}$/u.test(value));
 
 export const FounderValidationSchema = zod.object({
   email: preprocessEmail(zod.string().email()),
   name: zod.string().min(1).nullable().optional(),
   share: preprocessInt(zod.number().int().positive()).nullable().optional()
 });
-
-export const IdValidationSchema = zod
-  .string()
-  .refine(value => /^[\da-f]{24}$/u.test(value));
 
 export const ImageValidationSchema = zod.object({
   assetId: zod.string().min(1),
@@ -25,10 +20,40 @@ export const ImageValidationSchema = zod.object({
   width: preprocessInt(zod.number().int().positive())
 });
 
+export const LimitValidationSchema = preprocessInt(
+  zod.number().int().positive().max(MAX_LIMIT)
+).optional();
+
+export const OffsetValidationSchema = preprocessInt(
+  zod.number().int().nonnegative()
+).optional();
+
 export const SignatoryValidationSchema = zod.object({
   email: zod.string().email(),
   name: zod.string().min(1).nullable().optional(),
   role: zod.string().min(1)
+});
+
+export const SignatureValidationSchema = zod.object({
+  email: preprocessEmail(zod.string().email()),
+  embedSrc: zod.string().url(),
+  name: zod.string().min(1).nullable().optional(),
+  role: zod.string().min(1),
+  status: zod.string().min(1)
+});
+
+export const SortOrderValidationSchema = zod
+  .union([zod.literal("asc"), zod.literal("desc")])
+  .optional();
+
+export const CursorValidationSchema = zod
+  .tuple([zod.string().min(1), IdValidationSchema])
+  .optional();
+
+export const DigitalDocumentValidationSchema = zod.object({
+  signatures: zod.array(SignatureValidationSchema).nonempty(),
+  status: zod.string().min(1).nullable().optional(),
+  submissionId: preprocessInt(zod.number().int().positive())
 });
 
 /**

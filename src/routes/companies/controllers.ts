@@ -26,13 +26,13 @@ export function createCompanyControllers(
 ): CompanyControllers {
   return {
     addCompany: wrapAsyncHandler(async (req, res) => {
-      const company = CompanyCreateValidationSchema.safeParse(req.body);
+      const parsed = CompanyCreateValidationSchema.safeParse(req.body);
 
       const { email } = assertDefined(assertDefined(req).jwt);
 
-      if (company.success) {
-        const addedCompany = await service.addCompany({
-          ...company.data,
+      if (parsed.success) {
+        const company = await service.addCompany({
+          ...parsed.data,
           createdAt: new Date(),
           founders: [{ email }],
           images: [],
@@ -42,13 +42,13 @@ export function createCompanyControllers(
         sendResponse<Routes["/companies"]["post"]>(
           res,
           StatusCodes.CREATED,
-          assertValidForJsonStringify(addedCompany)
+          assertValidForJsonStringify(company)
         );
       } else
         sendResponse<Routes["/companies"]["post"]>(
           res,
           StatusCodes.BAD_REQUEST,
-          buildErrorResponse(ErrorCode.InvalidData, company.error)
+          buildErrorResponse(ErrorCode.InvalidData, parsed.error)
         );
     }),
     deleteCompany: wrapAsyncHandler(async (req, res) => {
@@ -124,16 +124,16 @@ export function createCompanyControllers(
     updateCompany: wrapAsyncHandler(async (req, res) => {
       const id = assertDefined(req.idParam);
 
-      const company = CompanyUpdateValidationSchema.safeParse(req.body);
+      const parsed = CompanyUpdateValidationSchema.safeParse(req.body);
 
-      if (company.success) {
-        const updatedCompany = await service.updateCompany(id, company.data);
+      if (parsed.success) {
+        const company = await service.updateCompany(id, parsed.data);
 
-        if (updatedCompany)
+        if (company)
           sendResponse<Routes["/companies/{id}"]["put"]>(
             res,
             StatusCodes.OK,
-            assertValidForJsonStringify(updatedCompany)
+            assertValidForJsonStringify(company)
           );
         else
           sendResponse<Routes["/companies/{id}"]["put"]>(
@@ -145,7 +145,7 @@ export function createCompanyControllers(
         sendResponse<Routes["/companies/{id}"]["put"]>(
           res,
           StatusCodes.BAD_REQUEST,
-          buildErrorResponse(ErrorCode.InvalidData, company.error)
+          buildErrorResponse(ErrorCode.InvalidData, parsed.error)
         );
     })
   };

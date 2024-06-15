@@ -40,20 +40,20 @@ export function createUserControllers(
     addUser: wrapAsyncHandler(async (req, res) => {
       const jwt = assertDefined(req.jwt);
 
-      const user = UserCreateValidationSchema.safeParse(req.body);
+      const parsed = UserCreateValidationSchema.safeParse(req.body);
 
-      if (user.success) {
-        const addedUser = await service.addUser({
-          ...user.data,
+      if (parsed.success) {
+        const user = await service.addUser({
+          ...parsed.data,
           email: jwt.email,
           favoriteCompanies: []
         });
 
-        if (addedUser)
+        if (user)
           sendResponse<Routes["/users"]["post"]>(
             res,
             StatusCodes.CREATED,
-            assertValidForJsonStringify(addedUser)
+            assertValidForJsonStringify(user)
           );
         else
           sendResponse<Routes["/users"]["post"]>(
@@ -65,7 +65,7 @@ export function createUserControllers(
         sendResponse<Routes["/users"]["post"]>(
           res,
           StatusCodes.BAD_REQUEST,
-          buildErrorResponse(ErrorCode.InvalidData, user.error)
+          buildErrorResponse(ErrorCode.InvalidData, parsed.error)
         );
     }),
     deleteUser: wrapAsyncHandler(async (req, res) => {
@@ -239,16 +239,16 @@ export function createUserControllers(
     updateUser: wrapAsyncHandler(async (req, res) => {
       const ref = assertDefined(req.userRef);
 
-      const user = UserUpdateValidationSchema.safeParse(req.body);
+      const parsed = UserUpdateValidationSchema.safeParse(req.body);
 
-      if (user.success) {
-        const updatedUser = await service.updateUser(ref, user.data);
+      if (parsed.success) {
+        const user = await service.updateUser(ref, parsed.data);
 
-        if (updatedUser)
+        if (user)
           sendResponse<Routes["/users/{id}"]["put"]>(
             res,
             StatusCodes.OK,
-            assertValidForJsonStringify(updatedUser)
+            assertValidForJsonStringify(user)
           );
         else
           sendResponse<Routes["/users/{id}"]["put"]>(
@@ -260,7 +260,7 @@ export function createUserControllers(
         sendResponse<Routes["/users/{id}"]["put"]>(
           res,
           StatusCodes.BAD_REQUEST,
-          buildErrorResponse(ErrorCode.InvalidData, user.error)
+          buildErrorResponse(ErrorCode.InvalidData, parsed.error)
         );
     })
   };

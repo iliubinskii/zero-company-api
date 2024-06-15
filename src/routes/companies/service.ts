@@ -1,3 +1,7 @@
+import {
+  type CompaniesService,
+  dangerouslyAssumePopulatedDocument
+} from "../../types";
 import type {
   Company,
   Document,
@@ -7,16 +11,11 @@ import type {
 } from "../../schema";
 import { DocType, MAX_LIMIT } from "../../schema";
 import { createDigitalDocument, getMongodbConnection } from "../../providers";
-import {
-  getCompanyModel,
-  getDocumentModel,
-  getUserModel
-} from "../../schema-mongodb";
-import type { CompaniesService } from "../../types";
 import type { FilterQuery } from "mongoose";
 import { FoundingAgreement } from "../../templates";
 import { StatusCodes } from "http-status-codes";
 import type { Writable } from "ts-toolbelt/out/Object/Writable";
+import { getModels } from "../../schema-mongodb";
 import { lang } from "../../langs";
 import type mongoose from "mongoose";
 
@@ -26,28 +25,24 @@ import type mongoose from "mongoose";
  */
 export function createCompaniesService(): CompaniesService {
   return {
-    addCompany: async company => {
-      const CompanyModel = await getCompanyModel();
+    addCompany: async data => {
+      const { CompanyModel } = await getModels();
 
-      const model = new CompanyModel(company);
+      const company = new CompanyModel(data);
 
-      const addedCompany = await model.save();
-
-      return addedCompany;
+      return company.save();
     },
     deleteCompany: async id => {
-      const CompanyModel = await getCompanyModel();
+      const { CompanyModel } = await getModels();
 
-      const deletedCompany = await CompanyModel.findByIdAndDelete(id);
+      const company = await CompanyModel.findByIdAndDelete(id);
 
-      return deletedCompany ? 1 : 0;
+      return company ? 1 : 0;
     },
     generateFoundingAgreement: async id => {
+      const { CompanyModel, DocumentModel } = await getModels();
+
       const connection = await getMongodbConnection();
-
-      const CompanyModel = await getCompanyModel();
-
-      const DocumentModel = await getDocumentModel();
 
       const session = await connection.startSession();
 
@@ -56,41 +51,15 @@ export function createCompaniesService(): CompaniesService {
       try {
         const company = await CompanyModel.findById(id).session(session);
 
-        if (!company) {
-          await session.abortTransaction();
-          await session.endSession();
+        if (company) {
+          if (company.foundingAgreement) {
+            await session.commitTransaction();
+            await session.endSession();
 
-          return null;
-        }
-
-        if (company.foundingAgreement) {
-          await session.abortTransaction();
-          await session.endSession();
-
-          return StatusCodes.CONFLICT;
-        }
-
-        const signatories = company.founders.map(
-          ({ email, name }, index): Signatory => {
-            return {
-              email,
-              name,
-              role: `${lang.Founder} ${index + 1}`
-            };
+            return StatusCodes.CONFLICT;
           }
-        );
 
-        const digitalDocument = await createDigitalDocument(
-          lang.FoundingAgreement,
-          FoundingAgreement,
-          signatories
-        );
-
-        const document: Document = {
-          company: company._id.toString(),
-          createdAt: new Date(),
-          doc: digitalDocument,
-          signatories: company.founders.map(
+          const signatories = company.founders.map(
             ({ email, name }, index): Signatory => {
               return {
                 email,
@@ -98,26 +67,53 @@ export function createCompaniesService(): CompaniesService {
                 role: `${lang.Founder} ${index + 1}`
               };
             }
-          ),
-          type: DocType.FoundingAgreement
-        };
+          );
 
-        const model = new DocumentModel(document);
+          const digitalDocument = await createDigitalDocument(
+            lang.FoundingAgreement,
+            FoundingAgreement,
+            signatories
+          );
 
-        const addedDocument = await model.save({ session });
+          const data: Document = {
+            company: company._id.toString(),
+            createdAt: new Date(),
+            doc: digitalDocument,
+            signatories: company.founders.map(
+              ({ email, name }, index): Signatory => {
+                return {
+                  email,
+                  name,
+                  role: `${lang.Founder} ${index + 1}`
+                };
+              }
+            ),
+            type: DocType.FoundingAgreement
+          };
 
-        company.foundingAgreement = addedDocument._id;
+          const document = new DocumentModel(data);
 
-        await company.save({ session });
+          await document.save({ session });
+          await document.populate("company");
+
+          company.foundingAgreement = document._id;
+
+          await company.save({ session });
+
+          await session.commitTransaction();
+
+          return dangerouslyAssumePopulatedDocument(document);
+        }
 
         await session.commitTransaction();
-        await session.endSession();
 
-        return addedDocument;
+        return null;
       } catch (err) {
         await session.abortTransaction();
-        await session.endSession();
+
         throw err;
+      } finally {
+        await session.endSession();
       }
     },
     getCompanies: async (options = {}, parentRef) => {
@@ -134,12 +130,12 @@ export function createCompaniesService(): CompaniesService {
 
       const mongodbSortOrder = mongodbSortOrderMap[sortOrder];
 
-      const CompanyModel = await getCompanyModel();
+      const { CompanyModel } = await getModels();
 
       if (parentRef)
         switch (parentRef.type) {
           case "bookmarkUserEmail": {
-            const UserModel = await getUserModel();
+            const { UserModel } = await getModels();
 
             const user = await UserModel.findOne({
               email: parentRef.bookmarkUserEmail
@@ -152,7 +148,7 @@ export function createCompaniesService(): CompaniesService {
           }
 
           case "bookmarkUserId": {
-            const UserModel = await getUserModel();
+            const { UserModel } = await getModels();
 
             const user = await UserModel.findById(parentRef.bookmarkUserId);
 
@@ -175,7 +171,7 @@ export function createCompaniesService(): CompaniesService {
           }
 
           case "founderId": {
-            const UserModel = await getUserModel();
+            const { UserModel } = await getModels();
 
             const user = await UserModel.findById(parentRef.founderId);
 
@@ -219,14 +215,12 @@ export function createCompaniesService(): CompaniesService {
       };
     },
     getCompany: async id => {
-      const CompanyModel = await getCompanyModel();
+      const { CompanyModel } = await getModels();
 
-      const company = await CompanyModel.findById(id);
-
-      return company;
+      return CompanyModel.findById(id);
     },
     updateCompany: async (id, company) => {
-      const CompanyModel = await getCompanyModel();
+      const { CompanyModel } = await getModels();
 
       const { addImages, removeImages, ...rest } = company;
 
@@ -240,12 +234,10 @@ export function createCompaniesService(): CompaniesService {
       if (removeImages && removeImages.length > 0)
         update["$pull"] = { images: { assetId: { $in: removeImages } } };
 
-      const updatedCompany = await CompanyModel.findByIdAndUpdate(id, update, {
+      return CompanyModel.findByIdAndUpdate(id, update, {
         new: true,
         runValidators: true
       });
-
-      return updatedCompany;
     }
   };
 }

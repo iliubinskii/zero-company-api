@@ -6,7 +6,7 @@ import type {
   SchemaResponse
 } from "../schema";
 import type { NextFunction, Request, RequestHandler, Response } from "express";
-import { assertNumber } from "./assertions";
+import { assertNumber, requireType } from "./assertions";
 import { lang } from "../langs";
 import type zod from "zod";
 
@@ -40,43 +40,37 @@ export function buildErrorResponse<E extends ErrorCode>(
   error: E,
   data?: zod.ZodError
 ): object {
-  if (data) {
-    const result: ErrorResponseWithData<E> = {
-      data: data.errors.map(issue => {
-        return {
-          message: issue.message,
-          path: issue.path
-            .map((item, index) => {
-              switch (typeof item) {
-                case "string": {
-                  return index ? `.${item}` : item;
+  return data
+    ? requireType<ErrorResponseWithData<E>>({
+        data: data.errors.map(issue => {
+          return {
+            message: issue.message,
+            path: issue.path
+              .map((item, index) => {
+                switch (typeof item) {
+                  case "string": {
+                    return index ? `.${item}` : item;
+                  }
+
+                  case "number": {
+                    return `[${item}]`;
+                  }
+
+                  default: {
+                    return "";
+                  }
                 }
-
-                case "number": {
-                  return `[${item}]`;
-                }
-
-                default: {
-                  return "";
-                }
-              }
-            })
-            .join("")
-        };
-      }),
-      error,
-      errorMessage: lang[error]
-    };
-
-    return result;
-  }
-
-  const result: ErrorResponse<E> = {
-    error,
-    errorMessage: lang[error]
-  };
-
-  return result;
+              })
+              .join("")
+          };
+        }),
+        error,
+        errorMessage: lang[error]
+      })
+    : requireType<ErrorResponse<E>>({
+        error,
+        errorMessage: lang[error]
+      });
 }
 
 /**

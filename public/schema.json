@@ -428,20 +428,20 @@
       },
       "DigitalDocument": {
         "properties": {
-          "embedSrc": {
-            "type": "string"
-          },
           "signatures": {
             "items": {
-              "type": "string"
+              "$ref": "#/components/schemas/Signature"
             },
             "type": "array"
+          },
+          "status": {
+            "type": "string"
           },
           "submissionId": {
             "type": "number"
           }
         },
-        "required": ["embedSrc", "signatures", "submissionId"],
+        "required": ["signatures", "submissionId"],
         "type": "object"
       },
       "Document": {
@@ -672,14 +672,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "_id",
-          "company",
-          "createdAt",
-          "doc",
-          "signatories",
-          "type"
-        ],
+        "required": ["_id", "createdAt", "doc", "signatories", "type"],
         "type": "object"
       },
       "PopulatedDocumentList": {
@@ -721,6 +714,27 @@
           }
         },
         "required": ["email", "role"],
+        "type": "object"
+      },
+      "Signature": {
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "embedSrc": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          }
+        },
+        "required": ["email", "embedSrc", "role", "status"],
         "type": "object"
       },
       "Unauthorized": {
@@ -815,7 +829,7 @@
   "info": {
     "description": "An API for Zero Company application",
     "title": "Zero Company API",
-    "version": "2024.6.14"
+    "version": "2024.6.15"
   },
   "openapi": "3.0.0",
   "paths": {
@@ -1057,7 +1071,7 @@
       "post": {
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Document"
+            "$ref": "#/components/responses/PopulatedDocument"
           },
           "404": {
             "$ref": "#/components/responses/NotFound"
@@ -1145,7 +1159,7 @@
       "post": {
         "responses": {
           "201": {
-            "$ref": "#/components/responses/Document"
+            "$ref": "#/components/responses/PopulatedDocument"
           },
           "400": {
             "$ref": "#/components/responses/InvalidData"
@@ -1168,7 +1182,7 @@
       "get": {
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Document"
+            "$ref": "#/components/responses/PopulatedDocument"
           },
           "404": {
             "$ref": "#/components/responses/NotFound"
@@ -1185,7 +1199,7 @@
       "put": {
         "responses": {
           "200": {
-            "$ref": "#/components/responses/Document"
+            "$ref": "#/components/responses/PopulatedDocument"
           },
           "400": {
             "$ref": "#/components/responses/InvalidData"

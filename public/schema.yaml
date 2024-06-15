@@ -4,7 +4,7 @@ openapi: 3.0.0
 info:
   title: Zero Company API
   description: An API for Zero Company application
-  version: 2024.6.14
+  version: 2024.6.15
 
 # Servers
 servers:
@@ -160,7 +160,7 @@ paths:
         - companies
       responses:
         "200":
-          $ref: "#/components/responses/Document"
+          $ref: "#/components/responses/PopulatedDocument"
         "404":
           $ref: "#/components/responses/NotFound"
         "409":
@@ -224,7 +224,7 @@ paths:
         - documents
       responses:
         "201":
-          $ref: "#/components/responses/Document"
+          $ref: "#/components/responses/PopulatedDocument"
         "400":
           $ref: "#/components/responses/InvalidData"
 
@@ -245,7 +245,7 @@ paths:
         - documents
       responses:
         "200":
-          $ref: "#/components/responses/Document"
+          $ref: "#/components/responses/PopulatedDocument"
         "404":
           $ref: "#/components/responses/NotFound"
     put:
@@ -254,7 +254,7 @@ paths:
         - documents
       responses:
         "200":
-          $ref: "#/components/responses/Document"
+          $ref: "#/components/responses/PopulatedDocument"
         "400":
           $ref: "#/components/responses/InvalidData"
         "404":
@@ -854,16 +854,15 @@ components:
     DigitalDocument:
       type: object
       required:
-        - embedSrc
         - signatures
         - submissionId
       properties:
-        embedSrc:
-          type: string
         signatures:
           type: array
           items:
-            type: string
+            $ref: '#/components/schemas/Signature'
+        status:
+          type: string
         submissionId:
           type: number
 
@@ -1062,7 +1061,6 @@ components:
       type: object
       required:
         - _id
-        - company
         - createdAt
         - doc
         - signatories
@@ -1109,6 +1107,7 @@ components:
           maxItems: 2
         total:
           type: integer
+
     # Signatory schema
     Signatory:
       type: object
@@ -1121,6 +1120,26 @@ components:
         name:
           type: string
         role:
+          type: string
+
+    # Signature schema
+    Signature:
+      type: object
+      required:
+        - email
+        - embedSrc
+        - role
+        - status
+      properties:
+        email:
+          type: string
+        embedSrc:
+          type: string
+        name:
+          type: string
+        role:
+          type: string
+        status:
           type: string
 
     # Unauthorized schema

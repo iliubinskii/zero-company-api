@@ -3,7 +3,7 @@ import type { Category } from "../../schema";
 import type { FilterQuery } from "mongoose";
 import { MAX_LIMIT } from "../../schema";
 import type { Writable } from "ts-toolbelt/out/Object/Writable";
-import { getCategoryModel } from "../../schema-mongodb";
+import { getModels } from "../../schema-mongodb";
 
 /**
  * Creates a MongoDB service for categories.
@@ -11,21 +11,19 @@ import { getCategoryModel } from "../../schema-mongodb";
  */
 export function createCategoriesService(): CategoriesService {
   return {
-    addCategory: async category => {
-      const CategoryModel = await getCategoryModel();
+    addCategory: async data => {
+      const { CategoryModel } = await getModels();
 
-      const model = new CategoryModel(category);
+      const category = new CategoryModel(data);
 
-      const addedCategory = await model.save();
-
-      return addedCategory;
+      return category.save();
     },
     deleteCategory: async id => {
-      const CategoryModel = await getCategoryModel();
+      const { CategoryModel } = await getModels();
 
-      const deletedCategory = await CategoryModel.findByIdAndDelete(id);
+      const category = await CategoryModel.findByIdAndDelete(id);
 
-      return deletedCategory ? 1 : 0;
+      return category ? 1 : 0;
     },
     getCategories: async ({
       limit = MAX_LIMIT,
@@ -36,7 +34,7 @@ export function createCategoriesService(): CategoriesService {
 
       if (onlyPinned) filter["pinned"] = true;
 
-      const CategoryModel = await getCategoryModel();
+      const { CategoryModel } = await getModels();
 
       const [categories, total] = await Promise.all([
         CategoryModel.find(filter).skip(offset).limit(limit),
@@ -50,22 +48,17 @@ export function createCategoriesService(): CategoriesService {
       };
     },
     getCategory: async id => {
-      const CompanyModel = await getCategoryModel();
+      const { CategoryModel } = await getModels();
 
-      const category = await CompanyModel.findById(id);
-
-      return category;
+      return CategoryModel.findById(id);
     },
     updateCategory: async (id, category) => {
-      const CategoryModel = await getCategoryModel();
+      const { CategoryModel } = await getModels();
 
-      const updatedCategory = await CategoryModel.findByIdAndUpdate(
-        id,
-        category,
-        { new: true, runValidators: true }
-      );
-
-      return updatedCategory;
+      return CategoryModel.findByIdAndUpdate(id, category, {
+        new: true,
+        runValidators: true
+      });
     }
   };
 }

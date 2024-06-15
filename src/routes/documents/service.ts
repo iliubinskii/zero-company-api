@@ -1,12 +1,14 @@
+import { CompanyStatus, DocType, MAX_LIMIT } from "../../schema";
 import type { Document, User } from "../../schema";
 import {
   type DocumentsService,
+  dangerouslyAssumePopulatedDocument,
   dangerouslyAssumePopulatedDocuments
 } from "../../types";
-import { getDocumentModel, getUserModel } from "../../schema-mongodb";
+import { getDigitalDocument, getMongodbConnection } from "../../providers";
 import type { FilterQuery } from "mongoose";
-import { MAX_LIMIT } from "../../schema";
 import type { Writable } from "ts-toolbelt/out/Object/Writable";
+import { getModels } from "../../schema-mongodb";
 import type mongoose from "mongoose";
 
 /**
@@ -15,28 +17,29 @@ import type mongoose from "mongoose";
  */
 export function createDocumentsService(): DocumentsService {
   return {
-    addDocument: async document => {
-      const DocumentModel = await getDocumentModel();
+    addDocument: async data => {
+      const { DocumentModel } = await getModels();
 
-      const model = new DocumentModel(document);
+      const document = new DocumentModel(data);
 
-      const addedDocument = await model.save();
+      await document.save();
+      await document.populate("company");
 
-      return addedDocument;
+      return dangerouslyAssumePopulatedDocument(document);
     },
     deleteDocument: async id => {
-      const DocumentModel = await getDocumentModel();
+      const { DocumentModel } = await getModels();
 
-      const deletedCategory = await DocumentModel.findByIdAndDelete(id);
+      const document = await DocumentModel.findByIdAndDelete(id);
 
-      return deletedCategory ? 1 : 0;
+      return document ? 1 : 0;
     },
     getDocument: async id => {
-      const DocumentModel = await getDocumentModel();
+      const { DocumentModel } = await getModels();
 
-      const document = await DocumentModel.findById(id);
+      const document = await DocumentModel.findById(id).populate("company");
 
-      return document;
+      return document ? dangerouslyAssumePopulatedDocument(document) : null;
     },
     getDocuments: async (options = {}, parentRef) => {
       const {
@@ -52,7 +55,7 @@ export function createDocumentsService(): DocumentsService {
 
       const mongodbSortOrder = mongodbSortOrderMap[sortOrder];
 
-      const DocumentModel = await getDocumentModel();
+      const { DocumentModel } = await getModels();
 
       if (parentRef)
         switch (parentRef.type) {
@@ -69,7 +72,7 @@ export function createDocumentsService(): DocumentsService {
           }
 
           case "signatoryId": {
-            const UserModel = await getUserModel();
+            const { UserModel } = await getModels();
 
             const user = await UserModel.findById(parentRef.signatoryId);
 
@@ -98,16 +101,58 @@ export function createDocumentsService(): DocumentsService {
         total
       });
     },
-    updateDocument: async (id, document) => {
-      const DocumentModel = await getDocumentModel();
+    updateDocument: async (id, update) => {
+      const { CompanyModel, DocumentModel } = await getModels();
 
-      const updatedCategory = await DocumentModel.findByIdAndUpdate(
-        id,
-        document,
-        { new: true, runValidators: true }
-      );
+      const connection = await getMongodbConnection();
 
-      return updatedCategory;
+      const session = await connection.startSession();
+
+      session.startTransaction();
+
+      try {
+        const document = await DocumentModel.findById(id).session(session);
+
+        if (document) {
+          const digitalDocument = await getDigitalDocument(
+            document.toObject().doc
+          );
+
+          if (
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- Ok
+            document.type === DocType.FoundingAgreement &&
+            digitalDocument.status === "completed"
+          )
+            await CompanyModel.findByIdAndUpdate(
+              document.company._id,
+              { status: CompanyStatus.founded },
+              { new: true, runValidators: true }
+            ).session(session);
+
+          const updatedDocument = await DocumentModel.findByIdAndUpdate(
+            id,
+            { ...update, doc: digitalDocument },
+            { new: true, runValidators: true }
+          )
+            .session(session)
+            .populate("company");
+
+          await session.commitTransaction();
+
+          return updatedDocument
+            ? dangerouslyAssumePopulatedDocument(updatedDocument)
+            : null;
+        }
+
+        await session.commitTransaction();
+
+        return null;
+      } catch (err) {
+        await session.abortTransaction();
+        throw err;
+      } finally {
+        await session.endSession();
+      }
     }
   };
 }

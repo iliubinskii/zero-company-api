@@ -1,4 +1,3 @@
-import { getMongodbConnection } from "../providers";
 import mongoose from "mongoose";
 
 export const UserSchema = new mongoose.Schema(
@@ -23,13 +22,12 @@ export const UserSchema = new mongoose.Schema(
 
 /**
  * Creates a user model.
+ * @param connection - The mongoose connection.
  * @returns A user model.
  */
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type -- Ok
-export async function getUserModel() {
-  const connection = await getMongodbConnection();
-
+export function getUserModel(connection: typeof mongoose) {
   return connection.model("User", UserSchema);
 }
 
-export type UserModel = Awaited<ReturnType<typeof getUserModel>>;
+export type UserModel = ReturnType<typeof getUserModel>;

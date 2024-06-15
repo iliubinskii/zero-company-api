@@ -12,37 +12,24 @@ import type {
 } from "./documents";
 import zod from "zod";
 
-const _id = IdValidationSchema;
-
-const company = zod.string().min(1);
-
-const createdAt = preprocessDate(zod.date());
-
-const doc = DigitalDocumentValidationSchema;
-
-const metadata = zod.string().min(1).nullable().optional();
-
-const signatories = zod.array(SignatoryValidationSchema).nonempty();
-
-const type = zod.enum([DocType.FoundingAgreement]);
-
 export const ExistingDocumentValidationSchema = zod.object({
-  _id,
-  company,
-  createdAt,
-  doc,
-  metadata,
-  signatories,
-  type
+  _id: IdValidationSchema,
+  company: zod.string().min(1),
+  createdAt: preprocessDate(zod.date()),
+  doc: DigitalDocumentValidationSchema,
+  metadata: zod.string().min(1).nullable().optional(),
+  signatories: zod.array(SignatoryValidationSchema).nonempty(),
+  type: zod.enum([DocType.FoundingAgreement])
 });
 
-export const DocumentCreateValidationSchema = zod.object({
-  company,
-  doc,
-  metadata,
-  signatories,
-  type
-});
+export const DocumentCreateValidationSchema =
+  ExistingDocumentValidationSchema.pick({
+    company: true,
+    doc: true,
+    metadata: true,
+    signatories: true,
+    type: true
+  });
 
 export const DocumentUpdateValidationSchema = zod.object({});
 
