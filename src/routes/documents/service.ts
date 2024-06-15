@@ -1,13 +1,13 @@
+import { CompanyStatus, DocumentType, MAX_LIMIT } from "../../schema";
 import type { Document, User } from "../../schema";
 import {
   type DocumentsService,
   dangerouslyAssumePopulatedDocument,
   dangerouslyAssumePopulatedDocuments
 } from "../../types";
+import { getDigitalDocument, getMongodbConnection } from "../../providers";
 import type { FilterQuery } from "mongoose";
-import { MAX_LIMIT } from "../../schema";
 import type { Writable } from "ts-toolbelt/out/Object/Writable";
-import { getDigitalDocument } from "../../providers";
 import { getModels } from "../../schema-mongodb";
 import type mongoose from "mongoose";
 
@@ -102,25 +102,56 @@ export function createDocumentsService(): DocumentsService {
       });
     },
     updateDocument: async (id, update) => {
-      const { DocumentModel } = await getModels();
+      const { CompanyModel, DocumentModel } = await getModels();
 
-      const document = await DocumentModel.findById(id);
+      const connection = await getMongodbConnection();
 
-      if (document) {
-        const digitalDocument = await getDigitalDocument(document.doc);
+      const session = await connection.startSession();
 
-        const updatedDocument = await DocumentModel.findByIdAndUpdate(
-          id,
-          { ...update, doc: digitalDocument },
-          { new: true, runValidators: true }
-        ).populate("company");
+      session.startTransaction();
 
-        return updatedDocument
-          ? dangerouslyAssumePopulatedDocument(updatedDocument)
-          : null;
+      try {
+        const document = await DocumentModel.findById(id).session(session);
+
+        if (document) {
+          const digitalDocument = await getDigitalDocument(
+            document.toObject().doc
+          );
+
+          if (
+            document.type === DocumentType.FoundingAgreement &&
+            digitalDocument.status === "completed"
+          )
+            await CompanyModel.findByIdAndUpdate(
+              document.company._id,
+              { status: CompanyStatus.founded },
+              { new: true, runValidators: true }
+            ).session(session);
+
+          const updatedDocument = await DocumentModel.findByIdAndUpdate(
+            id,
+            { ...update, doc: digitalDocument },
+            { new: true, runValidators: true }
+          )
+            .session(session)
+            .populate("company");
+
+          await session.commitTransaction();
+
+          return updatedDocument
+            ? dangerouslyAssumePopulatedDocument(updatedDocument)
+            : null;
+        }
+
+        await session.commitTransaction();
+
+        return null;
+      } catch (err) {
+        await session.abortTransaction();
+        throw err;
+      } finally {
+        await session.endSession();
       }
-
-      return null;
     }
   };
 }

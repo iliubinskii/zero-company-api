@@ -9,7 +9,7 @@ import type {
   Signatory,
   User
 } from "../../schema";
-import { DocType, MAX_LIMIT } from "../../schema";
+import { DocumentType, MAX_LIMIT } from "../../schema";
 import { createDigitalDocument, getMongodbConnection } from "../../providers";
 import type { FilterQuery } from "mongoose";
 import { FoundingAgreement } from "../../templates";
@@ -53,41 +53,15 @@ export function createCompaniesService(): CompaniesService {
       try {
         const company = await CompanyModel.findById(id).session(session);
 
-        if (!company) {
-          await session.abortTransaction();
-          await session.endSession();
+        if (company) {
+          if (company.foundingAgreement) {
+            await session.commitTransaction();
+            await session.endSession();
 
-          return null;
-        }
-
-        if (company.foundingAgreement) {
-          await session.abortTransaction();
-          await session.endSession();
-
-          return StatusCodes.CONFLICT;
-        }
-
-        const signatories = company.founders.map(
-          ({ email, name }, index): Signatory => {
-            return {
-              email,
-              name,
-              role: `${lang.Founder} ${index + 1}`
-            };
+            return StatusCodes.CONFLICT;
           }
-        );
 
-        const digitalDocument = await createDigitalDocument(
-          lang.FoundingAgreement,
-          FoundingAgreement,
-          signatories
-        );
-
-        const data: Document = {
-          company: company._id.toString(),
-          createdAt: new Date(),
-          doc: digitalDocument,
-          signatories: company.founders.map(
+          const signatories = company.founders.map(
             ({ email, name }, index): Signatory => {
               return {
                 email,
@@ -95,27 +69,53 @@ export function createCompaniesService(): CompaniesService {
                 role: `${lang.Founder} ${index + 1}`
               };
             }
-          ),
-          type: DocType.FoundingAgreement
-        };
+          );
 
-        const document = new DocumentModel(data);
+          const digitalDocument = await createDigitalDocument(
+            lang.FoundingAgreement,
+            FoundingAgreement,
+            signatories
+          );
 
-        await document.save({ session });
-        await document.populate("company");
+          const data: Document = {
+            company: company._id.toString(),
+            createdAt: new Date(),
+            doc: digitalDocument,
+            signatories: company.founders.map(
+              ({ email, name }, index): Signatory => {
+                return {
+                  email,
+                  name,
+                  role: `${lang.Founder} ${index + 1}`
+                };
+              }
+            ),
+            type: DocumentType.FoundingAgreement
+          };
 
-        company.foundingAgreement = document._id;
+          const document = new DocumentModel(data);
 
-        await company.save({ session });
+          await document.save({ session });
+          await document.populate("company");
+
+          company.foundingAgreement = document._id;
+
+          await company.save({ session });
+
+          await session.commitTransaction();
+
+          return dangerouslyAssumePopulatedDocument(document);
+        }
 
         await session.commitTransaction();
-        await session.endSession();
 
-        return dangerouslyAssumePopulatedDocument(document);
+        return null;
       } catch (err) {
         await session.abortTransaction();
-        await session.endSession();
+
         throw err;
+      } finally {
+        await session.endSession();
       }
     },
     getCompanies: async (options = {}, parentRef) => {

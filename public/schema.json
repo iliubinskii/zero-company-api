@@ -434,6 +434,9 @@
             },
             "type": "array"
           },
+          "status": {
+            "type": "string"
+          },
           "submissionId": {
             "type": "number"
           }

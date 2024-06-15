@@ -105,7 +105,8 @@ export async function getDigitalDocument(
         ...signature,
         status: submitter ? submitter.status : signature.status
       };
-    })
+    }),
+    status: submission.status
   };
 }
 
@@ -147,6 +148,7 @@ export type Template = (
 ) => string;
 
 const SubmissionValidationSchema = zod.object({
+  status: zod.string().min(1),
   submitters: zod
     .array(
       zod.object({

@@ -1167,6 +1167,9 @@
               "$ref": "#/components/schemas/Signature"
             }
           },
+          "status": {
+            "type": "string"
+          },
           "submissionId": {
             "type": "number"
           }

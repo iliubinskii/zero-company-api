@@ -81,6 +81,9 @@ export const digitalDocument = {
     required: true,
     type: [signature]
   },
+  status: {
+    type: mongoose.Schema.Types.String
+  },
   submissionId: {
     required: true,
     type: mongoose.Schema.Types.Number

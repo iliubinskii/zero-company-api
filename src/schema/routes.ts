@@ -549,6 +549,7 @@ export interface components {
     };
     DigitalDocument: {
       signatures: components["schemas"]["Signature"][];
+      status?: string;
       submissionId: number;
     };
     Document: {

@@ -1,6 +1,6 @@
 import {
   DigitalDocumentValidationSchema,
-  DocType,
+  DocumentType,
   IdValidationSchema,
   SignatoryValidationSchema,
   preprocessDate
@@ -24,7 +24,7 @@ const metadata = zod.string().min(1).nullable().optional();
 
 const signatories = zod.array(SignatoryValidationSchema).nonempty();
 
-const type = zod.enum([DocType.FoundingAgreement]);
+const type = zod.enum([DocumentType.FoundingAgreement]);
 
 export const ExistingDocumentValidationSchema = zod.object({
   _id,

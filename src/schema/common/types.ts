@@ -5,7 +5,7 @@ export const CompanyStatus = {
   founded: "founded"
 } as const;
 
-export const DocType = {
+export const DocumentType = {
   FoundingAgreement: "FoundingAgreement"
 } as const;
 
@@ -32,10 +32,11 @@ export interface DeleteResponse {
 
 export interface DigitalDocument {
   readonly signatures: readonly Signature[];
+  readonly status?: string | null | undefined;
   readonly submissionId: number;
 }
 
-export type DocType = (typeof DocType)[keyof typeof DocType];
+export type DocumentType = (typeof DocumentType)[keyof typeof DocumentType];
 
 export type ErrorCode = (typeof ErrorCode)[keyof typeof ErrorCode];
 

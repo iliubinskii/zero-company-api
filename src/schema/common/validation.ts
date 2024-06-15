@@ -35,6 +35,7 @@ export const SignatureValidationSchema = zod.object({
 
 export const DigitalDocumentValidationSchema = zod.object({
   signatures: zod.array(SignatureValidationSchema).nonempty(),
+  status: zod.string().min(1).nullable().optional(),
   submissionId: preprocessInt(zod.number().int().positive())
 });
 
