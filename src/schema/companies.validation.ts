@@ -1,94 +1,64 @@
-import { COUNTRY_CODE_SIZE, MAX_CATEGORIES } from "./consts";
+import {
+  COUNTRY_CODE_SIZE,
+  CompanyStatus,
+  FounderValidationSchema,
+  IdValidationSchema,
+  ImageValidationSchema,
+  MAX_CATEGORIES,
+  preprocessBoolean,
+  preprocessDate,
+  preprocessInt
+} from "./common";
 import {
   type CompanyCreate,
   type CompanyUpdate,
   type ExistingCompany
 } from "./companies";
-import {
-  CompanyStatus,
-  FounderValidationSchema,
-  IdValidationSchema,
-  ImageValidationSchema,
-  preprocessBoolean,
-  preprocessDate,
-  preprocessInt
-} from "./common";
 import zod from "zod";
 
-const _id = IdValidationSchema;
-
-const addImages = zod.array(ImageValidationSchema);
-
-const categories = zod.array(IdValidationSchema).nonempty().max(MAX_CATEGORIES);
-
-const country = zod.string().length(COUNTRY_CODE_SIZE);
-
-const createdAt = preprocessDate(zod.date());
-
-const description = zod.string().min(1).nullable().optional();
-
-const foundedAt = preprocessDate(zod.date()).nullable().optional();
-
-const foundingAgreement = zod.string().min(1).nullable().optional();
-
-const founders = zod.array(FounderValidationSchema);
-
-const images = zod.array(ImageValidationSchema);
-
-const logo = ImageValidationSchema.nullable().optional();
-
-const name = zod.string().min(1).nullable().optional();
-
-const privateCompany = preprocessBoolean(zod.boolean()).nullable().optional();
-
-const recommended = preprocessBoolean(zod.boolean()).nullable().optional();
-
-const removeImages = zod.array(zod.string().min(1));
-
-const status = zod.enum([CompanyStatus.draft, CompanyStatus.founded]);
-
-const targetValue = preprocessInt(zod.number().int().positive())
-  .nullable()
-  .optional();
-
-const website = zod.string().url().nullable().optional();
-
 export const ExistingCompanyValidationSchema = zod.object({
-  _id,
-  categories,
-  country,
-  createdAt,
-  description,
-  foundedAt,
-  founders,
-  foundingAgreement,
-  images,
-  logo,
-  name,
-  privateCompany,
-  recommended,
-  status,
-  targetValue,
-  website
+  _id: IdValidationSchema,
+  categories: zod.array(IdValidationSchema).nonempty().max(MAX_CATEGORIES),
+  country: zod.string().length(COUNTRY_CODE_SIZE),
+  createdAt: preprocessDate(zod.date()),
+  description: zod.string().min(1).nullable().optional(),
+  foundedAt: preprocessDate(zod.date()).nullable().optional(),
+  founders: zod.array(FounderValidationSchema),
+  foundingAgreement: zod.string().min(1).nullable().optional(),
+  images: zod.array(ImageValidationSchema),
+  logo: ImageValidationSchema.nullable().optional(),
+  name: zod.string().min(1).nullable().optional(),
+  privateCompany: preprocessBoolean(zod.boolean()).nullable().optional(),
+  recommended: preprocessBoolean(zod.boolean()).nullable().optional(),
+  status: zod.enum([CompanyStatus.draft, CompanyStatus.founded]),
+  targetValue: preprocessInt(zod.number().int().positive())
+    .nullable()
+    .optional(),
+  website: zod.string().url().nullable().optional()
 });
 
-export const CompanyCreateValidationSchema = zod.object({
-  categories,
-  country
-});
+export const CompanyCreateValidationSchema =
+  ExistingCompanyValidationSchema.pick({
+    categories: true,
+    country: true
+  });
 
-export const CompanyUpdateValidationSchema = zod.object({
-  addImages: addImages.optional(),
-  categories: categories.optional(),
-  description: description.optional(),
-  founders: founders.optional(),
-  logo: logo.optional(),
-  name: name.optional(),
-  privateCompany: privateCompany.optional(),
-  removeImages: removeImages.optional(),
-  targetValue: targetValue.optional(),
-  website: website.optional()
-});
+export const CompanyUpdateValidationSchema =
+  ExistingCompanyValidationSchema.pick({
+    categories: true,
+    description: true,
+    founders: true,
+    logo: true,
+    name: true,
+    privateCompany: true,
+    targetValue: true,
+    website: true
+  })
+    .partial()
+    .extend({
+      addImages: zod.array(ImageValidationSchema).optional(),
+      removeImages: zod.array(zod.string().min(1)).optional()
+    });
 
 // Type check the existing company validation schema
 ((): ExistingCompany | undefined => {

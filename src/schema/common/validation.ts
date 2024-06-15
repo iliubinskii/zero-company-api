@@ -1,3 +1,4 @@
+import { MAX_LIMIT } from "./consts";
 import zod from "zod";
 
 export const IdValidationSchema = zod
@@ -19,6 +20,14 @@ export const ImageValidationSchema = zod.object({
   width: preprocessInt(zod.number().int().positive())
 });
 
+export const LimitValidationSchema = preprocessInt(
+  zod.number().int().positive().max(MAX_LIMIT)
+).optional();
+
+export const OffsetValidationSchema = preprocessInt(
+  zod.number().int().nonnegative()
+).optional();
+
 export const SignatoryValidationSchema = zod.object({
   email: zod.string().email(),
   name: zod.string().min(1).nullable().optional(),
@@ -32,6 +41,14 @@ export const SignatureValidationSchema = zod.object({
   role: zod.string().min(1),
   status: zod.string().min(1)
 });
+
+export const SortOrderValidationSchema = zod
+  .union([zod.literal("asc"), zod.literal("desc")])
+  .optional();
+
+export const CursorValidationSchema = zod
+  .tuple([zod.string().min(1), IdValidationSchema])
+  .optional();
 
 export const DigitalDocumentValidationSchema = zod.object({
   signatures: zod.array(SignatureValidationSchema).nonempty(),

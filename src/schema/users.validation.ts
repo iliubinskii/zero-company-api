@@ -12,45 +12,37 @@ import {
 } from "./common";
 import zod from "zod";
 
-const _id = IdValidationSchema;
+export const AuthUserValidationSchema = zod.object({
+  admin: preprocessBoolean(zod.boolean()),
+  email: preprocessEmail(zod.string().email())
+});
 
-const addFavoriteCompanies = zod.array(zod.string().min(1));
-
-const admin = preprocessBoolean(zod.boolean());
-
-const email = preprocessEmail(zod.string().email());
-
-const favoriteCompanies = zod.array(zod.string().min(1));
-
-const firstName = zod.string().min(1).nullable().optional();
-
-const lastName = zod.string().min(1).nullable().optional();
-
-const removeFavoriteCompanies = zod.array(zod.string().min(1));
-
-export const AuthUserValidationSchema = zod.object({ admin, email });
-
-export const JwtValidationSchema = zod.object({ email });
+export const JwtValidationSchema = zod.object({
+  email: preprocessEmail(zod.string().email())
+});
 
 export const ExistingUserValidationSchema = zod.object({
-  _id,
-  email,
-  favoriteCompanies,
-  firstName,
-  lastName
+  _id: IdValidationSchema,
+  email: preprocessEmail(zod.string().email()),
+  favoriteCompanies: zod.array(zod.string().min(1)),
+  firstName: zod.string().min(1).nullable().optional(),
+  lastName: zod.string().min(1).nullable().optional()
 });
 
-export const UserCreateValidationSchema = zod.object({
-  firstName,
-  lastName
+export const UserCreateValidationSchema = ExistingUserValidationSchema.pick({
+  firstName: true,
+  lastName: true
 });
 
-export const UserUpdateValidationSchema = zod.object({
-  addFavoriteCompanies: addFavoriteCompanies.optional(),
-  firstName: firstName.optional(),
-  lastName: lastName.optional(),
-  removeFavoriteCompanies: removeFavoriteCompanies.optional()
-});
+export const UserUpdateValidationSchema = ExistingUserValidationSchema.pick({
+  firstName: true,
+  lastName: true
+})
+  .partial()
+  .extend({
+    addFavoriteCompanies: zod.array(zod.string().min(1)).optional(),
+    removeFavoriteCompanies: zod.array(zod.string().min(1)).optional()
+  });
 
 // Type check the existing user validation schema
 ((): ExistingUser | undefined => {

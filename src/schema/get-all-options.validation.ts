@@ -1,8 +1,10 @@
 import {
   CompanyStatus,
-  IdValidationSchema,
-  preprocessBoolean,
-  preprocessInt
+  CursorValidationSchema,
+  LimitValidationSchema,
+  OffsetValidationSchema,
+  SortOrderValidationSchema,
+  preprocessBoolean
 } from "./common";
 import type {
   GetCategoriesOptions,
@@ -10,69 +12,41 @@ import type {
   GetDocumentsOptions,
   GetUsersOptions
 } from "./get-all-options";
-import { MAX_LIMIT } from "./consts";
 import zod from "zod";
 
-const cursor = zod.tuple([zod.string().min(1), IdValidationSchema]).optional();
+export const GetCategoriesOptionsValidationSchema = zod.object({
+  limit: LimitValidationSchema,
+  offset: OffsetValidationSchema,
+  onlyPinned: preprocessBoolean(zod.boolean()).optional()
+});
 
-const includePrivateCompanies = preprocessBoolean(zod.boolean()).optional();
-
-const limit = preprocessInt(
-  zod.number().int().positive().max(MAX_LIMIT)
-).optional();
-
-const offset = preprocessInt(zod.number().int().nonnegative()).optional();
-
-const onlyPinned = preprocessBoolean(zod.boolean()).optional();
-
-const onlyRecommended = preprocessBoolean(zod.boolean()).optional();
-
-const sortBy = {
-  companies: zod
+export const GetCompaniesOptionsValidationSchema = zod.object({
+  cursor: CursorValidationSchema,
+  includePrivateCompanies: preprocessBoolean(zod.boolean()).optional(),
+  limit: LimitValidationSchema,
+  offset: OffsetValidationSchema,
+  onlyRecommended: preprocessBoolean(zod.boolean()).optional(),
+  sortBy: zod
     .union([
       zod.literal("createdAt"),
       zod.literal("foundedAt"),
       zod.literal("name")
     ])
     .optional(),
-  documents: zod.literal("createdAt").optional()
-} as const;
-
-const sortOrder = zod
-  .union([zod.literal("asc"), zod.literal("desc")])
-  .optional();
-
-const status = zod
-  .enum([CompanyStatus.draft, CompanyStatus.founded])
-  .optional();
-
-export const GetCategoriesOptionsValidationSchema = zod.object({
-  limit,
-  offset,
-  onlyPinned
-});
-
-export const GetCompaniesOptionsValidationSchema = zod.object({
-  cursor,
-  includePrivateCompanies,
-  limit,
-  offset,
-  onlyRecommended,
-  sortBy: sortBy.companies,
-  sortOrder,
-  status
+  sortOrder: SortOrderValidationSchema,
+  status: zod.enum([CompanyStatus.draft, CompanyStatus.founded]).optional()
 });
 
 export const GetDocumentsOptionsValidationSchema = zod.object({
-  limit,
-  offset,
-  sortBy: sortBy.documents,
-  sortOrder
+  limit: LimitValidationSchema,
+  offset: OffsetValidationSchema,
+  sortBy: zod.literal("createdAt").optional(),
+  sortOrder: SortOrderValidationSchema
 });
 
 export const GetUsersOptionsValidationSchema = zod.object({
-  limit,
-  offset
+  limit: LimitValidationSchema,
+  offset: OffsetValidationSchema
 });
 
 // Type check the get categories options validation schema

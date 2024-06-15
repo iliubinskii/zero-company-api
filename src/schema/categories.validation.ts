@@ -6,37 +6,29 @@ import type {
 import { IdValidationSchema, preprocessBoolean } from "./common";
 import zod from "zod";
 
-const _id = IdValidationSchema;
-
-const description = zod.string().min(1);
-
-const name = zod.string().min(1);
-
-const pinned = preprocessBoolean(zod.boolean());
-
-const tagline = zod.string().min(1);
-
 export const ExistingCategoryValidationSchema = zod.object({
-  _id,
-  description,
-  name,
-  pinned,
-  tagline
+  _id: IdValidationSchema,
+  description: zod.string().min(1),
+  name: zod.string().min(1),
+  pinned: preprocessBoolean(zod.boolean()),
+  tagline: zod.string().min(1)
 });
 
-export const CategoryCreateValidationSchema = zod.object({
-  description,
-  name,
-  pinned,
-  tagline
-});
+export const CategoryCreateValidationSchema =
+  ExistingCategoryValidationSchema.pick({
+    description: true,
+    name: true,
+    pinned: true,
+    tagline: true
+  });
 
-export const CategoryUpdateValidationSchema = zod.object({
-  description: description.optional(),
-  name: name.optional(),
-  pinned: pinned.optional(),
-  tagline: tagline.optional()
-});
+export const CategoryUpdateValidationSchema =
+  ExistingCategoryValidationSchema.pick({
+    description: true,
+    name: true,
+    pinned: true,
+    tagline: true
+  }).partial();
 
 // Type check the existing category validation schema
 ((): ExistingCategory | undefined => {
