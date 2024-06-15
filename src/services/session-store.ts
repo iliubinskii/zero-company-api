@@ -9,10 +9,10 @@ import MongoStore from "connect-mongo";
 import RedisStore from "connect-redis";
 
 /**
- * Get the session store
- * @returns Session store
+ * Create a session store based on the configured provider.
+ * @returns The session store instance.
  */
-export function getSessionStore(): MongoStore | RedisStore | undefined {
+export function createSessionStore(): MongoStore | RedisStore | undefined {
   switch (SESSION_STORE_PROVIDER) {
     case "memory": {
       return undefined;
