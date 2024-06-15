@@ -1,8 +1,10 @@
 .DS_Store
 .env
+.next
 .vercel
 certificates
 coverage
+docker
 dist
 node_modules
 .DS_Store
