@@ -32,21 +32,21 @@ export function createCategoryControllers(
 ): CategoryControllers {
   return {
     addCategory: wrapAsyncHandler(async (req, res) => {
-      const category = CategoryCreateValidationSchema.safeParse(req.body);
+      const parsed = CategoryCreateValidationSchema.safeParse(req.body);
 
-      if (category.success) {
-        const addedCategory = await service.addCategory(category.data);
+      if (parsed.success) {
+        const category = await service.addCategory(parsed.data);
 
         sendResponse<Routes["/categories"]["post"]>(
           res,
           StatusCodes.CREATED,
-          assertValidForJsonStringify(addedCategory)
+          assertValidForJsonStringify(category)
         );
       } else
         sendResponse<Routes["/categories"]["post"]>(
           res,
           StatusCodes.BAD_REQUEST,
-          buildErrorResponse(ErrorCode.InvalidData, category.error)
+          buildErrorResponse(ErrorCode.InvalidData, parsed.error)
         );
     }),
     deleteCategory: wrapAsyncHandler(async (req, res) => {
@@ -120,16 +120,16 @@ export function createCategoryControllers(
     updateCategory: wrapAsyncHandler(async (req, res) => {
       const id = assertDefined(req.idParam);
 
-      const category = CategoryUpdateValidationSchema.safeParse(req.body);
+      const parsed = CategoryUpdateValidationSchema.safeParse(req.body);
 
-      if (category.success) {
-        const updatedCategory = await service.updateCategory(id, category.data);
+      if (parsed.success) {
+        const category = await service.updateCategory(id, parsed.data);
 
-        if (updatedCategory)
+        if (category)
           sendResponse<Routes["/categories/{id}"]["put"]>(
             res,
             StatusCodes.OK,
-            assertValidForJsonStringify(updatedCategory)
+            assertValidForJsonStringify(category)
           );
         else
           sendResponse<Routes["/categories/{id}"]["put"]>(
@@ -141,7 +141,7 @@ export function createCategoryControllers(
         sendResponse<Routes["/categories/{id}"]["put"]>(
           res,
           StatusCodes.BAD_REQUEST,
-          buildErrorResponse(ErrorCode.InvalidData, category.error)
+          buildErrorResponse(ErrorCode.InvalidData, parsed.error)
         );
     })
   };

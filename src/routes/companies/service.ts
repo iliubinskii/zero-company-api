@@ -25,19 +25,19 @@ import type mongoose from "mongoose";
  */
 export function createCompaniesService(): CompaniesService {
   return {
-    addCompany: async company => {
+    addCompany: async data => {
       const { CompanyModel } = await getModels();
 
-      const model = new CompanyModel(company);
+      const company = new CompanyModel(data);
 
-      return model.save();
+      return company.save();
     },
     deleteCompany: async id => {
       const { CompanyModel } = await getModels();
 
-      const deletedCompany = await CompanyModel.findByIdAndDelete(id);
+      const company = await CompanyModel.findByIdAndDelete(id);
 
-      return deletedCompany ? 1 : 0;
+      return company ? 1 : 0;
     },
     generateFoundingAgreement: async id => {
       const { CompanyModel, DocumentModel } = await getModels();

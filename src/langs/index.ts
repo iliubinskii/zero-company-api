@@ -13,7 +13,6 @@ export const lang = {
   CookieDomain: "Cookie domain",
   CookieSecure: "Cookie secure",
   CorsOrigin: "CORS origin",
-  CreatingApp: "Creating app",
   CreatingMongodbConnection: "Creating MongoDB connection",
   CreatingRedisClient: "Creating Redis client",
   Environment: "Environment",

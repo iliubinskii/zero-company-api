@@ -9,13 +9,13 @@ import { getModels } from "../../schema-mongodb";
  */
 export function createUsersService(): UsersService {
   return {
-    addUser: async user => {
+    addUser: async data => {
       try {
         const { UserModel } = await getModels();
 
-        const model = new UserModel(user);
+        const user = new UserModel(data);
 
-        return await model.save();
+        return await user.save();
       } catch (err) {
         if (
           typeof err === "object" &&
@@ -31,7 +31,7 @@ export function createUsersService(): UsersService {
     deleteUser: async ref => {
       const { UserModel } = await getModels();
 
-      const deletedUser = await (() => {
+      const user = await (() => {
         switch (ref.type) {
           case "id": {
             return UserModel.findByIdAndDelete(ref.id);
@@ -43,7 +43,7 @@ export function createUsersService(): UsersService {
         }
       })();
 
-      return deletedUser ? 1 : 0;
+      return user ? 1 : 0;
     },
     getUser: async ref => {
       const { UserModel } = await getModels();

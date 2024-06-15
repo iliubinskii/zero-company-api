@@ -11,19 +11,19 @@ import { getModels } from "../../schema-mongodb";
  */
 export function createCategoriesService(): CategoriesService {
   return {
-    addCategory: async category => {
+    addCategory: async data => {
       const { CategoryModel } = await getModels();
 
-      const model = new CategoryModel(category);
+      const category = new CategoryModel(data);
 
-      return model.save();
+      return category.save();
     },
     deleteCategory: async id => {
       const { CategoryModel } = await getModels();
 
-      const deletedCategory = await CategoryModel.findByIdAndDelete(id);
+      const category = await CategoryModel.findByIdAndDelete(id);
 
-      return deletedCategory ? 1 : 0;
+      return category ? 1 : 0;
     },
     getCategories: async ({
       limit = MAX_LIMIT,
