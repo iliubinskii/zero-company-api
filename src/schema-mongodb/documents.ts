@@ -1,4 +1,5 @@
 import { digitalDocument, signatory } from "./common";
+import { DocType } from "../schema";
 import mongoose from "mongoose";
 
 export const DocumentSchema = new mongoose.Schema(
@@ -24,7 +25,7 @@ export const DocumentSchema = new mongoose.Schema(
       type: [signatory]
     },
     type: {
-      enum: Object.values(DocumentType),
+      enum: Object.values(DocType),
       required: true,
       type: mongoose.Schema.Types.String
     }

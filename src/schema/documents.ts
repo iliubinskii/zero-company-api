@@ -1,6 +1,6 @@
 import type {
   DigitalDocument,
-  DocumentType,
+  DocType,
   MultipleDocsResponse,
   Signatory
 } from "./common";
@@ -11,7 +11,7 @@ export interface Document {
   readonly doc: DigitalDocument;
   readonly metadata?: string | null | undefined;
   readonly signatories: readonly Signatory[];
-  readonly type: DocumentType;
+  readonly type: DocType;
 }
 
 export interface DocumentCreate

@@ -5,7 +5,7 @@ export const CompanyStatus = {
   founded: "founded"
 } as const;
 
-export const DocumentType = {
+export const DocType = {
   FoundingAgreement: "FoundingAgreement"
 } as const;
 
@@ -36,7 +36,7 @@ export interface DigitalDocument {
   readonly submissionId: number;
 }
 
-export type DocumentType = (typeof DocumentType)[keyof typeof DocumentType];
+export type DocType = (typeof DocType)[keyof typeof DocType];
 
 export type ErrorCode = (typeof ErrorCode)[keyof typeof ErrorCode];
 

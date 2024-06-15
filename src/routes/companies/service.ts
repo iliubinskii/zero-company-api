@@ -9,7 +9,7 @@ import type {
   Signatory,
   User
 } from "../../schema";
-import { DocumentType, MAX_LIMIT } from "../../schema";
+import { DocType, MAX_LIMIT } from "../../schema";
 import { createDigitalDocument, getMongodbConnection } from "../../providers";
 import type { FilterQuery } from "mongoose";
 import { FoundingAgreement } from "../../templates";
@@ -90,7 +90,7 @@ export function createCompaniesService(): CompaniesService {
                 };
               }
             ),
-            type: DocumentType.FoundingAgreement
+            type: DocType.FoundingAgreement
           };
 
           const document = new DocumentModel(data);

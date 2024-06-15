@@ -1,4 +1,4 @@
-import { CompanyStatus, DocumentType, MAX_LIMIT } from "../../schema";
+import { CompanyStatus, DocType, MAX_LIMIT } from "../../schema";
 import type { Document, User } from "../../schema";
 import {
   type DocumentsService,
@@ -119,7 +119,8 @@ export function createDocumentsService(): DocumentsService {
           );
 
           if (
-            document.type === DocumentType.FoundingAgreement &&
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- Ok
+            document.type === DocType.FoundingAgreement &&
             digitalDocument.status === "completed"
           )
             await CompanyModel.findByIdAndUpdate(
