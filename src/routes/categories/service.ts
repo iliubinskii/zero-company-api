@@ -16,9 +16,7 @@ export function createCategoriesService(): CategoriesService {
 
       const model = new CategoryModel(category);
 
-      const addedCategory = await model.save();
-
-      return addedCategory;
+      return model.save();
     },
     deleteCategory: async id => {
       const { CategoryModel } = await getModels();
@@ -52,20 +50,15 @@ export function createCategoriesService(): CategoriesService {
     getCategory: async id => {
       const { CategoryModel } = await getModels();
 
-      const category = await CategoryModel.findById(id);
-
-      return category;
+      return CategoryModel.findById(id);
     },
     updateCategory: async (id, category) => {
       const { CategoryModel } = await getModels();
 
-      const updatedCategory = await CategoryModel.findByIdAndUpdate(
-        id,
-        category,
-        { new: true, runValidators: true }
-      );
-
-      return updatedCategory;
+      return CategoryModel.findByIdAndUpdate(id, category, {
+        new: true,
+        runValidators: true
+      });
     }
   };
 }

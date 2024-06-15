@@ -49,8 +49,8 @@ function appExists(): boolean {
 }
 
 /**
- * Get Redis client
- * @returns Redis client
+ * Get the app from the cache or create a new one
+ * @returns The app
  */
 async function getApp(): Promise<express.Express> {
   if (appCached) return appCached;

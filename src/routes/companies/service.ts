@@ -30,9 +30,7 @@ export function createCompaniesService(): CompaniesService {
 
       const model = new CompanyModel(company);
 
-      const addedCompany = await model.save();
-
-      return addedCompany;
+      return model.save();
     },
     deleteCompany: async id => {
       const { CompanyModel } = await getModels();
@@ -219,9 +217,7 @@ export function createCompaniesService(): CompaniesService {
     getCompany: async id => {
       const { CompanyModel } = await getModels();
 
-      const company = await CompanyModel.findById(id);
-
-      return company;
+      return CompanyModel.findById(id);
     },
     updateCompany: async (id, company) => {
       const { CompanyModel } = await getModels();
@@ -238,12 +234,10 @@ export function createCompaniesService(): CompaniesService {
       if (removeImages && removeImages.length > 0)
         update["$pull"] = { images: { assetId: { $in: removeImages } } };
 
-      const updatedCompany = await CompanyModel.findByIdAndUpdate(id, update, {
+      return CompanyModel.findByIdAndUpdate(id, update, {
         new: true,
         runValidators: true
       });
-
-      return updatedCompany;
     }
   };
 }

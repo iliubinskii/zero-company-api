@@ -15,9 +15,7 @@ export function createUsersService(): UsersService {
 
         const model = new UserModel(user);
 
-        const addedUser = await model.save();
-
-        return addedUser;
+        return await model.save();
       } catch (err) {
         if (
           typeof err === "object" &&
@@ -50,7 +48,7 @@ export function createUsersService(): UsersService {
     getUser: async ref => {
       const { UserModel } = await getModels();
 
-      const user = await (() => {
+      return (() => {
         switch (ref.type) {
           case "id": {
             return UserModel.findById(ref.id);
@@ -65,8 +63,6 @@ export function createUsersService(): UsersService {
           }
         }
       })();
-
-      return user;
     },
     getUsers: async ({ limit = MAX_LIMIT, offset = 0 } = {}) => {
       const { UserModel } = await getModels();
@@ -101,7 +97,7 @@ export function createUsersService(): UsersService {
           favoriteCompanies: { $in: removeFavoriteCompanies }
         };
 
-      const updatedUser = await (() => {
+      return (() => {
         switch (ref.type) {
           case "id": {
             return UserModel.findByIdAndUpdate(ref.id, update, {
@@ -118,8 +114,6 @@ export function createUsersService(): UsersService {
           }
         }
       })();
-
-      return updatedUser;
     }
   };
 }
