@@ -1,7 +1,3 @@
-import {
-  type CompaniesService,
-  dangerouslyAssumePopulatedDocument
-} from "../../types";
 import type {
   Company,
   Document,
@@ -11,6 +7,7 @@ import type {
 } from "../../schema";
 import { DocType, MAX_LIMIT } from "../../schema";
 import { createDigitalDocument, getMongodbConnection } from "../../providers";
+import { type CompaniesService } from "../../types";
 import type { FilterQuery } from "mongoose";
 import { FoundingAgreement } from "../../templates";
 import { StatusCodes } from "http-status-codes";
@@ -30,7 +27,9 @@ export function createCompaniesService(): CompaniesService {
 
       const company = new CompanyModel(data);
 
-      return company.save();
+      await company.save();
+
+      return company;
     },
     deleteCompany: async id => {
       const { CompanyModel } = await getModels();
@@ -94,15 +93,11 @@ export function createCompaniesService(): CompaniesService {
           const document = new DocumentModel(data);
 
           await document.save({ session });
-          await document.populate("company");
-
           company.foundingAgreement = document._id;
-
           await company.save({ session });
-
           await session.commitTransaction();
 
-          return dangerouslyAssumePopulatedDocument(document);
+          return company;
         }
 
         await session.commitTransaction();

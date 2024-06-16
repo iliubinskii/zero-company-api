@@ -16,7 +16,9 @@ export function createCategoriesService(): CategoriesService {
 
       const category = new CategoryModel(data);
 
-      return category.save();
+      await category.save();
+
+      return category;
     },
     deleteCategory: async id => {
       const { CategoryModel } = await getModels();

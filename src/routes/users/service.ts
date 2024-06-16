@@ -15,7 +15,9 @@ export function createUsersService(): UsersService {
 
         const user = new UserModel(data);
 
-        return await user.save();
+        await user.save();
+
+        return user;
       } catch (err) {
         if (
           typeof err === "object" &&
