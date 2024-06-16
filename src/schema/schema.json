@@ -224,7 +224,7 @@
         ],
         "responses": {
           "200": {
-            "$ref": "#/components/responses/PopulatedDocument"
+            "$ref": "#/components/responses/Company"
           },
           "404": {
             "$ref": "#/components/responses/NotFound"

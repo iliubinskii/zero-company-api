@@ -1,5 +1,6 @@
 import { MAX_LIMIT } from "../../schema";
 import { MONGODB_ERROR } from "../../consts";
+import { MONGODB_RUN_VALIDATORS } from "../../config";
 import type { UsersService } from "../../types";
 import { getModels } from "../../schema-mongodb";
 
@@ -15,7 +16,9 @@ export function createUsersService(): UsersService {
 
         const user = new UserModel(data);
 
-        return await user.save();
+        await user.save();
+
+        return user;
       } catch (err) {
         if (
           typeof err === "object" &&
@@ -102,14 +105,14 @@ export function createUsersService(): UsersService {
           case "id": {
             return UserModel.findByIdAndUpdate(ref.id, update, {
               new: true,
-              runValidators: true
+              runValidators: MONGODB_RUN_VALIDATORS
             });
           }
 
           case "email": {
             return UserModel.findOneAndUpdate({ email: ref.email }, update, {
               new: true,
-              runValidators: true
+              runValidators: MONGODB_RUN_VALIDATORS
             });
           }
         }

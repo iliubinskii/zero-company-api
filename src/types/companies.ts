@@ -5,7 +5,6 @@ import type {
   GetCompaniesOptions,
   MultipleDocsResponse
 } from "../schema";
-import type { RawPopulatedDocument } from "./documents";
 import type { RequestHandler } from "express";
 import type { StatusCodes } from "http-status-codes";
 import type mongoose from "mongoose";
@@ -44,7 +43,7 @@ export interface CompaniesService {
    */
   readonly generateFoundingAgreement: (
     id: string
-  ) => Promise<RawPopulatedDocument | StatusCodes.CONFLICT | null>;
+  ) => Promise<RawExistingCompany | StatusCodes.CONFLICT | null>;
   /**
    * Gets all companies from the database.
    * @param options - The options to use when getting companies.
