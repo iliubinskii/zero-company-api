@@ -10,6 +10,7 @@ import { createDigitalDocument, getMongodbConnection } from "../../providers";
 import { type CompaniesService } from "../../types";
 import type { FilterQuery } from "mongoose";
 import { FoundingAgreement } from "../../templates";
+import { MONGODB_RUN_VALIDATORS } from "../../config";
 import { StatusCodes } from "http-status-codes";
 import type { Writable } from "ts-toolbelt/out/Object/Writable";
 import { getModels } from "../../schema-mongodb";
@@ -231,7 +232,7 @@ export function createCompaniesService(): CompaniesService {
 
       return CompanyModel.findByIdAndUpdate(id, update, {
         new: true,
-        runValidators: true
+        runValidators: MONGODB_RUN_VALIDATORS
       });
     }
   };
