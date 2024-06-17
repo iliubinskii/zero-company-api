@@ -1,4 +1,5 @@
 import type { CompanyImagesService } from "../../../types";
+import { MONGODB_RUN_VALIDATORS } from "../../../config";
 import { getModels } from "../../../schema-mongodb";
 
 /**
@@ -13,7 +14,7 @@ export function createCompanyImagesService(): CompanyImagesService {
       return CompanyModel.findByIdAndUpdate(
         id,
         { $push: { images: image } },
-        { new: true, runValidators: true }
+        { new: true, runValidators: MONGODB_RUN_VALIDATORS }
       );
     },
     deleteImage: async (id, assetId) => {
@@ -22,7 +23,7 @@ export function createCompanyImagesService(): CompanyImagesService {
       return CompanyModel.findByIdAndUpdate(
         id,
         { $pull: { images: { assetId } } },
-        { new: true, runValidators: true }
+        { new: true, runValidators: MONGODB_RUN_VALIDATORS }
       );
     },
     updateImage: async (id, assetId, image) => {
@@ -31,7 +32,7 @@ export function createCompanyImagesService(): CompanyImagesService {
       return CompanyModel.findOneAndUpdate(
         { "_id": id, "images.assetId": assetId },
         { $set: { "images.$": image } },
-        { new: true, runValidators: true }
+        { new: true, runValidators: MONGODB_RUN_VALIDATORS }
       );
     }
   };

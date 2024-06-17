@@ -7,6 +7,7 @@ import {
 } from "../../types";
 import { getDigitalDocument, getMongodbConnection } from "../../providers";
 import type { FilterQuery } from "mongoose";
+import { MONGODB_RUN_VALIDATORS } from "../../config";
 import type { Writable } from "ts-toolbelt/out/Object/Writable";
 import { getModels } from "../../schema-mongodb";
 import type mongoose from "mongoose";
@@ -126,13 +127,13 @@ export function createDocumentsService(): DocumentsService {
             await CompanyModel.findByIdAndUpdate(
               document.company._id,
               { status: CompanyStatus.founded },
-              { new: true, runValidators: true }
+              { new: true, runValidators: MONGODB_RUN_VALIDATORS }
             ).session(session);
 
           const updatedDocument = await DocumentModel.findByIdAndUpdate(
             id,
             { ...update, doc: digitalDocument },
-            { new: true, runValidators: true }
+            { new: true, runValidators: MONGODB_RUN_VALIDATORS }
           )
             .session(session)
             .populate("company");

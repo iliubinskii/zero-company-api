@@ -829,7 +829,7 @@
   "info": {
     "description": "An API for Zero Company application",
     "title": "Zero Company API",
-    "version": "2024.6.15"
+    "version": "2024.6.17"
   },
   "openapi": "3.0.0",
   "paths": {
@@ -1071,7 +1071,7 @@
       "post": {
         "responses": {
           "200": {
-            "$ref": "#/components/responses/PopulatedDocument"
+            "$ref": "#/components/responses/Company"
           },
           "404": {
             "$ref": "#/components/responses/NotFound"

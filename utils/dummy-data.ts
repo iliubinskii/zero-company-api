@@ -7,6 +7,8 @@ import { dummy } from "../assets";
 import { faker } from "@faker-js/faker";
 import fs from "node:fs";
 
+const BROKEN_IMAGES = new Set([86, 97]);
+
 const LIMIT = { companies: 250 } as const;
 
 const PRICE_STEP = 1000;
@@ -80,7 +82,9 @@ const companies = Array.from(
      * @returns The random index
      */
     function getIndex(): number {
-      return faker.number.int({ max: 100, min: 1 });
+      const result = faker.number.int({ max: 100, min: 1 });
+
+      return BROKEN_IMAGES.has(result) ? getIndex() : result;
     }
   }
 );

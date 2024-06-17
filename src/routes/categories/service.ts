@@ -2,6 +2,7 @@ import type { CategoriesService } from "../../types";
 import type { Category } from "../../schema";
 import type { FilterQuery } from "mongoose";
 import { MAX_LIMIT } from "../../schema";
+import { MONGODB_RUN_VALIDATORS } from "../../config";
 import type { Writable } from "ts-toolbelt/out/Object/Writable";
 import { getModels } from "../../schema-mongodb";
 
@@ -16,7 +17,9 @@ export function createCategoriesService(): CategoriesService {
 
       const category = new CategoryModel(data);
 
-      return category.save();
+      await category.save();
+
+      return category;
     },
     deleteCategory: async id => {
       const { CategoryModel } = await getModels();
@@ -57,7 +60,7 @@ export function createCategoriesService(): CategoriesService {
 
       return CategoryModel.findByIdAndUpdate(id, category, {
         new: true,
-        runValidators: true
+        runValidators: MONGODB_RUN_VALIDATORS
       });
     }
   };
