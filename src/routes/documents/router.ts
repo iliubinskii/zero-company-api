@@ -1,4 +1,4 @@
-import { requireIdParam, requireJwt, requireJwtAdmin } from "../../middleware";
+import { requireIdParam, requireJwt } from "../../middleware";
 import type { DocumentControllers } from "../../types";
 import { Router } from "express";
 
@@ -11,14 +11,9 @@ export function createDocumentsRouter(
   controllers: DocumentControllers
 ): Router {
   return Router()
-    .get("/", requireJwtAdmin, controllers.getDocuments)
-    .post("/", requireJwtAdmin, controllers.addDocument)
-    .get("/:id", requireJwtAdmin, requireIdParam, controllers.getDocument)
+    .get("/", requireJwt, controllers.getDocuments)
+    .post("/", requireJwt, controllers.addDocument)
+    .get("/:id", requireJwt, requireIdParam, controllers.getDocument)
     .put("/:id", requireJwt, requireIdParam, controllers.updateDocument)
-    .delete(
-      "/:id",
-      requireJwtAdmin,
-      requireIdParam,
-      controllers.deleteDocument
-    );
+    .delete("/:id", requireJwt, requireIdParam, controllers.deleteDocument);
 }

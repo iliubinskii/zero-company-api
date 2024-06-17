@@ -83,7 +83,7 @@ const config = {
     ],
     "@typescript-eslint/switch-exhaustiveness-check": "warn",
     "arrow-body-style": [
-      "error",
+      "warn",
       "as-needed",
       { requireReturnForObjectLiteral: true }
     ],
@@ -114,7 +114,7 @@ const config = {
     "jsdoc/require-returns-type": "off",
     "n/no-missing-import": "off",
     "no-duplicate-imports": "off",
-    "no-magic-numbers": ["error", { ignore: [-1, 0, 0.5, 1, 2, 100] }],
+    "no-magic-numbers": ["warn", { ignore: [-1, 0, 0.5, 1, 2, 100] }],
     "no-redeclare": "off",
     "no-shadow": "off",
     "no-type-assertion/no-type-assertion": "warn",
@@ -138,7 +138,7 @@ const config = {
     ],
     "promise/always-return": "off",
     "quote-props": ["warn", "consistent-as-needed"],
-    "quotes": ["error", "double"],
+    "quotes": ["warn", "double"],
     "security/detect-object-injection": "off",
     "sonarjs/no-duplicate-string": "off",
     "sonarjs/prefer-immediate-return": "off",

@@ -37,7 +37,7 @@ export function createCompaniesRouter(
     .get("/:id", requireIdParam, controllers.getCompany)
     .put(
       "/:id",
-      requireJwtAdmin,
+      requireJwt,
       requireIdParam,
       parseFormData,
       nullifyEmptyStringsDeep,
@@ -54,7 +54,7 @@ export function createCompaniesRouter(
     )
     .use(
       "/:id/images",
-      requireJwtAdmin,
+      requireJwt,
       requireIdParam,
       createCompanyImagesRouter(imageControllers)
     );
