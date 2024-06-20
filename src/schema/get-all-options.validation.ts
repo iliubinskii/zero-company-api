@@ -10,6 +10,7 @@ import type {
   GetCategoriesOptions,
   GetCompaniesOptions,
   GetDocumentsOptions,
+  GetListingsOptions,
   GetUsersOptions
 } from "./get-all-options";
 import zod from "zod";
@@ -44,6 +45,10 @@ export const GetDocumentsOptionsValidationSchema = zod.object({
   sortOrder: SortOrderValidationSchema
 });
 
+// eslint-disable-next-line no-warning-comments -- Assigned
+// TODO
+export const GetListingsOptionsValidationSchema = zod.object({});
+
 export const GetUsersOptionsValidationSchema = zod.object({
   limit: LimitValidationSchema,
   offset: OffsetValidationSchema
@@ -66,6 +71,13 @@ export const GetUsersOptionsValidationSchema = zod.object({
 // Type check the get documents options validation schema
 ((): GetDocumentsOptions | undefined => {
   const result = GetDocumentsOptionsValidationSchema.safeParse(undefined);
+
+  return result.success ? result.data : undefined;
+})();
+
+// Type check the get listing options validation schema
+((): GetListingsOptions | undefined => {
+  const result = GetListingsOptionsValidationSchema.safeParse(undefined);
 
   return result.success ? result.data : undefined;
 })();

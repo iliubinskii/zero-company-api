@@ -50,6 +50,9 @@ import session from "express-session";
  * @returns App
  */
 export async function createApp(): Promise<express.Express> {
+  // eslint-disable-next-line no-warning-comments -- Assigned
+  // TODO: Add listings router
+
   initAuth0Passport();
   initMongodb();
 

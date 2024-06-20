@@ -1,3 +1,6 @@
+// eslint-disable-next-line no-warning-comments -- Assigned
+// TODO: Export
+
 import type { paths } from "./routes";
 
 export type Routes = RouteTransform<paths>;

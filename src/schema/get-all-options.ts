@@ -24,6 +24,10 @@ export interface GetDocumentsOptions {
   readonly sortOrder?: "asc" | "desc" | undefined;
 }
 
+// eslint-disable-next-line no-warning-comments -- Assigned
+// TODO
+export interface GetListingsOptions {}
+
 export interface GetUsersOptions {
   readonly limit?: number | undefined;
   readonly offset?: number | undefined;

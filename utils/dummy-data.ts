@@ -13,6 +13,9 @@ const LIMIT = { companies: 250 } as const;
 
 const PRICE_STEP = 1000;
 
+// eslint-disable-next-line no-warning-comments -- Assigned
+// TODO: Dummy data for listings
+
 const companies = Array.from(
   { length: LIMIT.companies },
   (_, i): DummyCompany => {
