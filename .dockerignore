@@ -1,7 +1,14 @@
 .DS_Store
 .env
+.env.e2e
+.next
 .vercel
+blob-report
 certificates
 coverage
 dist
+docker
 node_modules
+playwright/.cache
+playwright-report
+test-results
