@@ -2,8 +2,12 @@
 .env
 .next
 .vercel
+blob-report
 certificates
 coverage
 docker
 dist
 node_modules
+playwright/.cache
+playwright-report
+test-results

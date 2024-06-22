@@ -24,7 +24,7 @@ const config = {
       }
     },
     {
-      files: "./utils/**",
+      files: ["./tests/**", "./utils/**"],
       rules: {
         "node/no-unpublished-import": "off"
       }
@@ -94,6 +94,7 @@ const config = {
             "fullsetup",
             "globals",
             "gmail",
+            "goto",
             "ico",
             "jpg",
             "jsdoc",
