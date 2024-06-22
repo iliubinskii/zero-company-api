@@ -1,7 +1,15 @@
 /* eslint-disable node/no-unpublished-import -- Ok */
 
+import { bool, cleanEnv } from "envalid";
 import { defineConfig, devices } from "@playwright/test";
-import { CI } from "./src";
+import { config } from "dotenv";
+
+config();
+
+// eslint-disable-next-line no-process-env -- Ok
+const { CI } = cleanEnv(process.env, {
+  CI: bool({ default: false })
+});
 
 export default defineConfig({
   forbidOnly: CI,
