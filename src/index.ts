@@ -6,6 +6,7 @@ export * from "./middleware";
 export * from "./providers";
 export * from "./routes";
 export * from "./schema";
+export * from "./schema-mongodb";
 export * from "./services";
 export * from "./types";
 export * from "./utils";
