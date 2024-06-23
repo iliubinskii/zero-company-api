@@ -7,8 +7,8 @@ import {
 } from "../../schema";
 import {
   assertDefined,
-  assertValidForJsonStringify,
   buildErrorResponse,
+  dangerouslyAssumeJsonTransform,
   sendResponse,
   wrapAsyncHandler
 } from "../../utils";
@@ -36,7 +36,7 @@ export function createDocumentControllers(
         sendResponse<Routes["/documents"]["post"]>(
           res,
           StatusCodes.CREATED,
-          assertValidForJsonStringify(document)
+          dangerouslyAssumeJsonTransform(document)
         );
       } else
         sendResponse<Routes["/documents"]["post"]>(
@@ -63,7 +63,7 @@ export function createDocumentControllers(
         sendResponse<Routes["/documents/{id}"]["get"]>(
           res,
           StatusCodes.OK,
-          assertValidForJsonStringify(document)
+          dangerouslyAssumeJsonTransform(document)
         );
       else
         sendResponse<Routes["/documents/{id}"]["get"]>(
@@ -81,7 +81,7 @@ export function createDocumentControllers(
         sendResponse<Routes["/documents"]["get"]>(
           res,
           StatusCodes.OK,
-          assertValidForJsonStringify(documents)
+          dangerouslyAssumeJsonTransform(documents)
         );
       } else
         sendResponse<Routes["/documents"]["get"]>(
@@ -102,7 +102,7 @@ export function createDocumentControllers(
           sendResponse<Routes["/documents/{id}"]["put"]>(
             res,
             StatusCodes.OK,
-            assertValidForJsonStringify(document)
+            dangerouslyAssumeJsonTransform(document)
           );
         else
           sendResponse<Routes["/documents/{id}"]["put"]>(

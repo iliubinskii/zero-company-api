@@ -2,10 +2,7 @@
  * @type {import("eslint").Linter.Config }
  */
 const config = {
-  env: {
-    es2020: true,
-    jest: true
-  },
+  env: { es2020: true },
   extends: ["./.eslintrc.base.cjs"],
   globals: { Express: true },
   ignorePatterns: ["!.*", "coverage/**", "dist/**", "node_modules/**"],
@@ -104,6 +101,7 @@ const config = {
             "lcfirst",
             "localhost",
             "logform",
+            "matchers",
             "mjs",
             "mongodb",
             "multer",
@@ -140,6 +138,7 @@ const config = {
             "ttl",
             "txt",
             "ucfirst",
+            "undef",
             "unlink",
             "uploader",
             "upsert",

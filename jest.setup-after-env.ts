@@ -3,8 +3,7 @@
 /* eslint-disable import/no-namespace -- Ok */
 
 import * as config from "./src/config";
-
-jest.mock("./src/config");
+import { getMongodbMemoryServerUri } from "./utils";
 
 // @ts-expect-error
-config.MONGODB_URI = `mongodb://127.0.0.1:${config.TEST_MONGODB_PORT}/`;
+config.MONGODB_URI = getMongodbMemoryServerUri();

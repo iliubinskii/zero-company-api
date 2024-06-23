@@ -16,8 +16,8 @@ import {
 } from "../../schema";
 import {
   assertDefined,
-  assertValidForJsonStringify,
   buildErrorResponse,
+  dangerouslyAssumeJsonTransform,
   sendResponse,
   wrapAsyncHandler
 } from "../../utils";
@@ -53,7 +53,7 @@ export function createUserControllers(
           sendResponse<Routes["/users"]["post"]>(
             res,
             StatusCodes.CREATED,
-            assertValidForJsonStringify(user)
+            dangerouslyAssumeJsonTransform(user)
           );
         else
           sendResponse<Routes["/users"]["post"]>(
@@ -109,7 +109,7 @@ export function createUserControllers(
         sendResponse<Routes["/users/{id}/companies"]["get"]>(
           res,
           StatusCodes.OK,
-          assertValidForJsonStringify(companies)
+          dangerouslyAssumeJsonTransform(companies)
         );
       } else
         sendResponse<Routes["/users/{id}/companies"]["get"]>(
@@ -150,7 +150,7 @@ export function createUserControllers(
         sendResponse<Routes["/users/{id}/documents"]["get"]>(
           res,
           StatusCodes.OK,
-          assertValidForJsonStringify(documents)
+          dangerouslyAssumeJsonTransform(documents)
         );
       } else
         sendResponse<Routes["/users/{id}/documents"]["get"]>(
@@ -191,7 +191,7 @@ export function createUserControllers(
         sendResponse<Routes["/users/{id}/favorite-companies"]["get"]>(
           res,
           StatusCodes.OK,
-          assertValidForJsonStringify(companies)
+          dangerouslyAssumeJsonTransform(companies)
         );
       } else
         sendResponse<Routes["/users/{id}/favorite-companies"]["get"]>(
@@ -209,7 +209,7 @@ export function createUserControllers(
         sendResponse<Routes["/users/{id}"]["get"]>(
           res,
           StatusCodes.OK,
-          assertValidForJsonStringify(user)
+          dangerouslyAssumeJsonTransform(user)
         );
       else
         sendResponse<Routes["/users/{id}"]["get"]>(
@@ -227,7 +227,7 @@ export function createUserControllers(
         sendResponse<Routes["/users"]["get"]>(
           res,
           StatusCodes.OK,
-          assertValidForJsonStringify(users)
+          dangerouslyAssumeJsonTransform(users)
         );
       } else
         sendResponse<Routes["/users"]["get"]>(
@@ -248,7 +248,7 @@ export function createUserControllers(
           sendResponse<Routes["/users/{id}"]["put"]>(
             res,
             StatusCodes.OK,
-            assertValidForJsonStringify(user)
+            dangerouslyAssumeJsonTransform(user)
           );
         else
           sendResponse<Routes["/users/{id}"]["put"]>(

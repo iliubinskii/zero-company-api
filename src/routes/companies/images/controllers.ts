@@ -5,8 +5,8 @@ import type {
 import { CompanyImageCreateValidationSchema, ErrorCode } from "../../../schema";
 import {
   assertDefined,
-  assertValidForJsonStringify,
   buildErrorResponse,
+  dangerouslyAssumeJsonTransform,
   sendResponse,
   wrapAsyncHandler
 } from "../../../utils";
@@ -34,7 +34,7 @@ export function createCompanyImageControllers(
           sendResponse<Routes["/companies/{id}/images"]["post"]>(
             res,
             StatusCodes.CREATED,
-            assertValidForJsonStringify(company)
+            dangerouslyAssumeJsonTransform(company)
           );
         else
           sendResponse<Routes["/companies/{id}/images"]["post"]>(
@@ -60,7 +60,7 @@ export function createCompanyImageControllers(
         sendResponse<Routes["/companies/{id}/images/{assetId}"]["delete"]>(
           res,
           StatusCodes.OK,
-          assertValidForJsonStringify(company)
+          dangerouslyAssumeJsonTransform(company)
         );
       else
         sendResponse<Routes["/companies/{id}/images/{assetId}"]["delete"]>(
@@ -87,7 +87,7 @@ export function createCompanyImageControllers(
           sendResponse<Routes["/companies/{id}/images/{assetId}"]["put"]>(
             res,
             StatusCodes.OK,
-            assertValidForJsonStringify(company)
+            dangerouslyAssumeJsonTransform(company)
           );
         else
           sendResponse<Routes["/companies/{id}/images/{assetId}"]["put"]>(

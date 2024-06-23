@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test";
 import { StatusCodes } from "http-status-codes";
 
-test.describe.parallel("API Testing", () => {
+test.describe.parallel("Root", () => {
   // eslint-disable-next-line no-warning-comments -- Ok
   // TODO: Take it from configuration
   const baseURL = "https://preview-api.zero-company.app";

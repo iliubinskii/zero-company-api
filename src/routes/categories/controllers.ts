@@ -12,8 +12,8 @@ import {
 } from "../../schema";
 import {
   assertDefined,
-  assertValidForJsonStringify,
   buildErrorResponse,
+  dangerouslyAssumeJsonTransform,
   sendResponse,
   wrapAsyncHandler
 } from "../../utils";
@@ -40,7 +40,7 @@ export function createCategoryControllers(
         sendResponse<Routes["/categories"]["post"]>(
           res,
           StatusCodes.CREATED,
-          assertValidForJsonStringify(category)
+          dangerouslyAssumeJsonTransform(category)
         );
       } else
         sendResponse<Routes["/categories"]["post"]>(
@@ -67,7 +67,7 @@ export function createCategoryControllers(
         sendResponse<Routes["/categories"]["get"]>(
           res,
           StatusCodes.OK,
-          assertValidForJsonStringify(categories)
+          dangerouslyAssumeJsonTransform(categories)
         );
       } else
         sendResponse<Routes["/categories"]["get"]>(
@@ -85,7 +85,7 @@ export function createCategoryControllers(
         sendResponse<Routes["/categories/{id}"]["get"]>(
           res,
           StatusCodes.OK,
-          assertValidForJsonStringify(category)
+          dangerouslyAssumeJsonTransform(category)
         );
       else
         sendResponse<Routes["/categories/{id}"]["get"]>(
@@ -108,7 +108,7 @@ export function createCategoryControllers(
         sendResponse<Routes["/categories/{id}/companies"]["get"]>(
           res,
           StatusCodes.OK,
-          assertValidForJsonStringify(companies)
+          dangerouslyAssumeJsonTransform(companies)
         );
       } else
         sendResponse<Routes["/categories/{id}/companies"]["get"]>(
@@ -129,7 +129,7 @@ export function createCategoryControllers(
           sendResponse<Routes["/categories/{id}"]["put"]>(
             res,
             StatusCodes.OK,
-            assertValidForJsonStringify(category)
+            dangerouslyAssumeJsonTransform(category)
           );
         else
           sendResponse<Routes["/categories/{id}"]["put"]>(
