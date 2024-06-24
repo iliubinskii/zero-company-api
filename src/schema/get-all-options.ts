@@ -6,6 +6,8 @@ export interface GetCategoriesOptions {
   readonly onlyPinned?: boolean | undefined;
 }
 
+// eslint-disable-next-line no-warning-comments -- Assigned
+// TODO: Add `q`
 export interface GetCompaniesOptions {
   readonly cursor?: readonly [string, string] | undefined;
   readonly includePrivateCompanies?: boolean | undefined;

@@ -112,6 +112,8 @@ export function createCompaniesService(): CompaniesService {
         await session.endSession();
       }
     },
+    // eslint-disable-next-line no-warning-comments -- Assigned
+    // TODO: Use `q` param to search companies by name, description
     getCompanies: async (options = {}, parentRef) => {
       const {
         limit = MAX_LIMIT,

@@ -20,6 +20,8 @@ export const GetCategoriesOptionsValidationSchema = zod.object({
   onlyPinned: preprocessBoolean(zod.boolean()).optional()
 });
 
+// eslint-disable-next-line no-warning-comments -- Assigned
+// TODO: Add `q`
 export const GetCompaniesOptionsValidationSchema = zod.object({
   cursor: CursorValidationSchema,
   includePrivateCompanies: preprocessBoolean(zod.boolean()).optional(),
