@@ -26,26 +26,19 @@ test.describe.parallel("Categories", () => {
       expect(createResponse.status()).toBe(StatusCodes.CREATED);
 
       const responseBody = await createResponse.json();
-      console.log(responseBody);
-    });
-  });
-
-  test("should return all categories", async ({ request }) => {
-    const response = await request.get(`${BASE_URL}/categories`);
-    expect(response.status()).toBe(200);
-    const responseBody = await response.json();
-    expect(responseBody).toHaveProperty("count");
-    expect(typeof responseBody.count).toBe("number");
-  });
-
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- Ok
-      const responseBody = await createResponse.json();
 
       // eslint-disable-next-line no-warning-comments -- Ok
       // TODO: Use expect to check response body
       // eslint-disable-next-line no-console -- Temp
       console.log(responseBody);
     });
-  });
 
+    test("should return all categories", async ({ request }) => {
+      const response = await request.get(`${BASE_URL}/categories`);
+      expect(response.status()).toBe(StatusCodes.OK);
+      const responseBody = await response.json();
+      expect(responseBody).toHaveProperty("count");
+      expect(typeof responseBody.count).toBe("number");
+    });
+  });
 });

@@ -14,14 +14,22 @@ const config = {
       }
     },
     {
-      files: ["./src/schema/routes.ts"],
+      files: "./src/schema/routes.ts",
       rules: {
         "no-magic-numbers": "off",
         "typescript-sort-keys/interface": "off"
       }
     },
     {
-      files: ["./tests/**", "./utils/**"],
+      files: "./tests/**",
+      rules: {
+        "@typescript-eslint/no-unsafe-assignment": "off",
+        "@typescript-eslint/no-unsafe-member-access": "off",
+        "node/no-unpublished-import": "off"
+      }
+    },
+    {
+      files: "./utils/**",
       rules: {
         "node/no-unpublished-import": "off"
       }
