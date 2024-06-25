@@ -37,4 +37,15 @@ test.describe.parallel("Categories", () => {
     expect(responseBody).toHaveProperty("count");
     expect(typeof responseBody.count).toBe("number");
   });
+
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- Ok
+      const responseBody = await createResponse.json();
+
+      // eslint-disable-next-line no-warning-comments -- Ok
+      // TODO: Use expect to check response body
+      // eslint-disable-next-line no-console -- Temp
+      console.log(responseBody);
+    });
+  });
+
 });

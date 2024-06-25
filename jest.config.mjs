@@ -12,7 +12,8 @@ const config = {
   globalTeardown: "./jest.global-teardown.ts",
   preset: "ts-jest",
   setupFilesAfterEnv: ["jest-extended/all", "./jest.setup-after-env.ts"],
-  testEnvironment: "node"
+  testEnvironment: "node",
+  testPathIgnorePatterns: ["/dist/", "/node_modules/", "/tests/"]
 };
 
 export default config;

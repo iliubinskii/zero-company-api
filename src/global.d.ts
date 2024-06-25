@@ -3,11 +3,6 @@
 import type { CSSProperties, DetailedHTMLProps, HTMLAttributes } from "react";
 import type { Jwt } from "./schema";
 
-export type IntrinsicElement = DetailedHTMLProps<
-  HTMLAttributes<HTMLElement>,
-  HTMLElement
-> & { name: string; role: string; style?: CSSProperties };
-
 declare global {
   namespace JSX {
     interface IntrinsicElements {
@@ -16,6 +11,12 @@ declare global {
       "text-field": IntrinsicElement;
     }
   }
+}
+
+declare module "@jest/expect" {
+  export interface Matchers<R>
+    // eslint-disable-next-line no-undef -- Ok
+    extends CustomMatchers<R> {}
 }
 
 declare module "express-serve-static-core" {
@@ -43,3 +44,8 @@ declare module "express-session" {
     successReturnUrl?: string | undefined;
   }
 }
+
+export type IntrinsicElement = DetailedHTMLProps<
+  HTMLAttributes<HTMLElement>,
+  HTMLElement
+> & { name: string; role: string; style?: CSSProperties };

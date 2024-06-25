@@ -1,5 +1,6 @@
 import type { ExistingUser, UserUpdate } from "../../schema";
-import { assertDefined, assertNotNull } from "../../utils";
+import { assertDefined, assertNotNull, jsonTransform } from "../../utils";
+import { beforeAll, describe, expect, it } from "@jest/globals";
 import { createUsersService } from "./service";
 import { faker } from "@faker-js/faker";
 import { getModels } from "../../schema-mongodb";
@@ -23,23 +24,19 @@ describe("createUsersService", () => {
     };
   };
 
-  const toObject = (obj: unknown): unknown =>
-    // eslint-disable-next-line unicorn/prefer-structured-clone -- Ok
-    JSON.parse(JSON.stringify(obj));
-
   describe("addUser", () => {
     const data = getData();
 
     it("should add a user", async () => {
       const user = await usersService.addUser(data);
 
-      expect(toObject(user)).toStrictEqual({
+      expect(jsonTransform(user)).toStrictEqual({
         ...data,
         _id: assertNotNull(user)._id.toString()
       });
     });
 
-    it("should return undefined for duplicate email", async () => {
+    it("should return null for duplicate email", async () => {
       const user = await usersService.addUser(data);
 
       expect(user).toBeNull();
@@ -106,31 +103,32 @@ describe("createUsersService", () => {
 
   describe("getUser", () => {
     describe("By email", () => {
-      const data = getData();
-
-      beforeAll(async () => {
-        await usersService.addUser(data);
-      });
-
       it("should get a user", async () => {
+        const data = getData();
+
+        await usersService.addUser(data);
+
         const user = await usersService.getUser({
           email: data.email,
           type: "email"
         });
 
-        expect(toObject(user)).toEqual({
+        expect(jsonTransform(user)).toEqual({
           ...data,
           _id: assertNotNull(user)._id.toString()
         });
       });
 
-      it("should return undefined for missing user", async () => {
-        const user = await usersService.getUser({
-          email: faker.internet.email(),
-          type: "email"
-        });
+      it("should create and return a user", async () => {
+        const { email } = getData();
 
-        expect(user).toBeNull();
+        const user = await usersService.getUser({ email, type: "email" });
+
+        expect(jsonTransform(user)).toEqual({
+          _id: assertNotNull(user)._id.toString(),
+          email,
+          favoriteCompanies: []
+        });
       });
     });
 
@@ -151,13 +149,13 @@ describe("createUsersService", () => {
           type: "id"
         });
 
-        expect(toObject(user)).toEqual({
+        expect(jsonTransform(user)).toEqual({
           ...data,
           _id: assertNotNull(user)._id.toString()
         });
       });
 
-      it("should return undefined for missing user", async () => {
+      it("should return null for missing user", async () => {
         const user = await usersService.getUser({
           id: faker.database.mongodbObjectId(),
           type: "id"
@@ -252,14 +250,14 @@ describe("createUsersService", () => {
           update
         );
 
-        expect(toObject(user)).toEqual({
+        expect(jsonTransform(user)).toEqual({
           ...data,
           ...update,
           _id: assertNotNull(user)._id.toString()
         });
       });
 
-      it("should return undefined for missing user", async () => {
+      it("should return null for missing user", async () => {
         const update = getUpdate();
 
         const user = await usersService.updateUser(
@@ -297,14 +295,14 @@ describe("createUsersService", () => {
           update
         );
 
-        expect(toObject(user)).toEqual({
+        expect(jsonTransform(user)).toEqual({
           ...data,
           ...update,
           _id: assertNotNull(user)._id.toString()
         });
       });
 
-      it("should return undefined for missing user", async () => {
+      it("should return null for missing user", async () => {
         const update = getUpdate();
 
         const user = await usersService.updateUser(
