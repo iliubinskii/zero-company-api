@@ -55,10 +55,6 @@ export function buildErrorResponse<E extends ErrorCode>(
                   case "number": {
                     return `[${item}]`;
                   }
-
-                  default: {
-                    return "";
-                  }
                 }
               })
               .join("")

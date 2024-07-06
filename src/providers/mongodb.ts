@@ -37,6 +37,7 @@ export function initMongodb(): void {
   for (const [event, message] of Object.entries(events))
     mongoose.connection.on(event, err => {
       if (err) logger.error(message, err);
+
       logger.info(message);
     });
 }
@@ -71,4 +72,4 @@ const events = {
   open: lang.MongodbOpen,
   reconnected: lang.MongodbReconnected,
   reconnectfailed: lang.MongodbReconnectFailed
-};
+} as const;

@@ -23,6 +23,7 @@ import { lang } from "../langs";
 import { logger } from "../services";
 import passport from "passport";
 import zod from "zod";
+
 /**
  * Create the authentication router.
  * @param usersService - The users service.

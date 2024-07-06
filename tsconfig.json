@@ -44,6 +44,7 @@
     ".eslintrc.base.cjs",
     ".eslintrc.cjs",
     ".eslintrc.next.cjs",
+    ".eslintrc.spellcheck.cjs",
     ".prettierrc.mjs",
     ".stylelintrc.base.mjs",
     ".stylelintrc.mjs",

@@ -5,10 +5,10 @@ import path from "node:path";
 import { v4 as uuidv4 } from "uuid";
 
 const storage = multer.diskStorage({
-  destination(_req, _file, callback) {
+  destination: (_req, _file, callback) => {
     callback(null, MULTER_DESTINATION_PATH);
   },
-  filename(_req, file, callback) {
+  filename: (_req, file, callback) => {
     const basename = uuidv4();
 
     const ext = path.extname(file.originalname);

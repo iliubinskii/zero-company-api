@@ -43,6 +43,7 @@ export const testRouter = Router()
         "/async",
         wrapAsyncHandler(async () => {
           await delay(TEST_DELAY_MS);
+
           throw new Error(lang.AsyncError);
         })
       )

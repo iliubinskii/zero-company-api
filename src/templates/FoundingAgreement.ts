@@ -4,33 +4,33 @@
 import type { Template } from "../providers";
 
 export const FoundingAgreement: Template = signatories => /*html*/ `
-    <html>
-      <head>
-        <meta charset="utf8" />
-        <title>Founding Agreement</title>
-      </head>
-      <body>
-        <div
-          style="display: flex; flex-direction: column; gap: 40px; padding: 20px;"
-        >
-          <h1 style="margin: 0px; padding: 0px; text-align: center;">
-            Founding Agreement
-          </h1>
-          <div style="display: flex; justify-content: center;">
-            <div
-              style="border: 2px solid red; font-size: 25px; margin: auto; padding: 20px;"
-            >
-              This demo of a founding agreement has no legal force.
-            </div>
-          </div>
+  <html>
+    <head>
+      <meta charset="utf8" />
+      <title>Founding Agreement</title>
+    </head>
+    <body>
+      <div
+        style="display: flex; flex-direction: column; gap: 40px; padding: 20px;"
+      >
+        <h1 style="margin: 0px; padding: 0px; text-align: center;">
+          Founding Agreement
+        </h1>
+        <div style="display: flex; justify-content: center;">
           <div
-            style="align-items: center; background: lightGray; color: gray; display: flex; font-size: 25px; height: 300px; justify-content: center;"
+            style="border: 2px solid red; font-size: 25px; margin: auto; padding: 20px;"
           >
-            Some text here
+            This demo of a founding agreement has no legal force.
           </div>
-          ${signatories
-            .map(
-              signatory => /*html*/ `
+        </div>
+        <div
+          style="align-items: center; background: lightGray; color: gray; display: flex; font-size: 25px; height: 300px; justify-content: center;"
+        >
+          Some text here
+        </div>
+        ${signatories
+          .map(
+            signatory => /*html*/ `
               <div style="align-items: center; display: flex; gap: 20px;">
                 <div style="display: flex; flex-direction: column;">
                   ${signatory.role}:
@@ -55,9 +55,9 @@ export const FoundingAgreement: Template = signatories => /*html*/ `
                 />
               </div>
             `
-            )
-            .join("")}
-        </div>
-      </body>
-    </html>
-  `;
+          )
+          .join("")}
+      </div>
+    </body>
+  </html>
+`;
