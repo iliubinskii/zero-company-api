@@ -29,7 +29,6 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "outDir": "dist",
-    "plugins": [],
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "sourceMap": true,
@@ -43,14 +42,11 @@
   "include": [
     ".eslintrc.base.cjs",
     ".eslintrc.cjs",
-    ".eslintrc.next.cjs",
     ".eslintrc.spellcheck.cjs",
     ".prettierrc.mjs",
     ".stylelintrc.base.mjs",
     ".stylelintrc.mjs",
     "**/*.cjs",
-    "**/*.js",
-    "**/*.jsx",
     "**/*.mjs",
     "**/*.ts",
     "**/*.tsx"
