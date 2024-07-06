@@ -150,6 +150,7 @@ export function createDocumentsService(): DocumentsService {
         return null;
       } catch (err) {
         await session.abortTransaction();
+
         throw err;
       } finally {
         await session.endSession();

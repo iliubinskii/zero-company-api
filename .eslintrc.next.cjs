@@ -7,7 +7,6 @@ const config = {
     "plugin:react-hooks/recommended",
     "plugin:@next/next/recommended"
   ],
-
   rules: {
     "@next/next/no-img-element": "off",
     "react/jsx-sort-props": "warn",
@@ -17,5 +16,4 @@ const config = {
   settings: { react: { version: "detect" } }
 };
 
-// eslint-disable-next-line import/no-commonjs -- Ok
 module.exports = config;

@@ -13,7 +13,6 @@ test.describe.parallel("Root", () => {
 
     expect(response.status()).toBe(StatusCodes.OK);
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- Ok
     const responseBody = await response.json();
 
     // eslint-disable-next-line no-warning-comments -- Ok

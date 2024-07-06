@@ -4,10 +4,18 @@
 const config = {
   clearMocks: true,
   collectCoverage: false,
-  collectCoverageFrom: ["src/**/*.{js,jsx,ts,tsx}", "!**/*.d.ts"],
+  collectCoverageFrom: ["src/**/*.{ts,tsx}", "!**/*.d.ts"],
   coverageDirectory: "coverage",
-  coverageProvider: "v8",
+  coverageProvider: "babel",
   coverageReporters: ["lcov"],
+  coverageThreshold: {
+    global: {
+      branches: 100,
+      functions: 100,
+      lines: 100,
+      statements: 100
+    }
+  },
   globalSetup: "./jest.global-setup.ts",
   globalTeardown: "./jest.global-teardown.ts",
   preset: "ts-jest",

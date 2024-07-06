@@ -191,7 +191,7 @@ export function createCompaniesService(): CompaniesService {
 
       const lastCompany = companies.at(-1);
 
-      const nextCursor = ((): [string, string] | undefined => {
+      const nextCursor = ((): readonly [string, string] | undefined => {
         if (companies.length === limit && lastCompany) {
           const cursor0 = lastCompany[sortBy];
 

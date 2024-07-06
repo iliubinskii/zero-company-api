@@ -107,7 +107,7 @@ describe("createUserControllers", () => {
       const user = {
         firstName: faker.person.firstName(),
         lastName: faker.person.lastName()
-      };
+      } as const;
 
       mockUsersService.addUser.mockResolvedValueOnce(null);
 
@@ -149,7 +149,7 @@ describe("createUserControllers", () => {
           }
         ],
         total: 1
-      };
+      } as const;
 
       mockCompaniesService.getCompanies.mockResolvedValueOnce(companies);
 
@@ -180,7 +180,7 @@ describe("createUserControllers", () => {
         favoriteCompanies: [],
         firstName: faker.person.firstName(),
         lastName: faker.person.lastName()
-      };
+      } as const;
 
       mockUsersService.getUser.mockResolvedValueOnce(user);
 
@@ -219,7 +219,7 @@ describe("createUserControllers", () => {
           }
         ],
         total: 1
-      };
+      } as const;
 
       mockUsersService.getUsers.mockResolvedValueOnce(users);
 
@@ -246,7 +246,7 @@ describe("createUserControllers", () => {
         favoriteCompanies: [],
         firstName: faker.person.firstName(),
         lastName: faker.person.lastName()
-      };
+      } as const;
 
       mockUsersService.updateUser.mockResolvedValueOnce(user);
 

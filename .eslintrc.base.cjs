@@ -1,18 +1,35 @@
+const block =
+  ":matches(BlockStatement, ExportNamedDeclaration, Program, SwitchCase, TSModuleBlock)";
+
 /**
  * @type {import("eslint").Linter.Config }
  */
 const config = {
+  plugins:
+    // @sorted
+    [
+      "es",
+      "misc",
+      "no-type-assertion",
+      "no-useless-assign",
+      "only-warn",
+      "sort-annotation",
+      "sort-imports-requires",
+      "spellcheck",
+      "unused-imports"
+    ],
   extends: [
     "eslint:recommended",
     "strict",
     "plugin:@typescript-eslint/strict-type-checked",
-    "plugin:eslint-comments/recommended",
     "plugin:escompat/recommended",
+    "plugin:eslint-comments/recommended",
     "plugin:etc/recommended",
     "plugin:github/recommended",
     "plugin:import/recommended",
     "plugin:jest-extended/all",
     "plugin:jsdoc/recommended",
+    "plugin:misc/recommended",
     "plugin:n/recommended",
     "plugin:no-use-extend-native/recommended",
     "plugin:node/recommended",
@@ -25,41 +42,10 @@ const config = {
     "plugin:unicorn/recommended",
     "plugin:prettier/recommended"
   ],
-  overrides: [
-    {
-      files: "*.d.ts",
-      rules: {
-        "spaced-comment": "off"
-      }
-    },
-    {
-      files: ["*.test.ts", "*.test.tsx"],
-      rules: {
-        "i18n-text/no-en": "off",
-        "no-magic-numbers": "off",
-        "node/no-unpublished-import": "off"
-      }
-    }
-  ],
-  plugins:
-    // @sorted
-    [
-      "es",
-      "no-type-assertion",
-      "no-useless-assign",
-      "only-warn",
-      "sort-annotation",
-      "sort-imports-requires",
-      "spellcheck",
-      "unused-imports"
-    ],
   rules: {
     "@typescript-eslint/consistent-type-imports": [
       "warn",
-      {
-        disallowTypeAnnotations: false,
-        prefer: "type-imports"
-      }
+      { disallowTypeAnnotations: false, prefer: "type-imports" }
     ],
     "@typescript-eslint/explicit-function-return-type": [
       "warn",
@@ -75,13 +61,15 @@ const config = {
       }
     ],
     "@typescript-eslint/no-dynamic-delete": "off",
+    "@typescript-eslint/no-invalid-void-type": "off",
     "@typescript-eslint/no-shadow": "warn",
     "@typescript-eslint/promise-function-async": "warn",
     "@typescript-eslint/restrict-template-expressions": [
       "warn",
       { allowNumber: true }
     ],
-    "@typescript-eslint/switch-exhaustiveness-check": "warn",
+    "@typescript-eslint/switch-exhaustiveness-check": "off",
+    "array-callback-return": "off",
     "arrow-body-style": [
       "warn",
       "as-needed",
@@ -89,6 +77,7 @@ const config = {
     ],
     "callback-return": "off",
     "camelcase": "off",
+    "class-methods-use-this": "off",
     "complexity": "off",
     "consistent-return": "off",
     "curly": ["warn", "multi"],
@@ -105,6 +94,7 @@ const config = {
     "id-blacklist": "off",
     "id-length": "off",
     "id-match": "off",
+    "import/extensions": "off",
     "import/named": "off",
     "import/no-internal-modules": "warn",
     "import/no-self-import": "warn",
@@ -112,9 +102,95 @@ const config = {
     "init-declarations": "off",
     "jsdoc/require-param-type": "off",
     "jsdoc/require-returns-type": "off",
+    "misc/consistent-empty-lines": [
+      "warn",
+      {
+        rules: [
+          {
+            _id: "arguments",
+            emptyLine: "never",
+            selector: "CallExpression > .arguments"
+          },
+          {
+            _id: "body",
+            emptyLine: "never",
+            selector: "TSInterfaceBody > .body"
+          },
+          {
+            _id: "elements",
+            emptyLine: "never",
+            selector: "ArrayExpression > .elements"
+          },
+          { _id: "enum-members", emptyLine: "never", selector: "TSEnumMember" },
+          {
+            _id: "members",
+            emptyLine: "never",
+            selector: "TSTypeLiteral > .members"
+          },
+          { _id: "params", emptyLine: "never", selector: ".params" },
+          {
+            _id: "properties",
+            emptyLine: "never",
+            selector: ":matches(ObjectExpression, ObjectPattern) > .properties"
+          },
+          {
+            _id: "statements",
+            emptyLine: "always",
+            selector: `${block} > :matches(:statement, TSDeclareFunction, TSExportAssignment)`
+          },
+          {
+            _id: "statements.export",
+            emptyLine: "never",
+            selector: `${block} > :matches(ExportAllDeclaration, ExportNamedDeclaration[source])`
+          },
+          {
+            _id: "statements.expression",
+            emptyLine: "any",
+            selector: `${block} > ExpressionStatement`
+          },
+          {
+            _id: "statements.import",
+            emptyLine: "never",
+            selector: `${block} > ImportDeclaration`
+          }
+        ]
+      }
+    ],
+    "misc/sort-class-members": [
+      "warn",
+      {
+        sortingOrder: [
+          "public-static-field",
+          "public-static-accessor",
+          "public-static-constructor",
+          "public-static-method",
+          "signature",
+          "public-dynamic-field",
+          "public-dynamic-accessor",
+          "public-dynamic-constructor",
+          "public-dynamic-method",
+          "protected-static-field",
+          "protected-static-accessor",
+          "protected-static-constructor",
+          "protected-static-method",
+          "protected-dynamic-field",
+          "protected-dynamic-accessor",
+          "protected-dynamic-constructor",
+          "protected-dynamic-method",
+          "private-static-field",
+          "private-static-accessor",
+          "private-static-constructor",
+          "private-static-method",
+          "private-dynamic-field",
+          "private-dynamic-accessor",
+          "private-dynamic-constructor",
+          "private-dynamic-method"
+        ]
+      }
+    ],
     "n/no-missing-import": "off",
     "no-duplicate-imports": "off",
-    "no-magic-numbers": ["warn", { ignore: [-1, 0, 0.5, 1, 2, 100] }],
+    "no-magic-numbers": ["warn", { ignore: [-1, 0, 0.5, 1, 2, 10, 100] }],
     "no-redeclare": "off",
     "no-shadow": "off",
     "no-type-assertion/no-type-assertion": "warn",
@@ -125,6 +201,7 @@ const config = {
     "no-use-before-define": "off",
     "no-useless-assign/no-useless-assign": "warn",
     "node/no-missing-import": "off",
+    "node/no-missing-require": "off",
     "node/no-unsupported-features/es-syntax": "off",
     "prefer-destructuring": "off",
     "prettier/prettier": [
@@ -138,9 +215,10 @@ const config = {
     ],
     "promise/always-return": "off",
     "quote-props": ["warn", "consistent-as-needed"],
-    "quotes": ["warn", "double"],
+    "quotes": ["warn", "double", { avoidEscape: true }],
     "security/detect-object-injection": "off",
     "sonarjs/no-duplicate-string": "off",
+    "sonarjs/no-nested-switch": "off",
     "sonarjs/prefer-immediate-return": "off",
     "sort/destructuring-properties": [
       "warn",
@@ -157,9 +235,9 @@ const config = {
     ],
     "sort/import-members": "off",
     "sort/imports": "off",
-    "sort/object-properties": ["warn", { caseSensitive: true, natural: true }],
-    "sort-annotation/sort": "warn",
-    "sort-annotation/sort-keys": "warn",
+    "sort/object-properties": "off",
+    "sort-annotation/sort": "off",
+    "sort-annotation/sort-keys": "off",
     "sort-imports-requires/sort-imports": ["warn", { unsafeAutofix: true }],
     "sort-imports-requires/sort-requires": ["warn", { unsafeAutofix: true }],
     "spellcheck/spell-checker": "warn",
@@ -168,6 +246,7 @@ const config = {
     "unicorn/filename-case": "off",
     "unicorn/no-array-callback-reference": "off",
     "unicorn/no-array-for-each": "off",
+    "unicorn/no-array-method-this-argument": "off",
     "unicorn/no-array-reduce": "off",
     "unicorn/no-unnecessary-polyfills": "off",
     "unicorn/no-useless-undefined": "off",
@@ -176,8 +255,66 @@ const config = {
     "unicorn/prefer-top-level-await": "off",
     "unicorn/prevent-abbreviations": "off",
     "unused-imports/no-unused-imports": "warn"
-  }
+  },
+  overrides: [
+    {
+      files: "*.cjs",
+      rules: {
+        "@typescript-eslint/explicit-function-return-type": "off",
+        "@typescript-eslint/no-var-requires": "off",
+        "import/no-commonjs": "off"
+      }
+    },
+    {
+      files: "*.mjs",
+      rules: { "@typescript-eslint/explicit-function-return-type": "off" }
+    },
+    { files: "*.d.ts", rules: { "spaced-comment": "off" } },
+    {
+      files: [
+        "*.spec.ts",
+        "*.spec.tsx",
+        "*.test.ts",
+        "*.test.tsx",
+        "**/__tests__/**/*.ts",
+        "**/__tests__/**/*.tsx",
+        "./tests/**/*.ts",
+        "./tests/**/*.tsx"
+      ],
+      rules: {
+        "i18n-text/no-en": "off",
+        "no-magic-numbers": "off",
+        "node/no-unpublished-import": "off"
+      }
+    },
+    {
+      files: ["./.eslintrc.*", "./.eslintrc.base.*"],
+      rules: {
+        "misc/sort-keys": [
+          "warn",
+          {
+            overrides: [
+              {
+                _id: "root",
+                customOrder: [
+                  "ignorePatterns",
+                  "env",
+                  "globals",
+                  "plugins",
+                  "extends",
+                  "parser",
+                  "parserOptions",
+                  "rules",
+                  "overrides"
+                ],
+                selector: "VariableDeclarator > ObjectExpression"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
 };
 
-// eslint-disable-next-line import/no-commonjs -- Ok
 module.exports = config;

@@ -92,13 +92,13 @@ const companies = Array.from(
 fs.writeFileSync("assets/dummy/companies.json", JSON.stringify(companies));
 
 // Type check the category schema
-((): DummyCategory[] => dummy.categories)();
+((): readonly DummyCategory[] => dummy.categories)();
 
 // Type check the companies schema
-((): DummyCompany[] => dummy.companies)();
+((): readonly DummyCompany[] => dummy.companies)();
 
 // Type check the users schema
-((): DummyUser[] => dummy.users)();
+((): readonly DummyUser[] => dummy.users)();
 
 /**
  * Create a date object

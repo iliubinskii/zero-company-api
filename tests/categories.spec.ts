@@ -12,7 +12,7 @@ test.describe.parallel("Categories", () => {
       name: "New",
       pinned: false,
       tagline: "Testing new category creation."
-    };
+    } as const;
 
     test("should create a new category", async ({ request }) => {
       const createResponse = await request.post(`${BASE_URL}/categories`, {
@@ -35,8 +35,11 @@ test.describe.parallel("Categories", () => {
 
     test("should return all categories", async ({ request }) => {
       const response = await request.get(`${BASE_URL}/categories`);
+
       expect(response.status()).toBe(StatusCodes.OK);
+
       const responseBody = await response.json();
+
       expect(responseBody).toHaveProperty("count");
       expect(typeof responseBody.count).toBe("number");
     });
