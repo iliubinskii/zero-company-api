@@ -5,7 +5,7 @@ const config = {
   ignorePatterns: ["!.*", "coverage/**", "dist/**", "node_modules/**"],
   env: { es2020: true },
   globals: { Express: true },
-  extends: ["./.eslintrc.base.cjs", "./.eslintrc.spellcheck.cjs"],
+  extends: "./.eslintrc.base.cjs",
   parser: "@typescript-eslint/parser",
   parserOptions: {
     ecmaFeatures: { jsx: true },
@@ -14,6 +14,31 @@ const config = {
     sourceType: "module"
   },
   rules: {
+    "@cspell/spellchecker": [
+      "warn",
+      {
+        cspell: {
+          words:
+            // @sorted
+            [
+              "csstools",
+              "docuseal",
+              "escompat",
+              "fullsetup",
+              "hsts",
+              "lcfirst",
+              "logform",
+              "picsum",
+              "preprocesses",
+              "reconnectfailed",
+              "resave",
+              "smacss",
+              "sonarjs",
+              "ucfirst"
+            ]
+        }
+      }
+    ],
     "import/no-internal-modules": ["warn", { allow: ["react-dom/server"] }],
     "misc/consistent-optional-props": [
       "warn",
