@@ -20,9 +20,6 @@ jobs:
         run: |
           echo "CI is $CI"
           echo "BASE_URL is $BASE_URL"
-          echo "JWT_ADMIN_EMAIL is $(printf '%*s' ${#JWT_ADMIN_EMAIL} | tr ' ' '*')"
-          echo "JWT_EMAIL is $(printf '%*s' ${#JWT_EMAIL} | tr ' ' '*')"
-          echo "JWT_SECRET is $(printf '%*s' ${#JWT_SECRET} | tr ' ' '*')"
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:

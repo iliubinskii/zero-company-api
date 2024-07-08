@@ -1,0 +1,24 @@
+name: Lint
+on:
+  push:
+    branches: [ develop, main, master ]
+  pull_request:
+    branches: [ develop, main, master ]
+  workflow_dispatch:
+jobs:
+  test:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+      - name: Install dependencies
+        run: npm ci
+      - name: Lint with TypeScript
+        run: npm run type-check
+      - name: Lint with ESLint
+        run: npm run lint-no-fix
+      - name: Lint with StyleLint
+        run: npm run lint-style-no-fix
