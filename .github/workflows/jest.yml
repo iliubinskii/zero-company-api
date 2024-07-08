@@ -1,0 +1,57 @@
+name: Test with Jest
+
+on:
+  push:
+    branches: [ develop, main, master ]
+  pull_request:
+    branches: [ develop, main, master ]
+  workflow_dispatch:
+
+jobs:
+  test:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    env:
+      ENV: development
+      PORT: 0
+      ADMIN_EMAIL: none
+      AUTH0_CALLBACK_URL: none
+      AUTH0_CLIENT_ID: none
+      AUTH0_CLIENT_SECRET: none
+      AUTH0_DOMAIN: none
+      AUTH0_RETURN_URL: none
+      CLOUDINARY_API_KEY: none
+      CLOUDINARY_API_SECRET: none
+      CLOUDINARY_BASE_FOLDER: none
+      CLOUDINARY_CLOUD_NAME: none
+      COOKIE_DOMAIN: none
+      COOKIE_SECURE: false
+      CORS_ORIGIN: none
+      DOCUSEAL_API_KEY: none
+      DOCUSEAL_FOLDER_NAME: none
+      DOCUSEAL_SEND_EMAIL: false
+      JWT_SECRET: none
+      LOG_LEVEL: info
+      MONGODB_DATABASE_NAME: none
+      MONGODB_RUN_VALIDATORS: true
+      MONGODB_URI: none
+      MULTER_DESTINATION_PATH: none
+      REDIS_PREFIX: none
+      REDIS_URL: none
+      SESSION_SECRET: none
+      SESSION_STORE_PROVIDER: memory
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+      - name: Install dependencies
+        run: npm ci
+      - name: Test with Jest
+        run: npm test
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: jest-report
+          path: jest-report/
+          retention-days: 30
