@@ -8,28 +8,11 @@ on:
   workflow_dispatch:
 
 jobs:
-  deploy:
-    timeout-minutes: 60
-    runs-on: ubuntu-latest
-    outputs:
-      url: ${{ steps.deploy.outputs.preview-url }}
-    steps:
-      - uses: actions/checkout@v2
-      - name: Deploy to Vercel preview
-        id: deploy
-        uses: amondnet/vercel-action@v25
-        with:
-          vercel-token: ${{ secrets.VERCEL_TOKEN }}
-          vercel-org-id: ${{ vars.VERCEL_ORG_ID }}
-          vercel-project-id: ${{ vars.VERCEL_PROJECT_ID }}
-
   test:
-    needs: deploy
     timeout-minutes: 60
     runs-on: ubuntu-latest
     environment: preview
     env:
-      BASE_URL: ${{ needs.deploy.outputs.url }}
       JWT_ADMIN_EMAIL: ${{ vars.JWT_ADMIN_EMAIL }}
       JWT_EMAIL: ${{ vars.JWT_EMAIL }}
       JWT_SECRET: ${{ secrets.JWT_SECRET }}
@@ -38,12 +21,14 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: lts/*
+      - name: Install dependencies
+        run: npm ci
+      - name: Deploy to Vercel preview
+        run: echo "BASE_URL=$(npx vercel --token ${{ secrets.VERCEL_TOKEN }} --yes)" >> $GITHUB_ENV
       - name: Output environment variables
         run: |
           echo "CI is $CI"
           echo "BASE_URL is $BASE_URL"
-      - name: Install dependencies
-        run: npm ci
       - name: Install Playwright browsers
         run: npx playwright install chromium --with-deps
       - name: Test with Playwright
