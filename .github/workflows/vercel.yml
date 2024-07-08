@@ -1,49 +1,52 @@
-name: Deploy and Test
+name: Deploy to Vercel preview and test with Playwright
+
 on:
   push:
-    branches: [ develop, main, master ]
+    branches: [ develop ]
   pull_request:
     branches: [ develop, main, master ]
   workflow_dispatch:
+
 jobs:
   deploy:
+    timeout-minutes: 60
     runs-on: ubuntu-latest
     outputs:
       url: ${{ steps.deploy.outputs.preview-url }}
     steps:
       - uses: actions/checkout@v2
-      - name: Deploy to Vercel
+      - name: Deploy to Vercel preview
         id: deploy
         uses: amondnet/vercel-action@v25
         with:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
           vercel-org-id: ${{ vars.VERCEL_ORG_ID }}
           vercel-project-id: ${{ vars.VERCEL_PROJECT_ID }}
-          vercel-args: ${{ github.ref == 'refs/heads/master' && '--prod' || '' }}
+
   test:
     needs: deploy
-    runs-on: ubuntu-latest
     timeout-minutes: 60
+    runs-on: ubuntu-latest
     environment: preview
     env:
       BASE_URL: ${{ needs.deploy.outputs.url }}
-      JWT_ADMIN_EMAIL: ${{ secrets.JWT_ADMIN_EMAIL }}
-      JWT_EMAIL: ${{ secrets.JWT_EMAIL }}
+      JWT_ADMIN_EMAIL: ${{ vars.JWT_ADMIN_EMAIL }}
+      JWT_EMAIL: ${{ vars.JWT_EMAIL }}
       JWT_SECRET: ${{ secrets.JWT_SECRET }}
     steps:
-      - name: Output environment variables
-        run: |
-          echo "CI is $CI"
-          echo "BASE_URL is $BASE_URL"
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: lts/*
+      - name: Output environment variables
+        run: |
+          echo "CI is $CI"
+          echo "BASE_URL is $BASE_URL"
       - name: Install dependencies
         run: npm ci
-      - name: Install Playwright Browsers
+      - name: Install Playwright browsers
         run: npx playwright install chromium --with-deps
-      - name: Run Playwright tests
+      - name: Test with Playwright
         run: npx playwright test
       - uses: actions/upload-artifact@v4
         if: always()
