@@ -1,4 +1,4 @@
-name: Deploy to Vercel production
+name: Deploy to Vercel from master
 
 on:
   push:
@@ -6,11 +6,12 @@ on:
   workflow_dispatch:
 
 jobs:
-  test:
+  deploy:
     timeout-minutes: 60
     runs-on: ubuntu-latest
     environment: production
     env:
+      BASE_URL: ${{ vars.BASE_URL }}
       JWT_ADMIN_EMAIL: ${{ vars.JWT_ADMIN_EMAIL }}
       JWT_EMAIL: ${{ vars.JWT_EMAIL }}
       JWT_SECRET: ${{ secrets.JWT_SECRET }}
@@ -21,8 +22,8 @@ jobs:
           node-version: lts/*
       - name: Install dependencies
         run: npm ci
-      - name: Deploy to Vercel production
-        run: echo "BASE_URL=$(npx vercel --prod --token ${{ secrets.VERCEL_TOKEN }} --yes)" >> $GITHUB_ENV
+      - name: Deploy to Vercel
+        run: npx vercel --prod --token ${{ secrets.VERCEL_TOKEN }} --yes
       - name: Output environment variables
         run: |
           echo "CI is $CI"
