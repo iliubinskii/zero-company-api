@@ -1,4 +1,4 @@
-name: Lint
+name: Linters
 on:
   push:
     branches: [ develop, main, master ]
@@ -6,7 +6,7 @@ on:
     branches: [ develop, main, master ]
   workflow_dispatch:
 jobs:
-  test:
+  lint:
     timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
