@@ -3,7 +3,7 @@ import { createClient } from "redis";
 import { lang } from "../langs";
 import { logger } from "../services";
 
-// Cache the connection in serverless environments
+// Cache the client in serverless environments
 let cachedClient: ReturnType<typeof createClient> | undefined;
 
 /**

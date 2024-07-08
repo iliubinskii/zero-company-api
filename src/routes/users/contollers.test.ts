@@ -1,12 +1,18 @@
-/* eslint-disable @typescript-eslint/no-unsafe-return -- Ok */
-
-import { ErrorCode } from "../../schema";
+import type {
+  CompaniesService,
+  DocumentsService,
+  UserRef,
+  UsersService
+} from "../../types";
+import { CompanyStatus, ErrorCode } from "../../schema";
+import { describe, expect, it, jest } from "@jest/globals";
 import type { Jwt } from "../../schema";
 import { StatusCodes } from "http-status-codes";
-import type { UserRef } from "../../types";
 import { createUserControllers } from "./controllers";
 import express from "express";
 import { faker } from "@faker-js/faker";
+import { jsonTransform } from "../../utils";
+import mongoose from "mongoose";
 import request from "supertest";
 
 describe("createUserControllers", () => {
@@ -18,29 +24,30 @@ describe("createUserControllers", () => {
   };
 
   const mockUsersService = {
-    addUser: jest.fn(),
-    deleteUser: jest.fn(),
-    getUser: jest.fn(),
-    getUsers: jest.fn(),
-    updateUser: jest.fn()
-  };
+    addUser: jest.fn<UsersService["addUser"]>(),
+    deleteUser: jest.fn<UsersService["deleteUser"]>(),
+    getUser: jest.fn<UsersService["getUser"]>(),
+    getUsers: jest.fn<UsersService["getUsers"]>(),
+    updateUser: jest.fn<UsersService["updateUser"]>()
+  } as const;
 
   const mockCompaniesService = {
-    addCompany: jest.fn(),
-    deleteCompany: jest.fn(),
-    generateFoundingAgreement: jest.fn(),
-    getCompanies: jest.fn(),
-    getCompany: jest.fn(),
-    updateCompany: jest.fn()
-  };
+    addCompany: jest.fn<CompaniesService["addCompany"]>(),
+    deleteCompany: jest.fn<CompaniesService["deleteCompany"]>(),
+    generateFoundingAgreement:
+      jest.fn<CompaniesService["generateFoundingAgreement"]>(),
+    getCompanies: jest.fn<CompaniesService["getCompanies"]>(),
+    getCompany: jest.fn<CompaniesService["getCompany"]>(),
+    updateCompany: jest.fn<CompaniesService["updateCompany"]>()
+  } as const;
 
   const mockDocumentsService = {
-    addDocument: jest.fn(),
-    deleteDocument: jest.fn(),
-    getDocument: jest.fn(),
-    getDocuments: jest.fn(),
-    updateDocument: jest.fn()
-  };
+    addDocument: jest.fn<DocumentsService["addDocument"]>(),
+    deleteDocument: jest.fn<DocumentsService["deleteDocument"]>(),
+    getDocument: jest.fn<DocumentsService["getDocument"]>(),
+    getDocuments: jest.fn<DocumentsService["getDocuments"]>(),
+    updateDocument: jest.fn<DocumentsService["updateDocument"]>()
+  } as const;
 
   const controllers = createUserControllers(
     mockUsersService,
@@ -68,23 +75,28 @@ describe("createUserControllers", () => {
 
   describe("addUser", () => {
     it("should add a user and return 201", async () => {
-      const user = {
+      const data = {
         firstName: faker.person.firstName(),
         lastName: faker.person.lastName()
-      };
+      } as const;
 
-      mockUsersService.addUser.mockImplementationOnce(u => u);
+      const user = {
+        _id: new mongoose.Types.ObjectId(),
+        email: jwt.email,
+        favoriteCompanies: [],
+        ...data
+      } as const;
 
-      const response = await request(app).post("/users").send(user);
+      mockUsersService.addUser.mockResolvedValueOnce(user);
+
+      const response = await request(app).post("/users").send(data);
 
       expect(response.status).toBe(StatusCodes.CREATED);
-      expect(response.body).toEqual({ ...user, email: jwt.email });
+      expect(response.body).toEqual(jsonTransform(user));
     });
 
     it("should return 400 for invalid data", async () => {
-      const response = await request(app)
-        .post("/users")
-        .send({ invalid: "data" });
+      const response = await request(app).post("/users").send({ firstName: 1 });
 
       expect(response.status).toBe(StatusCodes.BAD_REQUEST);
       expect(response.body).toHaveProperty("error", ErrorCode.InvalidData);
@@ -95,9 +107,9 @@ describe("createUserControllers", () => {
       const user = {
         firstName: faker.person.firstName(),
         lastName: faker.person.lastName()
-      };
+      } as const;
 
-      mockUsersService.addUser.mockResolvedValueOnce(undefined);
+      mockUsersService.addUser.mockResolvedValueOnce(null);
 
       const response = await request(app).post("/users").send(user);
 
@@ -125,10 +137,19 @@ describe("createUserControllers", () => {
       const companies = {
         count: 1,
         docs: [
-          { _id: faker.database.mongodbObjectId(), name: faker.company.name() }
+          {
+            _id: new mongoose.Types.ObjectId(),
+            categories: [],
+            country: "us",
+            createdAt: faker.date.past(),
+            founders: [],
+            images: [],
+            name: faker.company.name(),
+            status: CompanyStatus.founded
+          }
         ],
         total: 1
-      };
+      } as const;
 
       mockCompaniesService.getCompanies.mockResolvedValueOnce(companies);
 
@@ -137,13 +158,13 @@ describe("createUserControllers", () => {
       );
 
       expect(response.status).toBe(StatusCodes.OK);
-      expect(response.body).toEqual(companies);
+      expect(response.body).toEqual(jsonTransform(companies));
     });
 
     it("should return 400 for invalid query", async () => {
       const response = await request(app)
         .get(`/users/${faker.database.mongodbObjectId()}/companies`)
-        .query({ invalid: "query" });
+        .query({ limit: "x" });
 
       expect(response.status).toBe(StatusCodes.BAD_REQUEST);
       expect(response.body).toHaveProperty("error", ErrorCode.InvalidQuery);
@@ -154,10 +175,12 @@ describe("createUserControllers", () => {
   describe("getUser", () => {
     it("should get a user and return 200", async () => {
       const user = {
-        _id: faker.database.mongodbObjectId(),
+        _id: new mongoose.Types.ObjectId(),
+        email: faker.internet.email(),
+        favoriteCompanies: [],
         firstName: faker.person.firstName(),
         lastName: faker.person.lastName()
-      };
+      } as const;
 
       mockUsersService.getUser.mockResolvedValueOnce(user);
 
@@ -166,11 +189,11 @@ describe("createUserControllers", () => {
       );
 
       expect(response.status).toBe(StatusCodes.OK);
-      expect(response.body).toEqual(user);
+      expect(response.body).toEqual(jsonTransform(user));
     });
 
-    it("should return 404 if user not found", async () => {
-      mockUsersService.getUser.mockResolvedValueOnce(undefined);
+    it("should return 404 if user was not found", async () => {
+      mockUsersService.getUser.mockResolvedValueOnce(null);
 
       const response = await request(app).get(
         `/users/${faker.database.mongodbObjectId()}`
@@ -188,26 +211,26 @@ describe("createUserControllers", () => {
         count: 1,
         docs: [
           {
-            _id: faker.database.mongodbObjectId(),
+            _id: new mongoose.Types.ObjectId(),
+            email: faker.internet.email(),
+            favoriteCompanies: [],
             firstName: faker.person.firstName(),
             lastName: faker.person.lastName()
           }
         ],
         total: 1
-      };
+      } as const;
 
       mockUsersService.getUsers.mockResolvedValueOnce(users);
 
       const response = await request(app).get("/users");
 
       expect(response.status).toBe(StatusCodes.OK);
-      expect(response.body).toEqual(users);
+      expect(response.body).toEqual(jsonTransform(users));
     });
 
     it("should return 400 for invalid query", async () => {
-      const response = await request(app)
-        .get("/users")
-        .query({ invalid: "query" });
+      const response = await request(app).get("/users").query({ limit: "x" });
 
       expect(response.status).toBe(StatusCodes.BAD_REQUEST);
       expect(response.body).toHaveProperty("error", ErrorCode.InvalidQuery);
@@ -218,9 +241,12 @@ describe("createUserControllers", () => {
   describe("updateUser", () => {
     it("should update a user and return 200", async () => {
       const user = {
+        _id: new mongoose.Types.ObjectId(),
+        email: faker.internet.email(),
+        favoriteCompanies: [],
         firstName: faker.person.firstName(),
         lastName: faker.person.lastName()
-      };
+      } as const;
 
       mockUsersService.updateUser.mockResolvedValueOnce(user);
 
@@ -229,21 +255,21 @@ describe("createUserControllers", () => {
         .send(user);
 
       expect(response.status).toBe(StatusCodes.OK);
-      expect(response.body).toEqual(user);
+      expect(response.body).toEqual(jsonTransform(user));
     });
 
     it("should return 400 for invalid data", async () => {
       const response = await request(app)
         .put(`/users/${faker.database.mongodbObjectId()}`)
-        .send({ invalid: "data" });
+        .send({ firstName: 1 });
 
       expect(response.status).toBe(StatusCodes.BAD_REQUEST);
       expect(response.body).toHaveProperty("error", ErrorCode.InvalidData);
       expect(response.body).toHaveProperty("errorMessage");
     });
 
-    it("should return 404 if user not found", async () => {
-      mockUsersService.updateUser.mockResolvedValueOnce(undefined);
+    it("should return 404 if user was not found", async () => {
+      mockUsersService.updateUser.mockResolvedValueOnce(null);
 
       const response = await request(app).put(
         `/users/${faker.database.mongodbObjectId()}`

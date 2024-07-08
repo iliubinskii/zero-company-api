@@ -1,5 +1,3 @@
-import type { JsonTransform } from "../schema";
-
 /**
  * Asserts that a value is defined.
  * @param value - The value to check.
@@ -46,16 +44,6 @@ export function assertString(value: unknown): string {
   if (typeof value === "string") return value;
 
   throw new Error("Value is not a string");
-}
-
-/**
- * Asserts that the value is valid for JSON.stringify.
- * @param value - The value to assert.
- * @returns The value.
- */
-export function assertValidForJsonStringify<T>(value: T): JsonTransform<T> {
-  // eslint-disable-next-line no-type-assertion/no-type-assertion -- Ok
-  return value as JsonTransform<T>;
 }
 
 /**

@@ -1,7 +1,7 @@
 import type { RequestHandler } from "express";
-import { v4 as uuidv4 } from "uuid";
+import { v4 as uuid } from "uuid";
 
 export const requestId: RequestHandler = (req, _res, next) => {
-  req.requestId = uuidv4();
+  req.requestId = uuid();
   next();
 };

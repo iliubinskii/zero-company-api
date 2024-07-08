@@ -20,7 +20,7 @@ export function createSessionStore(): MongoStore | RedisStore | undefined {
 
     case "mongodb": {
       return MongoStore.create({
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment -- Postponed
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment -- Ok
         // @ts-expect-error
         clientPromise: (async () => {
           const { connection } = await getMongodbConnection();

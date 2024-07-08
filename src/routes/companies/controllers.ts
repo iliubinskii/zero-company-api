@@ -8,8 +8,8 @@ import {
 } from "../../schema";
 import {
   assertDefined,
-  assertValidForJsonStringify,
   buildErrorResponse,
+  dangerouslyAssumeJsonTransform,
   sendResponse,
   wrapAsyncHandler
 } from "../../utils";
@@ -42,7 +42,7 @@ export function createCompanyControllers(
         sendResponse<Routes["/companies"]["post"]>(
           res,
           StatusCodes.CREATED,
-          assertValidForJsonStringify(company)
+          dangerouslyAssumeJsonTransform(company)
         );
       } else
         sendResponse<Routes["/companies"]["post"]>(
@@ -76,7 +76,7 @@ export function createCompanyControllers(
           sendResponse<Routes["/companies/{id}/found"]["post"]>(
             res,
             StatusCodes.OK,
-            assertValidForJsonStringify(company)
+            dangerouslyAssumeJsonTransform(company)
           );
       else
         sendResponse<Routes["/companies/{id}/found"]["post"]>(
@@ -94,7 +94,7 @@ export function createCompanyControllers(
         sendResponse<Routes["/companies"]["get"]>(
           res,
           StatusCodes.OK,
-          assertValidForJsonStringify(companies)
+          dangerouslyAssumeJsonTransform(companies)
         );
       } else
         sendResponse<Routes["/companies"]["get"]>(
@@ -112,7 +112,7 @@ export function createCompanyControllers(
         sendResponse<Routes["/companies/{id}"]["get"]>(
           res,
           StatusCodes.OK,
-          assertValidForJsonStringify(company)
+          dangerouslyAssumeJsonTransform(company)
         );
       else
         sendResponse<Routes["/companies/{id}"]["get"]>(
@@ -133,7 +133,7 @@ export function createCompanyControllers(
           sendResponse<Routes["/companies/{id}"]["put"]>(
             res,
             StatusCodes.OK,
-            assertValidForJsonStringify(company)
+            dangerouslyAssumeJsonTransform(company)
           );
         else
           sendResponse<Routes["/companies/{id}"]["put"]>(

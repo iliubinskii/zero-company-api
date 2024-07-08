@@ -1,0 +1,30 @@
+name: Deploy to Vercel from master
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    environment: production
+    env:
+      BASE_URL: ${{ vars.BASE_URL }}
+      JWT_ADMIN_EMAIL: ${{ vars.JWT_ADMIN_EMAIL }}
+      JWT_EMAIL: ${{ vars.JWT_EMAIL }}
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+      - name: Install dependencies
+        run: npm ci
+      - name: Deploy to Vercel
+        run: npx vercel --prod --token ${{ secrets.VERCEL_TOKEN }} --yes
+      - name: Output environment variables
+        run: |
+          echo "CI is $CI"
+          echo "BASE_URL is $BASE_URL"

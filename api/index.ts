@@ -5,6 +5,7 @@ import {
   lang,
   logServerInfo,
   logger,
+  modelsExist,
   mongodbConnectionExists,
   redisClientExists
 } from "../src";
@@ -29,6 +30,8 @@ export default async function handler(
       ? lang.MongodbConnectionCacheHit
       : lang.MongodbConnectionCacheMiss
   );
+
+  logger.info(modelsExist() ? lang.ModelsCacheHit : lang.ModelsCacheMiss);
 
   if (SESSION_STORE_PROVIDER === "redis")
     logger.info(

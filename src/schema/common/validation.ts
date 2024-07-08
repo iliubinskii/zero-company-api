@@ -78,6 +78,10 @@ export function preprocessBoolean<T extends zod.ZodTypeAny>(
         case "off": {
           return false;
         }
+
+        default: {
+          return value;
+        }
       }
 
     return value;

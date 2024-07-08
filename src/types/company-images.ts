@@ -10,7 +10,7 @@ export interface CompanyImageControllers {
 
 export interface CompanyImagesMiddleware {
   readonly parseFormData: RequestHandler;
-  webAccessibleStorage: RequestHandler;
+  readonly webAccessibleStorage: RequestHandler;
 }
 
 export interface CompanyImagesService {

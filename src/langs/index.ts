@@ -26,6 +26,8 @@ export const lang = {
   JwtVerificationFailed: "JWT verification failed",
   LogLevel: "Log level",
   MethodNotAllowed: "Method not allowed. Https is required",
+  ModelsCacheHit: "Models cache hit",
+  ModelsCacheMiss: "Models cache miss",
   MongodbAll: "MongoDB all",
   MongodbClose: "MongoDB close",
   MongodbConnected: "MongoDB connected",
