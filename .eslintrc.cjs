@@ -1,8 +1,14 @@
 /**
- * @type {import("eslint").Linter.Config }
+ * @type {import("eslint").Linter.Config}
  */
 const config = {
-  ignorePatterns: ["!.*", "coverage/**", "dist/**", "node_modules/**"],
+  ignorePatterns: [
+    "!.*",
+    "coverage/**",
+    "node_modules/**",
+    "playwright-report/**",
+    "test-results/**"
+  ],
   env: { es2020: true },
   globals: { Express: true },
   extends: "./.eslintrc.base.cjs",
