@@ -81,11 +81,9 @@ const config = {
       files: "./tests/**",
       rules: {
         "@typescript-eslint/no-unsafe-assignment": "off",
-        "@typescript-eslint/no-unsafe-member-access": "off",
-        "node/no-unpublished-import": "off"
+        "@typescript-eslint/no-unsafe-member-access": "off"
       }
-    },
-    { files: "./utils/**", rules: { "node/no-unpublished-import": "off" } }
+    }
   ]
 };
 

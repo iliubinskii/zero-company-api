@@ -296,6 +296,7 @@ const config = {
         "node/no-unpublished-import": "off"
       }
     },
+    { files: "./utils/**", rules: { "node/no-unpublished-import": "off" } },
     {
       files: ["./.eslintrc.*", "./.eslintrc.base.*"],
       rules: {
