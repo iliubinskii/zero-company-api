@@ -112,17 +112,23 @@ export function createCompaniesService(): CompaniesService {
         await session.endSession();
       }
     },
-    // eslint-disable-next-line no-warning-comments -- Assigned
-    // TODO: Use `q` param to search companies by name, description
+    // eslint-disable-next-line sonarjs/cognitive-complexity -- Ok
     getCompanies: async (options = {}, parentRef) => {
       const {
         limit = MAX_LIMIT,
         offset = 0,
+        q,
         sortBy = "name",
         sortOrder = "asc"
       } = options;
 
       const filter: Writable<FilterQuery<Company>> = buildFilter(options);
+
+      if (q)
+        filter["$or"] = [
+          { name: { $options: "i", $regex: q } },
+          { description: { $options: "i", $regex: q } }
+        ];
 
       const mongodbSortOrderMap = { asc: 1, desc: -1 } as const;
 
@@ -201,7 +207,6 @@ export function createCompaniesService(): CompaniesService {
 
           if (cursor0) return [cursor0.toString(), cursor1];
         }
-
         return undefined;
       })();
 
@@ -253,12 +258,14 @@ export interface GetUserModel {
  * @param options.sortBy - The field to sort companies by.
  * @param options.sortOrder - The order to sort companies by.
  * @param options.status - The status of the companies.
+ * @param options.q - The query to search companies by.
  * @returns The filter to get companies.
  */
 function buildFilter({
   cursor,
   includePrivateCompanies = false,
   onlyRecommended = false,
+  q,
   sortBy = "name",
   sortOrder = "asc",
   status
@@ -277,6 +284,12 @@ function buildFilter({
       { _id: { [operator]: id }, [sortBy]: sortByValue }
     ];
   }
+
+  if (q)
+    filter["$or"] = [
+      { name: { $options: "i", $regex: q } },
+      { description: { $options: "i", $regex: q } }
+    ];
 
   if (includePrivateCompanies) {
     // Include both public and private companies
