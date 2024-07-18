@@ -13,12 +13,12 @@ import { DOCUSEAL_ENDPOINT } from "../consts";
 import zod from "zod";
 
 /**
- * Create a digital document
- * @param name - The name of the document
- * @param template - The template to use
- * @param signatories - The signatories to use
- * @param metadata - The metadata to use
- * @returns The digital document
+ * Create a digital document.
+ * @param name - The name of the document.
+ * @param template - The template to use.
+ * @param signatories - The signatories to use.
+ * @param metadata - The metadata to use.
+ * @returns The digital document.
  */
 export async function createDigitalDocument(
   name: string,
@@ -72,9 +72,9 @@ export async function createDigitalDocument(
 }
 
 /**
- * Get a digital document
- * @param doc - The digital document
- * @returns The updated digital document
+ * Get a digital document.
+ * @param doc - The digital document.
+ * @returns The updated digital document.
  */
 export async function getDigitalDocument(
   doc: DigitalDocument
@@ -111,12 +111,12 @@ export async function getDigitalDocument(
 }
 
 /**
- * Create a template
- * @param name - The name of the document
- * @param template - The template to use
- * @param signatories - The signatories to use
- * @param metadata - The metadata to use
- * @returns The template ID
+ * Create a template.
+ * @param name - The name of the document.
+ * @param template - The template to use.
+ * @param signatories - The signatories to use.
+ * @param metadata - The metadata to use.
+ * @returns The template ID.
  */
 async function createTemplate(
   name: string,

@@ -20,9 +20,9 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 /**
- * Create a middleware to handle uploaded files
- * @param fileFields - The fields to handle
- * @returns The middleware
+ * Create a middleware to handle uploaded files.
+ * @param fileFields - The fields to handle.
+ * @returns The middleware.
  */
 export function parseFormData(fileFields: FileFields): RequestHandler {
   return upload.fields(

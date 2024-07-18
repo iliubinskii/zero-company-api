@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  test:
+  deploy:
     timeout-minutes: 60
     runs-on: ubuntu-latest
     environment: preview

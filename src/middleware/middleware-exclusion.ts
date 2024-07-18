@@ -1,10 +1,10 @@
 import type { RequestHandler } from "express";
 
 /**
- * Applies the given middleware to all paths except the ones specified
- * @param middleware - The middleware to apply
- * @param exclusionRoutes - The routes to exclude from the middleware
- * @returns A middleware that applies the given middleware to all paths except the ones specified
+ * Applies the given middleware to all paths except the ones specified.
+ * @param middleware - The middleware to apply.
+ * @param exclusionRoutes - The routes to exclude from the middleware.
+ * @returns A middleware that applies the given middleware to all paths except the ones specified.
  */
 export function middlewareExclusion(
   middleware: RequestHandler,

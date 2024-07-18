@@ -1,8 +1,14 @@
 /**
- * @type {import("eslint").Linter.Config }
+ * @type {import("eslint").Linter.Config}
  */
 const config = {
-  ignorePatterns: ["!.*", "coverage/**", "dist/**", "node_modules/**"],
+  ignorePatterns: [
+    "!.*",
+    "coverage/**",
+    "node_modules/**",
+    "playwright-report/**",
+    "test-results/**"
+  ],
   env: { es2020: true },
   globals: { Express: true },
   extends: "./.eslintrc.base.cjs",
@@ -45,14 +51,6 @@ const config = {
       { classes: "combined", interfaces: "combined" }
     ],
     "misc/typescript/no-unsafe-object-assignment": "off",
-    "node/no-unsupported-features/es-builtins": [
-      "error",
-      { ignores: [], version: ">=20.0.0" }
-    ],
-    "node/no-unsupported-features/node-builtins": [
-      "warn",
-      { ignores: [], version: ">=20.0.0" }
-    ],
     "unicorn/no-null": "off"
   },
   overrides: [
@@ -63,6 +61,7 @@ const config = {
     {
       files: "./src/schema/routes.ts",
       rules: {
+        "jsdoc/require-description-complete-sentence": "off",
         "misc/comment-spacing": "off",
         "misc/typescript/no-never": "off",
         "misc/typescript/prefer-readonly-array": "off",
@@ -75,11 +74,9 @@ const config = {
       files: "./tests/**",
       rules: {
         "@typescript-eslint/no-unsafe-assignment": "off",
-        "@typescript-eslint/no-unsafe-member-access": "off",
-        "node/no-unpublished-import": "off"
+        "@typescript-eslint/no-unsafe-member-access": "off"
       }
-    },
-    { files: "./utils/**", rules: { "node/no-unpublished-import": "off" } }
+    }
   ]
 };
 

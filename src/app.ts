@@ -46,8 +46,8 @@ import passport from "passport";
 import session from "express-session";
 
 /**
- * Create the Express app
- * @returns App
+ * Create the Express app.
+ * @returns App.
  */
 export async function createApp(): Promise<express.Express> {
   initAuth0Passport();

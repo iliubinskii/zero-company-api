@@ -27,7 +27,7 @@ import zod from "zod";
 /**
  * Create the authentication router.
  * @param usersService - The users service.
- * @returns Router
+ * @returns Router.
  */
 export function createAuthRouter(usersService: UsersService): Router {
   return Router()

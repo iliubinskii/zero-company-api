@@ -14,9 +14,9 @@ import type { Routes } from "../../../schema";
 import { StatusCodes } from "http-status-codes";
 
 /**
- * Create company image controllers
- * @param service Company images service
- * @returns Company image controllers
+ * Create company image controllers.
+ * @param service Company images service.
+ * @returns Company image controllers.
  */
 export function createCompanyImageControllers(
   service: CompanyImagesService
