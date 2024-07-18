@@ -5,9 +5,9 @@ import winston from "winston";
 export const logger = createLogger(simpleFormatter);
 
 /**
- * Create logger
- * @param formatter - Formatter
- * @returns - Logger
+ * Create logger.
+ * @param formatter - Formatter.
+ * @returns - Logger.
  */
 export function createLogger(formatter: Formatter): winston.Logger {
   return winston.createLogger({

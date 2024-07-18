@@ -4,9 +4,9 @@ import { ucfirst } from "../../utils";
 import type winston from "winston";
 
 /**
- * Custom log formatter
- * @param info - Log info
- * @returns - Formatted log string
+ * Custom log formatter.
+ * @param info - Log info.
+ * @returns - Formatted log string.
  */
 export function detailedFormatter(
   info: winston.Logform.TransformableInfo

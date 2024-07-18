@@ -7,8 +7,8 @@ import { logger } from "../services";
 let cachedClient: ReturnType<typeof createClient> | undefined;
 
 /**
- * Get Redis client
- * @returns Redis client
+ * Get Redis client.
+ * @returns Redis client.
  */
 export function getRedisClient(): ReturnType<typeof createClient> {
   if (cachedClient) return cachedClient;
@@ -21,7 +21,7 @@ export function getRedisClient(): ReturnType<typeof createClient> {
 }
 
 /**
- * Initialize Redis
+ * Initialize Redis.
  */
 export async function initRedis(): Promise<void> {
   const client = getRedisClient();
@@ -36,8 +36,8 @@ export async function initRedis(): Promise<void> {
 }
 
 /**
- * Check if Redis client exists
- * @returns Whether Redis client exists
+ * Check if Redis client exists.
+ * @returns Whether Redis client exists.
  */
 export function redisClientExists(): boolean {
   return Boolean(cachedClient);

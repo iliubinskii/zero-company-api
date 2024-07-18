@@ -6,7 +6,7 @@ startServer().catch((err: unknown) => {
 });
 
 /**
- * Start the server
+ * Start the server.
  */
 async function startServer(): Promise<void> {
   logServerInfo();

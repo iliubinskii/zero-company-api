@@ -15,9 +15,9 @@ import type express from "express";
 let appCached: express.Express | undefined;
 
 /**
- * Handle the request
- * @param req - Request
- * @param res - Response
+ * Handle the request.
+ * @param req - Request.
+ * @param res - Response.
  */
 export default async function handler(
   req: Request,

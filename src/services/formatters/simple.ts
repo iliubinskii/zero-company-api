@@ -1,9 +1,9 @@
 import type winston from "winston";
 
 /**
- * Custom log formatter
- * @param info - Log info
- * @returns - Formatted log string
+ * Custom log formatter.
+ * @param info - Log info.
+ * @returns - Formatted log string.
  */
 export function simpleFormatter(
   info: winston.Logform.TransformableInfo
