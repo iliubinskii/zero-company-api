@@ -125,7 +125,7 @@
     "eslint-plugin-import": "^2",
     "eslint-plugin-jest-extended": "^2",
     "eslint-plugin-jsdoc": "^48",
-    "eslint-plugin-misc": "^3",
+    "eslint-plugin-misc": "^3.2.0",
     "eslint-plugin-n": "^16",
     "eslint-plugin-no-type-assertion": "^1",
     "eslint-plugin-no-use-extend-native": "^0.5",
@@ -149,7 +149,7 @@
     "jest-extended": "^4",
     "lint-staged": "^15",
     "markdownlint-cli": "^0.41",
-    "mongodb-memory-server": "^9",
+    "mongodb-memory-server": "^10",
     "nodemon": "^3",
     "npm-check-updates": "^16",
     "npm-run-all": "^4",
@@ -161,6 +161,6 @@
     "ts-jest": "^29",
     "tsx": "^4",
     "typescript": "^5",
-    "vercel": "^34"
+    "vercel": "^35"
   }
 }
