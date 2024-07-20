@@ -9,8 +9,12 @@ const config = {
     "playwright-report/**",
     "test-results/**"
   ],
-  env: { es2020: true },
-  globals: { Express: true },
+  env: {
+    es2020: true
+  },
+  globals: {
+    Express: "readonly"
+  },
   extends: "union",
   parser: "@typescript-eslint/parser",
   parserOptions: {
