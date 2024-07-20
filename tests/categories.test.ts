@@ -24,13 +24,6 @@ test.describe.parallel("Categories", () => {
       });
 
       expect(createResponse.status()).toBe(StatusCodes.CREATED);
-
-      const responseBody = await createResponse.json();
-
-      // eslint-disable-next-line no-warning-comments -- Ok
-      // TODO: Use expect to check response body
-      // eslint-disable-next-line no-console -- Temp
-      console.log(responseBody);
     });
 
     test("should return all categories", async ({ request }) => {

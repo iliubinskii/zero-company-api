@@ -28,7 +28,7 @@
     "noUncheckedIndexedAccess": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "outDir": "dist",
+    "outDir": "temp",
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "sourceMap": true,
@@ -39,13 +39,14 @@
   },
   "exclude": ["coverage", "node_modules", "playwright-report", "test-results"],
   "include": [
-    ".eslintrc.base.cjs",
     ".eslintrc.cjs",
     ".prettierrc.mjs",
     "**/*.cjs",
+    "**/*.cjsx",
     "**/*.js",
     "**/*.jsx",
     "**/*.mjs",
+    "**/*.mjsx",
     "**/*.ts",
     "**/*.tsx"
   ]
