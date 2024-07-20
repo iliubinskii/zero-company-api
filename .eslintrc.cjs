@@ -11,7 +11,7 @@ const config = {
   ],
   env: { es2020: true },
   globals: { Express: true },
-  extends: "./.eslintrc.base.cjs",
+  extends: "union",
   parser: "@typescript-eslint/parser",
   parserOptions: {
     ecmaFeatures: { jsx: true },
@@ -27,19 +27,20 @@ const config = {
           words:
             // @sorted
             [
+              "cjsx",
               "csstools",
               "docuseal",
-              "escompat",
               "fullsetup",
               "hsts",
               "lcfirst",
               "logform",
+              "mjsx",
+              "packagejson",
               "picsum",
               "preprocesses",
               "reconnectfailed",
               "resave",
               "smacss",
-              "sonarjs",
               "ucfirst"
             ]
         }

@@ -50,7 +50,6 @@ See [SPECIFICATION.md](SPECIFICATION.md) for more details about the project.
      - MarkdownLint (davidanson.vscode-markdownlint)
      - OpenAPI (Swagger) Editor (42crunch.vscode-openapi)
      - Prettier - Code formatter (esbenp.prettier-vscode)
-     - Sort package.json (unional.vscode-sort-package-json)
      - Stylelint (stylelint.vscode-stylelint)
      - Tailwind CSS IntelliSense (bradlc.vscode-tailwindcss)
      - YAML (redhat.vscode-yaml)
