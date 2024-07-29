@@ -1,3 +1,4 @@
+import { getArticleModel } from "./articles";
 import { getCategoryModel } from "./categories";
 import { getCompanyModel } from "./companies";
 import { getDocumentModel } from "./documents";
@@ -17,6 +18,7 @@ export async function getModels(): Promise<Models> {
   const connection = await getMongodbConnection();
 
   cachedModels = {
+    ArticleModel: getArticleModel(connection),
     CategoryModel: getCategoryModel(connection),
     CompanyModel: getCompanyModel(connection),
     DocumentModel: getDocumentModel(connection),
@@ -37,6 +39,7 @@ export function modelsExist(): boolean {
 }
 
 export interface Models {
+  readonly ArticleModel: ReturnType<typeof getArticleModel>;
   readonly CategoryModel: ReturnType<typeof getCategoryModel>;
   readonly CompanyModel: ReturnType<typeof getCompanyModel>;
   readonly DocumentModel: ReturnType<typeof getDocumentModel>;

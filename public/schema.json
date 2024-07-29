@@ -19,6 +19,26 @@
       }
     },
     "responses": {
+      "Article": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Article"
+            }
+          }
+        },
+        "description": "Article"
+      },
+      "ArticleList": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ArticleList"
+            }
+          }
+        },
+        "description": "Article list"
+      },
       "AuthUser": {
         "content": {
           "application/json": {
@@ -231,6 +251,41 @@
       }
     },
     "schemas": {
+      "Article": {
+        "properties": {
+          "_id": {
+            "type": "string"
+          }
+        },
+        "required": ["_id"],
+        "type": "object"
+      },
+      "ArticleList": {
+        "properties": {
+          "count": {
+            "type": "integer"
+          },
+          "docs": {
+            "items": {
+              "$ref": "#/components/schemas/Article"
+            },
+            "type": "array"
+          },
+          "nextCursor": {
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 2,
+            "minItems": 2,
+            "type": "array"
+          },
+          "total": {
+            "type": "integer"
+          }
+        },
+        "required": ["count", "docs", "total"],
+        "type": "object"
+      },
       "AuthUser": {
         "nullable": true,
         "properties": {
@@ -897,6 +952,75 @@
         },
         "summary": "Internal server error",
         "tags": ["common"]
+      }
+    },
+    "/articles": {
+      "get": {
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/ArticleList"
+          },
+          "400": {
+            "$ref": "#/components/responses/InvalidQuery"
+          }
+        },
+        "summary": "Get all articles",
+        "tags": ["articles"]
+      },
+      "post": {
+        "responses": {
+          "201": {
+            "$ref": "#/components/responses/Article"
+          },
+          "400": {
+            "$ref": "#/components/responses/InvalidData"
+          }
+        },
+        "summary": "Create a new article",
+        "tags": ["articles"]
+      }
+    },
+    "/articles/{id}": {
+      "delete": {
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Delete"
+          }
+        },
+        "summary": "Delete a article by ID",
+        "tags": ["articles"]
+      },
+      "get": {
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Article"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        },
+        "summary": "Get a article by ID",
+        "tags": ["articles"]
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/Id"
+        }
+      ],
+      "put": {
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Article"
+          },
+          "400": {
+            "$ref": "#/components/responses/InvalidData"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        },
+        "summary": "Update a article by ID",
+        "tags": ["articles"]
       }
     },
     "/auth/me": {

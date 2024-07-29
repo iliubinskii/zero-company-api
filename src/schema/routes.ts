@@ -32,6 +32,111 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/articles": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Get all articles */
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        200: components["responses"]["ArticleList"];
+        400: components["responses"]["InvalidQuery"];
+      };
+    };
+    put?: never;
+    /** Create a new article */
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        201: components["responses"]["Article"];
+        400: components["responses"]["InvalidData"];
+      };
+    };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/articles/{id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        id: components["parameters"]["Id"];
+      };
+      cookie?: never;
+    };
+    /** Get a article by ID */
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          id: components["parameters"]["Id"];
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        200: components["responses"]["Article"];
+        404: components["responses"]["NotFound"];
+      };
+    };
+    /** Update a article by ID */
+    put: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          id: components["parameters"]["Id"];
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        200: components["responses"]["Article"];
+        400: components["responses"]["InvalidData"];
+        404: components["responses"]["NotFound"];
+      };
+    };
+    post?: never;
+    /** Delete a article by ID */
+    delete: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          id: components["parameters"]["Id"];
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        200: components["responses"]["Delete"];
+      };
+    };
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/auth/me": {
     parameters: {
       query?: never;
@@ -1027,6 +1132,15 @@ export type webhooks = Record<string, never>;
 
 export interface components {
   schemas: {
+    Article: {
+      _id: string;
+    };
+    ArticleList: {
+      count: number;
+      docs: components["schemas"]["Article"][];
+      nextCursor?: string[];
+      total: number;
+    };
     AuthUser: {
       admin: boolean;
       email: string;
@@ -1207,6 +1321,24 @@ export interface components {
     };
   };
   responses: {
+    /** @description Article */
+    Article: {
+      headers: {
+        [name: string]: unknown;
+      };
+      content: {
+        "application/json": components["schemas"]["Article"];
+      };
+    };
+    /** @description Article list */
+    ArticleList: {
+      headers: {
+        [name: string]: unknown;
+      };
+      content: {
+        "application/json": components["schemas"]["ArticleList"];
+      };
+    };
     /** @description Authentication response */
     AuthUser: {
       headers: {

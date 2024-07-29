@@ -7,12 +7,20 @@ import {
   preprocessBoolean
 } from "./common";
 import type {
+  GetArticlesOptions,
   GetCategoriesOptions,
   GetCompaniesOptions,
   GetDocumentsOptions,
   GetUsersOptions
 } from "./get-all-options";
 import zod from "zod";
+
+export const GetArticlesOptionsValidationSchema = zod.object({
+  limit: LimitValidationSchema,
+  offset: OffsetValidationSchema
+  // eslint-disable-next-line no-warning-comments -- Assigned
+  // TODO: Add validation for the field to select articles or blogs
+});
 
 export const GetCategoriesOptionsValidationSchema = zod.object({
   limit: LimitValidationSchema,
@@ -48,6 +56,13 @@ export const GetUsersOptionsValidationSchema = zod.object({
   limit: LimitValidationSchema,
   offset: OffsetValidationSchema
 });
+
+// Type check the get articles options validation schema
+((): GetArticlesOptions | undefined => {
+  const result = GetArticlesOptionsValidationSchema.safeParse(undefined);
+
+  return result.success ? result.data : undefined;
+})();
 
 // Type check the get categories options validation schema
 ((): GetCategoriesOptions | undefined => {

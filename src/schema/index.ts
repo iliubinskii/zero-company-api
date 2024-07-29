@@ -8,6 +8,8 @@ export type RouteTransform<T> = {
     : RouteTransform<T[K]>;
 };
 
+export * from "./articles";
+export * from "./articles.validation";
 export * from "./categories";
 export * from "./categories.validation";
 export * from "./common";

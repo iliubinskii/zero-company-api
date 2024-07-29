@@ -55,6 +55,11 @@ export async function createApp(): Promise<express.Express> {
 
   if (SESSION_STORE_PROVIDER === "redis") await initRedis();
 
+  // eslint-disable-next-line no-warning-comments -- Assigned
+  /*
+  TODO: Create articles service
+  */
+
   const categoriesService = createCategoriesService();
 
   const companiesService = createCompaniesService();
@@ -64,6 +69,11 @@ export async function createApp(): Promise<express.Express> {
   const documentsService = createDocumentsService();
 
   const usersService = createUsersService();
+
+  // eslint-disable-next-line no-warning-comments -- Assigned
+  /*
+  TODO: Create article controllers
+  */
 
   const categoryControllers = createCategoryControllers(
     categoriesService,
@@ -121,6 +131,11 @@ export async function createApp(): Promise<express.Express> {
       status: ErrorCode.OK
     });
   });
+
+  // eslint-disable-next-line no-warning-comments -- Assigned
+  /*
+  TODO: Add articles router
+  */
 
   app.use("/auth", createAuthRouter(usersService));
 

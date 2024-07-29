@@ -22,6 +22,59 @@ paths:
         "200":
           $ref: "#/components/responses/Home"
 
+  # Articles path
+  /articles:
+    get:
+      summary: Get all articles
+      tags:
+        - articles
+      responses:
+        "200":
+          $ref: "#/components/responses/ArticleList"
+        "400":
+          $ref: "#/components/responses/InvalidQuery"
+    post:
+      summary: Create a new article
+      tags:
+        - articles
+      responses:
+        "201":
+          $ref: "#/components/responses/Article"
+        "400":
+          $ref: "#/components/responses/InvalidData"
+
+  # Article path
+  /articles/{id}:
+    parameters:
+      - $ref: '#/components/parameters/Id'
+    delete:
+      summary: Delete a article by ID
+      tags:
+        - articles
+      responses:
+        "200":
+          $ref: "#/components/responses/Delete"
+    get:
+      summary: Get a article by ID
+      tags:
+        - articles
+      responses:
+        "200":
+          $ref: "#/components/responses/Article"
+        "404":
+          $ref: "#/components/responses/NotFound"
+    put:
+      summary: Update a article by ID
+      tags:
+        - articles
+      responses:
+        "200":
+          $ref: "#/components/responses/Article"
+        "400":
+          $ref: "#/components/responses/InvalidData"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
   # Auth path
   /auth/me:
     get:
@@ -505,6 +558,22 @@ components:
   # Responses
   responses:
 
+    # Article response
+    Article:
+      description: Article
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Article"
+
+    # ArticleList response
+    ArticleList:
+      description: Article list
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ArticleList"
+
     # Authentication response
     AuthUser:
       description: Authentication response
@@ -675,6 +744,38 @@ components:
 
   # Schemas
   schemas:
+
+    # Article schema
+    Article:
+      type: object
+      required:
+        - _id
+      properties:
+        _id:
+          type: string
+
+    # ArticleList schema
+    ArticleList:
+      type: object
+      required:
+        - count
+        - docs
+        - total
+      properties:
+        count:
+          type: integer
+        docs:
+          type: array
+          items:
+            $ref: "#/components/schemas/Article"
+        nextCursor:
+          type: array
+          items:
+            type: string
+          minItems: 2
+          maxItems: 2
+        total:
+          type: integer
 
     # AuthUser schema
     AuthUser:

@@ -1,5 +1,12 @@
 import type { CompanyStatus } from "./common";
 
+export interface GetArticlesOptions {
+  readonly limit?: number | undefined;
+  readonly offset?: number | undefined;
+  // eslint-disable-next-line no-warning-comments -- Assigned
+  // TODO: Add field to select articles or blogs
+}
+
 export interface GetCategoriesOptions {
   readonly limit?: number | undefined;
   readonly offset?: number | undefined;
