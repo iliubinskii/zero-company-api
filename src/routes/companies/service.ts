@@ -112,7 +112,6 @@ export function createCompaniesService(): CompaniesService {
         await session.endSession();
       }
     },
-    // eslint-disable-next-line sonarjs/cognitive-complexity -- Ok
     getCompanies: async (options = {}, parentRef) => {
       const {
         limit = MAX_LIMIT,
@@ -122,13 +121,10 @@ export function createCompaniesService(): CompaniesService {
         sortOrder = "asc"
       } = options;
 
-      const filter: Writable<FilterQuery<Company>> = buildFilter(options);
-
-      if (q)
-        filter["$or"] = [
-          { name: { $options: "i", $regex: q } },
-          { description: { $options: "i", $regex: q } }
-        ];
+      const filter: Writable<FilterQuery<Company>> = buildFilter({
+        ...options,
+        q
+      });
 
       const mongodbSortOrderMap = { asc: 1, desc: -1 } as const;
 
@@ -285,11 +281,7 @@ function buildFilter({
     ];
   }
 
-  if (q)
-    filter["$or"] = [
-      { name: { $options: "i", $regex: q } },
-      { description: { $options: "i", $regex: q } }
-    ];
+  if (q) filter["$text"] = { $search: q };
 
   if (includePrivateCompanies) {
     // Include both public and private companies

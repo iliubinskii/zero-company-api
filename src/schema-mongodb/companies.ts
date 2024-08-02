@@ -60,6 +60,8 @@ export const CompanySchema = new mongoose.Schema(
   { versionKey: false }
 );
 
+CompanySchema.index({ description: "text", name: "text" });
+
 /**
  * Creates a company model.
  * @param connection - The mongoose connection.
