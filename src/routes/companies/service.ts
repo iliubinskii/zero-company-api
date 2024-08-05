@@ -116,15 +116,12 @@ export function createCompaniesService(): CompaniesService {
       const {
         limit = MAX_LIMIT,
         offset = 0,
-        q,
+
         sortBy = "name",
         sortOrder = "asc"
       } = options;
 
-      const filter: Writable<FilterQuery<Company>> = buildFilter({
-        ...options,
-        q
-      });
+      const filter: Writable<FilterQuery<Company>> = buildFilter(options);
 
       const mongodbSortOrderMap = { asc: 1, desc: -1 } as const;
 
