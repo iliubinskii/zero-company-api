@@ -17,7 +17,7 @@ export const DOCKER_PORT = 3000;
 export const DOCUSEAL_ENDPOINT = {
   SUBMISSIONS: "https://api.docuseal.co/submissions",
   TEMPLATES_HTML: "https://api.docuseal.co/templates/html"
-};
+} as const;
 
 export const JWT_EXPIRES_IN = "24h";
 
@@ -27,7 +27,7 @@ export const MONGODB_CONNECT_TIMEOUT_MS = 10_000;
 
 export const MONGODB_ERROR = {
   DUPLICATE_KEY: 11_000
-};
+} as const;
 
 export const MONGODB_SESSIONS_COLLECTION = "sessions";
 

@@ -1,17 +1,36 @@
-#!/bin/sh
-. "$(dirname "$0")/_/husky.sh"
-
-# Get the current Git branch name
 BRANCH_NAME=$(git symbolic-ref --short HEAD)
 
-# Forbid direct commits to master or develop
 if [ "$BRANCH_NAME" = "master" ] || [ "$BRANCH_NAME" = "develop" ]; then
   echo "Commits to $BRANCH_NAME branch are forbidden."
   exit 1
 fi
 
-# Prefer global type check, because changes to one file may cause type errors in other files
-npm run type-check
+TYPE_CHECK=no
 
-# Lint the staged files
-npx lint-staged
+PARSE_OPENAPI=no
+
+STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACM)
+
+for file in $STAGED_FILES; do
+  case "$file" in
+    *.cjs|*.cjsx|*.js|*.jsx|*.mjs|*.mjsx|*.ts|*.tsx)
+      TYPE_CHECK=yes
+      ;;
+  esac
+
+  case "$file" in
+    *.yaml)
+      PARSE_OPENAPI=yes
+      ;;
+  esac
+done
+
+if [ "$TYPE_CHECK" = "yes" ]; then
+  npm run type-check
+fi
+
+if [ "$PARSE_OPENAPI" = "yes" ]; then
+  npm run parse-openapi
+fi
+
+npm run lint-staged-files

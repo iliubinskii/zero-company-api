@@ -265,7 +265,6 @@ describe("createUsersService", () => {
             email: faker.internet.email(),
             type: "email"
           },
-
           update
         );
 
@@ -310,7 +309,6 @@ describe("createUsersService", () => {
             id: faker.database.mongodbObjectId(),
             type: "id"
           },
-
           update
         );
 

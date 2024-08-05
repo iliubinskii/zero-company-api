@@ -12,7 +12,7 @@ test.describe.parallel("Categories", () => {
       name: "New",
       pinned: false,
       tagline: "Testing new category creation."
-    };
+    } as const;
 
     test("should create a new category", async ({ request }) => {
       const createResponse = await request.post(`${BASE_URL}/categories`, {
@@ -24,14 +24,17 @@ test.describe.parallel("Categories", () => {
       });
 
       expect(createResponse.status()).toBe(StatusCodes.CREATED);
+    });
 
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- Ok
-      const responseBody = await createResponse.json();
+    test("should return all categories", async ({ request }) => {
+      const response = await request.get(`${BASE_URL}/categories`);
 
-      // eslint-disable-next-line no-warning-comments -- Ok
-      // TODO: Use expect to check response body
-      // eslint-disable-next-line no-console -- Temp
-      console.log(responseBody);
+      expect(response.status()).toBe(StatusCodes.OK);
+
+      const responseBody = await response.json();
+
+      expect(responseBody).toHaveProperty("count");
+      expect(typeof responseBody.count).toBe("number");
     });
   });
 });

@@ -78,8 +78,8 @@ const companies = Array.from(
     };
 
     /**
-     * Generate a random index for the picsum photos
-     * @returns The random index
+     * Generate a random index for the picsum photos.
+     * @returns The random index.
      */
     function getIndex(): number {
       const result = faker.number.int({ max: 100, min: 1 });
@@ -92,18 +92,18 @@ const companies = Array.from(
 fs.writeFileSync("assets/dummy/companies.json", JSON.stringify(companies));
 
 // Type check the category schema
-((): DummyCategory[] => dummy.categories)();
+((): readonly DummyCategory[] => dummy.categories)();
 
 // Type check the companies schema
-((): DummyCompany[] => dummy.companies)();
+((): readonly DummyCompany[] => dummy.companies)();
 
 // Type check the users schema
-((): DummyUser[] => dummy.users)();
+((): readonly DummyUser[] => dummy.users)();
 
 /**
- * Create a date object
- * @param date - The date
- * @returns The date object
+ * Create a date object.
+ * @param date - The date.
+ * @returns The date object.
  */
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type -- Ok
 function makeDate(date: Date) {
@@ -111,9 +111,9 @@ function makeDate(date: Date) {
 }
 
 /**
- * Create an ObjectId
- * @param id - The id
- * @returns The ObjectId
+ * Create an ObjectId.
+ * @param id - The id.
+ * @returns The ObjectId.
  */
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type -- Ok
 function makeId(id: string) {

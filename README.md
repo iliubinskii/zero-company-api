@@ -50,21 +50,16 @@ See [SPECIFICATION.md](SPECIFICATION.md) for more details about the project.
      - MarkdownLint (davidanson.vscode-markdownlint)
      - OpenAPI (Swagger) Editor (42crunch.vscode-openapi)
      - Prettier - Code formatter (esbenp.prettier-vscode)
-     - Sort package.json (unional.vscode-sort-package-json)
      - Stylelint (stylelint.vscode-stylelint)
      - Tailwind CSS IntelliSense (bradlc.vscode-tailwindcss)
      - YAML (redhat.vscode-yaml)
-5. AI tools:
-   - Copilot
-   - ChatGPT 4o
 
 ## Contributions
 
 1. Create a new feature branch `feature/<hyphened-branch-name>`.
 2. Make your changes.
-3. Format code by running `npm run format`.
-4. Commit and push your changes.
-5. Create a PR.
+3. Commit and push your changes.
+4. Create a PR.
 
 ## How To
 

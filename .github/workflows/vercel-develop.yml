@@ -1,37 +1,36 @@
-name: Playwright Tests
+name: Deploy to Vercel from develop
+
 on:
   push:
     branches: [ develop ]
-  pull_request:
-    branches: [ main, master ]
   workflow_dispatch:
+
 jobs:
-  test:
+  deploy:
     timeout-minutes: 60
     runs-on: ubuntu-latest
     environment: preview
     env:
       BASE_URL: ${{ vars.BASE_URL }}
-      JWT_ADMIN_EMAIL: ${{ secrets.JWT_ADMIN_EMAIL }}
-      JWT_EMAIL: ${{ secrets.JWT_EMAIL }}
+      JWT_ADMIN_EMAIL: ${{ vars.JWT_ADMIN_EMAIL }}
+      JWT_EMAIL: ${{ vars.JWT_EMAIL }}
       JWT_SECRET: ${{ secrets.JWT_SECRET }}
     steps:
-      - name: Output environment variables
-        run: |
-          echo "CI is $CI"
-          echo "BASE_URL is $BASE_URL"
-          echo "JWT_ADMIN_EMAIL is $(printf '%*s' ${#JWT_ADMIN_EMAIL} | tr ' ' '*')"
-          echo "JWT_EMAIL is $(printf '%*s' ${#JWT_EMAIL} | tr ' ' '*')"
-          echo "JWT_SECRET is $(printf '%*s' ${#JWT_SECRET} | tr ' ' '*')"
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: lts/*
       - name: Install dependencies
         run: npm ci
-      - name: Install Playwright Browsers
+      - name: Deploy to Vercel
+        run: npx vercel --token ${{ secrets.VERCEL_TOKEN }} --yes
+      - name: Output environment variables
+        run: |
+          echo "CI is $CI"
+          echo "BASE_URL is $BASE_URL"
+      - name: Install Playwright browsers
         run: npx playwright install chromium --with-deps
-      - name: Run Playwright tests
+      - name: Test with Playwright
         run: npx playwright test
       - uses: actions/upload-artifact@v4
         if: always()

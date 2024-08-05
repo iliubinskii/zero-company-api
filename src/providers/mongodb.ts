@@ -11,8 +11,8 @@ import mongoose from "mongoose";
 let cachedConnection: typeof mongoose | undefined;
 
 /**
- * Connect to MongoDB
- * @returns Connection
+ * Connect to MongoDB.
+ * @returns Connection.
  */
 export async function getMongodbConnection(): Promise<typeof mongoose> {
   if (cachedConnection) return cachedConnection;
@@ -29,7 +29,7 @@ export async function getMongodbConnection(): Promise<typeof mongoose> {
 }
 
 /**
- * Initialize MongoDB
+ * Initialize MongoDB.
  */
 export function initMongodb(): void {
   mongoose.connection.removeAllListeners();
@@ -37,20 +37,21 @@ export function initMongodb(): void {
   for (const [event, message] of Object.entries(events))
     mongoose.connection.on(event, err => {
       if (err) logger.error(message, err);
+
       logger.info(message);
     });
 }
 
 /**
- * Check if MongoDB connection exists
- * @returns Whether MongoDB connection exists
+ * Check if MongoDB connection exists.
+ * @returns Whether MongoDB connection exists.
  */
 export function mongodbConnectionExists(): boolean {
   return Boolean(cachedConnection);
 }
 
 /**
- * Disconnect from MongoDB
+ * Disconnect from MongoDB.
  */
 export async function mongodbDisconnect(): Promise<void> {
   if (cachedConnection) {
@@ -71,4 +72,4 @@ const events = {
   open: lang.MongodbOpen,
   reconnected: lang.MongodbReconnected,
   reconnectfailed: lang.MongodbReconnectFailed
-};
+} as const;

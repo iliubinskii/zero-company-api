@@ -76,8 +76,10 @@ export interface MultipleDocsResponse<T> {
 }
 
 export type SchemaItem = {
-  responses: {
-    [K: PropertyKey]: { content: { "application/json": object } };
+  readonly responses: {
+    readonly [K: PropertyKey]: {
+      readonly content: { readonly "application/json": object };
+    };
   };
 };
 

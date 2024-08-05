@@ -20,6 +20,7 @@ export interface DocumentCreate
     "company" | "doc" | "metadata" | "signatories" | "type"
   > {}
 
+// eslint-disable-next-line misc/typescript/no-empty-interfaces -- Ok
 export interface DocumentUpdate {}
 
 export interface ExistingDocument extends Document {

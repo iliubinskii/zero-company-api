@@ -5,45 +5,123 @@
 
 export interface paths {
   "/": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /** Get API status */
     get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
       responses: {
         200: components["responses"]["Home"];
       };
     };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/auth/me": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /** Get authentication response */
     get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
       responses: {
         200: components["responses"]["AuthUser"];
       };
     };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/categories": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /** Get all categories */
     get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
       responses: {
         200: components["responses"]["CategoryList"];
         400: components["responses"]["InvalidQuery"];
       };
     };
+    put?: never;
     /** Create a new category */
     post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
       responses: {
         201: components["responses"]["Category"];
         400: components["responses"]["InvalidData"];
       };
     };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/categories/{id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        id: components["parameters"]["Id"];
+      };
+      cookie?: never;
+    };
     /** Get a category by ID */
     get: {
       parameters: {
+        query?: never;
+        header?: never;
         path: {
           id: components["parameters"]["Id"];
         };
+        cookie?: never;
       };
+      requestBody?: never;
       responses: {
         200: components["responses"]["Category"];
         404: components["responses"]["NotFound"];
@@ -52,76 +130,136 @@ export interface paths {
     /** Update a category by ID */
     put: {
       parameters: {
+        query?: never;
+        header?: never;
         path: {
           id: components["parameters"]["Id"];
         };
+        cookie?: never;
       };
+      requestBody?: never;
       responses: {
         200: components["responses"]["Category"];
         400: components["responses"]["InvalidData"];
         404: components["responses"]["NotFound"];
       };
     };
+    post?: never;
     /** Delete a category by ID */
     delete: {
       parameters: {
+        query?: never;
+        header?: never;
         path: {
           id: components["parameters"]["Id"];
         };
+        cookie?: never;
       };
+      requestBody?: never;
       responses: {
         200: components["responses"]["Delete"];
       };
     };
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/categories/{id}/companies": {
     parameters: {
+      query?: never;
+      header?: never;
       path: {
         id: components["parameters"]["Id"];
       };
+      cookie?: never;
     };
-  };
-  "/categories/{id}/companies": {
     /** Get all companies for a category */
     get: {
       parameters: {
+        query?: never;
+        header?: never;
         path: {
           id: components["parameters"]["Id"];
         };
+        cookie?: never;
       };
+      requestBody?: never;
       responses: {
         200: components["responses"]["CompanyList"];
         400: components["responses"]["InvalidQuery"];
       };
     };
-    parameters: {
-      path: {
-        id: components["parameters"]["Id"];
-      };
-    };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/companies": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /** Get all companies */
     get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
       responses: {
         200: components["responses"]["CompanyList"];
         400: components["responses"]["InvalidQuery"];
       };
     };
+    put?: never;
     /** Create a new company */
     post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
       responses: {
         201: components["responses"]["Company"];
         400: components["responses"]["InvalidData"];
       };
     };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/companies/{id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        id: components["parameters"]["Id"];
+      };
+      cookie?: never;
+    };
     /** Get a company by ID */
     get: {
       parameters: {
+        query?: never;
+        header?: never;
         path: {
           id: components["parameters"]["Id"];
         };
+        cookie?: never;
       };
+      requestBody?: never;
       responses: {
         200: components["responses"]["Company"];
         404: components["responses"]["NotFound"];
@@ -130,122 +268,219 @@ export interface paths {
     /** Update a company by ID */
     put: {
       parameters: {
+        query?: never;
+        header?: never;
         path: {
           id: components["parameters"]["Id"];
         };
+        cookie?: never;
       };
+      requestBody?: never;
       responses: {
         200: components["responses"]["Company"];
         400: components["responses"]["InvalidData"];
         404: components["responses"]["NotFound"];
       };
     };
+    post?: never;
     /** Delete a company by ID */
     delete: {
       parameters: {
+        query?: never;
+        header?: never;
         path: {
           id: components["parameters"]["Id"];
         };
+        cookie?: never;
       };
+      requestBody?: never;
       responses: {
         200: components["responses"]["Delete"];
       };
     };
-    parameters: {
-      path: {
-        id: components["parameters"]["Id"];
-      };
-    };
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/companies/{id}/found": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
     /** Create founding agreement for a company */
     post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
       responses: {
         200: components["responses"]["Company"];
         404: components["responses"]["NotFound"];
         409: components["responses"]["Conflict"];
       };
     };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/companies/{id}/images": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        id: components["parameters"]["Id"];
+      };
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
     /** Upload a new image for a company */
     post: {
       parameters: {
+        query?: never;
+        header?: never;
         path: {
           id: components["parameters"]["Id"];
         };
+        cookie?: never;
       };
+      requestBody?: never;
       responses: {
         201: components["responses"]["Company"];
         400: components["responses"]["InvalidData"];
         404: components["responses"]["NotFound"];
       };
     };
-    parameters: {
-      path: {
-        id: components["parameters"]["Id"];
-      };
-    };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/companies/{id}/images/{assetId}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        id: components["parameters"]["Id"];
+        assetId: components["parameters"]["AssetId"];
+      };
+      cookie?: never;
+    };
+    get?: never;
     /** Update an image for a company */
     put: {
       parameters: {
+        query?: never;
+        header?: never;
         path: {
           id: components["parameters"]["Id"];
           assetId: components["parameters"]["AssetId"];
         };
+        cookie?: never;
       };
+      requestBody?: never;
       responses: {
         200: components["responses"]["Company"];
         400: components["responses"]["InvalidData"];
         404: components["responses"]["NotFound"];
       };
     };
+    post?: never;
     /** Delete an image for a company */
     delete: {
       parameters: {
+        query?: never;
+        header?: never;
         path: {
           id: components["parameters"]["Id"];
           assetId: components["parameters"]["AssetId"];
         };
+        cookie?: never;
       };
+      requestBody?: never;
       responses: {
         200: components["responses"]["Company"];
         404: components["responses"]["NotFound"];
       };
     };
-    parameters: {
-      path: {
-        id: components["parameters"]["Id"];
-        assetId: components["parameters"]["AssetId"];
-      };
-    };
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/documents": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /** Get all documents */
     get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
       responses: {
         200: components["responses"]["PopulatedDocumentList"];
         400: components["responses"]["InvalidQuery"];
       };
     };
+    put?: never;
     /** Create a new document */
     post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
       responses: {
         201: components["responses"]["PopulatedDocument"];
         400: components["responses"]["InvalidData"];
       };
     };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/documents/{id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        id: components["parameters"]["Id"];
+      };
+      cookie?: never;
+    };
     /** Get a document by ID */
     get: {
       parameters: {
+        query?: never;
+        header?: never;
         path: {
           id: components["parameters"]["Id"];
         };
+        cookie?: never;
       };
+      requestBody?: never;
       responses: {
         200: components["responses"]["PopulatedDocument"];
         404: components["responses"]["NotFound"];
@@ -254,36 +489,57 @@ export interface paths {
     /** Update a document by ID */
     put: {
       parameters: {
+        query?: never;
+        header?: never;
         path: {
           id: components["parameters"]["Id"];
         };
+        cookie?: never;
       };
+      requestBody?: never;
       responses: {
         200: components["responses"]["PopulatedDocument"];
         400: components["responses"]["InvalidData"];
         404: components["responses"]["NotFound"];
       };
     };
+    post?: never;
     /** Delete a document by ID */
     delete: {
       parameters: {
+        query?: never;
+        header?: never;
         path: {
           id: components["parameters"]["Id"];
         };
+        cookie?: never;
       };
+      requestBody?: never;
       responses: {
         200: components["responses"]["Delete"];
       };
     };
-    parameters: {
-      path: {
-        id: components["parameters"]["Id"];
-      };
-    };
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/me": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /** Get a user by ID */
     get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
       responses: {
         200: components["responses"]["User"];
         404: components["responses"]["NotFound"];
@@ -291,6 +547,13 @@ export interface paths {
     };
     /** Update a user by ID */
     put: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
       responses: {
         200: components["responses"]["User"];
         400: components["responses"]["InvalidData"];
@@ -299,6 +562,13 @@ export interface paths {
     };
     /** Create a new user */
     post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
       responses: {
         201: components["responses"]["User"];
         400: components["responses"]["InvalidData"];
@@ -307,63 +577,172 @@ export interface paths {
     };
     /** Delete a user by ID */
     delete: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
       responses: {
         200: components["responses"]["Delete"];
       };
     };
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/me/companies": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /** Get all companies for a user */
     get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
       responses: {
         200: components["responses"]["CompanyList"];
         400: components["responses"]["InvalidQuery"];
       };
     };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/me/documents": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /** Get all documents for a user */
     get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
       responses: {
         200: components["responses"]["PopulatedDocumentList"];
         400: components["responses"]["InvalidQuery"];
       };
     };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/me/favorite-companies": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /** Get all favorite companies for a user */
     get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
       responses: {
         200: components["responses"]["CompanyList"];
         400: components["responses"]["InvalidQuery"];
       };
     };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/users": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /** Get all users */
     get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
       responses: {
         200: components["responses"]["UserList"];
         400: components["responses"]["InvalidQuery"];
       };
     };
+    put?: never;
     /** Create a new user */
     post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
       responses: {
         201: components["responses"]["User"];
         400: components["responses"]["InvalidData"];
         409: components["responses"]["Conflict"];
       };
     };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/users/{id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        id: components["parameters"]["Id"];
+      };
+      cookie?: never;
+    };
     /** Get a user by ID */
     get: {
       parameters: {
+        query?: never;
+        header?: never;
         path: {
           id: components["parameters"]["Id"];
         };
+        cookie?: never;
       };
+      requestBody?: never;
       responses: {
         200: components["responses"]["User"];
         404: components["responses"]["NotFound"];
@@ -372,119 +751,275 @@ export interface paths {
     /** Update a user by ID */
     put: {
       parameters: {
+        query?: never;
+        header?: never;
         path: {
           id: components["parameters"]["Id"];
         };
+        cookie?: never;
       };
+      requestBody?: never;
       responses: {
         200: components["responses"]["User"];
         400: components["responses"]["InvalidData"];
         404: components["responses"]["NotFound"];
       };
     };
+    post?: never;
     /** Delete a user by ID */
     delete: {
       parameters: {
+        query?: never;
+        header?: never;
         path: {
           id: components["parameters"]["Id"];
         };
+        cookie?: never;
       };
+      requestBody?: never;
       responses: {
         200: components["responses"]["Delete"];
       };
     };
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/users/{id}/companies": {
     parameters: {
+      query?: never;
+      header?: never;
       path: {
         id: components["parameters"]["Id"];
       };
+      cookie?: never;
     };
-  };
-  "/users/{id}/companies": {
     /** Get all companies for a user */
     get: {
       parameters: {
+        query?: never;
+        header?: never;
         path: {
           id: components["parameters"]["Id"];
         };
+        cookie?: never;
       };
+      requestBody?: never;
       responses: {
         200: components["responses"]["CompanyList"];
         400: components["responses"]["InvalidQuery"];
       };
     };
-    parameters: {
-      path: {
-        id: components["parameters"]["Id"];
-      };
-    };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/users/{id}/documents": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /** Get all documents for a user */
     get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
       responses: {
         200: components["responses"]["PopulatedDocumentList"];
         400: components["responses"]["InvalidQuery"];
       };
     };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/users/{id}/favorite-companies": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        id: components["parameters"]["Id"];
+      };
+      cookie?: never;
+    };
     /** Get all favorite companies for a user */
     get: {
       parameters: {
+        query?: never;
+        header?: never;
         path: {
           id: components["parameters"]["Id"];
         };
+        cookie?: never;
       };
+      requestBody?: never;
       responses: {
         200: components["responses"]["CompanyList"];
         400: components["responses"]["InvalidQuery"];
       };
     };
-    parameters: {
-      path: {
-        id: components["parameters"]["Id"];
-      };
-    };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/400": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /** Bad request */
     get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
       responses: {
         400: components["responses"]["BadRequest"];
       };
     };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/401": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /** Unauthorized */
     get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
       responses: {
         401: components["responses"]["Unauthorized"];
       };
     };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/404": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /** Not found */
     get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
       responses: {
         404: components["responses"]["NotFound"];
       };
     };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/405": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /** Method not allowed */
     get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
       responses: {
         405: components["responses"]["MethodNotAllowed"];
       };
     };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/500": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     /** Internal server error */
     get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
       responses: {
         500: components["responses"]["InternalServerError"];
       };
     };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
 }
 
@@ -674,126 +1209,189 @@ export interface components {
   responses: {
     /** @description Authentication response */
     AuthUser: {
+      headers: {
+        [name: string]: unknown;
+      };
       content: {
         "application/json": components["schemas"]["AuthUser"];
       };
     };
     /** @description Bad request */
     BadRequest: {
+      headers: {
+        [name: string]: unknown;
+      };
       content: {
         "application/json": components["schemas"]["BadRequest"];
       };
     };
     /** @description Category */
     Category: {
+      headers: {
+        [name: string]: unknown;
+      };
       content: {
         "application/json": components["schemas"]["Category"];
       };
     };
     /** @description Category list */
     CategoryList: {
+      headers: {
+        [name: string]: unknown;
+      };
       content: {
         "application/json": components["schemas"]["CategoryList"];
       };
     };
     /** @description Company */
     Company: {
+      headers: {
+        [name: string]: unknown;
+      };
       content: {
         "application/json": components["schemas"]["Company"];
       };
     };
     /** @description Company list */
     CompanyList: {
+      headers: {
+        [name: string]: unknown;
+      };
       content: {
         "application/json": components["schemas"]["CompanyList"];
       };
     };
     /** @description Already exists */
     Conflict: {
+      headers: {
+        [name: string]: unknown;
+      };
       content: {
         "application/json": components["schemas"]["Conflict"];
       };
     };
     /** @description Delete */
     Delete: {
+      headers: {
+        [name: string]: unknown;
+      };
       content: {
         "application/json": components["schemas"]["Delete"];
       };
     };
     /** @description Document */
     Document: {
+      headers: {
+        [name: string]: unknown;
+      };
       content: {
         "application/json": components["schemas"]["Document"];
       };
     };
     /** @description Document list */
     DocumentList: {
+      headers: {
+        [name: string]: unknown;
+      };
       content: {
         "application/json": components["schemas"]["DocumentList"];
       };
     };
     /** @description Home */
     Home: {
+      headers: {
+        [name: string]: unknown;
+      };
       content: {
         "application/json": components["schemas"]["Home"];
       };
     };
     /** @description Internal server error */
     InternalServerError: {
+      headers: {
+        [name: string]: unknown;
+      };
       content: {
         "application/json": components["schemas"]["InternalServerError"];
       };
     };
     /** @description Invalid data */
     InvalidData: {
+      headers: {
+        [name: string]: unknown;
+      };
       content: {
         "application/json": components["schemas"]["InvalidData"];
       };
     };
     /** @description Invalid query */
     InvalidQuery: {
+      headers: {
+        [name: string]: unknown;
+      };
       content: {
         "application/json": components["schemas"]["InvalidQuery"];
       };
     };
     /** @description Method not allowed */
     MethodNotAllowed: {
+      headers: {
+        [name: string]: unknown;
+      };
       content: {
         "application/json": components["schemas"]["MethodNotAllowed"];
       };
     };
     /** @description Not found */
     NotFound: {
+      headers: {
+        [name: string]: unknown;
+      };
       content: {
         "application/json": components["schemas"]["NotFound"];
       };
     };
     /** @description Document */
     PopulatedDocument: {
+      headers: {
+        [name: string]: unknown;
+      };
       content: {
         "application/json": components["schemas"]["PopulatedDocument"];
       };
     };
     /** @description Document list */
     PopulatedDocumentList: {
+      headers: {
+        [name: string]: unknown;
+      };
       content: {
         "application/json": components["schemas"]["PopulatedDocumentList"];
       };
     };
     /** @description Bad request */
     Unauthorized: {
+      headers: {
+        [name: string]: unknown;
+      };
       content: {
         "application/json": components["schemas"]["Unauthorized"];
       };
     };
     /** @description User */
     User: {
+      headers: {
+        [name: string]: unknown;
+      };
       content: {
         "application/json": components["schemas"]["User"];
       };
     };
     /** @description User list */
     UserList: {
+      headers: {
+        [name: string]: unknown;
+      };
       content: {
         "application/json": components["schemas"]["UserList"];
       };
@@ -809,7 +1407,5 @@ export interface components {
 }
 
 export type $defs = Record<string, never>;
-
-export type external = Record<string, never>;
 
 export type operations = Record<string, never>;

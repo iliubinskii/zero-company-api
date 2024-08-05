@@ -1,32 +1,17 @@
 /**
- * @type {import("eslint").Linter.Config }
+ * @type {import("eslint").Linter.Config}
  */
 const config = {
-  env: { es2020: true },
-  extends: ["./.eslintrc.base.cjs"],
-  globals: { Express: true },
-  ignorePatterns: ["!.*", "coverage/**", "dist/**", "node_modules/**"],
-  overrides: [
-    {
-      files: "./src/schema/**",
-      rules: {
-        "import/no-relative-parent-imports": "warn"
-      }
-    },
-    {
-      files: ["./src/schema/routes.ts"],
-      rules: {
-        "no-magic-numbers": "off",
-        "typescript-sort-keys/interface": "off"
-      }
-    },
-    {
-      files: ["./tests/**", "./utils/**"],
-      rules: {
-        "node/no-unpublished-import": "off"
-      }
-    }
+  ignorePatterns: [
+    "!.*",
+    "coverage/**",
+    "node_modules/**",
+    "playwright-report/**",
+    "test-results/**"
   ],
+  env: { es2020: true },
+  globals: { Express: true },
+  extends: "union",
   parser: "@typescript-eslint/parser",
   parserOptions: {
     ecmaFeatures: { jsx: true },
@@ -35,132 +20,65 @@ const config = {
     sourceType: "module"
   },
   rules: {
-    "import/no-internal-modules": [
+    "@cspell/spellchecker": [
       "warn",
       {
-        allow:
-          // @sort
-          ["react-dom/server"]
+        cspell: {
+          words:
+            // @sorted
+            [
+              "cjsx",
+              "csstools",
+              "docuseal",
+              "fullsetup",
+              "hsts",
+              "lcfirst",
+              "logform",
+              "mjsx",
+              "packagejson",
+              "picsum",
+              "preprocesses",
+              "reconnectfailed",
+              "resave",
+              "smacss",
+              "ucfirst"
+            ]
+        }
       }
     ],
-    "node/no-unsupported-features/es-builtins": [
-      "error",
-      {
-        ignores: [],
-        version: ">=20.0.0"
-      }
-    ],
-    "node/no-unsupported-features/node-builtins": [
+    "import/no-internal-modules": ["warn", { allow: ["react-dom/server"] }],
+    "misc/consistent-optional-props": [
       "warn",
-      {
-        ignores: [],
-        version: ">=20.0.0"
-      }
+      { classes: "combined", interfaces: "combined" }
     ],
-    "spellcheck/spell-checker": [
-      "warn",
-      {
-        comments: true,
-        identifiers: true,
-        lang: "en_US",
-        minLength: 3,
-        skipWords:
-          // @sort
-          [
-            "autofix",
-            "bool",
-            "builtins",
-            "camelcase",
-            "cjs",
-            "cloudinary",
-            "commonjs",
-            "consts",
-            "cors",
-            "defs",
-            "destructure",
-            "docu",
-            "docuseal",
-            "ecma",
-            "enum",
-            "envalid",
-            "escompat",
-            "eslintrc",
-            "etag",
-            "filenames",
-            "formatter",
-            "fullsetup",
-            "globals",
-            "gmail",
-            "goto",
-            "ico",
-            "jpg",
-            "jsdoc",
-            "jsx",
-            "lang",
-            "langs",
-            "lcfirst",
-            "localhost",
-            "logform",
-            "matchers",
-            "mjs",
-            "mongodb",
-            "multer",
-            "namespace",
-            "nonnegative",
-            "nullable",
-            "num",
-            "oid",
-            "openapi",
-            "openid",
-            "originalname",
-            "parens",
-            "pdf",
-            "pem",
-            "picsum",
-            "printf",
-            "readonly",
-            "reconnectfailed",
-            "redeclare",
-            "redis",
-            "req",
-            "resave",
-            "schemas",
-            "serverless",
-            "smacss",
-            "sonarjs",
-            "str",
-            "stylelint",
-            "stylelintrc",
-            "submitters",
-            "tagline",
-            "tsconfig",
-            "tsx",
-            "ttl",
-            "txt",
-            "ucfirst",
-            "undef",
-            "unlink",
-            "uploader",
-            "upsert",
-            "uri",
-            "urls",
-            "utf8",
-            "uuidv4",
-            "validators",
-            "ver",
-            "vercel",
-            "webhooks",
-            "winston",
-            "yaml",
-            "zod"
-          ],
-        strings: true,
-        templates: true
-      }
-    ],
+    "misc/typescript/no-unsafe-object-assignment": "off",
     "unicorn/no-null": "off"
-  }
+  },
+  overrides: [
+    {
+      files: "./src/schema/**",
+      rules: { "import/no-relative-parent-imports": "warn" }
+    },
+    {
+      files: "./src/schema/routes.ts",
+      rules: {
+        "jsdoc/require-description-complete-sentence": "off",
+        "misc/comment-spacing": "off",
+        "misc/typescript/no-never": "off",
+        "misc/typescript/prefer-readonly-array": "off",
+        "misc/typescript/prefer-readonly-property": "off",
+        "no-magic-numbers": "off",
+        "typescript-sort-keys/interface": "off"
+      }
+    },
+    {
+      files: "./tests/**",
+      rules: {
+        "@typescript-eslint/no-unsafe-assignment": "off",
+        "@typescript-eslint/no-unsafe-member-access": "off"
+      }
+    }
+  ]
 };
 
-// eslint-disable-next-line import/no-commonjs -- Ok
 module.exports = config;

@@ -5,10 +5,10 @@ import type { Routes } from "../schema";
 import { StatusCodes } from "http-status-codes";
 
 /**
- * Middleware to apply SSL redirection and HSTS header
- * @param req - The request object
- * @param res - The response object
- * @param next - The next middleware
+ * Middleware to apply SSL redirection and HSTS header.
+ * @param req - The request object.
+ * @param res - The response object.
+ * @param next - The next middleware.
  */
 export const forceHttps: RequestHandler = (req, res, next) => {
   // Check x-forwarded-proto header in case the app is behind a proxy

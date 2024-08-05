@@ -68,6 +68,8 @@
     "scss.validate": false,
     "search.exclude": {
       "dist": true,
+      "docs": true,
+      "es": true,
       "package-lock.json": true
     },
     "sortJSON.excludedPaths": ["assets"],

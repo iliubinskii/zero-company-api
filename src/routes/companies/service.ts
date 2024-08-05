@@ -116,7 +116,6 @@ export function createCompaniesService(): CompaniesService {
       const {
         limit = MAX_LIMIT,
         offset = 0,
-
         sortBy = "name",
         sortOrder = "asc"
       } = options;
@@ -192,7 +191,7 @@ export function createCompaniesService(): CompaniesService {
 
       const lastCompany = companies.at(-1);
 
-      const nextCursor = ((): [string, string] | undefined => {
+      const nextCursor = ((): readonly [string, string] | undefined => {
         if (companies.length === limit && lastCompany) {
           const cursor0 = lastCompany[sortBy];
 
@@ -200,6 +199,7 @@ export function createCompaniesService(): CompaniesService {
 
           if (cursor0) return [cursor0.toString(), cursor1];
         }
+
         return undefined;
       })();
 

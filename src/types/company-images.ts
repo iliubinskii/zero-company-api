@@ -10,12 +10,12 @@ export interface CompanyImageControllers {
 
 export interface CompanyImagesMiddleware {
   readonly parseFormData: RequestHandler;
-  webAccessibleStorage: RequestHandler;
+  readonly webAccessibleStorage: RequestHandler;
 }
 
 export interface CompanyImagesService {
   /**
-   * Add an image to a company
+   * Add an image to a company.
    * @param id - The ID of the company to add the image to.
    * @param image - The image to add.
    * @returns A promise that resolves with the company with the added image, or `null` if the company was not found.
