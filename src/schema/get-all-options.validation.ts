@@ -26,6 +26,7 @@ export const GetCompaniesOptionsValidationSchema = zod.object({
   limit: LimitValidationSchema,
   offset: OffsetValidationSchema,
   onlyRecommended: preprocessBoolean(zod.boolean()).optional(),
+  q: zod.string().optional(),
   sortBy: zod
     .union([
       zod.literal("createdAt"),

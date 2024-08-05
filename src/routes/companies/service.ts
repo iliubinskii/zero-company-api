@@ -251,12 +251,14 @@ export interface GetUserModel {
  * @param options.sortBy - The field to sort companies by.
  * @param options.sortOrder - The order to sort companies by.
  * @param options.status - The status of the companies.
+ * @param options.q - The query to search companies by.
  * @returns The filter to get companies.
  */
 function buildFilter({
   cursor,
   includePrivateCompanies = false,
   onlyRecommended = false,
+  q,
   sortBy = "name",
   sortOrder = "asc",
   status
@@ -275,6 +277,8 @@ function buildFilter({
       { _id: { [operator]: id }, [sortBy]: sortByValue }
     ];
   }
+
+  if (q) filter["$text"] = { $search: q };
 
   if (includePrivateCompanies) {
     // Include both public and private companies
