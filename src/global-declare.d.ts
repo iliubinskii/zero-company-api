@@ -1,8 +1,10 @@
-// eslint-disable-next-line misc/comment-spacing -- Ok
-/// <reference types="jest-extended" />
+/* eslint import/no-extraneous-dependencies: ["warn", { "devDependencies": true }] -- Ok */
 
 import type { CSSProperties, DetailedHTMLProps, HTMLAttributes } from "react";
 import type { Jwt } from "./schema";
+import type jestExtended from "jest-extended";
+
+type JestExtended = typeof jestExtended;
 
 declare global {
   namespace JSX {
@@ -15,9 +17,8 @@ declare global {
 }
 
 declare module "@jest/expect" {
-  export interface Matchers<R>
-    // eslint-disable-next-line no-undef -- Ok
-    extends CustomMatchers<R> {}
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- Ok
+  export interface Matchers<R> extends JestExtended {}
 }
 
 declare module "express-serve-static-core" {

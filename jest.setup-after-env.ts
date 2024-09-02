@@ -1,5 +1,4 @@
 /* eslint-disable import/no-internal-modules -- Ok */
-/* eslint-disable import/no-namespace -- Ok */
 
 import * as config from "./src/config";
 import { getMongodbMemoryServerUri } from "./utils";
