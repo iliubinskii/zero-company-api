@@ -1,5 +1,6 @@
 import { getCategoryModel } from "./categories";
 import { getCompanyModel } from "./companies";
+import { getConversationModel } from "./conversations";
 import { getDocumentModel } from "./documents";
 import { getMongodbConnection } from "../providers";
 import { getUserModel } from "./users";
@@ -19,6 +20,7 @@ export async function getModels(): Promise<Models> {
   cachedModels = {
     CategoryModel: getCategoryModel(connection),
     CompanyModel: getCompanyModel(connection),
+    ConversationModel: getConversationModel(connection),
     DocumentModel: getDocumentModel(connection),
     UserModel: getUserModel(connection)
   } as const;
@@ -39,6 +41,7 @@ export function modelsExist(): boolean {
 export interface Models {
   readonly CategoryModel: ReturnType<typeof getCategoryModel>;
   readonly CompanyModel: ReturnType<typeof getCompanyModel>;
+  readonly ConversationModel: ReturnType<typeof getConversationModel>;
   readonly DocumentModel: ReturnType<typeof getDocumentModel>;
   readonly UserModel: ReturnType<typeof getUserModel>;
 }

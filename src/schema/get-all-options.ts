@@ -1,5 +1,10 @@
 import type { CompanyStatus } from "./common";
 
+export interface GetConversationsOptions {
+  readonly limit?: number | undefined;
+  readonly offset?: number | undefined;
+}
+
 export interface GetCategoriesOptions {
   readonly limit?: number | undefined;
   readonly offset?: number | undefined;

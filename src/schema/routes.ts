@@ -419,6 +419,111 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/conversations": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Get all conversations */
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        200: components["responses"]["ConversationList"];
+        400: components["responses"]["InvalidQuery"];
+      };
+    };
+    put?: never;
+    /** Create a new conversation */
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        201: components["responses"]["Conversation"];
+        400: components["responses"]["InvalidData"];
+      };
+    };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/conversations/{id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        id: components["parameters"]["Id"];
+      };
+      cookie?: never;
+    };
+    /** Get a conversation by ID */
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          id: components["parameters"]["Id"];
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        200: components["responses"]["Conversation"];
+        404: components["responses"]["NotFound"];
+      };
+    };
+    /** Update a conversation by ID */
+    put: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          id: components["parameters"]["Id"];
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        200: components["responses"]["Conversation"];
+        400: components["responses"]["InvalidData"];
+        404: components["responses"]["NotFound"];
+      };
+    };
+    post?: never;
+    /** Delete a conversation by ID */
+    delete: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          id: components["parameters"]["Id"];
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        200: components["responses"]["Delete"];
+      };
+    };
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/documents": {
     parameters: {
       query?: never;
@@ -1079,6 +1184,15 @@ export interface components {
       error: "AlreadyExists" | "Conflict";
       errorMessage: string;
     };
+    Conversation: {
+      _id: string;
+    };
+    ConversationList: {
+      count: number;
+      docs: components["schemas"]["Conversation"][];
+      nextCursor?: string[];
+      total: number;
+    };
     Delete: {
       affectedRows: number;
     };
@@ -1268,6 +1382,24 @@ export interface components {
       };
       content: {
         "application/json": components["schemas"]["Conflict"];
+      };
+    };
+    /** @description Conversation */
+    Conversation: {
+      headers: {
+        [name: string]: unknown;
+      };
+      content: {
+        "application/json": components["schemas"]["Conversation"];
+      };
+    };
+    /** @description Conversation list */
+    ConversationList: {
+      headers: {
+        [name: string]: unknown;
+      };
+      content: {
+        "application/json": components["schemas"]["ConversationList"];
       };
     };
     /** @description Delete */

@@ -1,5 +1,6 @@
 export * from "./categories";
 export * from "./companies";
+export * from "./conversations";
 export * from "./documents";
 export * from "./models";
 export * from "./users";

@@ -15,6 +15,8 @@ export * from "./companies";
 export * from "./companies.validation";
 export * from "./company-images";
 export * from "./company-images.validation";
+export * from "./conversations";
+export * from "./conversations.validation";
 export * from "./documents";
 export * from "./documents.validation";
 export * from "./get-all-options";

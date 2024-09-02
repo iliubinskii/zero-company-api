@@ -300,6 +300,85 @@
         }
       }
     },
+    "/conversations": {
+      "get": {
+        "summary": "Get all conversations",
+        "tags": [
+          "conversations"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/ConversationList"
+          },
+          "400": {
+            "$ref": "#/components/responses/InvalidQuery"
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new conversation",
+        "tags": [
+          "conversations"
+        ],
+        "responses": {
+          "201": {
+            "$ref": "#/components/responses/Conversation"
+          },
+          "400": {
+            "$ref": "#/components/responses/InvalidData"
+          }
+        }
+      }
+    },
+    "/conversations/{id}": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/Id"
+        }
+      ],
+      "delete": {
+        "summary": "Delete a conversation by ID",
+        "tags": [
+          "conversations"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Delete"
+          }
+        }
+      },
+      "get": {
+        "summary": "Get a conversation by ID",
+        "tags": [
+          "conversations"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Conversation"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update a conversation by ID",
+        "tags": [
+          "conversations"
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Conversation"
+          },
+          "400": {
+            "$ref": "#/components/responses/InvalidData"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
     "/documents": {
       "get": {
         "summary": "Get all documents",
@@ -784,6 +863,26 @@
           }
         }
       },
+      "Conversation": {
+        "description": "Conversation",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Conversation"
+            }
+          }
+        }
+      },
+      "ConversationList": {
+        "description": "Conversation list",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ConversationList"
+            }
+          }
+        }
+      },
       "Delete": {
         "description": "Delete",
         "content": {
@@ -1140,6 +1239,47 @@
           },
           "errorMessage": {
             "type": "string"
+          }
+        }
+      },
+      "Conversation": {
+        "type": "object",
+        "required": [
+          "_id"
+        ],
+        "properties": {
+          "_id": {
+            "type": "string"
+          }
+        }
+      },
+      "ConversationList": {
+        "type": "object",
+        "required": [
+          "count",
+          "docs",
+          "total"
+        ],
+        "properties": {
+          "count": {
+            "type": "integer"
+          },
+          "docs": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Conversation"
+            }
+          },
+          "nextCursor": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "minItems": 2,
+            "maxItems": 2
+          },
+          "total": {
+            "type": "integer"
           }
         }
       },

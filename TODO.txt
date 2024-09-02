@@ -1,0 +1,19 @@
+1. Our internal schema /src/schema
+1.a. Define interfaces (think which fields are needed for conversation and for filtering conversations)
+1.b. Edit validations for the interfaces at step (1)
+2. Define Mongoose schema /src/schema-mongoose
+3. Conversations router /src/routes/conversation
+3.a. Add additional filtering in `getConversations` schema /src/routes/conversation/service
+3.b. Add required middleware in `put` router /src/routes/conversation/router
+4. OpenAPI schema /public/schema.yaml
+4.a. Add fields to Conversation schema
+4.b. Run `parse-openapi` script (package.json)
+4.c. This should fix typescript errors in conversation controllers /src/routes/conversation/controllers
+5. Add conversations router to app /src/app
+6. Test with postman
+6.a. assets/postman/zero-company.postman_collection.json - postman collection
+6.b. assets/postman/zero-preview.postman_environment.json - postman environment
+
+Optional (after frontend):
+7. Jest tests
+8. Playwright tests

@@ -89,6 +89,26 @@
         },
         "description": "Already exists"
       },
+      "Conversation": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Conversation"
+            }
+          }
+        },
+        "description": "Conversation"
+      },
+      "ConversationList": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ConversationList"
+            }
+          }
+        },
+        "description": "Conversation list"
+      },
       "Delete": {
         "content": {
           "application/json": {
@@ -415,6 +435,41 @@
           }
         },
         "required": ["error", "errorMessage"],
+        "type": "object"
+      },
+      "Conversation": {
+        "properties": {
+          "_id": {
+            "type": "string"
+          }
+        },
+        "required": ["_id"],
+        "type": "object"
+      },
+      "ConversationList": {
+        "properties": {
+          "count": {
+            "type": "integer"
+          },
+          "docs": {
+            "items": {
+              "$ref": "#/components/schemas/Conversation"
+            },
+            "type": "array"
+          },
+          "nextCursor": {
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 2,
+            "minItems": 2,
+            "type": "array"
+          },
+          "total": {
+            "type": "integer"
+          }
+        },
+        "required": ["count", "docs", "total"],
         "type": "object"
       },
       "Delete": {
@@ -1141,6 +1196,75 @@
         },
         "summary": "Update an image for a company",
         "tags": ["companies"]
+      }
+    },
+    "/conversations": {
+      "get": {
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/ConversationList"
+          },
+          "400": {
+            "$ref": "#/components/responses/InvalidQuery"
+          }
+        },
+        "summary": "Get all conversations",
+        "tags": ["conversations"]
+      },
+      "post": {
+        "responses": {
+          "201": {
+            "$ref": "#/components/responses/Conversation"
+          },
+          "400": {
+            "$ref": "#/components/responses/InvalidData"
+          }
+        },
+        "summary": "Create a new conversation",
+        "tags": ["conversations"]
+      }
+    },
+    "/conversations/{id}": {
+      "delete": {
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Delete"
+          }
+        },
+        "summary": "Delete a conversation by ID",
+        "tags": ["conversations"]
+      },
+      "get": {
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Conversation"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        },
+        "summary": "Get a conversation by ID",
+        "tags": ["conversations"]
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/Id"
+        }
+      ],
+      "put": {
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/Conversation"
+          },
+          "400": {
+            "$ref": "#/components/responses/InvalidData"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        },
+        "summary": "Update a conversation by ID",
+        "tags": ["conversations"]
       }
     },
     "/documents": {

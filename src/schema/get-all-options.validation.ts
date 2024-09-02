@@ -9,10 +9,16 @@ import {
 import type {
   GetCategoriesOptions,
   GetCompaniesOptions,
+  GetConversationsOptions,
   GetDocumentsOptions,
   GetUsersOptions
 } from "./get-all-options";
 import zod from "zod";
+
+export const GetConversationsOptionsValidationSchema = zod.object({
+  limit: LimitValidationSchema,
+  offset: OffsetValidationSchema
+});
 
 export const GetCategoriesOptionsValidationSchema = zod.object({
   limit: LimitValidationSchema,
@@ -49,6 +55,13 @@ export const GetUsersOptionsValidationSchema = zod.object({
   limit: LimitValidationSchema,
   offset: OffsetValidationSchema
 });
+
+// Type check the get conversations options validation schema
+((): GetConversationsOptions | undefined => {
+  const result = GetConversationsOptionsValidationSchema.safeParse(undefined);
+
+  return result.success ? result.data : undefined;
+})();
 
 // Type check the get categories options validation schema
 ((): GetCategoriesOptions | undefined => {
